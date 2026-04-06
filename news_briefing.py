@@ -62,6 +62,8 @@ RSS_FEEDS: dict[str, str] = {
     "Reuters Business": "https://feeds.reuters.com/reuters/businessnews",
     "BBC World": "http://feeds.bbci.co.uk/news/world/rss.xml",
     "BBC Business": "http://feeds.bbci.co.uk/news/business/rss.xml",
+    "Dagens Næringsliv": "https://www.dn.no/rss.xml",
+    "Oslo Børs nyheter": "https://www.oslobors.no/ob/servlets/rss?category=nyhet",
 }
 
 MODEL = "claude-sonnet-4-20250514"
@@ -87,7 +89,8 @@ FORBUDT I OUTPUT:
 KUTT ALLTID: sport, kjendis, krim, underholdning, vær, lokale ulykker, politisk debatt uten vedtak.
 
 ## 📈 Marked og makro
-Ta med: rentevedtak, inflasjon, handelskrig, indeksbevegelse >1%, oljepris, valuta, kvartalstall som beveger markedet.
+Markedsdata (priser og prosentendringer) vises allerede i et eget snapshot øverst — IKKE gjenta prisene.
+Ta med: rentevedtak, inflasjon, handelskrig, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
 Kutt: dagsbevegelser uten nyhet bak.
 
 ## 🇳🇴 Norsk økonomi
@@ -105,7 +108,9 @@ Ta med KUN direkte hverdagskonsekvens:
 
 ## 🌍 Internasjonalt
 Ta med: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
-Kutt: alt annet."""
+Kutt: alt annet.
+
+TOTALBUDSJETT: Maks 300 ord for alle fire seksjoner samlet."""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Værvarsling Bergen (Yr / MET Norway API)
@@ -221,6 +226,86 @@ def fetch_bergen_weather() -> dict:
 
     except Exception as exc:
         return {"summary": f"utilgjengelig ({exc})", "rain_hours": []}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Markedssnapshot (yfinance / Yahoo Finance)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def fetch_market_snapshot() -> dict:
+    """
+    Returnér markedsdata som dict. Myk feil — stopper ikke kjøringen.
+    Keys: brent, brent_chg, sp500, sp500_chg, osebx, osebx_chg,
+          eurnok, usdnok, error
+    """
+    try:
+        import logging
+        import yfinance as yf
+
+        logging.getLogger("yfinance").setLevel(logging.ERROR)
+
+        t = yf.Tickers("BZ=F ^GSPC OBX.OL EURNOK=X USDNOK=X")
+
+        def _pct(info) -> tuple:
+            last = getattr(info, "last_price", None)
+            prev = getattr(info, "previous_close", None)
+            chg = (last / prev - 1) * 100 if last and prev else None
+            return last, chg
+
+        brent, brent_chg = _pct(t.tickers["BZ=F"].fast_info)
+        sp500, sp500_chg = _pct(t.tickers["^GSPC"].fast_info)
+        osebx, osebx_chg = _pct(t.tickers["OBX.OL"].fast_info)
+        eurnok = getattr(t.tickers["EURNOK=X"].fast_info, "last_price", None)
+        usdnok = getattr(t.tickers["USDNOK=X"].fast_info, "last_price", None)
+
+        return {
+            "brent": brent, "brent_chg": brent_chg,
+            "sp500": sp500, "sp500_chg": sp500_chg,
+            "osebx": osebx, "osebx_chg": osebx_chg,
+            "eurnok": eurnok, "usdnok": usdnok,
+            "error": None,
+        }
+    except Exception as exc:
+        return {
+            "brent": None, "brent_chg": None,
+            "sp500": None, "sp500_chg": None,
+            "osebx": None, "osebx_chg": None,
+            "eurnok": None, "usdnok": None,
+            "error": str(exc),
+        }
+
+
+def market_notion_blocks(market: dict) -> list[dict]:
+    """Bygg Notion-blokker for markedssnapshot (plasseres mellom vær og nyheter)."""
+    if market.get("error"):
+        text = f"Markedsdata utilgjengelig: {market['error']}"
+    else:
+        def _idx(price, chg, decimals=0) -> str:
+            p = f"{price:,.{decimals}f}".replace(",", " ") if price is not None else "–"
+            c = f"{chg:+.1f} %" if chg is not None else ""
+            return f"{c} ({p})".strip() if c else p
+
+        line1 = (
+            f"Brent {_idx(market['brent'], market['brent_chg'], 1)} $"
+            f"  ·  S&P 500 {_idx(market['sp500'], market['sp500_chg'])}"
+            f"  ·  OBX {_idx(market['osebx'], market['osebx_chg'])}"
+        )
+        fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
+        fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
+        line2 = f"EUR/NOK {fx1}  ·  USD/NOK {fx2}"
+        text = line1 + "\n" + line2
+
+    return [
+        {
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {
+                "rich_text": [{"type": "text", "text": {"content": text}}]
+            },
+        },
+        {"object": "block", "type": "divider", "divider": {}},
+    ]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -479,7 +564,7 @@ def weather_notion_blocks(weather: dict, date_human: str) -> list[dict]:
 
 
 def publish_to_notion(
-    briefing: str, weather: dict, date_str: str, date_human: str
+    briefing: str, weather: dict, market: dict, date_str: str, date_human: str
 ) -> None:
     try:
         from notion_client import Client as NotionClient
@@ -496,9 +581,11 @@ def publish_to_notion(
 
     try:
         notion = NotionClient(auth=notion_key)
-        # Vær øverst, deretter nyheter
-        blocks = weather_notion_blocks(weather, date_human) + markdown_to_notion_blocks(
-            briefing
+        # Vær øverst, deretter markedsdata, deretter nyheter
+        blocks = (
+            weather_notion_blocks(weather, date_human)
+            + market_notion_blocks(market)
+            + markdown_to_notion_blocks(briefing)
         )
 
         # Notion godtar maks 100 blokker per kall — del opp om nødvendig
@@ -562,6 +649,26 @@ def main() -> None:
         print(f"  Regn over 1 mm/t: kl. {', '.join(weather['rain_hours'])}")
     print()
 
+    print("Henter markedsdata...")
+    market = fetch_market_snapshot()
+    if market["error"]:
+        print(f"  ⚠  Markedsdata utilgjengelig: {market['error']}")
+    else:
+        def _sign(v):
+            return f"{v:+.1f} %" if v is not None else "–"
+        brent_str = f"{market['brent']:.1f} $" if market["brent"] else "–"
+        sp_str = f"{market['sp500']:,.0f}".replace(",", " ") if market["sp500"] else "–"
+        ob_str = f"{market['osebx']:,.0f}".replace(",", " ") if market["osebx"] else "–"
+        print(
+            f"  Brent {brent_str} ({_sign(market['brent_chg'])})  "
+            f"S&P 500 {sp_str} ({_sign(market['sp500_chg'])})  "
+            f"OBX {ob_str} ({_sign(market['osebx_chg'])})"
+        )
+        fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
+        fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
+        print(f"  EUR/NOK {fx1}  USD/NOK {fx2}")
+    print()
+
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")
     articles = fetch_articles()
 
@@ -580,7 +687,7 @@ def main() -> None:
         "NOTION_API_KEY" in os.environ and "NOTION_PARENT_PAGE_ID" in os.environ
     )
     if has_notion:
-        publish_to_notion(briefing, weather, today_str, today_human)
+        publish_to_notion(briefing, weather, market, today_str, today_human)
     else:
         print(
             "\n💡  Tips: Sett NOTION_API_KEY og NOTION_PARENT_PAGE_ID "

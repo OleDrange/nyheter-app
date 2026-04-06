@@ -36,6 +36,14 @@ Kopier `.env.example` til `.env` og fyll inn verdiene. Scriptet leser `.env` aut
 
 Rediger `RSS_FEEDS`-dict øverst i `news_briefing.py`. Format: `"Kildenavn": "https://..."`.
 
+Standardkilder inkluderer Dagens Næringsliv og Oslo Børs nyheter (offisielle børsmeldinger — kvartalstall, utbytte, kapitalforhøyelser).
+
+## Markedssnapshot
+
+`fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), EUR/NOK og USD/NOK via `yfinance`.
+Dataene vises i terminal og Notion men sendes **ikke** til Claude — Claude skal forklare *hvorfor* markedet beveget seg, ikke gjenta prisene.
+Feil i markedsdata stopper ikke resten av kjøringen (myk feil, som vær).
+
 ## Justere briefingen
 
 `SYSTEM_PROMPT` i `news_briefing.py` styrer hva Claude skriver. Stil: Bloomberg-terminal — tall og fakta, ingen fyllord.
