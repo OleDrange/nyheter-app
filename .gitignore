@@ -1,0 +1,18 @@
+# API-nøkler — skal aldri committes
+.env
+
+# Genererte briefing-filer
+briefing_*.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Windows
+create_shortcut.ps1
+Thumbs.db
+Desktop.ini
