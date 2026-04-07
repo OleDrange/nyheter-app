@@ -32,11 +32,44 @@ Kopier `.env.example` til `.env` og fyll inn verdiene. Scriptet leser `.env` aut
 - **Artikler uten dato:** inkluderes alltid (kan ikke fastslå alder).
 - **`MAX_PER_FEED = 15`:** beskytter mot feeds med hundrevis av innlegg.
 
+## RSS-henting — teknisk
+
+Feeds hentes med `httpx` (browser-lignende User-Agent + `follow_redirects=True`) og parseres av `feedparser`. Dette er nødvendig fordi mange norske nyhetsnettsteder blokkerer `feedparser`s standard bot-identifikasjon. Ikke bytt tilbake til `feedparser.parse(url)`.
+
+```python
+resp = httpx.get(url, headers=_FETCH_HEADERS, timeout=10, follow_redirects=True)
+resp.raise_for_status()
+feed = feedparser.parse(resp.content)
+```
+
+`_FETCH_HEADERS` er definert som konstant rett under `MAX_DESC_CHARS`.
+
+## Aktive RSS-feeds (10 stk)
+
+| Kilde | URL |
+|---|---|
+| NRK Nyheter | `https://www.nrk.no/toppsaker.rss` |
+| NRK Siste | `https://www.nrk.no/nyheter/siste.rss` |
+| Bergens Tidende | `https://www.bt.no/rss.xml` |
+| E24 | `https://e24.no/rss2/` |
+| E24 Børs og finans | `https://e24.no/rss2/?seksjon=boers-og-finans` |
+| The Guardian World | `https://www.theguardian.com/world/rss` |
+| The Guardian Business | `https://www.theguardian.com/business/rss` |
+| BBC World | `http://feeds.bbci.co.uk/news/world/rss.xml` |
+| BBC Business | `http://feeds.bbci.co.uk/news/business/rss.xml` |
+| Dagens Næringsliv | `https://services.dn.no/api/feed/rss/` |
+
+**Fjernede kilder og årsak:**
+- Reuters: offentlige RSS-feeds stengt 2020.
+- Finansavisen: tilbyr ikke offentlige RSS-feeds.
+- Oslo Børs: ingen offentlig RSS (børsmeldinger er tilgjengelig via NewsWeb API, ikke RSS). Børsnyheter dekkes via E24 Børs og finans.
+
+Ikke bruk `https://www.nrk.no/nyheter/rss.xml` (404), `https://e24.no/rss.xml` (404) eller `https://www.dn.no/rss.xml` (ugyldig) — disse er utdaterte URLer.
+
 ## Endre RSS-feeds
 
 Rediger `RSS_FEEDS`-dict øverst i `news_briefing.py`. Format: `"Kildenavn": "https://..."`.
-
-Standardkilder inkluderer Dagens Næringsliv og Oslo Børs nyheter (offisielle børsmeldinger — kvartalstall, utbytte, kapitalforhøyelser).
+Bekreft alltid at en ny URL faktisk returnerer gyldig RSS (HTTP 200 + XML) før du legger den til.
 
 ## Markedssnapshot
 

@@ -26,26 +26,36 @@ python news_briefing.py          # print til terminal
 python news_briefing.py --save   # lagrer også briefing_YYYY-MM-DD.md
 ```
 
+På Windows: dobbeltklikk `run_briefing.bat`.
+
 ## Desktop-snarvei (Windows)
 
-Gjør det mulig å kjøre briefingen med et dobbeltklikk fra skrivebordet.
-
-**1. Oppdater stien i skriptet**
-
-Åpne `create_shortcut.ps1` og endre de to hardkodede stiene til der du har klonet repoet:
-
-```powershell
-$bat = "C:\DIN\STI\nyheter-app\run_briefing.bat"
-$sc.WorkingDirectory = "C:\DIN\STI\nyheter-app"
-```
-
-**2. Kjør skriptet**
+Kjør følgende for å opprette en snarvei på skrivebordet:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File create_shortcut.ps1
 ```
 
 En snarvei kalt `Nyhetsbriefing.lnk` opprettes på skrivebordet. Dobbeltklikk for å kjøre.
+
+> **Merk:** `create_shortcut.ps1` bruker hardkodede stier som peker til der repoet ble klonet. Åpne filen og oppdater stiene om du har klonet til en annen plassering.
+
+## Kilder (10 RSS-feeds)
+
+| Kilde | Seksjon |
+|---|---|
+| NRK Nyheter | Toppsaker |
+| NRK Siste | Siste nytt |
+| Bergens Tidende | Alle nyheter |
+| E24 | Alle nyheter |
+| E24 Børs og finans | Børs og finans |
+| The Guardian World | Internasjonalt |
+| The Guardian Business | Internasjonal økonomi |
+| BBC World | Internasjonalt |
+| BBC Business | Internasjonal økonomi |
+| Dagens Næringsliv | Alle nyheter |
+
+> Reuters ble fjernet (offentlige RSS-feeds stengt 2020). Finansavisen og Oslo Børs tilbyr ikke offentlige RSS-feeds.
 
 ## Konfigurasjon
 

@@ -53,17 +53,16 @@ def _load_dotenv() -> None:
 # ─────────────────────────────────────────────────────────────────────────────
 
 RSS_FEEDS: dict[str, str] = {
-    "NRK Nyheter": "https://www.nrk.no/nyheter/rss.xml",
-    "NRK Økonomi": "https://www.nrk.no/okonomi/rss.xml",
+    "NRK Nyheter": "https://www.nrk.no/toppsaker.rss",
+    "NRK Siste": "https://www.nrk.no/nyheter/siste.rss",
     "Bergens Tidende": "https://www.bt.no/rss.xml",
-    "E24": "https://e24.no/rss.xml",
-    "Finansavisen": "https://finansavisen.no/feed/",
-    "Reuters Top News": "https://feeds.reuters.com/reuters/topNews",
-    "Reuters Business": "https://feeds.reuters.com/reuters/businessnews",
+    "E24": "https://e24.no/rss2/",
+    "E24 Børs og finans": "https://e24.no/rss2/?seksjon=boers-og-finans",
+    "The Guardian World": "https://www.theguardian.com/world/rss",
+    "The Guardian Business": "https://www.theguardian.com/business/rss",
     "BBC World": "http://feeds.bbci.co.uk/news/world/rss.xml",
     "BBC Business": "http://feeds.bbci.co.uk/news/business/rss.xml",
-    "Dagens Næringsliv": "https://www.dn.no/rss.xml",
-    "Oslo Børs nyheter": "https://www.oslobors.no/ob/servlets/rss?category=nyhet",
+    "Dagens Næringsliv": "https://services.dn.no/api/feed/rss/",
 }
 
 MODEL = "claude-sonnet-4-20250514"
@@ -71,6 +70,16 @@ MAX_TOKENS = 4096
 LOOKBACK_HOURS = 24
 MAX_PER_FEED = 15  # maks antall artikler per kilde
 MAX_DESC_CHARS = 400  # maks tegn fra ingress/beskrivelse per artikkel
+
+_FETCH_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/rss+xml, application/xml, text/xml, */*",
+    "Accept-Language": "nb-NO,nb;q=0.9,en;q=0.8",
+}
 
 SYSTEM_PROMPT = """Nyhetsbriefing på norsk for en investor i Bergen. Skriv som en Bloomberg-terminal: tall og fakta, null pynt.
 
@@ -319,9 +328,9 @@ def fetch_articles() -> list[dict]:
 
     for source, url in RSS_FEEDS.items():
         try:
-            feed = feedparser.parse(
-                url, request_headers={"User-Agent": "news-briefing/1.0"}
-            )
+            resp = httpx.get(url, headers=_FETCH_HEADERS, timeout=10, follow_redirects=True)
+            resp.raise_for_status()
+            feed = feedparser.parse(resp.content)
             if feed.bozo and not feed.entries:
                 print(f"  ⚠  {source}: kunne ikke hente feed ({url})")
                 continue
