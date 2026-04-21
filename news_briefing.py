@@ -127,7 +127,7 @@ TOTALBUDSJETT: Maks 300 ord for alle fire seksjoner samlet."""
 
 # Bergen: 60.3928°N, 5.3241°E
 _YR_URL = (
-    "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.3928&lon=5.3241"
+    "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.3928&lon=5.3241"
 )
 
 _SYMBOL_NO: dict[str, str] = {
@@ -215,8 +215,10 @@ def fetch_bergen_weather() -> dict:
                         break
                 break
 
-        # Finn timer med nedbør >= 1 mm/t resten av i dag
+        # Finn timer med nedbør >= 1 mm/t og maks UV-indeks resten av i dag
         rain_hours: list[str] = []
+        uv_max = 0.0
+        uv_max_hour: int | None = None
         for entry in ts:
             t_local = datetime.fromisoformat(
                 entry["time"].replace("Z", "+00:00")
@@ -230,6 +232,13 @@ def fetch_bergen_weather() -> dict:
                 mm = d["next_1_hours"]["details"].get("precipitation_amount", 0.0)
                 if mm >= 1.0:
                     rain_hours.append(f"{t_local.hour:02d}–{t_local.hour + 1:02d}")
+            uv = d["instant"]["details"].get("ultraviolet_index_clear_sky")
+            if uv is not None and uv > uv_max:
+                uv_max = uv
+                uv_max_hour = t_local.hour
+
+        if uv_max >= 1 and uv_max_hour is not None:
+            summary += f", UV maks {uv_max:.0f} kl. {uv_max_hour:02d}"
 
         return {"summary": summary, "rain_hours": rain_hours}
 
