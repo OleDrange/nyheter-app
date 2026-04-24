@@ -44,9 +44,9 @@ feed = feedparser.parse(resp.content)
 
 `_FETCH_HEADERS` er definert som konstant rett under `MAX_DESC_CHARS`.
 
-## Aktive RSS-feeds (10 stk)
+## Aktive RSS-feeds (15 stk)
 
-| Kilde | URL |
+| Kilde | Kategori |
 |---|---|
 | NRK Nyheter | `https://www.nrk.no/toppsaker.rss` |
 | NRK Siste | `https://www.nrk.no/nyheter/siste.rss` |
@@ -58,6 +58,11 @@ feed = feedparser.parse(resp.content)
 | BBC World | `http://feeds.bbci.co.uk/news/world/rss.xml` |
 | BBC Business | `http://feeds.bbci.co.uk/news/business/rss.xml` |
 | Dagens Næringsliv | `https://services.dn.no/api/feed/rss/` |
+| VentureBeat AI | `https://venturebeat.com/category/ai/feed/` |
+| MIT Technology Review | `https://www.technologyreview.com/feed/` |
+| ScienceDaily | `https://www.sciencedaily.com/rss/top/science.xml` |
+| ScienceDaily Helse | `https://www.sciencedaily.com/rss/health_medicine.xml` |
+| STAT News | `https://www.statnews.com/feed/` |
 
 **Fjernede kilder og årsak:**
 - Reuters: offentlige RSS-feeds stengt 2020.
@@ -71,15 +76,53 @@ Ikke bruk `https://www.nrk.no/nyheter/rss.xml` (404), `https://e24.no/rss.xml` (
 Rediger `RSS_FEEDS`-dict øverst i `news_briefing.py`. Format: `"Kildenavn": "https://..."`.
 Bekreft alltid at en ny URL faktisk returnerer gyldig RSS (HTTP 200 + XML) før du legger den til.
 
+## Briefing-seksjoner (8 stk)
+
+`SYSTEM_PROMPT` styrer hva Claude skriver. Stil: Bloomberg-terminal — tall og fakta, ingen fyllord. Maks 490 ord totalt.
+
+| Seksjon | Innhold |
+|---|---|
+| 🏥 Helse og medisin | Legemiddelgodkjenninger, klinisk evidens, folkehelsevarsler |
+| 🤖 AI og forskning | Nye modeller, gjennombrudd, AI-regulering |
+| 🎯 Dagens intensjon | Én setning — viktigste observasjon fra dagens nyheter |
+| 🧠 Visste du at | Historisk/faglig kontekst til én av dagens nyheter |
+| 🌍 Internasjonalt | Geopolitikk, naturkatastrofer, G20-valg |
+| 🇳🇴 Norsk økonomi | Norges Bank, oljesektor, kronekurs, norske børsselskaper |
+| 📈 Marked og makro | Rentevedtak, inflasjon, handelskrig, kvartalstall |
+| 🏙️ Bergen og Vestland | Kun direkte hverdagskonsekvens (kollektiv, vedtak, helse) |
+
+`Dagens intensjon` og `Visste du at` bruker ikke kulepunkter — tekst skrives direkte under heading.
+
+## Værvarsling Bergen
+
+`fetch_bergen_weather()` bruker MET Norway Locationforecast API (`complete`-endepunktet — ikke `compact`, da UV-data kun er tilgjengelig i `complete`).
+
+Returnerer:
+- `summary` — nåværende vær + eventuell ettermiddagsendring
+- `rain_hours` — tidsspenn der nedbør >= 1 mm/t resten av i dag
+- `sun_periods` — sammenhengende klarvær-perioder (dagstid kl. 05–21)
+- `max_uv` — høyeste UV-indeks (clear-sky) i dag
+- `max_uv_hour` — timen med maks UV
+- `max_temp` — høyeste temperatur i dag
+- `max_temp_hour` — timen med maks temp
+- `temp_0700` — temperatur kl. 07:00
+
+Feil i værhenting stopper ikke resten av kjøringen (myk feil).
+
 ## Markedssnapshot
 
 `fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), EUR/NOK og USD/NOK via `yfinance`.
 Dataene vises i terminal og Notion men sendes **ikke** til Claude — Claude skal forklare *hvorfor* markedet beveget seg, ikke gjenta prisene.
-Feil i markedsdata stopper ikke resten av kjøringen (myk feil, som vær).
+Feil i markedsdata stopper ikke resten av kjøringen (myk feil).
 
-## Justere briefingen
+## Notion-struktur
 
-`SYSTEM_PROMPT` i `news_briefing.py` styrer hva Claude skriver. Stil: Bloomberg-terminal — tall og fakta, ingen fyllord.
+Siden bygges opp i denne rekkefølgen:
+1. Værseksjon (heading_1 + værsummary, klarvær-perioder, nedbørstimer, UV/temp-stats)
+2. Markedssnapshot (Brent, S&P 500, OBX, EUR/NOK, USD/NOK)
+3. Nyhetsinnhold fra Claude (8 seksjoner)
+
+Notion godtar maks 100 blokker per API-kall — lange briefinger splittes automatisk.
 
 ## Avhengigheter
 
