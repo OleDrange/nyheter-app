@@ -1,0 +1,70 @@
+
+──────────────────────────────────────────────────────────────────────
+  Nyhetsbriefing  —  Friday 17. April 2026
+──────────────────────────────────────────────────────────────────────
+
+Henter vær for Bergen...
+  Bergen: 9°C, delvis skyet, vind 5 m/s → ettermiddag skyet 15°C
+
+Henter markedsdata...
+  Brent 98.2 $ (-0.4 %)  S&P 500 7 041 (+0.3 %)  OBX 1 970 (-0.2 %)
+  EUR/NOK 11.02  USD/NOK 9.35
+
+Henter nyheter fra 15 kilder...
+  ✓  NRK Nyheter: 15 artikler
+  ✓  NRK Siste: 15 artikler
+  ✓  Bergens Tidende: 15 artikler
+  ✓  E24: 8 artikler
+  ✓  E24 Børs og finans: 9 artikler
+  ✓  The Guardian World: 15 artikler
+  ✓  The Guardian Business: 15 artikler
+  ✓  BBC World: 15 artikler
+  ✓  BBC Business: 15 artikler
+  ✓  Dagens Næringsliv: 15 artikler
+  –  VentureBeat AI: ingen nye artikler siste 24t
+  ✓  MIT Technology Review: 7 artikler
+  ✓  ScienceDaily: 2 artikler
+  ✓  ScienceDaily Helse: 6 artikler
+  ✓  STAT News: 15 artikler
+
+Totalt 167 artikler fra siste 24 timer.
+
+Oppsummerer med Claude (streamer svar)...
+
+──────────────────────────────────────────────────────────────────────
+## 🏥 Helse og medisin
+• FDA-godkjenning av nytt nyremedikament fra Travere Therapeutics tross svakere kliniske resultater enn forventet. [Travere's drug for a kidney disease doesn't improve kidney function. The FDA approved it anyway](https://www.statnews.com/2026/04/16/travere-therapeutics-kidney-disease-fda-approval/)
+• Forskere fjernet "zombie-celler" fra mus og reverserte leverskader dramatisk uten kostholdsendringer. [Scientists remove "zombie" cells and reverse liver damage in mice](https://www.sciencedaily.com/releases/2026/04/260416071947.htm)
+• Naturlig hormon FGF21 kan reversere overvekt ved å aktivere ny hjernekretsløp for metabolisme, forskjellig fra GLP-1-medikamenter. [Scientists discover natural hormone that reverses obesity](https://www.sciencedaily.com/releases/2026/04/260416071954.htm)
+
+## 🤖 AI og forskning
+• Myseum-aksjen stiger kraftig etter å ha endret navn til å inkludere "AI", følger trend fra andre selskaper. ["AI"-navnebytte sender aksje til himmels](https://e24.no/boers-og-finans/i/Wvg13Q/ai-navnebytte-sender-aksje-til-himmels)
+• Finansministre og banktopper uttrykkjer alvorlig bekymring for Mythos AI-modell sin evne til å identifisere cybersikkerhetssårbarheter. [Finance ministers and top bankers raise serious concerns about Mythos AI model](https://www.bbc.com/news/articles/c2ev24yx4rmo)
+
+## 🎯 Dagens intensjon
+Når våpenhviler varsles i krigsområder, er oljeprisenes umiddelbare respons mindre viktig enn deres langvarige volatilitet.
+
+## 🧠 Visste du at
+Da Montreal-protokollen fra 1987 forbød ozonødeleggende stoffer, forventet forskerne full gjenopprettelse av ozonlaget innen 2070. Nye funn viser at industrikjemikalier fortsatt lekker ut i høyere grad enn antatt, noe som kan forsinke helingen med syv år.
+
+## 🌍 Internasjonalt
+• Trump kunngjorde 10 dagers våpenhvile mellom Israel og Libanon som trer i kraft ved midnatt. [Trump varsler våpenhvile mellom Israel og Libanon](https://e24.no/internasjonal-oekonomi/i/rrrvWA/donald-trump-varsler-vaapenhvile-mellom-israel-og-libanon)
+• IEA-sjef advarer at Europa kun har seks uker med jetdrivstoff igjen på grunn av Iran-krigen. [Europe has 'maybe six weeks of jet fuel left', energy boss warns](https://www.bbc.com/news/articles/czjw2kz0l22o)
+• Russland gjennomførte årets dødeligste luftangrep på Ukraina med nærmere 700 droner og 19 ballistiske missiler. [Ukraina har fremgang med nye droner](https://www.nrk.no/urix/ukraina-bruker-na-droner-mot-mellomdistansemal-i-krigen-mot-russland-1.17849164)
+
+## 🇳🇴 Norsk økonomi
+• NHO-sjef Almlid frykter Norge stopper opp i krise uten drivstoff, regjeringen varsler grep for å fylle lager. [NHO-sjefen om norsk beredskap: – Veldig alvorleg](https://www.nrk.no/vestland/nho-sjefen-om-norsk-beredskap_-_-veldig-alvorleg-1.17848211)
+• Lånekassen har slettet 870 millioner i studiegjeld for 34.000 personer etter nye regler. [Sletta 870 millionar i studiegjeld: – Eg fekk sletta det eg søkte om](https://www.nrk.no/sorlandet/lanekassen-har-sletta-870-millionar-i-studiegjeld-1.17847493)
+
+## 📈 Marked og makro
+• Oslo Børs er verdens beste presterende børs hittil i år tross nedgang torsdag. [Oslo er den globale vinnerbørsen](https://e24.no/boers-og-finans/i/XM92Qm/oslo-er-den-globale-vinnerboersen)
+• Netflix-aksjen falt 9 prosent etter kvartalstall, medgrunnlegger Reed Hastings forlater styret. [Netflix-aksjen faller etter tallslipp](https://e24.no/boers-og-finans/i/3p1dWA/netflix-aksjen-faller-i-etterhandel)
+• Konkurransetilsynet vil vurdere Elkjøps oppkjøp av Eplehuset nærmere av konkurransehensyn. [Konkurransetilsynet: Elkjøps oppkjøp av Eplehuset må vurderes nærmere](https://e24.no/boers-og-finans/i/5p8QlO/konkurransetilsynet-elkjoeps-oppkjoep-av-eplehuset-maa-vurderes-naermere)
+
+## 🏙️ Bergen og Vestland
+• Ingen viktige hendelser.
+──────────────────────────────────────────────────────────────────────
+
+✓  Publisert til Notion: Nyhetsbriefing 2026-04-17
+   https://www.notion.so/Nyhetsbriefing-2026-04-17-345a0042221481558a43d5d40091062c
+✓  Lagret som briefing_2026-04-17.md

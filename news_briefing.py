@@ -63,6 +63,14 @@ RSS_FEEDS: dict[str, str] = {
     "BBC World": "http://feeds.bbci.co.uk/news/world/rss.xml",
     "BBC Business": "http://feeds.bbci.co.uk/news/business/rss.xml",
     "Dagens Næringsliv": "https://services.dn.no/api/feed/rss/",
+    # AI og teknologi (dekker bl.a. Claude/Anthropic-nyheter)
+    "VentureBeat AI": "https://venturebeat.com/category/ai/feed/",
+    "MIT Technology Review": "https://www.technologyreview.com/feed/",
+    # Forskning og vitenskap
+    "ScienceDaily": "https://www.sciencedaily.com/rss/top/science.xml",
+    # Helse og medisin
+    "ScienceDaily Helse": "https://www.sciencedaily.com/rss/health_medicine.xml",
+    "STAT News": "https://www.statnews.com/feed/",
 }
 
 MODEL = "claude-sonnet-4-20250514"
@@ -84,11 +92,11 @@ _FETCH_HEADERS = {
 SYSTEM_PROMPT = """Nyhetsbriefing på norsk for en investor i Bergen. Skriv som en Bloomberg-terminal: tall og fakta, null pynt.
 
 FORMAT:
-- Fire seksjoner med ## heading og • kulepunkter — ingenting annet.
-- Maks 3 punkter per seksjon. Heller færre enn å fylle opp med svake nyheter.
+- Åtte seksjoner med ## heading og • kulepunkter — ingenting annet.
+- Maks 3 punkter per nyhetseksjon. Heller færre enn å fylle opp med svake nyheter.
 - Én setning per punkt. Subjekt + verb + tall/konsekvens. Slutt.
-- Alltid inline-lenke: [tittel](url)
-- Tom seksjon → skriv kun: • Ingen viktige hendelser.
+- Alltid inline-lenke i nyhetspunkter: [tittel](url)
+- Tom nyhetseksjon → skriv kun: • Ingen viktige hendelser.
 
 FORBUDT I OUTPUT:
 - Fyllfraser: "Det er verdt å merke seg", "I tillegg", "Som et resultat", "Det er viktig å"
@@ -97,14 +105,38 @@ FORBUDT I OUTPUT:
 
 KUTT ALLTID: sport, kjendis, krim, underholdning, vær, lokale ulykker, politisk debatt uten vedtak.
 
-## 📈 Marked og makro
-Markedsdata (priser og prosentendringer) vises allerede i et eget snapshot øverst — IKKE gjenta prisene.
-Ta med: rentevedtak, inflasjon, handelskrig, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
-Kutt: dagsbevegelser uten nyhet bak.
+## 🏥 Helse og medisin
+Kilder: ScienceDaily Helse, STAT News — og helserelaterte artikler fra øvrige kilder.
+Ta med: nye behandlingsmetoder med klinisk evidens, legemiddelgodkjenninger (FDA/EMA), forskningsgjennombrudd med direkte pasientkonsekvens, folkehelsevarsler.
+Kutt: kostholdstips, treningsråd, enkeltcase-studier uten generell relevans.
+
+## 🤖 AI og forskning
+Kilder: VentureBeat AI, MIT Technology Review, ScienceDaily — og AI-nyheter fra øvrige kilder.
+Ta med: nye modeller/versjoner (GPT, Claude, Gemini osv.), gjennombrudd innen medisin/energi/klima, regulering av AI.
+Kutt: produktanmeldelser, hype uten konkret nyhet, akademiske artikler uten praktisk konsekvens.
+
+## 🎯 Dagens intensjon
+Én setning — maks 20 ord — som destillerer det viktigste å ha i bakhodet i dag, basert på dagens nyheter.
+Ikke råd, ikke oppfordring. En observasjon som setter kontekst: "Når X skjer, er Y verdt å huske."
+Ingen lenke. Ingen bullet-liste — skriv setningen direkte under headingen, uten • foran.
+
+## 🧠 Visste du at
+Ett faktum — maks 2 setninger — som gir historisk eller faglig kontekst til én av dagens nyheter.
+Format: "Da [historisk hendelse/parallell], [hva som skjedde]. [Hvorfor det er relevant nå]."
+Ingen lenke. Ingen bullet-liste — skriv teksten direkte under headingen, uten • foran.
+
+## 🌍 Internasjonalt
+Ta med: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
+Kutt: alt annet.
 
 ## 🇳🇴 Norsk økonomi
 Ta med: Norges Bank, statsbudsjett, norske selskaper med markedseffekt, oljesektor, kronekurs med årsak.
 Kutt: NRK, kultur, innenrikspolitikk uten økonomisk utfall.
+
+## 📈 Marked og makro
+Markedsdata (priser og prosentendringer) vises allerede i et eget snapshot øverst — IKKE gjenta prisene.
+Ta med: rentevedtak, inflasjon, handelskrig, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
+Kutt: dagsbevegelser uten nyhet bak.
 
 ## 🏙️ Bergen og Vestland
 Ta med KUN direkte hverdagskonsekvens:
@@ -115,11 +147,7 @@ Ta med KUN direkte hverdagskonsekvens:
 ✓ Helseadvarsler / sykehuskapasitet
 ✓ Store arbeidsplassnyheter (nedleggelse / nyetablering)
 
-## 🌍 Internasjonalt
-Ta med: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
-Kutt: alt annet.
-
-TOTALBUDSJETT: Maks 300 ord for alle fire seksjoner samlet."""
+TOTALBUDSJETT: Maks 490 ord for alle åtte seksjoner samlet."""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Værvarsling Bergen (Yr / MET Norway API)
@@ -215,35 +243,94 @@ def fetch_bergen_weather() -> dict:
                         break
                 break
 
-        # Finn timer med nedbør >= 1 mm/t og maks UV-indeks resten av i dag
+        # Scan hele dagen: nedbør, klarvær-timer, UV, temperaturstatistikk
         rain_hours: list[str] = []
-        uv_max = 0.0
-        uv_max_hour: int | None = None
+        sun_hours: list[int] = []
+        max_uv = 0.0
+        max_uv_hour: int | None = None
+        max_temp_day: float | None = None
+        max_temp_hour: int | None = None
+        temp_0700: float | None = None
+
         for entry in ts:
             t_local = datetime.fromisoformat(
                 entry["time"].replace("Z", "+00:00")
             ).astimezone()
             if t_local.date() > today_date:
                 break
-            if t_local < now_local:
+            if t_local.date() < today_date:
                 continue
+
+            hour = t_local.hour
             d = entry["data"]
-            if "next_1_hours" in d:
+            inst = d["instant"]["details"]
+
+            # Temp kl. 07:00
+            if hour == 7:
+                temp_0700 = inst.get("air_temperature")
+
+            # Maks temperatur i dag
+            t_val = inst.get("air_temperature")
+            if t_val is not None:
+                if max_temp_day is None or t_val > max_temp_day:
+                    max_temp_day = t_val
+                    max_temp_hour = hour
+
+            # Maks UV-indeks (clear-sky)
+            uv = inst.get("ultraviolet_index_clear_sky") or 0.0
+            if uv > max_uv:
+                max_uv = uv
+                max_uv_hour = hour
+
+            # Klarvær-timer (clearsky-symbol, dagstid)
+            if "next_1_hours" in d and 5 <= hour <= 21:
+                sym_code = d["next_1_hours"]["summary"]["symbol_code"]
+                base = re.sub(r"_(day|night|polartwilight)$", "", sym_code)
+                if base == "clearsky":
+                    sun_hours.append(hour)
+
+            # Nedbørstimer >= 1 mm/t resten av i dag
+            if t_local >= now_local and "next_1_hours" in d:
                 mm = d["next_1_hours"]["details"].get("precipitation_amount", 0.0)
                 if mm >= 1.0:
-                    rain_hours.append(f"{t_local.hour:02d}–{t_local.hour + 1:02d}")
-            uv = d["instant"]["details"].get("ultraviolet_index_clear_sky")
-            if uv is not None and uv > uv_max:
-                uv_max = uv
-                uv_max_hour = t_local.hour
+                    rain_hours.append(f"{hour:02d}–{hour + 1:02d}")
 
-        if uv_max >= 1 and uv_max_hour is not None:
-            summary += f", UV maks {uv_max:.0f} kl. {uv_max_hour:02d}"
+        # Bygg klarvær-perioder (sammenhengende timer → intervall)
+        sun_periods: list[str] = []
+        if sun_hours:
+            start = sun_hours[0]
+            end = sun_hours[0]
+            for h in sun_hours[1:]:
+                if h == end + 1:
+                    end = h
+                else:
+                    sun_periods.append(f"kl. {start:02d}00–{end + 1:02d}00")
+                    start = h
+                    end = h
+            sun_periods.append(f"kl. {start:02d}00–{end + 1:02d}00")
 
-        return {"summary": summary, "rain_hours": rain_hours}
+        return {
+            "summary": summary,
+            "rain_hours": rain_hours,
+            "sun_periods": sun_periods,
+            "max_uv": round(max_uv) if max_uv else None,
+            "max_uv_hour": max_uv_hour,
+            "max_temp": max_temp_day,
+            "max_temp_hour": max_temp_hour,
+            "temp_0700": temp_0700,
+        }
 
     except Exception as exc:
-        return {"summary": f"utilgjengelig ({exc})", "rain_hours": []}
+        return {
+            "summary": f"utilgjengelig ({exc})",
+            "rain_hours": [],
+            "sun_periods": [],
+            "max_uv": None,
+            "max_uv_hour": None,
+            "max_temp": None,
+            "max_temp_hour": None,
+            "temp_0700": None,
+        }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -548,12 +635,40 @@ def markdown_to_notion_blocks(text: str) -> list[dict]:
 def weather_notion_blocks(weather: dict, date_human: str) -> list[dict]:
     """Bygg Notion-blokker for værseksjonen (plasseres øverst på siden)."""
     rain = weather["rain_hours"]
-    if rain:
-        rain_text = "Regn over 1 mm/t: kl. " + ", ".join(rain)
-    else:
-        rain_text = "Ingen nedbør over 1 mm i dag."
+    rain_text = (
+        "Regn over 1 mm/t: kl. " + ", ".join(rain) if rain
+        else "Ingen nedbør over 1 mm i dag."
+    )
 
-    return [
+    sun_periods = weather.get("sun_periods", [])
+    sun_text = (
+        "Full sol: " + ", ".join(sun_periods) if sun_periods
+        else "Ingen klarvær i dag."
+    )
+
+    # Én linje med UV, maks temp og morgTemp
+    stats_parts = []
+    max_uv = weather.get("max_uv")
+    max_uv_hour = weather.get("max_uv_hour")
+    max_temp = weather.get("max_temp")
+    max_temp_hour = weather.get("max_temp_hour")
+    temp_0700 = weather.get("temp_0700")
+    if max_uv is not None and max_uv_hour is not None:
+        stats_parts.append(f"Maks UV: {max_uv} (kl. {max_uv_hour:02d})")
+    if max_temp is not None and max_temp_hour is not None:
+        stats_parts.append(f"Maks temp: {max_temp:.0f}°C (kl. {max_temp_hour:02d})")
+    if temp_0700 is not None:
+        stats_parts.append(f"Kl. 07: {temp_0700:.0f}°C")
+    stats_text = " · ".join(stats_parts)
+
+    def _para(text: str) -> dict:
+        return {
+            "object": "block",
+            "type": "paragraph",
+            "paragraph": {"rich_text": [{"type": "text", "text": {"content": text}}]},
+        }
+
+    blocks = [
         {
             "object": "block",
             "type": "heading_1",
@@ -563,22 +678,14 @@ def weather_notion_blocks(weather: dict, date_human: str) -> list[dict]:
                 ]
             },
         },
-        {
-            "object": "block",
-            "type": "paragraph",
-            "paragraph": {
-                "rich_text": [{"type": "text", "text": {"content": weather["summary"]}}]
-            },
-        },
-        {
-            "object": "block",
-            "type": "paragraph",
-            "paragraph": {
-                "rich_text": [{"type": "text", "text": {"content": rain_text}}]
-            },
-        },
-        {"object": "block", "type": "divider", "divider": {}},
+        _para(weather["summary"]),
+        _para(sun_text),
+        _para(rain_text),
     ]
+    if stats_text:
+        blocks.append(_para(stats_text))
+    blocks.append({"object": "block", "type": "divider", "divider": {}})
+    return blocks
 
 
 def publish_to_notion(
