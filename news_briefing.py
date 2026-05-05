@@ -63,11 +63,13 @@ RSS_FEEDS: dict[str, str] = {
     "BBC World": "http://feeds.bbci.co.uk/news/world/rss.xml",
     "BBC Business": "http://feeds.bbci.co.uk/news/business/rss.xml",
     "Dagens Næringsliv": "https://services.dn.no/api/feed/rss/",
-    # AI og teknologi (dekker bl.a. Claude/Anthropic-nyheter)
+    # AI og teknologi
     "VentureBeat AI": "https://venturebeat.com/category/ai/feed/",
     "MIT Technology Review": "https://www.technologyreview.com/feed/",
     # Forskning og vitenskap
     "ScienceDaily": "https://www.sciencedaily.com/rss/top/science.xml",
+    "Nature News": "https://www.nature.com/nature.rss",
+    "Phys.org": "https://phys.org/rss-feed/",
     # Helse og medisin
     "ScienceDaily Helse": "https://www.sciencedaily.com/rss/health_medicine.xml",
     "STAT News": "https://www.statnews.com/feed/",
@@ -92,8 +94,8 @@ _FETCH_HEADERS = {
 SYSTEM_PROMPT = """Nyhetsbriefing på norsk for en investor i Bergen. Skriv som en Bloomberg-terminal: tall og fakta, null pynt.
 
 FORMAT:
-- Åtte seksjoner med ## heading og • kulepunkter — ingenting annet.
-- Maks 3 punkter per nyhetseksjon. Heller færre enn å fylle opp med svake nyheter.
+- Syv seksjoner med ## heading og • kulepunkter — ingenting annet.
+- Maks 3 punkter per seksjon, med unntak der lavere maks er angitt. Heller færre enn å fylle opp med svake nyheter.
 - Én setning per punkt. Subjekt + verb + tall/konsekvens. Slutt.
 - Alltid inline-lenke i nyhetspunkter: [tittel](url)
 - Tom nyhetseksjon → skriv kun: • Ingen viktige hendelser.
@@ -103,51 +105,48 @@ FORBUDT I OUTPUT:
 - Gjentakelse av kildenavn, dato eller kontekst fra forrige punkt
 - Vurderinger og adjektiver som ikke er tall: "betydelig", "kraftig", "stor"
 
-KUTT ALLTID: sport, kjendis, krim, underholdning, vær, lokale ulykker, politisk debatt uten vedtak.
+KUTT ALLTID: sport, kjendis, krim, underholdning, vær, lokale ulykker, innenrikspolitikk uten direkte markedseffekt, eiendomsmarkedet.
 
 ## 🏥 Helse og medisin
 Kilder: ScienceDaily Helse, STAT News — og helserelaterte artikler fra øvrige kilder.
 Ta med: nye behandlingsmetoder med klinisk evidens, legemiddelgodkjenninger (FDA/EMA), forskningsgjennombrudd med direkte pasientkonsekvens, folkehelsevarsler.
 Kutt: kostholdstips, treningsråd, enkeltcase-studier uten generell relevans.
 
-## 🤖 AI og forskning
-Kilder: VentureBeat AI, MIT Technology Review, ScienceDaily — og AI-nyheter fra øvrige kilder.
-Ta med: nye modeller/versjoner (GPT, Claude, Gemini osv.), gjennombrudd innen medisin/energi/klima, regulering av AI.
-Kutt: produktanmeldelser, hype uten konkret nyhet, akademiske artikler uten praktisk konsekvens.
+## 🔬 Forskning og vitenskap
+Kilder: ScienceDaily, Scientific American, MIT Technology Review — og vitenskapsnyheter fra øvrige kilder.
+Ta med: store vitenskapelige gjennombrudd (fysikk, kjemi, biologi, romfart), klima- og energiforskning med konkrete tall eller milepæler, ny teknologi med bred samfunnskonsekvens.
+Kutt: inkrementelle fremskritt, akademiske artikler uten praktisk konsekvens.
 
-## 🎯 Dagens intensjon
-Én setning — maks 20 ord — som destillerer det viktigste å ha i bakhodet i dag, basert på dagens nyheter.
-Ikke råd, ikke oppfordring. En observasjon som setter kontekst: "Når X skjer, er Y verdt å huske."
-Ingen lenke. Ingen bullet-liste — skriv setningen direkte under headingen, uten • foran.
-
-## 🧠 Visste du at
-Ett faktum — maks 2 setninger — som gir historisk eller faglig kontekst til én av dagens nyheter.
-Format: "Da [historisk hendelse/parallell], [hva som skjedde]. [Hvorfor det er relevant nå]."
-Ingen lenke. Ingen bullet-liste — skriv teksten direkte under headingen, uten • foran.
+## 🤖 AI, teknologi og startups
+Kilder: VentureBeat AI, MIT Technology Review — og teknologinyheter fra øvrige kilder.
+Ta med: nye AI-modeller/versjoner (GPT, Claude, Gemini osv.), AI-regulering, store nyheter fra Apple/Google/Meta/Microsoft, produktlanseringer med markedseffekt.
+Startups og VC: maks 1 punkt — kun finansieringsrunder over 100 MUSD eller strategisk viktige oppkjøp.
+Kutt: produktanmeldelser, hype uten konkret nyhet.
 
 ## 🌍 Internasjonalt
-Ta med: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
-Kutt: alt annet.
+Ta med KUN det viktigste: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
+Maks 1 punkt.
 
 ## 🇳🇴 Norsk økonomi
 Ta med: Norges Bank, statsbudsjett, norske selskaper med markedseffekt, oljesektor, kronekurs med årsak.
-Kutt: NRK, kultur, innenrikspolitikk uten økonomisk utfall.
+Kutt: innenrikspolitikk uten økonomisk utfall, eiendomsmarkedet.
 
 ## 📈 Marked og makro
 Markedsdata (priser og prosentendringer) vises allerede i et eget snapshot øverst — IKKE gjenta prisene.
 Ta med: rentevedtak, inflasjon, handelskrig, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
+Krypto: maks 1 punkt — kun ved bevegelse over 10 % eller regulatorisk hendelse av betydning.
 Kutt: dagsbevegelser uten nyhet bak.
 
 ## 🏙️ Bergen og Vestland
 Ta med KUN direkte hverdagskonsekvens:
 ✓ Kollektivstreik/-stans (Skyss, Bybanen, buss)
 ✓ Veistenging / store trafikkforstyrrelser
-✓ Lokale prisendringer (bolig, kommunale avgifter)
+✓ Lokale prisendringer (kommunale avgifter)
 ✓ Kommunevedtak (barnehage, skole, helse)
 ✓ Helseadvarsler / sykehuskapasitet
 ✓ Store arbeidsplassnyheter (nedleggelse / nyetablering)
 
-TOTALBUDSJETT: Maks 490 ord for alle åtte seksjoner samlet."""
+TOTALBUDSJETT: Maks 450 ord for alle syv seksjoner samlet."""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Værvarsling Bergen (Yr / MET Norway API)
@@ -688,6 +687,68 @@ def weather_notion_blocks(weather: dict, date_human: str) -> list[dict]:
     return blocks
 
 
+_ANCHOR_TEXT = "Nyhetsbriefinger"
+_ARCHIVE_TITLE = "Arkiv"
+
+
+def _find_child_page_by_title(notion, parent_id: str, title: str) -> str | None:
+    """Finn en child_page-blokk med gitt tittel. Returnerer block_id (= page_id) eller None."""
+    cursor = None
+    while True:
+        kwargs: dict = {"block_id": parent_id}
+        if cursor:
+            kwargs["start_cursor"] = cursor
+        resp = notion.blocks.children.list(**kwargs)
+        for block in resp.get("results", []):
+            if block["type"] == "child_page" and block["child_page"].get("title") == title:
+                return block["id"]
+        if not resp.get("has_more"):
+            break
+        cursor = resp.get("next_cursor")
+    return None
+
+
+def _get_or_create_archive(notion, parent_id: str) -> str:
+    """Returner ID for 'Arkiv'-undersiden under parent_id, opprett den om nødvendig."""
+    page_id = _find_child_page_by_title(notion, parent_id, _ARCHIVE_TITLE)
+    if page_id:
+        return page_id
+    page = notion.pages.create(
+        parent={"page_id": parent_id},
+        properties={"title": {"title": [{"text": {"content": _ARCHIVE_TITLE}}]}},
+    )
+    return page["id"]
+
+
+def _get_or_create_anchor(notion, parent_id: str) -> str:
+    """Returner block_id for anker-heading på parent_id, opprett den om nødvendig."""
+    cursor = None
+    while True:
+        kwargs: dict = {"block_id": parent_id}
+        if cursor:
+            kwargs["start_cursor"] = cursor
+        resp = notion.blocks.children.list(**kwargs)
+        for block in resp.get("results", []):
+            if block["type"] == "heading_2":
+                rt = block["heading_2"].get("rich_text", [])
+                if rt and rt[0].get("text", {}).get("content") == _ANCHOR_TEXT:
+                    return block["id"]
+        if not resp.get("has_more"):
+            break
+        cursor = resp.get("next_cursor")
+    result = notion.blocks.children.append(
+        block_id=parent_id,
+        children=[{
+            "object": "block",
+            "type": "heading_2",
+            "heading_2": {
+                "rich_text": [{"type": "text", "text": {"content": _ANCHOR_TEXT}}]
+            },
+        }],
+    )
+    return result["results"][0]["id"]
+
+
 def publish_to_notion(
     briefing: str, weather: dict, market: dict, date_str: str, date_human: str
 ) -> None:
@@ -713,10 +774,13 @@ def publish_to_notion(
             + markdown_to_notion_blocks(briefing)
         )
 
+        # Opprett eller finn Arkiv-undersiden — briefing-sider lagres der
+        archive_id = _get_or_create_archive(notion, parent_id)
+
         # Notion godtar maks 100 blokker per kall — del opp om nødvendig
         CHUNK = 100
         page = notion.pages.create(
-            parent={"page_id": parent_id},
+            parent={"page_id": archive_id},
             properties={
                 "title": {
                     "title": [{"text": {"content": f"Nyhetsbriefing {date_str}"}}]
@@ -731,6 +795,18 @@ def publish_to_notion(
                 block_id=page_id,
                 children=blocks[i : i + CHUNK],
             )
+
+        # Legg til link øverst på indekssiden — nyeste alltid først
+        anchor_id = _get_or_create_anchor(notion, parent_id)
+        notion.blocks.children.append(
+            block_id=parent_id,
+            after=anchor_id,
+            children=[{
+                "object": "block",
+                "type": "link_to_page",
+                "link_to_page": {"type": "page_id", "page_id": page_id},
+            }],
+        )
 
         page_url = page.get("url", "")
         print(f"\n✓  Publisert til Notion: Nyhetsbriefing {date_str}")

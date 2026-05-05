@@ -61,6 +61,8 @@ feed = feedparser.parse(resp.content)
 | VentureBeat AI | `https://venturebeat.com/category/ai/feed/` |
 | MIT Technology Review | `https://www.technologyreview.com/feed/` |
 | ScienceDaily | `https://www.sciencedaily.com/rss/top/science.xml` |
+| Nature News | `https://www.nature.com/nature.rss` |
+| Phys.org | `https://phys.org/rss-feed/` |
 | ScienceDaily Helse | `https://www.sciencedaily.com/rss/health_medicine.xml` |
 | STAT News | `https://www.statnews.com/feed/` |
 
@@ -76,22 +78,21 @@ Ikke bruk `https://www.nrk.no/nyheter/rss.xml` (404), `https://e24.no/rss.xml` (
 Rediger `RSS_FEEDS`-dict øverst i `news_briefing.py`. Format: `"Kildenavn": "https://..."`.
 Bekreft alltid at en ny URL faktisk returnerer gyldig RSS (HTTP 200 + XML) før du legger den til.
 
-## Briefing-seksjoner (8 stk)
+## Briefing-seksjoner (7 stk)
 
-`SYSTEM_PROMPT` styrer hva Claude skriver. Stil: Bloomberg-terminal — tall og fakta, ingen fyllord. Maks 490 ord totalt.
+`SYSTEM_PROMPT` styrer hva Claude skriver. Stil: Bloomberg-terminal — tall og fakta, ingen fyllord. Maks 450 ord totalt.
 
-| Seksjon | Innhold |
-|---|---|
-| 🏥 Helse og medisin | Legemiddelgodkjenninger, klinisk evidens, folkehelsevarsler |
-| 🤖 AI og forskning | Nye modeller, gjennombrudd, AI-regulering |
-| 🎯 Dagens intensjon | Én setning — viktigste observasjon fra dagens nyheter |
-| 🧠 Visste du at | Historisk/faglig kontekst til én av dagens nyheter |
-| 🌍 Internasjonalt | Geopolitikk, naturkatastrofer, G20-valg |
-| 🇳🇴 Norsk økonomi | Norges Bank, oljesektor, kronekurs, norske børsselskaper |
-| 📈 Marked og makro | Rentevedtak, inflasjon, handelskrig, kvartalstall |
-| 🏙️ Bergen og Vestland | Kun direkte hverdagskonsekvens (kollektiv, vedtak, helse) |
+| Seksjon | Innhold | Maks punkter |
+|---|---|---|
+| 🏥 Helse og medisin | Legemiddelgodkjenninger, klinisk evidens, folkehelsevarsler | 3 |
+| 🔬 Forskning og vitenskap | Vitenskapelige gjennombrudd, klima/energiforskning, ny teknologi | 3 |
+| 🤖 AI, teknologi og startups | Nye AI-modeller, AI-regulering, Apple/Google/Meta, startups >100 MUSD | 3 (startups: 1) |
+| 🌍 Internasjonalt | Geopolitikk, naturkatastrofer, G20-valg | 1 |
+| 🇳🇴 Norsk økonomi | Norges Bank, oljesektor, kronekurs, norske børsselskaper | 3 |
+| 📈 Marked og makro | Rentevedtak, inflasjon, handelskrig, kvartalstall, krypto | 3 (krypto: 1) |
+| 🏙️ Bergen og Vestland | Kun direkte hverdagskonsekvens (kollektiv, vedtak, helse) | 3 |
 
-`Dagens intensjon` og `Visste du at` bruker ikke kulepunkter — tekst skrives direkte under heading.
+Innenrikspolitikk uten markedseffekt og eiendomsmarkedet kuttes alltid.
 
 ## Værvarsling Bergen
 
@@ -120,7 +121,7 @@ Feil i markedsdata stopper ikke resten av kjøringen (myk feil).
 Siden bygges opp i denne rekkefølgen:
 1. Værseksjon (heading_1 + værsummary, klarvær-perioder, nedbørstimer, UV/temp-stats)
 2. Markedssnapshot (Brent, S&P 500, OBX, EUR/NOK, USD/NOK)
-3. Nyhetsinnhold fra Claude (8 seksjoner)
+3. Nyhetsinnhold fra Claude (7 seksjoner)
 
 Notion godtar maks 100 blokker per API-kall — lange briefinger splittes automatisk.
 
