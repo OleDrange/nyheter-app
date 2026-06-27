@@ -2,16 +2,24 @@
 
 ## Hva prosjektet er
 
-Et standalone Python-script (`news_briefing.py`) som henter RSS-nyheter, oppsummerer dem med Claude AI, og publiserer til Notion. Ingen web-app, ingen pakkestruktur — bare én fil.
+To frittstående Python-script som oppsummerer med Claude AI og publiserer til Notion:
 
-## Kjøre scriptet
+- **`news_briefing.py`** — daglig nyhetsbriefing fra RSS-feeds (vær, marked, nyheter).
+- **`research_briefing.py`** — daglig forskningsbriefing: nye fagfellevurderte studier (trening/helse/medisin) fra Europe PMC, abstract-form, maks 5 per dag.
+
+Ingen web-app, ingen pakkestruktur. `research_briefing.py` gjenbruker hjelpefunksjoner fra `news_briefing.py`.
+
+## Kjøre scriptene
 
 ```bash
-python news_briefing.py          # print til terminal
+python news_briefing.py          # nyhetsbriefing til terminal
 python news_briefing.py --save   # lagrer også briefing_YYYY-MM-DD.md
+
+python research_briefing.py          # forskningsbriefing til terminal
+python research_briefing.py --save   # lagrer også forskningsbrief_YYYY-MM-DD.md
 ```
 
-På Windows: dobbeltklikk `run_briefing.bat`.
+På Windows: dobbeltklikk `run_briefing.bat` — kjører begge etter hverandre.
 
 ## Miljøvariabler
 
@@ -128,10 +136,33 @@ Siden bygges opp i denne rekkefølgen:
 
 Notion godtar maks 100 blokker per API-kall — lange briefinger splittes automatisk.
 
+## Forskningsbriefing (`research_briefing.py`)
+
+Egen daglig briefing kun om ny forskning. Henter kandidatstudier fra **Europe PMC** (ett REST-kall, ingen API-nøkkel), lar Claude velge de mest relevante og skrive abstract-form på norsk.
+
+**Kilde:** Europe PMC `search`-endepunkt (`https://www.ebi.ac.uk/europepmc/webservices/rest/search`), `resultType=core` (gir fulle abstracts), `SRC:MED` = kun fagfellevurdert (MEDLINE/PubMed), ikke preprints. Dekker både PubMed og preprints hvis man bytter `SRC`-filter — vi bruker kun MEDLINE.
+
+**Konfig** (konstanter øverst i fila — speiler `RSS_FEEDS`-mønsteret):
+- `MODEL` / `MAX_TOKENS` — som nyhetsbriefen (`claude-sonnet-4-6`).
+- `LOOKBACK_DAYS = 2` — datovindu på publiseringsdato (toleranse for indekseringsforsinkelse).
+- `MAX_ITEMS = 5` — maks studier (styres også i `SYSTEM_PROMPT`).
+- `CANDIDATE_POOL = 40` — antall ferske studier som hentes og sendes til Claude for kurering.
+- `EUROPE_PMC_QUERY` — bred, redigerbar emnespørring (trening + helse + klinisk medisin). Endre denne for å justere tema.
+
+**Format per studie:** `## [tittel](url)` + **Hva som ble gjort** / **Resultat** / **Relevans**. Claude velger opptil 5; heller færre enn svake.
+
+**Dedup:** `research_seen_dois.json` (ved siden av scriptet) holder DOI-er for studier som allerede er dekket, og pruner etter `SEEN_RETENTION_DAYS = 14`. Hindrer at samme studie gjentas dag etter dag. Kun studier Claude faktisk valgte (URL dukker opp i output) markeres som sett.
+
+**Notion:** egen seksjon adskilt fra nyhetsbriefen — undersiden **«Forskning Arkiv»** og ankeret **«Forskningsbriefinger»** på samme `NOTION_PARENT_PAGE_ID`. Gjenbruker `markdown_to_notion_blocks`, `_get_or_create_archive` og `_get_or_create_anchor` (sistnevnte to tar nå valgfri `title`/`anchor_text`).
+
+**Lagring:** `--save` skriver `forskningsbrief_YYYY-MM-DD.md`.
+
+Feil i henting er myk (tom liste → avslutter uten å krasje bat-fila).
+
 ## Avhengigheter
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Krever Python 3.10+.
+Krever Python 3.10+. Forskningsbriefen bruker samme avhengigheter (`httpx`, `anthropic`, `notion-client`) — ingen nye.

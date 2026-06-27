@@ -17,4 +17,7 @@ for /f "usebackq eol=# tokens=1,* delims==" %%A in (".env") do (
 python news_briefing.py --save
 
 echo.
+python research_briefing.py --save
+
+echo.
 pause

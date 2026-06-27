@@ -716,19 +716,19 @@ def _find_child_page_by_title(notion, parent_id: str, title: str) -> str | None:
     return None
 
 
-def _get_or_create_archive(notion, parent_id: str) -> str:
-    """Returner ID for 'Arkiv'-undersiden under parent_id, opprett den om nødvendig."""
-    page_id = _find_child_page_by_title(notion, parent_id, _ARCHIVE_TITLE)
+def _get_or_create_archive(notion, parent_id: str, title: str = _ARCHIVE_TITLE) -> str:
+    """Returner ID for arkiv-undersiden under parent_id, opprett den om nødvendig."""
+    page_id = _find_child_page_by_title(notion, parent_id, title)
     if page_id:
         return page_id
     page = notion.pages.create(
         parent={"page_id": parent_id},
-        properties={"title": {"title": [{"text": {"content": _ARCHIVE_TITLE}}]}},
+        properties={"title": {"title": [{"text": {"content": title}}]}},
     )
     return page["id"]
 
 
-def _get_or_create_anchor(notion, parent_id: str) -> str:
+def _get_or_create_anchor(notion, parent_id: str, anchor_text: str = _ANCHOR_TEXT) -> str:
     """Returner block_id for anker-heading på parent_id, opprett den om nødvendig."""
     cursor = None
     while True:
@@ -739,7 +739,7 @@ def _get_or_create_anchor(notion, parent_id: str) -> str:
         for block in resp.get("results", []):
             if block["type"] == "heading_2":
                 rt = block["heading_2"].get("rich_text", [])
-                if rt and rt[0].get("text", {}).get("content") == _ANCHOR_TEXT:
+                if rt and rt[0].get("text", {}).get("content") == anchor_text:
                     return block["id"]
         if not resp.get("has_more"):
             break
@@ -750,7 +750,7 @@ def _get_or_create_anchor(notion, parent_id: str) -> str:
             "object": "block",
             "type": "heading_2",
             "heading_2": {
-                "rich_text": [{"type": "text", "text": {"content": _ANCHOR_TEXT}}]
+                "rich_text": [{"type": "text", "text": {"content": anchor_text}}]
             },
         }],
     )

@@ -3,6 +3,10 @@
 
 # Genererte briefing-filer
 briefing_*.md
+forskningsbrief_*.md
+
+# Dedup-cache for forskningsbriefen
+research_seen_dois.json
 
 # Python
 __pycache__/
