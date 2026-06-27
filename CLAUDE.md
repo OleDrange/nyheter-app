@@ -25,7 +25,7 @@ Kopier `.env.example` til `.env` og fyll inn verdiene. Scriptet leser `.env` aut
 
 ## Viktige designvalg — ikke endre uten grunn
 
-- **Modell:** `claude-sonnet-4-20250514` — ikke bytt til opus eller haiku.
+- **Modell:** `claude-sonnet-4-6` — ikke bytt til opus eller haiku. (Tidligere `claude-sonnet-4-20250514`, pensjonert 15. juni 2026.)
 - **Streaming:** Claude-output streames direkte til terminal, ikke bufret.
 - **Notion er valgfritt:** publiseres kun hvis begge Notion-variabler er satt.
 - **RSS-feil er myke:** én feed som feiler stopper ikke resten av kjøringen.
@@ -44,7 +44,7 @@ feed = feedparser.parse(resp.content)
 
 `_FETCH_HEADERS` er definert som konstant rett under `MAX_DESC_CHARS`.
 
-## Aktive RSS-feeds (15 stk)
+## Aktive RSS-feeds (19 stk)
 
 | Kilde | Kategori |
 |---|---|
@@ -63,6 +63,8 @@ feed = feedparser.parse(resp.content)
 | ScienceDaily | `https://www.sciencedaily.com/rss/top/science.xml` |
 | Nature News | `https://www.nature.com/nature.rss` |
 | Phys.org | `https://phys.org/rss-feed/` |
+| Titan (UiO) | `https://titan.uio.no/rss.xml` (Atom) |
+| Aftenposten Viten | `https://www.aftenposten.no/rss/viten` |
 | ScienceDaily Helse | `https://www.sciencedaily.com/rss/health_medicine.xml` |
 | STAT News | `https://www.statnews.com/feed/` |
 
@@ -70,6 +72,7 @@ feed = feedparser.parse(resp.content)
 - Reuters: offentlige RSS-feeds stengt 2020.
 - Finansavisen: tilbyr ikke offentlige RSS-feeds.
 - Oslo Børs: ingen offentlig RSS (børsmeldinger er tilgjengelig via NewsWeb API, ikke RSS). Børsnyheter dekkes via E24 Børs og finans.
+- forskning.no: ingen fungerende offentlig RSS-feed (Labrador CMS, `/rss` er en JS-rendret HTML-side uten autodiscovery-tag; alle vanlige feed-URLer gir 404). Norsk vitenskap dekkes via Titan (UiO) og Aftenposten Viten.
 
 Ikke bruk `https://www.nrk.no/nyheter/rss.xml` (404), `https://e24.no/rss.xml` (404) eller `https://www.dn.no/rss.xml` (ugyldig) — disse er utdaterte URLer.
 

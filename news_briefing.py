@@ -70,12 +70,14 @@ RSS_FEEDS: dict[str, str] = {
     "ScienceDaily": "https://www.sciencedaily.com/rss/top/science.xml",
     "Nature News": "https://www.nature.com/nature.rss",
     "Phys.org": "https://phys.org/rss-feed/",
+    "Titan (UiO)": "https://titan.uio.no/rss.xml",
+    "Aftenposten Viten": "https://www.aftenposten.no/rss/viten",
     # Helse og medisin
     "ScienceDaily Helse": "https://www.sciencedaily.com/rss/health_medicine.xml",
     "STAT News": "https://www.statnews.com/feed/",
 }
 
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 LOOKBACK_HOURS = 24
 MAX_PER_FEED = 15  # maks antall artikler per kilde
@@ -557,13 +559,19 @@ def parse_inline_links(text: str) -> list[dict]:
                 )
 
         link_text = m.group(1)[:NOTION_TEXT_LIMIT]
-        link_url = m.group(2)
-        parts.append(
-            {
-                "type": "text",
-                "text": {"content": link_text, "link": {"url": link_url}},
-            }
-        )
+        link_url = m.group(2).strip()
+        if link_url.startswith(("http://", "https://")):
+            parts.append(
+                {
+                    "type": "text",
+                    "text": {"content": link_text, "link": {"url": link_url}},
+                }
+            )
+        else:
+            # Ugyldig/placeholder-URL — render som vanlig tekst (Notion avviser ellers hele kallet)
+            parts.append(
+                {"type": "text", "text": {"content": link_text}}
+            )
         last = m.end()
 
     if last < len(text):
