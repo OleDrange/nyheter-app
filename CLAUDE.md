@@ -2,12 +2,17 @@
 
 ## Hva prosjektet er
 
-To frittstående Python-script som oppsummerer med Claude AI og publiserer til Notion:
+En selvstendig daglig briefing-app, hostet på VPS bak `*.modr.online`-proxyen, i to deler:
 
-- **`news_briefing.py`** — daglig nyhetsbriefing fra RSS-feeds (vær, marked, nyheter).
-- **`research_briefing.py`** — daglig forskningsbriefing: nye fagfellevurderte studier (trening/helse/medisin) fra Europe PMC, abstract-form, maks 5 per dag.
+- **Generator** (Python) — kjører én gang i døgnet (cron 05:00) og skriver dagens briefing som JSON:
+  - **`news_briefing.py`** — daglig nyhetsbriefing fra RSS-feeds (vær, marked, nyheter).
+  - **`research_briefing.py`** — daglig forskningsbriefing: nye fagfellevurderte studier (trening/helse/medisin) fra Europe PMC, abstract-form, maks 5 per dag. Gjenbruker hjelpefunksjoner fra `news_briefing.py`.
+- **Nettside** (`web/`, Astro SSR på Node) — leser JSON-filene og viser dagens briefing + arkiv på `nyheter.modr.online`.
 
-Ingen web-app, ingen pakkestruktur. `research_briefing.py` gjenbruker hjelpefunksjoner fra `news_briefing.py`.
+Primær output er nå **nettsiden** (via et delt JSON-datalager), ikke Notion. Notion er valgfri/legacy.
+
+> Drift, deploy og oppdateringsflyt: se **«Drift på VPS»** og **«Oppdateringsflyt»** nedenfor.
+> Migreringshistorikk og full begrunnelse: `MIGRERINGSPLAN.md`.
 
 ## Kjøre scriptene
 
@@ -18,6 +23,10 @@ python news_briefing.py --save   # lagrer også briefing_YYYY-MM-DD.md
 python research_briefing.py          # forskningsbriefing til terminal
 python research_briefing.py --save   # lagrer også forskningsbrief_YYYY-MM-DD.md
 ```
+
+Begge scriptene skriver **alltid** dagens briefing til datalageret via `store_briefing()`
+(`<BRIEFING_DATA_DIR>/briefings/<dato>.json`, default `./briefings/` lokalt, `/data/briefings/` i container).
+`--save` legger i tillegg til en markdown-backup. Se «Datalager — JSON-kontrakten» nedenfor.
 
 På Windows: dobbeltklikk `run_briefing.bat` — kjører begge etter hverandre.
 
@@ -35,7 +44,7 @@ Kopier `.env.example` til `.env` og fyll inn verdiene. Scriptet leser `.env` aut
 
 - **Modell:** `claude-sonnet-4-6` — ikke bytt til opus eller haiku. (Tidligere `claude-sonnet-4-20250514`, pensjonert 15. juni 2026.)
 - **Streaming:** Claude-output streames direkte til terminal, ikke bufret.
-- **Notion er valgfritt:** publiseres kun hvis begge Notion-variabler er satt.
+- **Notion er valgfritt/legacy:** publiseres kun hvis begge Notion-variabler er satt; ellers myk feil. Primær output er JSON-datalageret (nettsiden). På VPS holdes `NOTION_*` tomme i `.env`.
 - **RSS-feil er myke:** én feed som feiler stopper ikke resten av kjøringen.
 - **Artikler uten dato:** inkluderes alltid (kan ikke fastslå alder).
 - **`MAX_PER_FEED = 15`:** beskytter mot feeds med hundrevis av innlegg.
@@ -151,7 +160,7 @@ Egen daglig briefing kun om ny forskning. Henter kandidatstudier fra **Europe PM
 
 **Format per studie:** `## [tittel](url)` + **Hva som ble gjort** / **Resultat** / **Relevans**. Claude velger opptil 5; heller færre enn svake.
 
-**Dedup:** `research_seen_dois.json` (ved siden av scriptet) holder DOI-er for studier som allerede er dekket, og pruner etter `SEEN_RETENTION_DAYS = 14`. Hindrer at samme studie gjentas dag etter dag. Kun studier Claude faktisk valgte (URL dukker opp i output) markeres som sett.
+**Dedup:** `research_seen_dois.json` holder DOI-er for studier som allerede er dekket, og pruner etter `SEEN_RETENTION_DAYS = 14`. Hindrer at samme studie gjentas dag etter dag. Kun studier Claude faktisk valgte (URL dukker opp i output) markeres som sett. Lagres i `BRIEFING_DATA_DIR` (på volumet i container — MÅ persisteres, ellers nullstilles dedup hver kjøring), faller tilbake til scriptmappa lokalt.
 
 **Notion:** egen seksjon adskilt fra nyhetsbriefen — undersiden **«Forskning Arkiv»** og ankeret **«Forskningsbriefinger»** på samme `NOTION_PARENT_PAGE_ID`. Gjenbruker `markdown_to_notion_blocks`, `_get_or_create_archive` og `_get_or_create_anchor` (sistnevnte to tar nå valgfri `title`/`anchor_text`).
 
@@ -159,10 +168,108 @@ Egen daglig briefing kun om ny forskning. Henter kandidatstudier fra **Europe PM
 
 Feil i henting er myk (tom liste → avslutter uten å krasje bat-fila).
 
+## Datalager — JSON-kontrakten (kilde for nettsiden)
+
+`store_briefing()` (i `news_briefing.py`, importert av `research_briefing.py`) skriver/merger
+dagens briefing til `<BRIEFING_DATA_DIR>/briefings/<dato>.json`. Begge scriptene skriver inn i
+**samme dagsfil** — kun feltene den enkelte kjøringen produserte oppdateres. Skrivingen er
+**atomisk** (skriv `.tmp`, så `os.replace`) slik at nettsiden aldri leser en halvskrevet fil.
+
+Skjema:
+
+```json
+{
+  "date": "2026-06-28",
+  "created_at": "ISO-tidsstempel",
+  "news_md": "nyhetsbriefing (markdown)",
+  "research_md": "forskningsbriefing (markdown)",
+  "weather": { ... },          // fetch_bergen_weather()-dict
+  "market": { ... },           // fetch_market_snapshot()-dict
+  "research_items": [ { "title", "url", "journal", "date" } ]
+}
+```
+
+`weather`/`market` lagres strukturert hver dag → kan bygge figurer (markedstrend over tid osv.)
+uten ekstra datainnhenting.
+
+## Nettsiden (`web/` — Astro)
+
+- **Astro 5 i SSR-modus** (`output: 'server'`, `@astrojs/node` standalone). Leser JSON ved hver
+  forespørsel → nytt innhold vises **uten** bygge-steg. Designendringer krever rebuild av web-imaget.
+- Ruter: `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
+- `src/lib/briefings.js` — `listDates()`, `getBriefing(date)`, `renderMarkdown()`.
+  Markdown rendres med `marked`; Claude-output bruker `•`-punkter → normaliseres til `- ` der.
+- Lytter på `0.0.0.0:8080` i container (`HOST`/`PORT` env). Bind til `0.0.0.0` er et plattformkrav.
+
+## Drift på VPS
+
+- **Vert:** VPS-en `MODR`, kjører som **root**, repo klonet til `/root/nyheter-app`.
+  Repo: `git@github.com:OleDrange/nyheter-app.git`, **default-branch er `master`** (ikke `main`).
+- **To tjenester** (`docker-compose.yml`):
+  - `web` — alltid oppe (`docker compose up -d web`), `restart: unless-stopped`, på det eksterne
+    `web`-nettet med alias **`nyheter-web`**, intern port **8080**. Monterer `briefing-data:/data:ro`.
+  - `generator` — batch, `profiles: ["batch"]` (startes IKKE av `up -d`), kjøres av cron med
+    `docker compose run --rm generator`. Monterer `briefing-data:/data` (rw), `env_file: .env`.
+    Dockerfile bruker **CMD** (ikke ENTRYPOINT), se fallgruver.
+- **Tidsplan:** root sin crontab:
+  ```cron
+  CRON_TZ=Europe/Oslo
+  0 5 * * * cd /root/nyheter-app && /usr/bin/docker compose run --rm generator >> /root/nyheter-cron.log 2>&1
+  ```
+- **Proxy:** `~/modr-proxy` (Caddy). Blokk i `Caddyfile`:
+  `nyheter.modr.online { encode gzip; reverse_proxy nyheter-web:8080 }`.
+  Last inn: `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile --address 127.0.0.1:2019`
+  (IPv4-adressen er nødvendig — se fallgruver). Fallback: `docker compose restart caddy`.
+- **Inspisere data uten å kjøre generatoren på nytt** (web monterer samme volum):
+  `docker compose exec web ls -la /data/briefings` / `... cat /data/briefings/<dato>.json`.
+- **Backup** av hele arkivet (bor kun i volumet):
+  `docker run --rm -v nyheter-app_briefing-data:/d -v /root:/b alpine tar czf /b/nyheter-backup.tgz -C /d .`
+- **Logger:** generator → `/root/nyheter-cron.log` (opprettes først ved første cron-kjøring);
+  web → `docker compose logs -f web`.
+
+## Oppdateringsflyt
+
+Data og presentasjon er frikoblet — endre det ene uten å røre det andre.
+
+```bash
+# lokalt: rediger, test, push
+git add -A && git commit -m "..." && git push          # til master
+# på VPS:
+cd ~/nyheter-app && git pull && docker compose build && docker compose up -d web
+```
+
+| Endring | Test lokalt | Effekt på VPS |
+|---|---|---|
+| Generator (`*.py`) | `python news_briefing.py` | Ny logikk ved neste cron (eller `docker compose run --rm generator`). Web røres ikke. |
+| Nettside (`web/`) | `cd web && npm run dev` | Ny design på all historikk umiddelbart (SSR re-rendrer eksisterende JSON). |
+
+Rollback: `git revert <commit> && git push`, så `git pull && docker compose build && docker compose up -d web`.
+
+## Fallgruver (les før du endrer deploy)
+
+- **`master`, ikke `main`** — repoets default-branch.
+- **Generator bruker CMD, ikke ENTRYPOINT.** `docker compose run --rm generator <cmd>` overstyrer
+  jobben. Ikke kjør `docker compose run --rm generator ls/cat …` med ENTRYPOINT-tankegang — bruk
+  `docker compose exec web …` for inspeksjon, ellers risikerer du å kjøre hele briefingen (og bruke Claude-kvote).
+- **Tidssone:** scriptene bruker naiv `datetime.now()`/`.astimezone()`. `TZ=Europe/Oslo` settes i
+  containeren (Dockerfile + compose) og `CRON_TZ` i crontab — ellers blir dato/værvinduer/05:00 feil på UTC-vert.
+- **Persistente data:** `briefings/<dato>.json` og `research_seen_dois.json` MÅ ligge på volumet
+  (`BRIEFING_DATA_DIR=/data`). Uten det: tomt arkiv + dedup som nullstilles.
+- **Backfill av gammel historikk:** `briefing_*.md`/`forskningsbrief_*.md` er gitignored og
+  `.dockerignore`-et, så de finnes verken i repoet eller imaget — kun på den opprinnelige
+  Windows-maskinen. `import_history.py` i container finner derfor ingenting; backfill må kjøres
+  lokalt og JSON-filene overføres til volumet.
+- **`docker-entrypoint.sh` må ha LF**-linjeskift (sikret av `.gitattributes`), ellers feiler den i Linux.
+- **Notion-støy:** en ugyldig (men ikke-tom) `NOTION_API_KEY` i `.env` gir en rød «API token is
+  invalid»-linje hver morgen (myk feil). Hold `NOTION_*` tomme på VPS, eller fjern Notion-koden.
+- **Caddy reload** treffer admin-API på `[::1]:2019` (IPv6) som standard og feiler — bruk
+  `--address 127.0.0.1:2019`, eller `docker compose restart caddy`.
+
 ## Avhengigheter
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt    # generator: httpx, feedparser, anthropic, notion-client, yfinance
+cd web && npm install              # nettside: astro, @astrojs/node, marked
 ```
 
-Krever Python 3.10+. Forskningsbriefen bruker samme avhengigheter (`httpx`, `anthropic`, `notion-client`) — ingen nye.
+Generator krever Python 3.10+ (image bruker 3.12). Nettsiden krever Node 20+ (image bruker 22).
