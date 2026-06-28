@@ -1,19 +1,56 @@
 ---
+import '../styles/global.css';
+import ThemePicker from '../components/ThemePicker.astro';
+
 const { title } = Astro.props;
+const path = Astro.url.pathname;
+const isHome = path === '/';
+const isArchive = path.startsWith('/arkiv');
 ---
 
+<!doctype html>
 <html lang="no">
   <head>
     <meta charset="utf-8" />
+    {/* Sett tema før paint (unngår blink): lagret valg, ellers systemets preferanse. */}
+    <script is:inline>
+      (() => {
+        try {
+          let t = localStorage.getItem('theme');
+          if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <title>{title}</title>
   </head>
   <body>
-    <nav>
-      <a href="/">I dag</a> · <a href="/arkiv">Arkiv</a>
-    </nav>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="brand">
+          <a href="/">
+            <span class="brand__mark">📰 Nyhetsbriefing</span>
+          </a>
+          <span class="brand__sub">Bergen · daglig</span>
+        </div>
+        <div class="header-actions">
+          <nav class="nav">
+            <a href="/" aria-current={isHome ? 'page' : undefined}>I dag</a>
+            <a href="/arkiv" aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+          </nav>
+          <ThemePicker />
+        </div>
+      </div>
+    </header>
+
     <main>
       <slot />
     </main>
+
+    <footer class="site-footer">
+      Daglig nyhets- og forskningsbriefing · oppsummert med Claude
+    </footer>
   </body>
 </html>

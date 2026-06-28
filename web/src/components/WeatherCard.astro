@@ -1,0 +1,64 @@
+---
+// Vær-widget for Bergen. Bygger på det strukturerte `weather`-objektet
+// (fetch_bergen_weather): summary, rain_hours, sun_periods, max_uv(+hour),
+// max_temp(+hour), temp_0700.
+const { weather } = Astro.props;
+const w = weather || {};
+
+function weatherIcon(summary = '') {
+  const s = summary.toLowerCase();
+  if (/(torden|tordenvær)/.test(s)) return '⛈️';
+  if (/(regn|byge|sludd|nedbør)/.test(s)) return '🌧️';
+  if (/snø/.test(s)) return '🌨️';
+  if (/(tåke|skodde)/.test(s)) return '🌫️';
+  if (/(klarvær|klart|sol)/.test(s)) return '☀️';
+  if (/delvis/.test(s)) return '⛅';
+  if (/(skyet|overskyet)/.test(s)) return '☁️';
+  return '🌤️';
+}
+
+const hasData = w.summary && !String(w.summary).startsWith('utilgjengelig');
+
+const stats = [];
+if (w.temp_0700 != null) stats.push({ label: 'Kl. 07', value: `${w.temp_0700}°` });
+if (w.max_temp != null)
+  stats.push({
+    label: 'Maks temp',
+    value: w.max_temp_hour != null ? `${w.max_temp}° kl. ${w.max_temp_hour}` : `${w.max_temp}°`,
+  });
+if (w.max_uv != null)
+  stats.push({
+    label: 'Maks UV',
+    value: w.max_uv_hour != null ? `${w.max_uv} kl. ${w.max_uv_hour}` : `${w.max_uv}`,
+  });
+stats.push({
+  label: 'Sol',
+  value: w.sun_periods?.length ? w.sun_periods.join(', ').replace(/kl\.\s*/g, '') : 'Ingen klarvær',
+});
+stats.push({
+  label: 'Nedbør',
+  value: w.rain_hours?.length ? w.rain_hours.join(', ').replace(/kl\.\s*/g, '') : 'Ingen over 1 mm',
+});
+---
+
+<div class="card weather">
+  <div class="weather__top">
+    <span class="weather__icon" aria-hidden="true">{weatherIcon(w.summary)}</span>
+    <div>
+      <div class="weather__place">Bergen</div>
+      <div class="weather__summary">{hasData ? w.summary : 'Vær utilgjengelig'}</div>
+    </div>
+  </div>
+  {
+    hasData && (
+      <div class="weather__stats">
+        {stats.map((s) => (
+          <div class="wstat">
+            <span class="wstat__label">{s.label}</span>
+            <span class="wstat__value">{s.value}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</div>

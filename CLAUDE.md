@@ -197,8 +197,28 @@ uten ekstra datainnhenting.
 - **Astro 5 i SSR-modus** (`output: 'server'`, `@astrojs/node` standalone). Leser JSON ved hver
   forespørsel → nytt innhold vises **uten** bygge-steg. Designendringer krever rebuild av web-imaget.
 - Ruter: `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
-- `src/lib/briefings.js` — `listDates()`, `getBriefing(date)`, `renderMarkdown()`.
-  Markdown rendres med `marked`; Claude-output bruker `•`-punkter → normaliseres til `- ` der.
+- **Design:** «moderne dashboard» — kort-basert, sans-serif.
+  Stiler i `src/styles/global.css` (design-tokens som CSS-variabler, importeres i `Base.astro`).
+- **Temaer:** 5 fargetemaer (Lys, Sepia, Skumring, Mørk, Midnatt) valgt via `[data-theme]` på
+  `<html>`. Velges med `ThemePicker.astro`-knappen i headeren; valget lagres i `localStorage`
+  (nøkkel `theme`) og settes **før paint** av et `is:inline`-skript i `<head>` (unngår blink;
+  faller tilbake til `prefers-color-scheme` ved første besøk). **Legge til et tema = (1) ny
+  `[data-theme="<id>"]`-blokk i `global.css`, (2) én linje i `src/lib/themes.js`** — knappen/menyen
+  bygges fra registeret, så ingen annen kode trenger endres.
+  Komponenter: `WeatherCard.astro` (vær-widget fra `weather`-objektet), `MarketStrip.astro`
+  (marked fra `market`-objektet, opp/ned-farger), `BriefingView.astro` (deler topp-grid +
+  nyhetskort + forskningskort mellom forside og enkeltdag).
+- `src/lib/briefings.js`:
+  - `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked; `•` → `- `).
+  - `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (ett kort per «## »-seksjon;
+    håndterer flagg-emoji som 🇳🇴 via `Regional_Indicator`).
+  - `splitResearch(research_md)` → `[{ title, url, html }]` (ett kort per studie).
+  - `formatDateNo()` / `weekdayNo()` — norsk dato (lokaltid-trygg, ingen UTC-skift).
+- **`BRIEFING_DIR`:** prod (Dockerfile) setter `/data/briefings` eksplisitt. Uten env-var
+  (lokal dev) faller `briefings.js` tilbake til **repo-lokal `briefings/`** — samme mappe
+  generatoren skriver til lokalt (`BRIEFING_DATA_DIR=.`). `briefings/` er git-/docker-ignorert.
+- **Lokal dev:** `cd web && npm run dev` → `http://localhost:4321`. Trenger JSON i repo-lokal
+  `briefings/` (kjør generatoren lokalt, eller bruk eksisterende filer der). HMR oppdaterer live.
 - Lytter på `0.0.0.0:8080` i container (`HOST`/`PORT` env). Bind til `0.0.0.0` er et plattformkrav.
 
 ## Drift på VPS

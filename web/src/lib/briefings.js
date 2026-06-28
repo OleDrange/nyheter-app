@@ -1,9 +1,15 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
 
-// Mappa generatoren skriver dagsfilene til (delt volum i produksjon).
-const DIR = process.env.BRIEFING_DIR || '/data/briefings';
+// Mappa generatoren skriver dagsfilene til. I produksjon (Docker) settes
+// BRIEFING_DIR=/data/briefings eksplisitt mot det delte volumet. Uten env-var
+// (lokal dev) leser vi repo-lokal briefings/-mappe — samme sted generatoren
+// skriver lokalt (BRIEFING_DATA_DIR=.).
+const DIR =
+  process.env.BRIEFING_DIR ||
+  fileURLToPath(new URL('../../../briefings', import.meta.url));
 
 /**
  * Claude-output bruker «•»-punkter; normaliser til «- » så marked tolker dem
@@ -35,4 +41,69 @@ export async function getBriefing(date) {
   } catch {
     return null;
   }
+}
+
+/** "2026-06-28" → "lørdag 28. juni 2026" (lokaltid-trygg, ingen UTC-skift). */
+export function formatDateNo(dateStr, opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) {
+  const [y, m, d] = String(dateStr).split('-').map(Number);
+  if (!y || !m || !d) return dateStr;
+  return new Intl.DateTimeFormat('nb-NO', opts).format(new Date(y, m - 1, d));
+}
+
+/** "2026-06-28" → "lørdag" (kort ukedagsbruk i arkivet). */
+export function weekdayNo(dateStr) {
+  return formatDateNo(dateStr, { weekday: 'long' });
+}
+
+// Ledende emoji (inkl. flagg som 🇳🇴) + mellomrom + resten av overskriften.
+const HEADING_EMOJI =
+  /^((?:\p{Extended_Pictographic}|\p{Regional_Indicator})[\p{Extended_Pictographic}\p{Regional_Indicator}️‍]*)\s+(.*)$/u;
+
+/**
+ * Del nyhetsbriefingen (`news_md`) i de syv «## »-seksjonene slik at hver kan
+ * vises som eget kort. Returnerer [{ emoji, title, html }].
+ */
+export function splitNewsSections(md) {
+  const text = String(md || '').trim();
+  if (!text) return [];
+  return text
+    .split(/^##\s+/m)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const nl = part.indexOf('\n');
+      const heading = (nl === -1 ? part : part.slice(0, nl)).trim();
+      const body = nl === -1 ? '' : part.slice(nl + 1).trim();
+      const m = heading.match(HEADING_EMOJI);
+      return {
+        emoji: m ? m[1] : '',
+        title: m ? m[2] : heading,
+        html: renderMarkdown(body),
+      };
+    });
+}
+
+/**
+ * Del forskningsbriefingen (`research_md`) per studie. Hver studie er
+ * `## [tittel](url)` etterfulgt av Hva/Resultat/Relevans.
+ * Returnerer [{ title, url, html }].
+ */
+export function splitResearch(md) {
+  const text = String(md || '').trim();
+  if (!text) return [];
+  return text
+    .split(/^##\s+/m)
+    .map((s) => s.replace(/\n*-{3,}\s*$/, '').trim()) // dropp avsluttende «---»
+    .filter(Boolean)
+    .map((part) => {
+      const nl = part.indexOf('\n');
+      const heading = (nl === -1 ? part : part.slice(0, nl)).trim();
+      const body = nl === -1 ? '' : part.slice(nl + 1).trim();
+      const link = heading.match(/^\[(.*?)\]\((.*?)\)\s*$/);
+      return {
+        title: link ? link[1] : heading,
+        url: link ? link[2] : null,
+        html: renderMarkdown(body),
+      };
+    });
 }

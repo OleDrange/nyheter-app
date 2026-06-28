@@ -1,0 +1,90 @@
+---
+// Tema-velger: en knapp som åpner en meny med alle registrerte temaer.
+// Menyen bygges fra THEMES, så nye temaer dukker opp automatisk uten kodeendring.
+// Valget lagres i localStorage og anvendes før paint av skriptet i Base.astro.
+import { THEMES } from '../lib/themes.js';
+---
+
+<div class="theme-picker" data-theme-picker>
+  <button
+    type="button"
+    class="theme-toggle"
+    data-theme-toggle
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-label="Velg fargetema"
+  >
+    <span class="theme-toggle__icon" aria-hidden="true">🎨</span>
+    <span class="theme-toggle__label" data-theme-label>Tema</span>
+  </button>
+  <div class="theme-menu" role="menu" data-theme-menu hidden>
+    {
+      THEMES.map((t) => (
+        <button
+          type="button"
+          class="theme-option"
+          role="menuitemradio"
+          aria-checked="false"
+          data-set-theme={t.id}
+          data-theme-name={t.name}
+        >
+          <span class="theme-option__swatch" style={`background:${t.swatch}`} aria-hidden="true" />
+          <span>{t.name}</span>
+          <span class="theme-option__check" aria-hidden="true">✓</span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const KEY = 'theme';
+    const root = document.documentElement;
+    const picker = document.querySelector('[data-theme-picker]');
+    if (!picker) return;
+    const btn = picker.querySelector('[data-theme-toggle]');
+    const menu = picker.querySelector('[data-theme-menu]');
+    const label = picker.querySelector('[data-theme-label]');
+    const options = Array.from(picker.querySelectorAll('[data-set-theme]'));
+
+    const currentTheme = () => root.getAttribute('data-theme') || 'light';
+
+    function sync() {
+      const cur = currentTheme();
+      options.forEach((o) => {
+        const on = o.getAttribute('data-set-theme') === cur;
+        o.setAttribute('aria-checked', on ? 'true' : 'false');
+        if (on && label) label.textContent = o.getAttribute('data-theme-name');
+      });
+    }
+    function setOpen(open) {
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(menu.hidden);
+    });
+    options.forEach((o) =>
+      o.addEventListener('click', () => {
+        const t = o.getAttribute('data-set-theme');
+        root.setAttribute('data-theme', t);
+        try {
+          localStorage.setItem(KEY, t);
+        } catch (e) {}
+        sync();
+        setOpen(false);
+      })
+    );
+    document.addEventListener('click', (e) => {
+      if (!picker.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+
+    sync();
+  })();
+</script>

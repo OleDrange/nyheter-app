@@ -8,6 +8,7 @@ __pycache__/
 briefing_*.md
 forskningsbrief_*.md
 research_seen_dois.json
+briefings/
 briefing_log.txt
 *.bat
 create_shortcut.ps1

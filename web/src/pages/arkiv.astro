@@ -1,23 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
-import { listDates } from '../lib/briefings.js';
+import { listDates, formatDateNo, weekdayNo } from '../lib/briefings.js';
 
 const dates = await listDates();
 ---
 
 <Base title="Arkiv">
-  <h1>Arkiv</h1>
+  <div class="page-head">
+    <h1>Arkiv</h1>
+    <div class="date">{dates.length} briefinger</div>
+  </div>
   {
     dates.length ? (
-      <ul>
+      <div class="archive-grid">
         {dates.map((d) => (
-          <li>
-            <a href={`/b/${d}`}>{d}</a>
-          </li>
+          <a class="card archive-card" href={`/b/${d}`}>
+            {formatDateNo(d, { day: 'numeric', month: 'short', year: 'numeric' })}
+            <span class="weekday">{weekdayNo(d)}</span>
+          </a>
         ))}
-      </ul>
+      </div>
     ) : (
-      <p>Ingen briefinger ennå.</p>
+      <p class="empty">Ingen briefinger ennå.</p>
     )
   }
 </Base>

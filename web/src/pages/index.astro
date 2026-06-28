@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { listDates, getBriefing, renderMarkdown } from '../lib/briefings.js';
+import BriefingView from '../components/BriefingView.astro';
+import { listDates, getBriefing, formatDateNo } from '../lib/briefings.js';
 
 const dates = await listDates();
 const b = dates.length ? await getBriefing(dates[0]) : null;
@@ -9,18 +10,15 @@ const b = dates.length ? await getBriefing(dates[0]) : null;
 <Base title={b ? `Briefing ${b.date}` : 'Nyhetsbriefing'}>
   {
     b ? (
-      <article>
-        <h1>Nyhetsbriefing — {b.date}</h1>
-        <Fragment set:html={renderMarkdown(b.news_md)} />
-        <h1>Forskningsbriefing</h1>
-        {b.research_md ? (
-          <Fragment set:html={renderMarkdown(b.research_md)} />
-        ) : (
-          <p>Ingen forskningsbriefing i dag.</p>
-        )}
-      </article>
+      <>
+        <div class="page-head">
+          <h1>Dagens briefing</h1>
+          <div class="date">{formatDateNo(b.date)}</div>
+        </div>
+        <BriefingView b={b} />
+      </>
     ) : (
-      <p>Ingen briefing generert ennå.</p>
+      <p class="empty">Ingen briefing generert ennå.</p>
     )
   }
 </Base>

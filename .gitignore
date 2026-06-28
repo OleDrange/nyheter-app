@@ -8,6 +8,9 @@ forskningsbrief_*.md
 # Dedup-cache for forskningsbriefen
 research_seen_dois.json
 
+# Lokalt datalager (genereres / sample for dev; i prod er det et Docker-volum)
+briefings/
+
 # Python
 __pycache__/
 *.py[cod]
