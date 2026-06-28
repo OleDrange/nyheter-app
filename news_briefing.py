@@ -294,6 +294,7 @@ def fetch_bergen_weather() -> dict:
         max_temp_day: float | None = None
         max_temp_hour: int | None = None
         temp_0700: float | None = None
+        hourly: list[dict] = []
 
         for entry in ts:
             t_local = datetime.fromisoformat(
@@ -338,6 +339,24 @@ def fetch_bergen_weather() -> dict:
                 if mm >= 1.0:
                     rain_hours.append(f"{hour:02d}–{hour + 1:02d}")
 
+            # Timesserie for værspilleren på nettsiden (per time i dag).
+            # next_1_hours gir nedbør + symbol per time; instant gir temp + UV.
+            h_precip = h_symbol = None
+            if "next_1_hours" in d:
+                h_precip = round(
+                    d["next_1_hours"]["details"].get("precipitation_amount", 0.0), 1
+                )
+                h_symbol = d["next_1_hours"]["summary"]["symbol_code"]
+            hourly.append(
+                {
+                    "hour": hour,
+                    "temp": round(t_val, 1) if t_val is not None else None,
+                    "precip": h_precip,
+                    "uv": round(uv, 1),
+                    "symbol": h_symbol,
+                }
+            )
+
         # Bygg klarvær-perioder (sammenhengende timer → intervall)
         sun_periods: list[str] = []
         if sun_hours:
@@ -361,6 +380,7 @@ def fetch_bergen_weather() -> dict:
             "max_temp": max_temp_day,
             "max_temp_hour": max_temp_hour,
             "temp_0700": temp_0700,
+            "hourly": hourly,
         }
 
     except Exception as exc:
@@ -373,6 +393,7 @@ def fetch_bergen_weather() -> dict:
             "max_temp": None,
             "max_temp_hour": None,
             "temp_0700": None,
+            "hourly": [],
         }
 
 
@@ -393,7 +414,7 @@ def fetch_market_snapshot() -> dict:
 
         logging.getLogger("yfinance").setLevel(logging.ERROR)
 
-        t = yf.Tickers("BZ=F ^GSPC OBX.OL EURNOK=X USDNOK=X")
+        t = yf.Tickers("BZ=F ^GSPC OBX.OL BTC-USD EURNOK=X USDNOK=X")
 
         def _pct(info) -> tuple:
             last = getattr(info, "last_price", None)
@@ -404,6 +425,7 @@ def fetch_market_snapshot() -> dict:
         brent, brent_chg = _pct(t.tickers["BZ=F"].fast_info)
         sp500, sp500_chg = _pct(t.tickers["^GSPC"].fast_info)
         osebx, osebx_chg = _pct(t.tickers["OBX.OL"].fast_info)
+        btc, btc_chg = _pct(t.tickers["BTC-USD"].fast_info)
         eurnok = getattr(t.tickers["EURNOK=X"].fast_info, "last_price", None)
         usdnok = getattr(t.tickers["USDNOK=X"].fast_info, "last_price", None)
 
@@ -411,6 +433,7 @@ def fetch_market_snapshot() -> dict:
             "brent": brent, "brent_chg": brent_chg,
             "sp500": sp500, "sp500_chg": sp500_chg,
             "osebx": osebx, "osebx_chg": osebx_chg,
+            "btc": btc, "btc_chg": btc_chg,
             "eurnok": eurnok, "usdnok": usdnok,
             "error": None,
         }
@@ -419,6 +442,7 @@ def fetch_market_snapshot() -> dict:
             "brent": None, "brent_chg": None,
             "sp500": None, "sp500_chg": None,
             "osebx": None, "osebx_chg": None,
+            "btc": None, "btc_chg": None,
             "eurnok": None, "usdnok": None,
             "error": str(exc),
         }
@@ -438,6 +462,7 @@ def market_notion_blocks(market: dict) -> list[dict]:
             f"Brent {_idx(market['brent'], market['brent_chg'], 1)} $"
             f"  ·  S&P 500 {_idx(market['sp500'], market['sp500_chg'])}"
             f"  ·  OBX {_idx(market['osebx'], market['osebx_chg'])}"
+            f"  ·  BTC {_idx(market.get('btc'), market.get('btc_chg'))} $"
         )
         fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
         fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
@@ -910,11 +935,13 @@ def main() -> None:
         brent_str = f"{market['brent']:.1f} $" if market["brent"] else "–"
         sp_str = f"{market['sp500']:,.0f}".replace(",", " ") if market["sp500"] else "–"
         ob_str = f"{market['osebx']:,.0f}".replace(",", " ") if market["osebx"] else "–"
+        btc_str = f"{market['btc']:,.0f}".replace(",", " ") + " $" if market.get("btc") else "–"
         print(
             f"  Brent {brent_str} ({_sign(market['brent_chg'])})  "
             f"S&P 500 {sp_str} ({_sign(market['sp500_chg'])})  "
             f"OBX {ob_str} ({_sign(market['osebx_chg'])})"
         )
+        print(f"  BTC {btc_str} ({_sign(market.get('btc_chg'))})")
         fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
         fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
         print(f"  EUR/NOK {fx1}  USD/NOK {fx2}")

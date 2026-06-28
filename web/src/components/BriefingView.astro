@@ -2,17 +2,18 @@
 // Felles visning for én briefing — brukes av både forsiden og enkeltdag-siden.
 import WeatherCard from './WeatherCard.astro';
 import MarketStrip from './MarketStrip.astro';
-import { splitNewsSections, splitResearch } from '../lib/briefings.js';
+import { splitNewsSections, splitResearch, getMarketHistory } from '../lib/briefings.js';
 
 const { b } = Astro.props;
 const sections = splitNewsSections(b.news_md);
 const studies = splitResearch(b.research_md);
+const marketHistory = b.market ? await getMarketHistory({ endDate: b.date }) : {};
 ---
 
 {(b.weather || b.market) && (
   <div class="top-grid">
     {b.weather && <WeatherCard weather={b.weather} />}
-    {b.market && <MarketStrip market={b.market} />}
+    {b.market && <MarketStrip market={b.market} history={marketHistory} />}
   </div>
 )}
 

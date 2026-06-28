@@ -55,6 +55,31 @@ export function weekdayNo(dateStr) {
   return formatDateNo(dateStr, { weekday: 'long' });
 }
 
+// Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten/sparklines.
+export const MARKET_KEYS = ['brent', 'sp500', 'osebx', 'btc', 'eurnok', 'usdnok'];
+
+/**
+ * Bygg per-ticker tallserier fra de siste briefingene (til sparklines).
+ * Returnerer { brent: number[], sp500: number[], … } i stigende datorekkefølge.
+ * `endDate` (valgfri) avgrenser vinduet til t.o.m. den datoen, så enkeltdag-siden
+ * viser trenden fram til den dagen og ikke nyere data.
+ */
+export async function getMarketHistory({ limit = 30, endDate = null } = {}) {
+  let dates = await listDates(); // nyeste først
+  if (endDate) dates = dates.filter((d) => d <= endDate);
+  dates = dates.slice(0, limit).reverse(); // eldste → nyeste
+
+  const series = Object.fromEntries(MARKET_KEYS.map((k) => [k, []]));
+  for (const d of dates) {
+    const m = (await getBriefing(d))?.market;
+    if (!m || m.error) continue;
+    for (const k of MARKET_KEYS) {
+      if (typeof m[k] === 'number' && Number.isFinite(m[k])) series[k].push(m[k]);
+    }
+  }
+  return series;
+}
+
 // Ledende emoji (inkl. flagg som 🇳🇴) + mellomrom + resten av overskriften.
 const HEADING_EMOJI =
   /^((?:\p{Extended_Pictographic}|\p{Regional_Indicator})[\p{Extended_Pictographic}\p{Regional_Indicator}️‍]*)\s+(.*)$/u;

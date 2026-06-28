@@ -1,9 +1,11 @@
 ---
 // Vær-widget for Bergen. Bygger på det strukturerte `weather`-objektet
 // (fetch_bergen_weather): summary, rain_hours, sun_periods, max_uv(+hour),
-// max_temp(+hour), temp_0700.
+// max_temp(+hour), temp_0700, hourly[].
+import WeatherPlayer from './WeatherPlayer.astro';
 const { weather } = Astro.props;
 const w = weather || {};
+const hasHourly = Array.isArray(w.hourly) && w.hourly.length > 0;
 
 function weatherIcon(summary = '') {
   const s = summary.toLowerCase();
@@ -43,22 +45,26 @@ stats.push({
 
 <div class="card weather">
   <div class="weather__top">
-    <span class="weather__icon" aria-hidden="true">{weatherIcon(w.summary)}</span>
+    {!hasHourly && <span class="weather__icon" aria-hidden="true">{weatherIcon(w.summary)}</span>}
     <div>
       <div class="weather__place">Bergen</div>
       <div class="weather__summary">{hasData ? w.summary : 'Vær utilgjengelig'}</div>
     </div>
   </div>
   {
-    hasData && (
-      <div class="weather__stats">
-        {stats.map((s) => (
-          <div class="wstat">
-            <span class="wstat__label">{s.label}</span>
-            <span class="wstat__value">{s.value}</span>
-          </div>
-        ))}
-      </div>
+    hasHourly ? (
+      <WeatherPlayer hourly={w.hourly} />
+    ) : (
+      hasData && (
+        <div class="weather__stats">
+          {stats.map((s) => (
+            <div class="wstat">
+              <span class="wstat__label">{s.label}</span>
+              <span class="wstat__value">{s.value}</span>
+            </div>
+          ))}
+        </div>
+      )
     )
   }
 </div>

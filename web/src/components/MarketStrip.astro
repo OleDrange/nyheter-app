@@ -1,18 +1,22 @@
 ---
 // Markeds-widget. Bygger på det strukturerte `market`-objektet
-// (fetch_market_snapshot): brent, sp500, osebx (m/ *_chg), eurnok, usdnok.
-const { market } = Astro.props;
+// (fetch_market_snapshot): brent, sp500, osebx, btc (m/ *_chg), eurnok, usdnok.
+// `history` er per-ticker tallserier fra getMarketHistory() → kompakte sparklines.
+import Sparkline from './Sparkline.astro';
+
+const { market, history = {} } = Astro.props;
 const m = market || {};
 
 const fmt = (n, d = 2) =>
   n == null ? '–' : n.toLocaleString('nb-NO', { minimumFractionDigits: d, maximumFractionDigits: d });
 
 const ticks = [
-  { name: 'Brent', value: m.brent, chg: m.brent_chg, d: 1, unit: ' $' },
-  { name: 'S&P 500', value: m.sp500, chg: m.sp500_chg, d: 0 },
-  { name: 'OBX', value: m.osebx, chg: m.osebx_chg, d: 1 },
-  { name: 'EUR/NOK', value: m.eurnok, chg: null, d: 2 },
-  { name: 'USD/NOK', value: m.usdnok, chg: null, d: 2 },
+  { key: 'brent', name: 'Brent', value: m.brent, chg: m.brent_chg, d: 1, unit: ' $' },
+  { key: 'sp500', name: 'S&P 500', value: m.sp500, chg: m.sp500_chg, d: 0 },
+  { key: 'osebx', name: 'OBX', value: m.osebx, chg: m.osebx_chg, d: 1 },
+  { key: 'btc', name: 'BTC', value: m.btc, chg: m.btc_chg, d: 0, unit: ' $' },
+  { key: 'eurnok', name: 'EUR/NOK', value: m.eurnok, chg: null, d: 2 },
+  { key: 'usdnok', name: 'USD/NOK', value: m.usdnok, chg: null, d: 2 },
 ];
 
 const hasData = !m.error && ticks.some((t) => t.value != null);
@@ -26,16 +30,19 @@ const hasData = !m.error && ticks.some((t) => t.value != null);
         {ticks.map((t) => (
           <div class="tick">
             <div class="tick__name">{t.name}</div>
-            <div>
-              <span class="tick__value">
-                {fmt(t.value, t.d)}
-                {t.value != null && t.unit ? t.unit : ''}
-              </span>
-              {t.chg != null && (
-                <span class={t.chg >= 0 ? 'tick__chg chg-up' : 'tick__chg chg-down'}>
-                  {t.chg >= 0 ? '▲' : '▼'} {Math.abs(t.chg).toFixed(2)}%
+            <div class="tick__row">
+              <div class="tick__nums">
+                <span class="tick__value">
+                  {fmt(t.value, t.d)}
+                  {t.value != null && t.unit ? t.unit : ''}
                 </span>
-              )}
+                {t.chg != null && (
+                  <span class={t.chg >= 0 ? 'tick__chg chg-up' : 'tick__chg chg-down'}>
+                    {t.chg >= 0 ? '▲' : '▼'} {Math.abs(t.chg).toFixed(2)}%
+                  </span>
+                )}
+              </div>
+              <Sparkline values={history[t.key] || []} />
             </div>
           </div>
         ))}

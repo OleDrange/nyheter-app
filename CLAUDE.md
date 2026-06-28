@@ -127,12 +127,16 @@ Returnerer:
 - `max_temp` — høyeste temperatur i dag
 - `max_temp_hour` — timen med maks temp
 - `temp_0700` — temperatur kl. 07:00
+- `hourly` — timesserie for i dag (fra genereringstidspunktet og ut dagen) til værspilleren
+  på nettsiden. Liste av `{ hour, temp, precip, uv, symbol }` der `symbol` er MET-symbolkoden
+  (f.eks. `partlycloudy_day`). `precip`/`symbol` hentes fra `next_1_hours`, `temp`/`uv` fra
+  `instant.details` — alt i samme dagsløkke som de øvrige feltene.
 
 Feil i værhenting stopper ikke resten av kjøringen (myk feil).
 
 ## Markedssnapshot
 
-`fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), EUR/NOK og USD/NOK via `yfinance`.
+`fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), BTC (`BTC-USD`), EUR/NOK og USD/NOK via `yfinance`.
 Dataene vises i terminal og Notion men sendes **ikke** til Claude — Claude skal forklare *hvorfor* markedet beveget seg, ikke gjenta prisene.
 Feil i markedsdata stopper ikke resten av kjøringen (myk feil).
 
@@ -199,6 +203,18 @@ uten ekstra datainnhenting.
 - Ruter: `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
 - **Design:** «moderne dashboard» — kort-basert, sans-serif.
   Stiler i `src/styles/global.css` (design-tokens som CSS-variabler, importeres i `Base.astro`).
+- **Værspiller:** `WeatherCard.astro` viser `WeatherPlayer.astro` når `weather.hourly` finnes —
+  en time-for-time «video» av dagens vær (ikon, temp, status, nedbør, UV) med slider og
+  play/pause, og en statisk dagssammendrag-rad under slideren (min/maks temp, maks UV, total
+  nedbør kl. 06–21, beregnet fra `hourly`). **Autospiller som default**; stopper når brukeren tar på slideren/knappen
+  (respekterer `prefers-reduced-motion`). Symbol→ikon/etikett-map speiler `_SYMBOL_NO` i
+  generatoren. Klientlogikken sendes inn med `define:vars={{ frames }}` (inline, ingen bundling).
+  Faller tilbake til den statiske stat-griden for gamle briefinger uten `hourly`.
+- **Markedswidget + sparklines:** `MarketStrip.astro` viser Brent, S&P 500, OBX, BTC, EUR/NOK,
+  USD/NOK med dagsendring og en kompakt trendlinje per ticker (`Sparkline.astro` — inline SVG,
+  ingen klient-JS/avhengighet, fargelagt av trenden). Serien bygges av `getMarketHistory()` i
+  `briefings.js`, som leser `market` fra de siste briefingene (default 30 dager, `endDate`
+  avgrenser til t.o.m. dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
 - **Temaer:** 5 fargetemaer (Lys, Sepia, Skumring, Mørk, Midnatt) valgt via `[data-theme]` på
   `<html>`. Velges med `ThemePicker.astro`-knappen i headeren; valget lagres i `localStorage`
   (nøkkel `theme`) og settes **før paint** av et `is:inline`-skript i `<head>` (unngår blink;

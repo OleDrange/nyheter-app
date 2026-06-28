@@ -1,0 +1,176 @@
+---
+// Time-for-time værspiller for i dag. Leser weather.hourly fra generatoren
+// ({ hour, temp, precip, uv, symbol }) og spiller av som en «video» gjennom
+// dagen. Autospill stopper når brukeren tar på slideren / play-knappen.
+const { hourly = [] } = Astro.props;
+
+// Speiler _SYMBOL_NO i news_briefing.py (MET-symbolkoder → norsk).
+const LABEL_NO = {
+  clearsky: 'klarvær', fair: 'lettskyet', partlycloudy: 'delvis skyet', cloudy: 'skyet',
+  fog: 'tåke', lightrain: 'lett regn', lightrainshowers: 'lette regnbyger', rain: 'regn',
+  rainshowers: 'regnbyger', heavyrain: 'kraftig regn', heavyrainshowers: 'kraftige regnbyger',
+  lightsleet: 'lett sludd', sleet: 'sludd', sleetshowers: 'sluddbyger', lightsnow: 'lett snø',
+  snow: 'snø', snowshowers: 'snøbyger', thunder: 'torden', rainandthunder: 'regn og torden',
+  heavyrainandthunder: 'kraftig regn og torden',
+};
+
+function baseOf(code) {
+  return String(code || '').replace(/_(day|night|polartwilight)$/, '');
+}
+function labelFor(code) {
+  if (!code) return '–';
+  return LABEL_NO[baseOf(code)] || baseOf(code);
+}
+function emojiFor(code) {
+  if (!code) return '🌡️';
+  const night = /_night$/.test(code);
+  const map = {
+    clearsky: night ? '🌙' : '☀️', fair: night ? '🌙' : '🌤️',
+    partlycloudy: night ? '☁️' : '⛅', cloudy: '☁️', fog: '🌫️',
+    lightrain: '🌦️', lightrainshowers: '🌦️', rainshowers: '🌦️',
+    rain: '🌧️', heavyrain: '🌧️', heavyrainshowers: '🌧️',
+    lightsleet: '🌨️', sleet: '🌨️', sleetshowers: '🌨️',
+    lightsnow: '🌨️', snow: '❄️', snowshowers: '🌨️',
+    thunder: '⛈️', rainandthunder: '⛈️', heavyrainandthunder: '⛈️',
+  };
+  return map[baseOf(code)] || '🌡️';
+}
+
+// Klargjorte «frames» — all formatering gjøres her, klientskriptet bytter bare tekst.
+const frames = hourly.map((h) => ({
+  clock: 'kl. ' + String(h.hour).padStart(2, '0'),
+  temp: h.temp == null ? '–' : String(Math.round(h.temp)),
+  precip: h.precip == null ? '–' : h.precip.toFixed(1).replace('.', ',') + ' mm',
+  uv: h.uv == null ? '–' : String(Math.round(h.uv)),
+  label: labelFor(h.symbol),
+  emoji: emojiFor(h.symbol),
+}));
+
+const f0 = frames[0] || { clock: '', temp: '–', precip: '–', uv: '–', label: '–', emoji: '🌡️' };
+
+// Statisk dagssammendrag kl. 06–21 (under slideren). Temp/UV avleses kl. 06–21;
+// total nedbør summeres over timesbøttene 06–21 (hour 6..20 dekker 06:00→21:00).
+const dayHours = hourly.filter((h) => h.hour >= 6 && h.hour <= 21);
+const temps = dayHours.map((h) => h.temp).filter((t) => typeof t === 'number');
+const uvs = dayHours.map((h) => h.uv).filter((u) => typeof u === 'number');
+const precipTotal = hourly
+  .filter((h) => h.hour >= 6 && h.hour <= 20)
+  .reduce((s, h) => s + (typeof h.precip === 'number' ? h.precip : 0), 0);
+
+const fmtTemp = (v) => (v == null ? '–' : `${Math.round(v)}°`);
+const daySummary = {
+  min: temps.length ? fmtTemp(Math.min(...temps)) : '–',
+  max: temps.length ? fmtTemp(Math.max(...temps)) : '–',
+  uv: uvs.length ? String(Math.round(Math.max(...uvs))) : '–',
+  precip: precipTotal.toFixed(1).replace('.', ',') + ' mm',
+};
+---
+
+<div class="wplayer" data-wplayer>
+  <div class="wplayer__main">
+    <span class="wplayer__icon" data-wp-icon aria-hidden="true">{f0.emoji}</span>
+    <div class="wplayer__readout">
+      <div class="wplayer__time" data-wp-hour>{f0.clock}</div>
+      <div class="wplayer__temp"><span data-wp-temp>{f0.temp}</span>°</div>
+      <div class="wplayer__status" data-wp-status>{f0.label}</div>
+    </div>
+    <div class="wplayer__metrics">
+      <div class="wmetric">
+        <span class="wmetric__label">Nedbør</span>
+        <span class="wmetric__value" data-wp-precip>{f0.precip}</span>
+      </div>
+      <div class="wmetric">
+        <span class="wmetric__label">UV</span>
+        <span class="wmetric__value" data-wp-uv>{f0.uv}</span>
+      </div>
+    </div>
+  </div>
+  <div class="wplayer__controls">
+    <button type="button" class="wplayer__play" data-wp-play aria-label="Pause">⏸</button>
+    <input
+      type="range"
+      class="wplayer__slider"
+      min="0"
+      max={Math.max(0, frames.length - 1)}
+      value="0"
+      step="1"
+      data-wp-slider
+      aria-label="Velg time på dagen"
+    />
+  </div>
+
+  <div class="wplayer__summary">
+    <div class="wplayer__summary-head">Dagen · kl. 06–21</div>
+    <div class="wsum-grid">
+      <div class="wsum"><span class="wsum__label">Min</span><span class="wsum__value">{daySummary.min}</span></div>
+      <div class="wsum"><span class="wsum__label">Maks</span><span class="wsum__value">{daySummary.max}</span></div>
+      <div class="wsum"><span class="wsum__label">Maks UV</span><span class="wsum__value">{daySummary.uv}</span></div>
+      <div class="wsum"><span class="wsum__label">Nedbør</span><span class="wsum__value">{daySummary.precip}</span></div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ frames }}>
+  (() => {
+    const root = document.querySelector('[data-wplayer]');
+    if (!root || !frames.length) return;
+    const slider = root.querySelector('[data-wp-slider]');
+    const playBtn = root.querySelector('[data-wp-play]');
+    const el = {
+      icon: root.querySelector('[data-wp-icon]'),
+      hour: root.querySelector('[data-wp-hour]'),
+      temp: root.querySelector('[data-wp-temp]'),
+      status: root.querySelector('[data-wp-status]'),
+      precip: root.querySelector('[data-wp-precip]'),
+      uv: root.querySelector('[data-wp-uv]'),
+    };
+    let i = 0;
+    let timer = null;
+
+    function render(idx) {
+      const f = frames[idx];
+      if (!f) return;
+      el.icon.textContent = f.emoji;
+      el.hour.textContent = f.clock;
+      el.temp.textContent = f.temp;
+      el.status.textContent = f.label;
+      el.precip.textContent = f.precip;
+      el.uv.textContent = f.uv;
+      slider.value = String(idx);
+    }
+    function play() {
+      if (timer || frames.length < 2) return;
+      playBtn.textContent = '⏸';
+      playBtn.setAttribute('aria-label', 'Pause');
+      timer = setInterval(() => {
+        i = (i + 1) % frames.length;
+        render(i);
+      }, 900);
+    }
+    function pause() {
+      if (timer) clearInterval(timer);
+      timer = null;
+      playBtn.textContent = '▶';
+      playBtn.setAttribute('aria-label', 'Spill av');
+    }
+
+    // Brukeren drar slideren → stopp autospill og følg fingeren.
+    slider.addEventListener('input', () => {
+      pause();
+      i = Number(slider.value);
+      render(i);
+    });
+    playBtn.addEventListener('click', () => {
+      if (timer) pause();
+      else {
+        if (i >= frames.length - 1) i = 0;
+        play();
+      }
+    });
+
+    render(0);
+    // Autospill som default, med mindre brukeren foretrekker redusert bevegelse.
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) pause();
+    else play();
+  })();
+</script>

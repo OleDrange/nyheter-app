@@ -1,0 +1,55 @@
+---
+// Kompakt trendlinje (inline SVG, ingen klient-JS, ingen avhengighet).
+// Fargelegges av trenden i vinduet (første → siste verdi) via currentColor.
+const { values = [], width = 76, height = 24, strokeWidth = 1.5 } = Astro.props;
+
+const nums = values.filter((v) => typeof v === 'number' && Number.isFinite(v));
+const enough = nums.length >= 2;
+
+let line = '';
+let area = '';
+let up = true;
+let lastX = 0;
+let lastY = 0;
+
+if (enough) {
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  const span = max - min || 1;
+  const pad = strokeWidth + 1; // hold strek + endepunkt innenfor
+  const h = height - pad * 2;
+  const stepX = width / (nums.length - 1);
+  const pts = nums.map((v, i) => [i * stepX, pad + h - ((v - min) / span) * h]);
+
+  line = pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+  area = `M0,${height} ` + pts.map(([x, y]) => `L${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ` L${width},${height} Z`;
+  up = nums[nums.length - 1] >= nums[0];
+  [lastX, lastY] = pts[pts.length - 1];
+}
+---
+
+{
+  enough ? (
+    <svg
+      class={up ? 'spark spark--up' : 'spark spark--down'}
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+      height={height}
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path class="spark__area" d={area} />
+      <path
+        class="spark__line"
+        d={line}
+        fill="none"
+        stroke-width={strokeWidth}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <circle class="spark__dot" cx={lastX} cy={lastY} r="1.7" />
+    </svg>
+  ) : (
+    <span class="spark spark--empty" aria-hidden="true" />
+  )
+}

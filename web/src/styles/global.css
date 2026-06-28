@@ -305,6 +305,138 @@ main {
   margin-top: 2px;
 }
 
+/* ── Værspiller (time for time) ─────────────────────────────────────────── */
+.wplayer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wplayer__main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.wplayer__icon {
+  font-size: 3rem;
+  line-height: 1;
+  flex: none;
+}
+.wplayer__readout {
+  flex: 1 1 120px;
+  min-width: 0;
+}
+.wplayer__time {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.wplayer__temp {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.wplayer__status {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+.wplayer__metrics {
+  display: flex;
+  gap: 10px;
+}
+.wmetric {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  text-align: center;
+  min-width: 64px;
+}
+.wmetric__label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.wmetric__value {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+.wplayer__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wplayer__play {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
+.wplayer__play:hover {
+  border-color: var(--border-strong);
+  color: var(--accent);
+}
+.wplayer__slider {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.wplayer__summary {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.wplayer__summary-head {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  margin-bottom: 8px;
+}
+.wsum-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 420px) {
+  .wsum-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.wsum {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 6px;
+  text-align: center;
+}
+.wsum__label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.wsum__value {
+  font-weight: 600;
+  font-size: 0.98rem;
+  white-space: nowrap;
+}
+
 /* ── Markeds-widget ─────────────────────────────────────────────────────── */
 .market {
   padding: 18px 20px;
@@ -319,27 +451,38 @@ main {
 }
 .market__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px 18px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px 20px;
 }
 .tick__name {
   font-size: 0.78rem;
   color: var(--text-muted);
 }
+.tick__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 2px;
+}
+.tick__nums {
+  min-width: 0;
+}
 .tick__value {
   font-family: var(--mono);
-  font-size: 1.12rem;
+  font-size: 1.08rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  margin-top: 2px;
+  white-space: nowrap;
 }
 .tick__chg {
   font-family: var(--mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   margin-left: 6px;
   padding: 1px 6px;
   border-radius: 6px;
+  white-space: nowrap;
 }
 .chg-up {
   color: var(--up);
@@ -348,6 +491,35 @@ main {
 .chg-down {
   color: var(--down);
   background: var(--down-bg);
+}
+
+/* Sparkline (kompakt trendlinje) */
+.spark {
+  display: block;
+  flex: none;
+  width: 76px;
+  height: 24px;
+  overflow: visible;
+}
+.spark--up {
+  color: var(--up);
+}
+.spark--down {
+  color: var(--down);
+}
+.spark__line {
+  stroke: currentColor;
+}
+.spark__dot {
+  fill: currentColor;
+}
+.spark__area {
+  fill: currentColor;
+  opacity: 0.13;
+}
+.spark--empty {
+  width: 76px;
+  height: 24px;
 }
 
 /* ── Seksjonsetikett ────────────────────────────────────────────────────── */
