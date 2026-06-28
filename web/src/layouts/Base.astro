@@ -1,0 +1,19 @@
+---
+const { title } = Astro.props;
+---
+
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/">I dag</a> · <a href="/arkiv">Arkiv</a>
+    </nav>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

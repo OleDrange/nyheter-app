@@ -1,0 +1,38 @@
+services:
+  # Web-tjenesten: alltid oppe, bak Caddy-proxyen. Plattform-kontrakten gjelder HER.
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Oslo
+      HOST: 0.0.0.0          # plattformkrav — må binde 0.0.0.0 for å nås fra proxyen
+      PORT: "8080"
+      BRIEFING_DIR: /data/briefings
+    volumes:
+      - briefing-data:/data:ro   # web leser kun
+    networks:
+      web:
+        aliases:
+          - nyheter-web         # navnet proxyen bruker: reverse_proxy nyheter-web:8080
+    # INGEN "ports:" — proxyen eier 80/443.
+
+  # Generatoren: batch-jobb. Profilen hindrer at `docker compose up -d` starter den;
+  # cron kjører den med `docker compose run --rm generator`.
+  generator:
+    build: .
+    profiles: ["batch"]
+    env_file: .env              # ANTHROPIC_API_KEY (+ NOTION_* tomt = av)
+    environment:
+      TZ: Europe/Oslo
+      BRIEFING_DATA_DIR: /data
+    volumes:
+      - briefing-data:/data     # generator skriver
+
+networks:
+  web:
+    external: true              # opprettes på verten: docker network create web
+
+volumes:
+  briefing-data:

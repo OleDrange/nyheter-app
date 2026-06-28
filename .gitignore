@@ -20,3 +20,9 @@ env/
 create_shortcut.ps1
 Thumbs.db
 Desktop.ini
+
+# Astro / Node (web/)
+web/node_modules/
+web/dist/
+web/.astro/
+npm-debug.log*

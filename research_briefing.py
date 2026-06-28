@@ -36,6 +36,7 @@ import anthropic
 # Gjenbruk hjelpefunksjoner fra nyhetsbriefen (samme mappe, ingen sideeffekter)
 from news_briefing import (
     _load_dotenv,
+    store_briefing,
     markdown_to_notion_blocks,
     _get_or_create_archive,
     _get_or_create_anchor,
@@ -107,7 +108,8 @@ REGLER:
 
 
 def _seen_path() -> str:
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), SEEN_FILE)
+    base = os.environ.get("BRIEFING_DATA_DIR") or os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base, SEEN_FILE)
 
 
 def _load_seen() -> dict:
@@ -382,6 +384,14 @@ def main() -> None:
     selected = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
     _save_seen(_load_seen(), selected)
 
+    # Lagre forskningsbriefingen til datalageret (merges inn i samme dagsfil som nyhetsbriefen)
+    research_items = [
+        {"title": a["title"], "url": a["url"], "journal": a["journal"], "date": a["date"]}
+        for a in articles
+        if a["url"] and a["url"] in briefing
+    ]
+    store_briefing(today_str, research_md=briefing, research_items=research_items)
+
     # Notion
     has_notion = (
         "NOTION_API_KEY" in os.environ and "NOTION_PARENT_PAGE_ID" in os.environ
@@ -396,7 +406,8 @@ def main() -> None:
 
     # Lagre som fil
     if args.save:
-        filename = f"forskningsbrief_{today_str}.md"
+        data_dir = os.environ.get("BRIEFING_DATA_DIR", ".")
+        filename = os.path.join(data_dir, f"forskningsbrief_{today_str}.md")
         with open(filename, "w", encoding="utf-8") as f:
             f.write(f"# Forskningsbriefing — {today_human}\n\n" + briefing)
         print(f"✓  Lagret som {filename}")

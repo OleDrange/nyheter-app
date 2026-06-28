@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { listDates } from '../lib/briefings.js';
+
+const dates = await listDates();
+---
+
+<Base title="Arkiv">
+  <h1>Arkiv</h1>
+  {
+    dates.length ? (
+      <ul>
+        {dates.map((d) => (
+          <li>
+            <a href={`/b/${d}`}>{d}</a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>Ingen briefinger ennå.</p>
+    )
+  }
+</Base>

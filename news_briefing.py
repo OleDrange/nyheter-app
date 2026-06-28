@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import time
+import json
 import argparse
 from datetime import datetime, timezone, timedelta
 
@@ -46,6 +47,47 @@ def _load_dotenv() -> None:
                     os.environ[key] = val
     except FileNotFoundError:
         pass
+
+
+def store_briefing(date_str, *, news_md=None, research_md=None,
+                   weather=None, market=None, research_items=None) -> None:
+    """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
+
+    Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
+    den enkelte kjøringen produserte oppdateres. Skrivingen er atomisk (skriv til
+    .tmp og rename) slik at web-tjenesten aldri leser en halvskrevet fil.
+    """
+    data_dir = os.environ.get("BRIEFING_DATA_DIR", ".")
+    out_dir = os.path.join(data_dir, "briefings")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f"{date_str}.json")
+
+    data: dict = {}
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            data = {}
+
+    data["date"] = date_str
+    data["created_at"] = datetime.now().isoformat()
+    if news_md is not None:
+        data["news_md"] = news_md
+    if research_md is not None:
+        data["research_md"] = research_md
+    if weather is not None:
+        data["weather"] = weather
+    if market is not None:
+        data["market"] = market
+    if research_items is not None:
+        data["research_items"] = research_items
+
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)  # atomisk publisering
+    print(f"✓  Lagret til datalager: {path}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -891,6 +933,9 @@ def main() -> None:
 
     print("─" * 70)
 
+    # Lagre dagens briefing til datalageret som nettsiden leser
+    store_briefing(today_str, news_md=briefing, weather=weather, market=market)
+
     # Notion
     has_notion = (
         "NOTION_API_KEY" in os.environ and "NOTION_PARENT_PAGE_ID" in os.environ
@@ -911,7 +956,8 @@ def main() -> None:
             else "Ingen nedbør over 1 mm i dag."
         )
         weather_md = f"## Bergen\n{weather['summary']}\n{rain_line}\n\n"
-        filename = f"briefing_{today_str}.md"
+        data_dir = os.environ.get("BRIEFING_DATA_DIR", ".")
+        filename = os.path.join(data_dir, f"briefing_{today_str}.md")
         with open(filename, "w", encoding="utf-8") as f:
             f.write(f"# Nyhetsbriefing — {today_human}\n\n" + weather_md + briefing)
         print(f"✓  Lagret som {filename}")

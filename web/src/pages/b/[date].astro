@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getBriefing, renderMarkdown } from '../../lib/briefings.js';
+
+const { date } = Astro.params;
+const b = await getBriefing(date);
+
+if (!b) {
+  return new Response('Ikke funnet', { status: 404 });
+}
+---
+
+<Base title={`Briefing ${b.date}`}>
+  <article>
+    <p><a href="/arkiv">← Arkiv</a></p>
+    <h1>Nyhetsbriefing — {b.date}</h1>
+    <Fragment set:html={renderMarkdown(b.news_md)} />
+    <h1>Forskningsbriefing</h1>
+    {
+      b.research_md ? (
+        <Fragment set:html={renderMarkdown(b.research_md)} />
+      ) : (
+        <p>Ingen forskningsbriefing denne dagen.</p>
+      )
+    }
+  </article>
+</Base>
