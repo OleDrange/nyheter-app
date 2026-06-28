@@ -451,38 +451,48 @@ main {
 }
 .market__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 14px 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+}
+@media (max-width: 360px) {
+  .market__grid {
+    grid-template-columns: 1fr;
+  }
+}
+.tick {
+  min-width: 0;
+}
+.tick__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px 8px;
 }
 .tick__name {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-.tick__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 2px;
-}
-.tick__nums {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
   min-width: 0;
+}
+.tick__now {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
 }
 .tick__value {
   font-family: var(--mono);
-  font-size: 1.08rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  white-space: nowrap;
 }
 .tick__chg {
   font-family: var(--mono);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  margin-left: 6px;
   padding: 1px 6px;
   border-radius: 6px;
-  white-space: nowrap;
 }
 .chg-up {
   color: var(--up);
@@ -493,33 +503,50 @@ main {
   background: var(--down-bg);
 }
 
-/* Sparkline (kompakt trendlinje) */
-.spark {
+/* Mini-dagsgraf per ticker (3–5 punkter med verdi-etikett) */
+.mtrend {
   display: block;
-  flex: none;
-  width: 76px;
-  height: 24px;
+  width: 100%;
+  height: 46px;
+  margin-top: 2px;
   overflow: visible;
 }
-.spark--up {
+.mtrend--up {
   color: var(--up);
 }
-.spark--down {
+.mtrend--down {
   color: var(--down);
 }
-.spark__line {
+.mtrend__line {
   stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.spark__dot {
+.mtrend__dot {
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+.mtrend__dot--last {
   fill: currentColor;
 }
-.spark__area {
-  fill: currentColor;
-  opacity: 0.13;
+.mtrend__val {
+  fill: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 600;
 }
-.spark--empty {
-  width: 76px;
-  height: 24px;
+.mtrend__val--last {
+  fill: var(--text);
+}
+.mtrend__day {
+  fill: var(--text-faint);
+  font-size: 7.5px;
+}
+.mtrend--empty {
+  font-size: 0.82rem;
+  padding: 10px 0 14px;
 }
 
 /* ── Seksjonsetikett ────────────────────────────────────────────────────── */

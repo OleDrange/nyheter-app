@@ -142,7 +142,7 @@ Feil i værhenting stopper ikke resten av kjøringen (myk feil).
 
 ## Markedssnapshot
 
-`fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), BTC (`BTC-USD`), EUR/NOK og USD/NOK via `yfinance`.
+`fetch_market_snapshot()` henter Brent, S&P 500, OBX-indeksen (`OBX.OL`), BTC (`BTC-USD`), ETH (`ETH-USD`) og **Nordnet Global** (`nordnet`-nøkkelen — MSCI World-proxy via `URTH`; bytt ticker i `yf.Tickers(...)` + terminal/Notion-utskriften for en annen global indeks) via `yfinance`.
 Dataene vises i terminal og Notion men sendes **ikke** til Claude — Claude skal forklare *hvorfor* markedet beveget seg, ikke gjenta prisene.
 Feil i markedsdata stopper ikke resten av kjøringen (myk feil).
 
@@ -217,11 +217,13 @@ uten ekstra datainnhenting.
   (respekterer `prefers-reduced-motion`). Symbol→ikon/etikett-map speiler `_SYMBOL_NO` i
   generatoren. Klientlogikken sendes inn med `define:vars={{ frames }}` (inline, ingen bundling).
   Faller tilbake til den statiske stat-griden for gamle briefinger uten `hourly`.
-- **Markedswidget + sparklines:** `MarketStrip.astro` viser Brent, S&P 500, OBX, BTC, EUR/NOK,
-  USD/NOK med dagsendring og en kompakt trendlinje per ticker (`Sparkline.astro` — inline SVG,
-  ingen klient-JS/avhengighet, fargelagt av trenden). Serien bygges av `getMarketHistory()` i
-  `briefings.js`, som leser `market` fra de siste briefingene (default 30 dager, `endDate`
-  avgrenser til t.o.m. dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
+- **Markedswidget + dagsgrafer:** `MarketStrip.astro` viser Brent, S&P 500, OBX, BTC, ETH,
+  Nordnet Global med dagsendring og en kompakt **mini-dagsgraf** per ticker (`MarketTrend.astro`
+  — inline SVG, ingen klient-JS; 3–5 punkter, ett per dag, med verdien skrevet over hvert punkt
+  og dag-i-måneden under, fargelagt av trenden, siste punkt fremhevet). Serien bygges av
+  `getMarketHistory()` i `briefings.js`, som leser `market` fra de siste briefingene (default
+  **5 dager**, `[{ date, value }]` per ticker; `endDate` avgrenser til t.o.m. dagen som vises).
+  `MARKET_KEYS` styrer rekkefølgen.
 - **Temaer:** 5 fargetemaer (Lys, Sepia, Skumring, Mørk, Midnatt) valgt via `[data-theme]` på
   `<html>`. Velges med `ThemePicker.astro`-knappen i headeren; valget lagres i `localStorage`
   (nøkkel `theme`) og settes **før paint** av et `is:inline`-skript i `<head>` (unngår blink;

@@ -405,8 +405,9 @@ def fetch_bergen_weather() -> dict:
 def fetch_market_snapshot() -> dict:
     """
     Returnér markedsdata som dict. Myk feil — stopper ikke kjøringen.
-    Keys: brent, brent_chg, sp500, sp500_chg, osebx, osebx_chg,
-          eurnok, usdnok, error
+    Keys: brent, brent_chg, sp500, sp500_chg, osebx, osebx_chg, btc, btc_chg,
+          eth, eth_chg, nordnet, nordnet_chg, error
+    nordnet = Nordnet Global (MSCI World-proxy via URTH; bytt ticker for en annen indeks).
     """
     try:
         import logging
@@ -414,7 +415,9 @@ def fetch_market_snapshot() -> dict:
 
         logging.getLogger("yfinance").setLevel(logging.ERROR)
 
-        t = yf.Tickers("BZ=F ^GSPC OBX.OL BTC-USD EURNOK=X USDNOK=X")
+        # URTH = iShares MSCI World (USD) — proxy for «Nordnet Global». Bytt ticker her
+        # (og i terminal/Notion-utskriften under) for en annen global indeks.
+        t = yf.Tickers("BZ=F ^GSPC OBX.OL BTC-USD ETH-USD URTH")
 
         def _pct(info) -> tuple:
             last = getattr(info, "last_price", None)
@@ -426,15 +429,16 @@ def fetch_market_snapshot() -> dict:
         sp500, sp500_chg = _pct(t.tickers["^GSPC"].fast_info)
         osebx, osebx_chg = _pct(t.tickers["OBX.OL"].fast_info)
         btc, btc_chg = _pct(t.tickers["BTC-USD"].fast_info)
-        eurnok = getattr(t.tickers["EURNOK=X"].fast_info, "last_price", None)
-        usdnok = getattr(t.tickers["USDNOK=X"].fast_info, "last_price", None)
+        eth, eth_chg = _pct(t.tickers["ETH-USD"].fast_info)
+        nordnet, nordnet_chg = _pct(t.tickers["URTH"].fast_info)
 
         return {
             "brent": brent, "brent_chg": brent_chg,
             "sp500": sp500, "sp500_chg": sp500_chg,
             "osebx": osebx, "osebx_chg": osebx_chg,
             "btc": btc, "btc_chg": btc_chg,
-            "eurnok": eurnok, "usdnok": usdnok,
+            "eth": eth, "eth_chg": eth_chg,
+            "nordnet": nordnet, "nordnet_chg": nordnet_chg,
             "error": None,
         }
     except Exception as exc:
@@ -443,7 +447,8 @@ def fetch_market_snapshot() -> dict:
             "sp500": None, "sp500_chg": None,
             "osebx": None, "osebx_chg": None,
             "btc": None, "btc_chg": None,
-            "eurnok": None, "usdnok": None,
+            "eth": None, "eth_chg": None,
+            "nordnet": None, "nordnet_chg": None,
             "error": str(exc),
         }
 
@@ -462,11 +467,12 @@ def market_notion_blocks(market: dict) -> list[dict]:
             f"Brent {_idx(market['brent'], market['brent_chg'], 1)} $"
             f"  ·  S&P 500 {_idx(market['sp500'], market['sp500_chg'])}"
             f"  ·  OBX {_idx(market['osebx'], market['osebx_chg'])}"
-            f"  ·  BTC {_idx(market.get('btc'), market.get('btc_chg'))} $"
         )
-        fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
-        fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
-        line2 = f"EUR/NOK {fx1}  ·  USD/NOK {fx2}"
+        line2 = (
+            f"BTC {_idx(market.get('btc'), market.get('btc_chg'))} $"
+            f"  ·  ETH {_idx(market.get('eth'), market.get('eth_chg'))} $"
+            f"  ·  Nordnet Global {_idx(market.get('nordnet'), market.get('nordnet_chg'), 1)}"
+        )
         text = line1 + "\n" + line2
 
     return [
@@ -972,15 +978,18 @@ def main() -> None:
         sp_str = f"{market['sp500']:,.0f}".replace(",", " ") if market["sp500"] else "–"
         ob_str = f"{market['osebx']:,.0f}".replace(",", " ") if market["osebx"] else "–"
         btc_str = f"{market['btc']:,.0f}".replace(",", " ") + " $" if market.get("btc") else "–"
+        eth_str = f"{market['eth']:,.0f}".replace(",", " ") + " $" if market.get("eth") else "–"
+        nordnet_str = f"{market['nordnet']:,.1f}".replace(",", " ") if market.get("nordnet") else "–"
         print(
             f"  Brent {brent_str} ({_sign(market['brent_chg'])})  "
             f"S&P 500 {sp_str} ({_sign(market['sp500_chg'])})  "
             f"OBX {ob_str} ({_sign(market['osebx_chg'])})"
         )
-        print(f"  BTC {btc_str} ({_sign(market.get('btc_chg'))})")
-        fx1 = f"{market['eurnok']:.2f}" if market["eurnok"] else "–"
-        fx2 = f"{market['usdnok']:.2f}" if market["usdnok"] else "–"
-        print(f"  EUR/NOK {fx1}  USD/NOK {fx2}")
+        print(
+            f"  BTC {btc_str} ({_sign(market.get('btc_chg'))})  "
+            f"ETH {eth_str} ({_sign(market.get('eth_chg'))})  "
+            f"Nordnet Global {nordnet_str} ({_sign(market.get('nordnet_chg'))})"
+        )
     print()
 
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")

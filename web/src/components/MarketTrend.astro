@@ -1,0 +1,70 @@
+---
+// Kompakt dagsgraf for én ticker: 3–5 punkter (ett per dag), linje + prikker,
+// med verdien skrevet over hvert punkt og dag-i-måneden under. Inline SVG, ingen
+// klient-JS. Fargelegges av trenden (første → siste). Siste punkt fremhevet.
+const { points = [], width = 240, height = 48 } = Astro.props;
+
+const pts = points.filter((p) => typeof p.value === 'number' && Number.isFinite(p.value));
+const has = pts.length >= 1;
+
+const padX = 24;
+const plotTop = 18;
+const plotBottom = 33;
+const plotH = plotBottom - plotTop;
+
+let coords = [];
+let line = '';
+let up = true;
+
+if (has) {
+  const vals = pts.map((p) => p.value);
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const span = max - min || 1;
+  const n = pts.length;
+  const stepX = n > 1 ? (width - padX * 2) / (n - 1) : 0;
+  coords = pts.map((p, i) => {
+    const x = n > 1 ? padX + i * stepX : width / 2;
+    const y = plotBottom - ((p.value - min) / span) * plotH;
+    return { x, y, label: p.label, day: p.day, last: i === n - 1 };
+  });
+  line = coords.map((c, i) => `${i ? 'L' : 'M'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+  up = vals[n - 1] >= vals[0];
+}
+---
+
+{
+  has ? (
+    <svg
+      class={up ? 'mtrend mtrend--up' : 'mtrend mtrend--down'}
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+    >
+      {coords.length > 1 && <path class="mtrend__line" d={line} fill="none" />}
+      {coords.map((c) => (
+        <g>
+          <text
+            class={c.last ? 'mtrend__val mtrend__val--last' : 'mtrend__val'}
+            x={c.x}
+            y={c.y - 6 < 9 ? c.y + 11 : c.y - 6}
+            text-anchor="middle"
+          >
+            {c.label}
+          </text>
+          <circle
+            class={c.last ? 'mtrend__dot mtrend__dot--last' : 'mtrend__dot'}
+            cx={c.x}
+            cy={c.y}
+            r={c.last ? 2.9 : 2.2}
+          />
+          <text class="mtrend__day" x={c.x} y={height - 3} text-anchor="middle">
+            {c.day}
+          </text>
+        </g>
+      ))}
+    </svg>
+  ) : (
+    <div class="mtrend mtrend--empty muted">Ny — bygger historikk</div>
+  )
+}

@@ -55,16 +55,16 @@ export function weekdayNo(dateStr) {
   return formatDateNo(dateStr, { weekday: 'long' });
 }
 
-// Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten/sparklines.
-export const MARKET_KEYS = ['brent', 'sp500', 'osebx', 'btc', 'eurnok', 'usdnok'];
+// Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten.
+export const MARKET_KEYS = ['brent', 'sp500', 'osebx', 'btc', 'eth', 'nordnet'];
 
 /**
- * Bygg per-ticker tallserier fra de siste briefingene (til sparklines).
- * Returnerer { brent: number[], sp500: number[], … } i stigende datorekkefølge.
- * `endDate` (valgfri) avgrenser vinduet til t.o.m. den datoen, så enkeltdag-siden
- * viser trenden fram til den dagen og ikke nyere data.
+ * Bygg per-ticker dagsserier fra de siste briefingene (til mini-grafene).
+ * Returnerer { brent: [{ date, value }], … } i stigende datorekkefølge, ett punkt
+ * per dag. `endDate` (valgfri) avgrenser vinduet til t.o.m. den datoen, så
+ * enkeltdag-siden viser trenden fram til den dagen og ikke nyere data.
  */
-export async function getMarketHistory({ limit = 30, endDate = null } = {}) {
+export async function getMarketHistory({ limit = 5, endDate = null } = {}) {
   let dates = await listDates(); // nyeste først
   if (endDate) dates = dates.filter((d) => d <= endDate);
   dates = dates.slice(0, limit).reverse(); // eldste → nyeste
@@ -74,7 +74,7 @@ export async function getMarketHistory({ limit = 30, endDate = null } = {}) {
     const m = (await getBriefing(d))?.market;
     if (!m || m.error) continue;
     for (const k of MARKET_KEYS) {
-      if (typeof m[k] === 'number' && Number.isFinite(m[k])) series[k].push(m[k]);
+      if (typeof m[k] === 'number' && Number.isFinite(m[k])) series[k].push({ date: d, value: m[k] });
     }
   }
   return series;
