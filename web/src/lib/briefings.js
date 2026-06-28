@@ -108,10 +108,14 @@ export function splitNewsSections(md) {
     });
 }
 
+// Merkede deler i en studie: «**Hva som ble gjort:** …» fram til neste «**…:**».
+const STUDY_PART_RE = /\*\*\s*(.+?)\s*:\*\*\s*([\s\S]*?)(?=\n\s*\*\*|$)/g;
+
 /**
  * Del forskningsbriefingen (`research_md`) per studie. Hver studie er
- * `## [tittel](url)` etterfulgt av Hva/Resultat/Relevans.
- * Returnerer [{ title, url, html }].
+ * `## [tittel](url)` etterfulgt av merkede avsnitt (Hva/Resultat/Relevans).
+ * Returnerer [{ title, url, parts: [{ label, html }], html }] der `parts` er de
+ * separerte avsnittene (tom hvis ingen merkede deler → bruk `html`-fallback).
  */
 export function splitResearch(md) {
   const text = String(md || '').trim();
@@ -125,9 +129,18 @@ export function splitResearch(md) {
       const heading = (nl === -1 ? part : part.slice(0, nl)).trim();
       const body = nl === -1 ? '' : part.slice(nl + 1).trim();
       const link = heading.match(/^\[(.*?)\]\((.*?)\)\s*$/);
+
+      const parts = [];
+      STUDY_PART_RE.lastIndex = 0;
+      let m;
+      while ((m = STUDY_PART_RE.exec(body)) !== null) {
+        parts.push({ label: m[1].trim(), html: marked.parseInline(m[2].trim()) });
+      }
+
       return {
         title: link ? link[1] : heading,
         url: link ? link[2] : null,
+        parts,
         html: renderMarkdown(body),
       };
     });

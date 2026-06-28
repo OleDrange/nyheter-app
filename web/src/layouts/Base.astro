@@ -2,7 +2,9 @@
 import '../styles/global.css';
 import ThemePicker from '../components/ThemePicker.astro';
 
+// Fanetittel: «modr - nyheter - <dato/seksjon>». Sidene sender bare datodelen.
 const { title } = Astro.props;
+const fullTitle = title ? `modr - nyheter - ${title}` : 'modr - nyheter';
 const path = Astro.url.pathname;
 const isHome = path === '/';
 const isArchive = path.startsWith('/arkiv');
@@ -24,7 +26,8 @@ const isArchive = path.startsWith('/arkiv');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{fullTitle}</title>
   </head>
   <body>
     <header class="site-header">

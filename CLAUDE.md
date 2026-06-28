@@ -61,6 +61,12 @@ feed = feedparser.parse(resp.content)
 
 `_FETCH_HEADERS` er definert som konstant rett under `MAX_DESC_CHARS`.
 
+**Dedup før Claude:** `fetch_articles()` kjører `_dedup_articles()` til slutt som slår sammen
+nær-identiske saker på tvers av feeds (normalisert tittel + URL; beholder varianten med
+lengst ingress). Sparer Claude-input-tokens og fjerner støy uten kvalitetstap — feedene
+overlapper mye (NRK toppsaker/siste, BBC/Guardian world+business, to ScienceDaily).
+`MAX_DESC_CHARS = 300` begrenser ingresslengden per artikkel.
+
 ## Aktive RSS-feeds (19 stk)
 
 | Kilde | Kategori |
@@ -159,7 +165,8 @@ Egen daglig briefing kun om ny forskning. Henter kandidatstudier fra **Europe PM
 - `MODEL` / `MAX_TOKENS` — som nyhetsbriefen (`claude-sonnet-4-6`).
 - `LOOKBACK_DAYS = 2` — datovindu på publiseringsdato (toleranse for indekseringsforsinkelse).
 - `MAX_ITEMS = 5` — maks studier (styres også i `SYSTEM_PROMPT`).
-- `CANDIDATE_POOL = 40` — antall ferske studier som hentes og sendes til Claude for kurering.
+- `CANDIDATE_POOL = 25` — antall ferske studier som hentes og sendes til Claude for kurering
+  (Claude velger uansett kun 5; 25 er rikelig og holder input-tokens nede).
 - `EUROPE_PMC_QUERY` — bred, redigerbar emnespørring (trening + helse + klinisk medisin). Endre denne for å justere tema.
 
 **Format per studie:** `## [tittel](url)` + **Hva som ble gjort** / **Resultat** / **Relevans**. Claude velger opptil 5; heller færre enn svake.
@@ -228,7 +235,10 @@ uten ekstra datainnhenting.
   - `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked; `•` → `- `).
   - `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (ett kort per «## »-seksjon;
     håndterer flagg-emoji som 🇳🇴 via `Regional_Indicator`).
-  - `splitResearch(research_md)` → `[{ title, url, html }]` (ett kort per studie).
+  - `splitResearch(research_md)` → `[{ title, url, parts, html }]` (ett kort per studie).
+    `parts` er de merkede avsnittene `[{ label, html }]` (Hva som ble gjort / Resultat /
+    Relevans) som vises som separate, ikon-merkede blokker — Relevans fremhevet som konklusjon.
+    `html` er fallback hvis et abstract ikke har merkede deler.
   - `formatDateNo()` / `weekdayNo()` — norsk dato (lokaltid-trygg, ingen UTC-skift).
 - **`BRIEFING_DIR`:** prod (Dockerfile) setter `/data/briefings` eksplisitt. Uten env-var
   (lokal dev) faller `briefings.js` tilbake til **repo-lokal `briefings/`** — samme mappe
@@ -262,6 +272,12 @@ uten ekstra datainnhenting.
   `docker run --rm -v nyheter-app_briefing-data:/d -v /root:/b alpine tar czf /b/nyheter-backup.tgz -C /d .`
 - **Logger:** generator → `/root/nyheter-cron.log` (opprettes først ved første cron-kjøring);
   web → `docker compose logs -f web`.
+- **Feilvarsling (mot stille feil):** `healthcheck.py` kjøres sist i `docker-entrypoint.sh` og
+  verifiserer at dagens `briefings/<dato>.json` faktisk ble skrevet med `news_md`. Manglende/tom
+  fil → POST til `ALERT_WEBHOOK_URL` (Slack/Discord-format). Ved suksess pinges `HEARTBEAT_URL`
+  — pek den mot en ekstern dead-man's-switch (healthchecks.io o.l.) som varsler hvis pinget
+  uteblir, slik at du også fanger at cron aldri kjørte. Begge env-vars er valgfrie (i `.env`,
+  se `notify.py`); uten dem er varsling av.
 
 ## Oppdateringsflyt
 

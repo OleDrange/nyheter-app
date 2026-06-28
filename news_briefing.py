@@ -123,7 +123,7 @@ MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 LOOKBACK_HOURS = 24
 MAX_PER_FEED = 15  # maks antall artikler per kilde
-MAX_DESC_CHARS = 400  # maks tegn fra ingress/beskrivelse per artikkel
+MAX_DESC_CHARS = 300  # maks tegn fra ingress/beskrivelse per artikkel
 
 _FETCH_HEADERS = {
     "User-Agent": (
@@ -486,6 +486,37 @@ def market_notion_blocks(market: dict) -> list[dict]:
 # ─────────────────────────────────────────────────────────────────────────────
 
 
+def _norm_title(title: str) -> str:
+    """Normaliser tittel for dedup: små bokstaver, uten tegnsetting, kollapset luft."""
+    t = re.sub(r"[^\w\s]", " ", title.lower())
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def _dedup_articles(articles: list[dict]) -> list[dict]:
+    """Slå sammen nær-identiske saker som dukker opp i flere feeds (sparer Claude-tokens
+    og fjerner støy). Dedupliserer på normalisert tittel og på URL; ved tittelduplikat
+    beholdes artikkelen med lengst ingress (mest kontekst til Claude)."""
+    out: list[dict] = []
+    title_idx: dict[str, int] = {}
+    seen_urls: set[str] = set()
+    for a in articles:
+        url = (a.get("url") or "").split("?")[0].rstrip("/")
+        if url and url in seen_urls:
+            continue
+        key = _norm_title(a["title"])
+        if key and key in title_idx:
+            j = title_idx[key]
+            if len(a["description"]) > len(out[j]["description"]):
+                out[j] = a  # behold den rikeste varianten
+            continue
+        out.append(a)
+        if key:
+            title_idx[key] = len(out) - 1
+        if url:
+            seen_urls.add(url)
+    return out
+
+
 def fetch_articles() -> list[dict]:
     cutoff = datetime.now(timezone.utc) - timedelta(hours=LOOKBACK_HOURS)
     articles: list[dict] = []
@@ -551,6 +582,11 @@ def fetch_articles() -> list[dict]:
         except Exception as exc:
             print(f"  ✗  {source}: feil ved henting — {exc}")
 
+    before = len(articles)
+    articles = _dedup_articles(articles)
+    removed = before - len(articles)
+    if removed:
+        print(f"  ⓘ  dedup: {before} → {len(articles)} artikler ({removed} duplikater fjernet)")
     return articles
 
 

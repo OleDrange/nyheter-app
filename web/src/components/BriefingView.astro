@@ -8,6 +8,13 @@ const { b } = Astro.props;
 const sections = splitNewsSections(b.news_md);
 const studies = splitResearch(b.research_md);
 const marketHistory = b.market ? await getMarketHistory({ endDate: b.date }) : {};
+
+// Ikon per merket del i forskningsabstractene (structured-abstract-stil).
+const PART_ICON = {
+  'Hva som ble gjort': '🔬',
+  Resultat: '📊',
+  Relevans: '💡',
+};
 ---
 
 {(b.weather || b.market) && (
@@ -48,7 +55,21 @@ const marketHistory = b.market ? await getMarketHistory({ endDate: b.date }) : {
             <h3 class="study__title">
               {st.url ? <a href={st.url} target="_blank" rel="noopener">{st.title}</a> : st.title}
             </h3>
-            <div class="prose" set:html={st.html} />
+            {st.parts.length ? (
+              <div class="study__parts">
+                {st.parts.map((p) => (
+                  <div class={p.label === 'Relevans' ? 'study__part study__part--key' : 'study__part'}>
+                    <div class="study__label">
+                      <span class="study__label-icon" aria-hidden="true">{PART_ICON[p.label] || '•'}</span>
+                      {p.label}
+                    </div>
+                    <div class="study__text" set:html={p.html} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="prose" set:html={st.html} />
+            )}
           </article>
         ))}
       </div>

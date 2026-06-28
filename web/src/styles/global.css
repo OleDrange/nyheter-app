@@ -649,6 +649,52 @@ main {
   color: var(--accent);
 }
 
+/* Separerte avsnitt (Hva som ble gjort / Resultat / Relevans) */
+.study__parts {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+.study__part {
+  padding-left: 13px;
+  border-left: 2px solid var(--border-strong);
+}
+.study__part--key {
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 13px;
+}
+.study__label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.study__label-icon {
+  font-size: 0.9rem;
+}
+.study__text {
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.study__part--key .study__text {
+  color: var(--text);
+}
+.study__text a {
+  color: var(--text);
+  font-weight: 600;
+}
+.study__text a:hover {
+  color: var(--accent);
+}
+
 /* ── Arkiv ──────────────────────────────────────────────────────────────── */
 .archive-grid {
   display: grid;

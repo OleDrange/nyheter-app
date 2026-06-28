@@ -51,7 +51,7 @@ MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 LOOKBACK_DAYS = 2          # vindu på publiseringsdato (toleranse for indekseringsforsinkelse)
 MAX_ITEMS = 5             # maks studier i briefen (styres også i SYSTEM_PROMPT)
-CANDIDATE_POOL = 40        # antall ferske studier som hentes og sendes til Claude
+CANDIDATE_POOL = 25        # antall ferske studier som hentes og sendes til Claude
 MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
 
 # Dedup mot gjentakelser på tvers av dager

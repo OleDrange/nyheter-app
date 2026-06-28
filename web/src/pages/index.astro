@@ -7,7 +7,7 @@ const dates = await listDates();
 const b = dates.length ? await getBriefing(dates[0]) : null;
 ---
 
-<Base title={b ? `Briefing ${b.date}` : 'Nyhetsbriefing'}>
+<Base title={b ? b.date : 'i dag'}>
   {
     b ? (
       <>
