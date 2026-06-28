@@ -19,4 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN mkdir -p /data && chmod +x docker-entrypoint.sh
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+# CMD (ikke ENTRYPOINT): `docker compose run --rm generator` kjører standard-jobben,
+# men `docker compose run --rm generator python import_history.py` (eller `ls`, `cat`)
+# overstyrer den i stedet for å kjøre briefingen på nytt.
+CMD ["./docker-entrypoint.sh"]

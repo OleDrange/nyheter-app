@@ -466,8 +466,9 @@ cd ~/modr-proxy && docker compose exec caddy caddy reload --config /etc/caddy/Ca
 
 - [ ] `docker compose run --rm generator` kjører grønt (vær, marked, artikler,
       Claude-stream i loggen).
-- [ ] JSON-fila finnes:
-      `docker compose run --rm generator ls -la /data/briefings`
+- [ ] JSON-fila finnes (inspiser via web-containeren, som monterer samme volum —
+      IKKE via `generator`, som ville kjørt briefingen på nytt):
+      `docker compose exec web ls -la /data/briefings`
 - [ ] **Dedup persisterer:** kjør generatoren to ganger; forskningsbriefen
       gjentar ikke gårsdagens studier.
 - [ ] Web svarer internt:
