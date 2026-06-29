@@ -253,17 +253,22 @@ uten ekstra datainnhenting.
 
 - **Vert:** VPS-en `MODR`, kjører som **root**, repo klonet til `/root/nyheter-app`.
   Repo: `git@github.com:OleDrange/nyheter-app.git`, **default-branch er `master`** (ikke `main`).
+  **Verts-TZ er `Europe/Oslo`** (`timedatectl`) — kritisk for når cron fyrer, se «Tidsplan».
 - **To tjenester** (`docker-compose.yml`):
   - `web` — alltid oppe (`docker compose up -d web`), `restart: unless-stopped`, på det eksterne
     `web`-nettet med alias **`nyheter-web`**, intern port **8080**. Monterer `briefing-data:/data:ro`.
   - `generator` — batch, `profiles: ["batch"]` (startes IKKE av `up -d`), kjøres av cron med
     `docker compose run --rm generator`. Monterer `briefing-data:/data` (rw), `env_file: .env`.
     Dockerfile bruker **CMD** (ikke ENTRYPOINT), se fallgruver.
-- **Tidsplan:** root sin crontab:
+- **Tidsplan:** root sin crontab (host-TZ må være `Europe/Oslo`, se under):
   ```cron
-  CRON_TZ=Europe/Oslo
   0 5 * * * cd /root/nyheter-app && /usr/bin/docker compose run --rm generator >> /root/nyheter-cron.log 2>&1
   ```
+  Tidssonen styres av **verten**, satt med `timedatectl set-timezone Europe/Oslo` (+ `systemctl
+  restart cron` — cron cacher TZ ved oppstart). Bruk **ikke** `CRON_TZ=Europe/Oslo` i crontab:
+  Debians standard-`cron` respekterer den ikke (det er en cronie-utvidelse), så `0 5` tolkes alltid
+  i systemets TZ. Med host-TZ = Oslo betyr `0 5` = 05:00 Oslo, og DST håndteres av OS-et.
+  Sjekk med `date` (skal vise `CEST`/`CET`) og `crontab -l` (skal *ikke* inneholde `CRON_TZ`).
 - **Proxy:** `~/modr-proxy` (Caddy). Blokk i `Caddyfile`:
   `nyheter.modr.online { encode gzip; reverse_proxy nyheter-web:8080 }`.
   Last inn: `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile --address 127.0.0.1:2019`
@@ -305,8 +310,12 @@ Rollback: `git revert <commit> && git push`, så `git pull && docker compose bui
 - **Generator bruker CMD, ikke ENTRYPOINT.** `docker compose run --rm generator <cmd>` overstyrer
   jobben. Ikke kjør `docker compose run --rm generator ls/cat …` med ENTRYPOINT-tankegang — bruk
   `docker compose exec web …` for inspeksjon, ellers risikerer du å kjøre hele briefingen (og bruke Claude-kvote).
-- **Tidssone:** scriptene bruker naiv `datetime.now()`/`.astimezone()`. `TZ=Europe/Oslo` settes i
-  containeren (Dockerfile + compose) og `CRON_TZ` i crontab — ellers blir dato/værvinduer/05:00 feil på UTC-vert.
+- **Tidssone (to nivåer):** (1) *Innholdet* — scriptene bruker naiv `datetime.now()`/`.astimezone()`,
+  så `TZ=Europe/Oslo` settes i containeren (Dockerfile + compose) for korrekt dato/værvinduer.
+  (2) *Når cron fyrer* — styres av **verts**-TZ, ikke containeren. Sett den med
+  `timedatectl set-timezone Europe/Oslo` + `systemctl restart cron`. **`CRON_TZ` i crontab virker
+  ikke** på Debians `cron` — gjorde man det, ble `0 5` tolket som 05:00 UTC = 07:00 Oslo (akkurat
+  den feilen som forsinket briefingen til den ble oppdaget 29. juni 2026). Host-TZ = Oslo er fasit.
 - **Persistente data:** `briefings/<dato>.json` og `research_seen_dois.json` MÅ ligge på volumet
   (`BRIEFING_DATA_DIR=/data`). Uten det: tomt arkiv + dedup som nullstilles.
 - **Backfill av gammel historikk:** `briefing_*.md`/`forskningsbrief_*.md` er gitignored og
