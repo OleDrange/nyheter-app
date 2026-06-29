@@ -294,12 +294,12 @@ Data og presentasjon er frikoblet — endre det ene uten å røre det andre.
 # lokalt: rediger, test, push
 git add -A && git commit -m "..." && git push          # til master
 # på VPS:
-cd ~/nyheter-app && git pull && docker compose build && docker compose up -d web
+cd ~/nyheter-app && git pull && docker compose build web generator && docker compose up -d web
 ```
 
 | Endring | Test lokalt | Effekt på VPS |
 |---|---|---|
-| Generator (`*.py`) | `python news_briefing.py` | **Krever `docker compose build` først** — `docker compose run --rm generator` gjenbruker det eksisterende imaget og kjører ellers gammel kode. Web røres ikke. |
+| Generator (`*.py`) | `python news_briefing.py` | **Krever rebuild først:** `docker compose build generator` — bart `docker compose build` hopper den over (pga. `profiles: batch`), så `run`/cron kjører ellers gammel kode. Web røres ikke. |
 | Nettside (`web/`) | `cd web && npm run dev` | Ny design på all historikk umiddelbart (SSR re-rendrer eksisterende JSON). |
 
 Rollback: `git revert <commit> && git push`, så `git pull && docker compose build && docker compose up -d web`.
@@ -307,10 +307,13 @@ Rollback: `git revert <commit> && git push`, så `git pull && docker compose bui
 ## Fallgruver (les før du endrer deploy)
 
 - **`master`, ikke `main`** — repoets default-branch.
-- **`git pull` rebuild-er ikke imaget.** `docker compose run --rm generator` (og web) bruker det
-  sist *bygde* imaget, ikke koden i arbeidstreet. Etter `git pull` MÅ du `docker compose build`
-  før endringer i `*.py`/`web/` får effekt — ellers kjører du gammel kode. Klassisk symptom: vær
-  uten `hourly`-feltet → nettsiden faller tilbake til statisk stat-grid uten time-for-time-spiller.
+- **`git pull` rebuild-er ikke imaget — og `docker compose build` bygger ikke generatoren.**
+  Imagene brukes slik de sist ble *bygd*, ikke fra koden i arbeidstreet. Verre: generatoren ligger
+  bak `profiles: ["batch"]`, så et bart `docker compose build` hopper den **stille** over (bygger
+  bare `web`). Etter `git pull` må generatoren bygges eksplisitt: `docker compose build web generator`
+  (eller engangs `docker compose run --rm --build generator`). Ellers kjører cron gammel kode.
+  Klassisk symptom: vær uten `hourly`-feltet → nettsiden faller tilbake til statisk stat-grid uten
+  time-for-time-spiller.
 - **Generator bruker CMD, ikke ENTRYPOINT.** `docker compose run --rm generator <cmd>` overstyrer
   jobben. Ikke kjør `docker compose run --rm generator ls/cat …` med ENTRYPOINT-tankegang — bruk
   `docker compose exec web …` for inspeksjon, ellers risikerer du å kjøre hele briefingen (og bruke Claude-kvote).
