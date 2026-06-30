@@ -2,12 +2,12 @@
 
 ## Hva prosjektet er
 
-En selvstendig daglig briefing-app, hostet på VPS bak `*.modr.online`-proxyen, i to deler:
+En selvstendig daglig briefing-app, hostet på VPS bak `*.modr.no`-proxyen, i to deler:
 
 - **Generator** (Python) — kjører én gang i døgnet (cron 05:00) og skriver dagens briefing som JSON:
   - **`news_briefing.py`** — daglig nyhetsbriefing fra RSS-feeds (vær, marked, nyheter).
   - **`research_briefing.py`** — daglig forskningsbriefing: nye fagfellevurderte studier (trening/helse/medisin) fra Europe PMC, abstract-form, maks 5 per dag. Gjenbruker hjelpefunksjoner fra `news_briefing.py`.
-- **Nettside** (`web/`, Astro SSR på Node) — leser JSON-filene og viser dagens briefing + arkiv på `nyheter.modr.online`.
+- **Nettside** (`web/`, Astro SSR på Node) — leser JSON-filene og viser dagens briefing + arkiv på `nyheter.modr.no`.
 
 Primær output er nå **nettsiden** (via et delt JSON-datalager), ikke Notion. Notion er valgfri/legacy.
 
@@ -269,10 +269,15 @@ uten ekstra datainnhenting.
   Debians standard-`cron` respekterer den ikke (det er en cronie-utvidelse), så `0 5` tolkes alltid
   i systemets TZ. Med host-TZ = Oslo betyr `0 5` = 05:00 Oslo, og DST håndteres av OS-et.
   Sjekk med `date` (skal vise `CEST`/`CET`) og `crontab -l` (skal *ikke* inneholde `CRON_TZ`).
-- **Proxy:** `~/modr-proxy` (Caddy). Blokk i `Caddyfile`:
-  `nyheter.modr.online { encode gzip; reverse_proxy nyheter-web:8080 }`.
-  Last inn: `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile --address 127.0.0.1:2019`
-  (IPv4-adressen er nødvendig — se fallgruver). Fallback: `docker compose restart caddy`.
+- **Proxy:** `~/modr-proxy` (Caddy). Primærdomenet er **`nyheter.modr.no`**; både
+  `nyheter.modr.online` (gammelt domene) og `n.modr.no` (kort alias) 301-redirecter dit.
+  Blokk i `Caddyfile`:
+  `nyheter.modr.no { encode gzip; reverse_proxy nyheter-web:8080 }` + to `redir`-blokker.
+  Caddy har **`admin off`** i den globale blokka, så admin-API-reload (`caddy reload … :2019`)
+  virker ikke — last inn med `docker compose restart caddy`. Validér først med
+  `docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile`.
+  TLS-certifikatene utstedes automatisk av Let's Encrypt; alle tre vertsnavn må ha DNS-A/AAAA
+  mot VPS-en (allerede satt opp, samme IP som `dashboard.modr.no`).
 - **Inspisere data uten å kjøre generatoren på nytt** (web monterer samme volum):
   `docker compose exec web ls -la /data/briefings` / `... cat /data/briefings/<dato>.json`.
 - **Backup** av hele arkivet (bor kun i volumet):

@@ -2,7 +2,7 @@
 
 Henter RSS-nyheter (19 kilder), ny forskning (Europe PMC), Bergen-vær (MET Norway) og
 markedsdata (yfinance), oppsummerer med Claude AI, og publiserer en daglig briefing på
-**https://nyheter.modr.online** — dagens utgave pluss arkiv over tidligere dager.
+**https://nyheter.modr.no** — dagens utgave pluss arkiv over tidligere dager.
 
 > Tidligere ble briefingen publisert til Notion. Nå er nettsiden den primære kanalen;
 > Notion er valgfri (under utfasing).
@@ -17,7 +17,7 @@ To samvirkende deler i samme repo, koblet via ett delt datalager (et Docker-volu
   forespørsel og viser dagens briefing + arkiv. Ligger bak den delte Caddy-proxyen.
 
 ```
-generator (cron 05:00) ──► /data/briefings/<dato>.json (volum) ──► web (Astro SSR) ──► Caddy ──► nyheter.modr.online
+generator (cron 05:00) ──► /data/briefings/<dato>.json (volum) ──► web (Astro SSR) ──► Caddy ──► nyheter.modr.no
 ```
 
 - Bakgrunn og full migreringsoppskrift: [MIGRERINGSPLAN.md](MIGRERINGSPLAN.md)
@@ -49,13 +49,13 @@ $env:BRIEFING_DIR="..\briefings"; npm run dev      # http://localhost:4321
 
 ## Drift på VPS (oppsummert)
 
-Kjører på VPS-en bak `*.modr.online`-proxyen. Full oppskrift i
+Kjører på VPS-en bak `*.modr.no`-proxyen. Full oppskrift i
 [MIGRERINGSPLAN.md](MIGRERINGSPLAN.md) §1.6; detaljer + oppdateringsflyt i
 [CLAUDE.md](CLAUDE.md).
 
 | | |
 |---|---|
-| Subdomene | `nyheter.modr.online` |
+| Subdomene | `nyheter.modr.no` (redirect fra `nyheter.modr.online` og `n.modr.no`) |
 | Proxy-alias / intern port | `nyheter-web:8080` |
 | Daglig kjøring | cron 05:00 (Europe/Oslo): `docker compose run --rm generator` |
 | Datalager | Docker-volum `briefing-data` → `/data/briefings/<dato>.json` |
