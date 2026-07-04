@@ -293,19 +293,30 @@ uten ekstra datainnhenting.
 
 ## Oppdateringsflyt
 
+**Utviklingsflyt (standard):** Utvikling og ny implementasjon skjer **direkte i dette repoet
+på serveren** (`/root/nyheter-app` på VPS-en). Etter hver endring skal Claude selv:
+
+1. Skrive/redigere koden i repoet her.
+2. Committe og pushe til `master` (`git add -A && git commit -m "..." && git push`).
+3. Oppdatere Docker slik at endringen er live:
+   `docker compose build web generator && docker compose up -d web`.
+
+Slik kan endringer testes **rett på nettsiden** (`https://nyheter.modr.no`) — det er der
+brukeren verifiserer, ikke i en lokal dev-server. Ikke stopp etter kodeendringen; flyten er
+ikke ferdig før nettsiden kjører den nye koden.
+
 Data og presentasjon er frikoblet — endre det ene uten å røre det andre.
 
 ```bash
-# lokalt: rediger, test, push
+# på serveren: rediger → commit → push → deploy
 git add -A && git commit -m "..." && git push          # til master
-# på VPS:
-cd ~/nyheter-app && git pull && docker compose build web generator && docker compose up -d web
+docker compose build web generator && docker compose up -d web
 ```
 
-| Endring | Test lokalt | Effekt på VPS |
+| Endring | Rask sjekk før deploy (valgfritt) | Effekt live |
 |---|---|---|
 | Generator (`*.py`) | `python news_briefing.py` | **Krever rebuild først:** `docker compose build generator` — bart `docker compose build` hopper den over (pga. `profiles: batch`), så `run`/cron kjører ellers gammel kode. Web røres ikke. |
-| Nettside (`web/`) | `cd web && npm run dev` | Ny design på all historikk umiddelbart (SSR re-rendrer eksisterende JSON). |
+| Nettside (`web/`) | `cd web && npm run dev` | Etter `build web` + `up -d web`: ny design på all historikk på `nyheter.modr.no` umiddelbart (SSR re-rendrer eksisterende JSON). |
 
 Rollback: `git revert <commit> && git push`, så `git pull && docker compose build && docker compose up -d web`.
 
