@@ -957,7 +957,7 @@ _ELITESERIEN_TOURNAMENT_ID = 5
 _BRANN_NEWS_RSS = (
     "https://news.google.com/rss/search?q=%22SK+Brann%22&hl=no&gl=NO&ceid=NO:no"
 )
-_BRANN_NEWS_MAX = 3
+_BRANN_NEWS_MAX = 1
 
 
 def _nifs_get(path: str):

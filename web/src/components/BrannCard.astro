@@ -61,7 +61,7 @@ const outcomeLabel = { seier: 'Seier', tap: 'Tap', uavgjort: 'Uavgjort' }[last?.
   </ul>
   {brann.news?.length > 0 && (
     <ul class="brann__news">
-      {brann.news.map((n) => (
+      {brann.news.slice(0, 1).map((n) => (
         <li>
           <a href={n.url} target="_blank" rel="noopener">{n.title}</a>
           {n.source && <span class="brann__news-src">{n.source}</span>}

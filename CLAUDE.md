@@ -168,8 +168,10 @@ Myk feil → `learning`-feltet utelates den dagen.
 - **NIFS-API** (`api.nifs.no`, åpent, ingen nøkkel): tabellplassering, siste resultat og
   neste kamp i Eliteserien. Brann herrer = team-id `1`, Eliteserien = turnering-id `5`;
   riktig sesong-stage slås opp per år (`yearStart == inneværende år`).
-- **Google News RSS** (`"SK Brann"`-søk): 3 siste nyheter (skader/overganger o.l.),
-  kildenavnet løftes ut av tittelen (« - Kilde»-suffikset).
+- **Google News RSS** (`"SK Brann"`-søk): siste nyhet (`_BRANN_NEWS_MAX = 1`; skader/
+  overganger o.l.), kildenavnet løftes ut av tittelen (« - Kilde»-suffikset).
+  `BrannCard.astro` viser uansett maks 1 (`slice(0, 1)`) så gamle briefinger med flere
+  lagrede nyheter også viser én.
 Myk feil per del; feltet utelates kun hvis alt feiler.
 
 ### Forskningsbriefing (`research_briefing.py`)
