@@ -13,6 +13,14 @@ const isHome = isForskning
   ? path === '/forskning' || path === '/forskning/'
   : path === '/';
 const isArchive = isForskning ? path.startsWith('/forskning/arkiv') : path.startsWith('/arkiv');
+
+// Dagens dato i headeren — beregnes per forespørsel (SSR) i container-TZ (Europe/Oslo).
+const _today = new Intl.DateTimeFormat('nb-NO', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+}).format(new Date());
+const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
 ---
 
 <!doctype html>
@@ -42,6 +50,7 @@ const isArchive = isForskning ? path.startsWith('/forskning/arkiv') : path.start
             <span class="brand__mark">{isForskning ? '🔬 Forskning' : '📰 Nyhetsbriefing'}</span>
           </a>
           <span class="brand__sub">{isForskning ? 'medisin · trening · kosthold' : 'Bergen · daglig'}</span>
+          <span class="brand__date">{todayNo}</span>
         </div>
         <div class="header-actions">
           <nav class="nav">

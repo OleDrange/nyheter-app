@@ -203,6 +203,12 @@ a:hover {
   font-weight: 500;
   color: var(--text-faint);
 }
+.brand__date {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
 .nav {
   display: flex;
   gap: 6px;
