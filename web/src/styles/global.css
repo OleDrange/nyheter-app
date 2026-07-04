@@ -129,6 +129,15 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Lås sidescroll globalt — kun vertikal scrolling. `clip` (der det støttes)
+   lager ikke en egen scroll-kontekst slik `hidden` kan gjøre. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
 /* Global tekstskala — alle rem-størrelser i appen følger denne (18px basis). */
 html {
   font-size: 112.5%;
@@ -167,9 +176,13 @@ a:hover {
   margin: 0 auto;
   padding: 14px 16px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px 16px;
+}
+.header-actions {
+  margin-left: auto;
 }
 .brand {
   display: flex;
@@ -225,6 +238,27 @@ main {
   .site-header__inner {
     padding-left: 10px;
     padding-right: 10px;
+    gap: 6px 10px;
+  }
+  .brand {
+    gap: 8px;
+    min-width: 0;
+  }
+  .brand__sub {
+    display: none;
+  }
+  .nav {
+    gap: 2px;
+  }
+  .nav a {
+    padding: 6px 9px;
+    font-size: 0.85rem;
+  }
+  .theme-toggle {
+    padding: 6px 9px;
+  }
+  .theme-toggle__label {
+    display: none;
   }
 }
 
