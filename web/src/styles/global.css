@@ -722,6 +722,104 @@ main {
   color: var(--accent);
 }
 
+/* ── Dagens hjernetrim (quiz) ───────────────────────────────────────────── */
+.quiz-q {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.quiz-q__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.quiz-q__level {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.quiz-q__level--hard {
+  background: var(--down-bg);
+  color: var(--down);
+}
+.quiz-q__category {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  text-align: right;
+}
+.quiz-q__question {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text);
+}
+.quiz-q__options {
+  display: grid;
+  gap: 8px;
+  margin-top: auto;
+}
+.quiz-opt {
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.quiz-opt:hover:enabled {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.quiz-opt:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+.quiz-opt--correct,
+.quiz-opt--correct:disabled {
+  background: var(--up-bg);
+  border-color: var(--up);
+  color: var(--up);
+  font-weight: 650;
+  opacity: 1;
+}
+.quiz-opt--wrong,
+.quiz-opt--wrong:disabled {
+  background: var(--down-bg);
+  border-color: var(--down);
+  color: var(--down);
+  opacity: 1;
+}
+.quiz-q__verdict {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+.quiz-q__verdict--right {
+  color: var(--up);
+}
+.quiz-q__verdict--wrong {
+  color: var(--down);
+}
+.quiz-score {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--text);
+}
+
 /* ── Arkiv ──────────────────────────────────────────────────────────────── */
 .archive-grid {
   display: grid;

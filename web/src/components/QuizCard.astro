@@ -1,0 +1,72 @@
+---
+// Dagens hjernetrim — 5 flervalgsspørsmål (nivå 1–5, lett → vanskelig).
+// Fasit er skjult til brukeren trykker på et svaralternativ; riktig svar
+// markeres grønt, feil valg rødt. Ingen bundling — ren inline-script.
+const { quiz } = Astro.props;
+
+const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
+---
+
+<div class="cards-grid quiz-grid">
+  {quiz.map((q, i) => (
+    <article class="card quiz-q" data-answer={q.answer}>
+      <header class="quiz-q__head">
+        <span class={`quiz-q__level quiz-q__level--${q.difficulty}`}>
+          Nivå {q.level ?? i + 1} · {DIFF_NO[q.difficulty] ?? q.difficulty}
+        </span>
+        {q.category && <span class="quiz-q__category">{q.category}</span>}
+      </header>
+      <p class="quiz-q__question">{q.question}</p>
+      <div class="quiz-q__options" role="group" aria-label="Svaralternativer">
+        {q.options.map((opt) => (
+          <button type="button" class="quiz-opt" data-opt={opt}>{opt}</button>
+        ))}
+      </div>
+      <p class="quiz-q__verdict" hidden></p>
+    </article>
+  ))}
+</div>
+<p class="quiz-score" hidden>
+  <span class="quiz-score__text"></span>
+</p>
+
+<script is:inline>
+  (() => {
+    const cards = Array.from(document.querySelectorAll('.quiz-q'));
+    const scoreEl = document.querySelector('.quiz-score');
+    const scoreText = document.querySelector('.quiz-score__text');
+    let answered = 0;
+    let correct = 0;
+
+    for (const card of cards) {
+      const answer = card.dataset.answer;
+      const verdict = card.querySelector('.quiz-q__verdict');
+      card.querySelectorAll('.quiz-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (card.classList.contains('quiz-q--done')) return;
+          card.classList.add('quiz-q--done');
+          const right = btn.dataset.opt === answer;
+          card.querySelectorAll('.quiz-opt').forEach((b) => {
+            b.disabled = true;
+            if (b.dataset.opt === answer) b.classList.add('quiz-opt--correct');
+          });
+          if (right) {
+            correct += 1;
+            verdict.textContent = '✓ Riktig!';
+            verdict.classList.add('quiz-q__verdict--right');
+          } else {
+            btn.classList.add('quiz-opt--wrong');
+            verdict.textContent = `✗ Feil — riktig svar: ${answer}`;
+            verdict.classList.add('quiz-q__verdict--wrong');
+          }
+          verdict.hidden = false;
+          answered += 1;
+          if (answered === cards.length && scoreEl && scoreText) {
+            scoreText.textContent = `Dagens fasit: ${correct} av ${cards.length} riktige 🧠`;
+            scoreEl.hidden = false;
+          }
+        });
+      });
+    }
+  })();
+</script>

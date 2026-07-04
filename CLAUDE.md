@@ -128,6 +128,15 @@ Innenrikspolitikk uten markedseffekt og eiendomsmarkedet kuttes alltid.
 ETH (`ETH-USD`) og Nordnet Global (nøkkel `nordnet`, MSCI World-proxy via `URTH`).
 Dataene sendes **ikke** til Claude — Claude forklarer *hvorfor* markedet beveget seg.
 
+### Dagens quiz (OpenTDB)
+
+`fetch_daily_quiz()` i `news_briefing.py` henter 5 flervalgsspørsmål fra **Open Trivia
+Database** (`opentdb.com/api.php` — gratis, ingen nøkkel, **engelsk**; ingen Claude-bruk).
+Nivåstige `_QUIZ_LADDER`: 1×easy + 2×medium + 2×hard → nivå 1–5. Rate limit 1 kall/5 s
+(`_QUIZ_RATE_LIMIT_S`). Dedup mot `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert
+spørsmålstekst, prunes etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres**
+(volumet). Myk feil → tom liste, `quiz`-feltet utelates den dagen.
+
 ### Forskningsbriefing (`research_briefing.py`)
 
 - **Kilde:** Europe PMC `search`-REST (ingen nøkkel), `resultType=core` (fulle abstracts),
@@ -156,7 +165,8 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "research_md": "forskningsbriefing (markdown)",
   "weather": { ... },          // fetch_bergen_weather()-dict
   "market": { ... },           // fetch_market_snapshot()-dict
-  "research_items": [ { "title", "url", "journal", "date" } ]
+  "research_items": [ { "title", "url", "journal", "date" } ],
+  "quiz": [ { "level", "difficulty", "category", "question", "options", "answer" } ]
 }
 ```
 
@@ -180,6 +190,10 @@ bygges uten ekstra datainnhenting.
   - `MarketStrip.astro` — markedswidget med dagsendring + mini-dagsgraf per ticker
     (`MarketTrend.astro` — inline SVG, ingen klient-JS). Serien fra `getMarketHistory()`
     (default 5 dager, `endDate` avgrenser til dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
+  - `QuizCard.astro` — «Dagens hjernetrim»: 5 flervalgsspørsmål fra `quiz`-feltet
+    (vises kun når feltet finnes). Fasit skjult til bruker trykker et alternativ —
+    riktig grønt (`--up`), feil rødt (`--down`), score-linje når alle 5 er besvart.
+    Inline-script, ingen bundling.
   - `ThemePicker.astro` — temavelger i headeren.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
   `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (per
@@ -202,8 +216,9 @@ bygges uten ekstra datainnhenting.
 - **Generator-container har CMD, ikke ENTRYPOINT** — `docker compose run generator <cmd>` kjører
   `<cmd>` i stedet for briefingen; uten `<cmd>` kjøres hele briefingen (Claude-kvote). Inspiser
   data via `docker compose exec web …`.
-- **Persistente data på volumet:** `briefings/<dato>.json` og `research_seen_dois.json` MÅ ligge
-  i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup.
+- **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json` og
+  `quiz_seen.json` MÅ ligge i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv +
+  nullstilt dedup.
 - **Tidssone:** cron-tidspunkt = verts-TZ (`CRON_TZ` virker ikke på Debian); innholdets
   dato/værvinduer = container-TZ. Begge skal være `Europe/Oslo`.
 - **`docker-entrypoint.sh` må ha LF** (sikret av `.gitattributes`).

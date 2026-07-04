@@ -50,7 +50,8 @@ def _load_dotenv() -> None:
 
 
 def store_briefing(date_str, *, news_md=None, research_md=None,
-                   weather=None, market=None, research_items=None) -> None:
+                   weather=None, market=None, research_items=None,
+                   quiz=None) -> None:
     """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
 
     Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
@@ -82,6 +83,8 @@ def store_briefing(date_str, *, news_md=None, research_md=None,
         data["market"] = market
     if research_items is not None:
         data["research_items"] = research_items
+    if quiz is not None:
+        data["quiz"] = quiz
 
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -485,6 +488,120 @@ def market_notion_blocks(market: dict) -> list[dict]:
         },
         {"object": "block", "type": "divider", "divider": {}},
     ]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Dagens quiz (Open Trivia Database — gratis, ingen nøkkel, engelsk)
+# ─────────────────────────────────────────────────────────────────────────────
+
+_QUIZ_API = "https://opentdb.com/api.php"
+_QUIZ_SEEN_FILE = "quiz_seen.json"  # i BRIEFING_DATA_DIR — må persisteres (volumet)
+_QUIZ_SEEN_RETENTION_DAYS = 365
+# Nivå 1–5: OpenTDB har tre vanskelighetsgrader; stigen bygges som
+# 1×easy + 2×medium + 2×hard → nivå 1 (lettest) til 5 (vanskeligst).
+_QUIZ_LADDER = [("easy", 1), ("medium", 2), ("hard", 2)]
+_QUIZ_RATE_LIMIT_S = 5.5  # OpenTDB: maks 1 kall per 5 s per IP
+
+
+def _quiz_seen_path() -> str:
+    return os.path.join(os.environ.get("BRIEFING_DATA_DIR", "."), _QUIZ_SEEN_FILE)
+
+
+def _load_quiz_seen() -> dict:
+    """{normalisert spørsmål: 'YYYY-MM-DD' sist brukt}, prunet etter retention."""
+    try:
+        with open(_quiz_seen_path(), encoding="utf-8") as f:
+            seen = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    cutoff = (datetime.now() - timedelta(days=_QUIZ_SEEN_RETENTION_DAYS)).strftime(
+        "%Y-%m-%d"
+    )
+    return {k: v for k, v in seen.items() if isinstance(v, str) and v >= cutoff}
+
+
+def _save_quiz_seen(seen: dict) -> None:
+    path = _quiz_seen_path()
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(seen, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+
+
+def fetch_daily_quiz() -> list[dict]:
+    """
+    Hent 5 flervalgsspørsmål fra Open Trivia DB, nivå 1–5 (lett → vanskelig).
+    Myk feil — returnerer [] hvis API-et er nede. Dedup mot quiz_seen.json så
+    samme spørsmål ikke gjentas innen retention-vinduet.
+
+    Returnerer liste av
+      { level, difficulty, category, question, options, answer }
+    der options er stokket og answer er fasitteksten (på engelsk — OpenTDB
+    har ikke norske spørsmål).
+    """
+    import html
+    import random
+
+    seen = _load_quiz_seen()
+    today = datetime.now().strftime("%Y-%m-%d")
+    quiz: list[dict] = []
+
+    try:
+        for i, (difficulty, need) in enumerate(_QUIZ_LADDER):
+            if i:
+                time.sleep(_QUIZ_RATE_LIMIT_S)
+            # Hent med god margin så dedup har noe å velge i
+            resp = httpx.get(
+                _QUIZ_API,
+                params={
+                    "amount": need * 4,
+                    "difficulty": difficulty,
+                    "type": "multiple",
+                },
+                timeout=15,
+            )
+            resp.raise_for_status()
+            payload = resp.json()
+            if payload.get("response_code") != 0:
+                print(f"  ⚠  quiz: OpenTDB response_code {payload.get('response_code')} ({difficulty})")
+                continue
+
+            candidates = payload.get("results", [])
+            picked = 0
+            for cand in candidates:
+                if picked >= need:
+                    break
+                question = html.unescape(cand.get("question", "")).strip()
+                answer = html.unescape(cand.get("correct_answer", "")).strip()
+                wrong = [html.unescape(w).strip() for w in cand.get("incorrect_answers", [])]
+                if not question or not answer or len(wrong) < 3:
+                    continue
+                key = _norm_title(question)
+                if key in seen:
+                    continue
+                options = wrong + [answer]
+                random.shuffle(options)
+                quiz.append(
+                    {
+                        "level": len(quiz) + 1,
+                        "difficulty": difficulty,
+                        "category": html.unescape(cand.get("category", "")).strip(),
+                        "question": question,
+                        "options": options,
+                        "answer": answer,
+                    }
+                )
+                seen[key] = today
+                picked += 1
+            if picked < need:
+                print(f"  ⚠  quiz: fikk bare {picked}/{need} nye {difficulty}-spørsmål")
+
+    except Exception as exc:
+        print(f"  ✗  quiz: feil ved henting — {exc}")
+
+    if quiz:
+        _save_quiz_seen(seen)
+    return quiz
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -992,6 +1109,11 @@ def main() -> None:
         )
     print()
 
+    print("Henter dagens quiz (OpenTDB)...")
+    quiz = fetch_daily_quiz()
+    print(f"  {len(quiz)} spørsmål (nivå 1–{len(quiz)})" if quiz else "  ⚠  ingen quiz i dag")
+    print()
+
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")
     articles = fetch_articles()
 
@@ -1006,7 +1128,10 @@ def main() -> None:
     print("─" * 70)
 
     # Lagre dagens briefing til datalageret som nettsiden leser
-    store_briefing(today_str, news_md=briefing, weather=weather, market=market)
+    store_briefing(
+        today_str, news_md=briefing, weather=weather, market=market,
+        quiz=quiz or None,
+    )
 
     # Notion
     has_notion = (

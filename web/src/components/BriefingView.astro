@@ -2,6 +2,7 @@
 // Felles visning for én briefing — brukes av både forsiden og enkeltdag-siden.
 import WeatherCard from './WeatherCard.astro';
 import MarketStrip from './MarketStrip.astro';
+import QuizCard from './QuizCard.astro';
 import { splitNewsSections, splitResearch, getMarketHistory } from '../lib/briefings.js';
 
 const { b } = Astro.props;
@@ -78,3 +79,10 @@ const PART_ICON = {
     )
   }
 </section>
+
+{b.quiz?.length > 0 && (
+  <section>
+    <h2 class="section-label">Dagens hjernetrim</h2>
+    <QuizCard quiz={b.quiz} />
+  </section>
+)}
