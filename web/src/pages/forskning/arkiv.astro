@@ -1,0 +1,35 @@
+---
+// forskning.modr.no/arkiv — alle dager med forskningsbriefing.
+import Base from '../../layouts/Base.astro';
+import { listDates, getBriefing, splitResearch, formatDateNo, weekdayNo } from '../../lib/briefings.js';
+
+const base = Astro.locals.fbase ?? '/forskning';
+
+const days = [];
+for (const d of await listDates()) {
+  const b = await getBriefing(d);
+  if (!b?.research_md) continue;
+  days.push({ date: d, count: splitResearch(b.research_md).length });
+}
+---
+
+<Base title="arkiv" site="forskning" base={base}>
+  <div class="page-head">
+    <h1>Arkiv</h1>
+    <div class="date">{days.length} forskningsbriefinger</div>
+  </div>
+  {
+    days.length ? (
+      <div class="archive-grid">
+        {days.map((day) => (
+          <a class="card archive-card" href={`${base}/b/${day.date}`}>
+            {formatDateNo(day.date, { day: 'numeric', month: 'short', year: 'numeric' })}
+            <span class="weekday">{weekdayNo(day.date)} · {day.count} studier</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="empty">Ingen forskningsbriefinger ennå.</p>
+    )
+  }
+</Base>

@@ -55,6 +55,16 @@ export function weekdayNo(dateStr) {
   return formatDateNo(dateStr, { weekday: 'long' });
 }
 
+// Forskningssiden bor på eget subdomene (samme app, host-rutet i middleware.js).
+export const FORSKNING_URL = 'https://forskning.modr.no';
+
+// Kategoriene i forskningsbriefingen — rekkefølge og emoji brukes av visningen.
+export const RESEARCH_CATEGORIES = [
+  { id: 'medisin', label: 'Medisin', emoji: '🩺' },
+  { id: 'trening', label: 'Trening', emoji: '🏋️' },
+  { id: 'kosthold', label: 'Kosthold', emoji: '🥗' },
+];
+
 // Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten.
 export const MARKET_KEYS = ['brent', 'sp500', 'osebx', 'btc', 'eth', 'nordnet'];
 
@@ -113,9 +123,11 @@ const STUDY_PART_RE = /\*\*\s*(.+?)\s*:\*\*\s*([\s\S]*?)(?=\n\s*\*\*|$)/g;
 
 /**
  * Del forskningsbriefingen (`research_md`) per studie. Hver studie er
- * `## [tittel](url)` etterfulgt av merkede avsnitt (Hva/Resultat/Relevans).
- * Returnerer [{ title, url, parts: [{ label, html }], html }] der `parts` er de
- * separerte avsnittene (tom hvis ingen merkede deler → bruk `html`-fallback).
+ * `## [tittel](url)` etterfulgt av merkede avsnitt (Kategori/Hva/Resultat/Relevans).
+ * Returnerer [{ title, url, category, parts: [{ label, html }], html }] der
+ * `category` er 'medisin'/'trening'/'kosthold' (null for gamle briefinger uten
+ * etikett) og `parts` er de øvrige merkede avsnittene (tom hvis ingen merkede
+ * deler → bruk `html`-fallback).
  */
 export function splitResearch(md) {
   const text = String(md || '').trim();
@@ -131,15 +143,23 @@ export function splitResearch(md) {
       const link = heading.match(/^\[(.*?)\]\((.*?)\)\s*$/);
 
       const parts = [];
+      let category = null;
       STUDY_PART_RE.lastIndex = 0;
       let m;
       while ((m = STUDY_PART_RE.exec(body)) !== null) {
-        parts.push({ label: m[1].trim(), html: marked.parseInline(m[2].trim()) });
+        const label = m[1].trim();
+        const raw = m[2].trim();
+        if (/^kategori$/i.test(label)) {
+          category = raw.replace(/[*_]/g, '').trim().toLowerCase() || null;
+          continue;
+        }
+        parts.push({ label, html: marked.parseInline(raw) });
       }
 
       return {
         title: link ? link[1] : heading,
         url: link ? link[2] : null,
+        category,
         parts,
         html: renderMarkdown(body),
       };

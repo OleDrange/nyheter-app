@@ -673,8 +673,18 @@ main {
   display: grid;
   gap: 16px;
 }
+/* Forskningssiden: to kolonner på brede skjermer (20 studier/dag) */
+.research-grid--wide {
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+}
+@media (max-width: 520px) {
+  .research-grid--wide {
+    grid-template-columns: 1fr;
+  }
+}
 .study {
   padding: 18px 22px;
+  scroll-margin-top: 80px; /* anker-hopp fra nyhetssiden lander under sticky header */
 }
 .study__title {
   font-size: 1.05rem;
@@ -735,6 +745,50 @@ main {
 }
 .study__text a:hover {
   color: var(--accent);
+}
+
+/* Tittel-liste på nyhetssiden — lenker til forskning.modr.no */
+.research-links-card {
+  padding: 10px 20px 16px;
+}
+.research-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.research-links li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.research-links li a {
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.research-links li a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+.research-links__cat {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.research-links__more {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 
 /* ── Dagens hjernetrim (quiz) ───────────────────────────────────────────── */

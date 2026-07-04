@@ -4,19 +4,20 @@ import WeatherCard from './WeatherCard.astro';
 import MarketStrip from './MarketStrip.astro';
 import QuizCard from './QuizCard.astro';
 import RiddleCard from './RiddleCard.astro';
-import { splitNewsSections, splitResearch, getMarketHistory } from '../lib/briefings.js';
+import {
+  splitNewsSections,
+  splitResearch,
+  getMarketHistory,
+  FORSKNING_URL,
+  RESEARCH_CATEGORIES,
+} from '../lib/briefings.js';
 
 const { b } = Astro.props;
 const sections = splitNewsSections(b.news_md);
 const studies = splitResearch(b.research_md);
 const marketHistory = b.market ? await getMarketHistory({ endDate: b.date }) : {};
 
-// Ikon per merket del i forskningsabstractene (structured-abstract-stil).
-const PART_ICON = {
-  'Hva som ble gjort': '🔬',
-  Resultat: '📊',
-  Relevans: '💡',
-};
+const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
 ---
 
 {(b.weather || b.market) && (
@@ -62,32 +63,21 @@ const PART_ICON = {
 </section>
 
 <section>
-  <h2 class="section-label">Forskningsbriefing</h2>
+  <h2 class="section-label">Forskning</h2>
   {
     studies.length ? (
-      <div class="research-grid">
-        {studies.map((st) => (
-          <article class="card study">
-            <h3 class="study__title">
-              {st.url ? <a href={st.url} target="_blank" rel="noopener">{st.title}</a> : st.title}
-            </h3>
-            {st.parts.length ? (
-              <div class="study__parts">
-                {st.parts.map((p) => (
-                  <div class={p.label === 'Relevans' ? 'study__part study__part--key' : 'study__part'}>
-                    <div class="study__label">
-                      <span class="study__label-icon" aria-hidden="true">{PART_ICON[p.label] || '•'}</span>
-                      {p.label}
-                    </div>
-                    <div class="study__text" set:html={p.html} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div class="prose" set:html={st.html} />
-            )}
-          </article>
-        ))}
+      <div class="card research-links-card">
+        <ul class="research-links">
+          {studies.map((st, i) => (
+            <li>
+              <a href={`${FORSKNING_URL}/b/${b.date}#s${i}`}>{st.title}</a>
+              {catLabel(st.category) && <span class="research-links__cat">{catLabel(st.category)}</span>}
+            </li>
+          ))}
+        </ul>
+        <a class="research-links__more" href={`${FORSKNING_URL}/b/${b.date}`}>
+          Les oppsummeringene på forskning.modr.no →
+        </a>
       </div>
     ) : (
       <p class="muted">Ingen forskningsbriefing denne dagen.</p>

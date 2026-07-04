@@ -2,12 +2,17 @@
 import '../styles/global.css';
 import ThemePicker from '../components/ThemePicker.astro';
 
-// Fanetittel: «modr - nyheter - <dato/seksjon>». Sidene sender bare datodelen.
-const { title } = Astro.props;
-const fullTitle = title ? `modr - nyheter - ${title}` : 'modr - nyheter';
+// Fanetittel: «modr - <site> - <dato/seksjon>». Sidene sender bare datodelen.
+// `site="forskning"` gir forskningssidens header/nav; `base` er lenkeprefikset
+// for interne forskning-lenker ('' på forskning.modr.no, '/forskning' ellers).
+const { title, site = 'nyheter', base = '' } = Astro.props;
+const isForskning = site === 'forskning';
+const fullTitle = title ? `modr - ${site} - ${title}` : `modr - ${site}`;
 const path = Astro.url.pathname;
-const isHome = path === '/';
-const isArchive = path.startsWith('/arkiv');
+const isHome = isForskning
+  ? path === '/forskning' || path === '/forskning/'
+  : path === '/';
+const isArchive = isForskning ? path.startsWith('/forskning/arkiv') : path.startsWith('/arkiv');
 ---
 
 <!doctype html>
@@ -33,15 +38,26 @@ const isArchive = path.startsWith('/arkiv');
     <header class="site-header">
       <div class="site-header__inner">
         <div class="brand">
-          <a href="/">
-            <span class="brand__mark">📰 Nyhetsbriefing</span>
+          <a href={isForskning ? base || '/' : '/'}>
+            <span class="brand__mark">{isForskning ? '🔬 Forskning' : '📰 Nyhetsbriefing'}</span>
           </a>
-          <span class="brand__sub">Bergen · daglig</span>
+          <span class="brand__sub">{isForskning ? 'medisin · trening · kosthold' : 'Bergen · daglig'}</span>
         </div>
         <div class="header-actions">
           <nav class="nav">
-            <a href="/" aria-current={isHome ? 'page' : undefined}>I dag</a>
-            <a href="/arkiv" aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+            {isForskning ? (
+              <>
+                <a href={base || '/'} aria-current={isHome ? 'page' : undefined}>I dag</a>
+                <a href={`${base}/arkiv`} aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+                <a href="https://nyheter.modr.no">Nyheter</a>
+              </>
+            ) : (
+              <>
+                <a href="/" aria-current={isHome ? 'page' : undefined}>I dag</a>
+                <a href="/arkiv" aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+                <a href="https://forskning.modr.no">Forskning</a>
+              </>
+            )}
           </nav>
           <ThemePicker />
         </div>

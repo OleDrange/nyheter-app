@@ -48,10 +48,10 @@ from news_briefing import (
 # ─────────────────────────────────────────────────────────────────────────────
 
 MODEL = "claude-sonnet-4-6"
-MAX_TOKENS = 4096
+MAX_TOKENS = 8192
 LOOKBACK_DAYS = 2          # vindu på publiseringsdato (toleranse for indekseringsforsinkelse)
-MAX_ITEMS = 5             # maks studier i briefen (styres også i SYSTEM_PROMPT)
-CANDIDATE_POOL = 25        # antall ferske studier som hentes og sendes til Claude
+MAX_ITEMS = 20             # maks studier i briefen (styres også i SYSTEM_PROMPT)
+CANDIDATE_POOL = 30        # antall ferske studier som hentes PER KATEGORI og sendes til Claude
 MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
 
 # Dedup mot gjentakelser på tvers av dager
@@ -62,34 +62,45 @@ SEEN_RETENTION_DAYS = 14
 ARCHIVE_TITLE = "Forskning Arkiv"
 ANCHOR_TEXT = "Forskningsbriefinger"
 
-# Bred emnespørring (trening + helse + all klinisk medisin). Rediger fritt.
+# Én emnespørring per kategori — kandidater hentes separat og merkes med kategorien.
 # Syntaks: Europe PMC query language. SRC:MED = kun fagfellevurdert (MEDLINE/PubMed).
-EUROPE_PMC_QUERY = (
-    '('
-    'exercise OR "physical activity" OR "strength training" OR "resistance training" '
-    'OR "aerobic exercise" OR "high-intensity interval training" OR "sports medicine" '
-    'OR nutrition OR diet OR "weight loss" OR sleep OR recovery '
-    'OR cardiovascular OR metabolic OR diabetes OR obesity OR longevity '
-    'OR "clinical trial" OR "randomized controlled trial" OR treatment OR therapy '
-    'OR pharmacology'
-    ') '
-    'AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y'
-)
+# Daglig volum (LANG:eng + abstract, målt 2026-07): medisin ~4 700, kosthold ~500,
+# trening ~300 nye artikler — CANDIDATE_POOL per kategori er aldri et problem å fylle.
+_PMC_SUFFIX = " AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y"
+CATEGORY_QUERIES: dict[str, str] = {
+    "medisin": (
+        '("clinical trial" OR "randomized controlled trial" OR treatment OR therapy '
+        'OR pharmacology OR cardiovascular OR metabolic OR diabetes OR obesity '
+        'OR cancer OR longevity OR "public health")' + _PMC_SUFFIX
+    ),
+    "trening": (
+        '(exercise OR "physical activity" OR "strength training" OR "resistance training" '
+        'OR "aerobic exercise" OR "endurance training" OR "high-intensity interval training" '
+        'OR "sports medicine" OR "muscle hypertrophy" OR recovery)' + _PMC_SUFFIX
+    ),
+    "kosthold": (
+        '(nutrition OR diet OR "dietary intake" OR "dietary supplement" OR "weight loss" '
+        'OR "intermittent fasting" OR protein OR "omega-3" OR micronutrient)' + _PMC_SUFFIX
+    ),
+}
+CATEGORY_LABELS = {"medisin": "Medisin", "trening": "Trening", "kosthold": "Kosthold"}
 
 _API_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 _HEADERS = {"User-Agent": "research-briefing/1.0 (personal script)"}
 
-SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk om ny forskning innen trening, helse og medisin, for en interessert lekperson.
+SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk om ny forskning innen medisin, trening og kosthold, for en interessert lekperson.
 
-Du får en liste med kandidatstudier (tittel, tidsskrift, dato, URL, engelsk sammendrag). Velg de OPPTIL 5 mest relevante og betydningsfulle. Heller færre enn å fylle opp med svake studier. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
+Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Velg de OPPTIL 20 mest relevante og betydningsfulle. Heller færre enn å fylle opp med svake studier. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
 
 UTVALGSKRITERIER (prioritert rekkefølge):
-- Praktisk eller klinisk betydning for trening, helse eller medisin
+- Praktisk eller klinisk betydning for medisin, trening eller kosthold
 - Studiekvalitet: vekt randomiserte kontrollerte studier (RCT), metaanalyser, systematiske oversikter og store studier høyere enn små observasjonsstudier, dyrestudier og enkeltkasus
-- Nyhetsverdi og bredde — velg variasjon framfor fem nesten like studier
+- Nyhetsverdi og bredde — velg variasjon framfor mange nesten like studier
+- Fordeling: tilstreb studier fra alle tre kategoriene (minst 4 per kategori når kandidatene tillater det)
 
 FORMAT — for hver valgte studie, nøyaktig denne strukturen:
 ## [Kort, dekkende norsk tittel](URL)
+**Kategori:** Medisin | Trening | Kosthold (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
 **Hva som ble gjort:** Design, populasjon/antall deltakere og intervensjon. 1–3 setninger.
 **Resultat:** Hovedfunn med konkrete tall (effektstørrelser, prosent, p-verdier der oppgitt). 1–3 setninger.
 **Relevans:** Én setning om hva dette betyr i praksis.
@@ -148,68 +159,83 @@ def _strip_html(text: str) -> str:
 
 
 def fetch_research() -> list[dict]:
+    """Hent kandidatstudier per kategori (medisin/trening/kosthold) og slå sammen.
+    Hver artikkel merkes med `category`; duplikater på tvers av kategoriene
+    (samme DOI/id) beholdes kun én gang — første kategori vinner."""
+    import time as _time
+
     today = datetime.now().date()
     start = today - timedelta(days=LOOKBACK_DAYS)
-    query = (
-        f"{EUROPE_PMC_QUERY} "
-        f"AND (FIRST_PDATE:[{start.isoformat()} TO {today.isoformat()}])"
-    )
-    params = {
-        "query": query,
-        "resultType": "core",
-        "sort": "P_PDATE_D desc",
-        "pageSize": str(CANDIDATE_POOL),
-        "format": "json",
-    }
-
-    try:
-        resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=20)
-        resp.raise_for_status()
-        data = resp.json()
-    except Exception as exc:
-        print(f"  ✗  Europe PMC: feil ved henting — {exc}")
-        return []
+    date_filter = f" AND (FIRST_PDATE:[{start.isoformat()} TO {today.isoformat()}])"
 
     seen = _load_seen()
     articles: list[dict] = []
+    picked_ids: set[str] = set()
     skipped_seen = 0
 
-    for r in data.get("resultList", {}).get("result", []):
-        title = (r.get("title") or "").strip().rstrip(".")
-        abstract = _strip_html(r.get("abstractText", ""))
-        if not title or not abstract:
+    for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES.items()):
+        if ci:
+            _time.sleep(1)  # høflig mot Europe PMC
+        params = {
+            "query": cat_query + date_filter,
+            "resultType": "core",
+            "sort": "P_PDATE_D desc",
+            "pageSize": str(CANDIDATE_POOL),
+            "format": "json",
+        }
+        try:
+            resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=20)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as exc:
+            print(f"  ✗  Europe PMC ({category}): feil ved henting — {exc}")
             continue
 
-        doi = (r.get("doi") or "").strip().lower()
-        if doi and doi in seen:
-            skipped_seen += 1
-            continue
+        count = 0
+        for r in data.get("resultList", {}).get("result", []):
+            title = (r.get("title") or "").strip().rstrip(".")
+            abstract = _strip_html(r.get("abstractText", ""))
+            if not title or not abstract:
+                continue
 
-        journal = (
-            (r.get("journalInfo") or {}).get("journal", {}).get("title")
-            or r.get("journalTitle")
-            or "—"
-        )
-        src = r.get("source", "")
-        pid = r.get("id", "")
-        if doi:
-            url = f"https://doi.org/{doi}"
-        elif src and pid:
-            url = f"https://europepmc.org/article/{src}/{pid}"
-        else:
-            url = ""
+            doi = (r.get("doi") or "").strip().lower()
+            if doi and doi in seen:
+                skipped_seen += 1
+                continue
 
-        articles.append(
-            {
-                "title": title,
-                "abstract": abstract[:MAX_ABSTRACT_CHARS],
-                "authors": (r.get("authorString") or "").strip(),
-                "journal": journal,
-                "date": r.get("firstPublicationDate", "—"),
-                "doi": doi,
-                "url": url,
-            }
-        )
+            src = r.get("source", "")
+            pid = r.get("id", "")
+            uid = doi or f"{src}/{pid}"
+            if uid in picked_ids:
+                continue  # samme studie traff en tidligere kategorispørring
+            picked_ids.add(uid)
+
+            journal = (
+                (r.get("journalInfo") or {}).get("journal", {}).get("title")
+                or r.get("journalTitle")
+                or "—"
+            )
+            if doi:
+                url = f"https://doi.org/{doi}"
+            elif src and pid:
+                url = f"https://europepmc.org/article/{src}/{pid}"
+            else:
+                url = ""
+
+            articles.append(
+                {
+                    "category": category,
+                    "title": title,
+                    "abstract": abstract[:MAX_ABSTRACT_CHARS],
+                    "authors": (r.get("authorString") or "").strip(),
+                    "journal": journal,
+                    "date": r.get("firstPublicationDate", "—"),
+                    "doi": doi,
+                    "url": url,
+                }
+            )
+            count += 1
+        print(f"  ✓  {category}: {count} kandidater")
 
     if skipped_seen:
         print(f"  ({skipped_seen} allerede dekket tidligere — hoppet over)")
@@ -225,7 +251,7 @@ def build_candidates_text(articles: list[dict]) -> str:
     lines = []
     for i, a in enumerate(articles, 1):
         lines.append(
-            f"[{i}] {a['title']}\n"
+            f"[{i}] ({CATEGORY_LABELS.get(a.get('category'), a.get('category', '?'))}) {a['title']}\n"
             f"Tidsskrift: {a['journal']} | Publisert: {a['date']}\n"
             f"URL: {a['url']}\n"
             f"Sammendrag: {a['abstract']}\n"
@@ -386,7 +412,8 @@ def main() -> None:
 
     # Lagre forskningsbriefingen til datalageret (merges inn i samme dagsfil som nyhetsbriefen)
     research_items = [
-        {"title": a["title"], "url": a["url"], "journal": a["journal"], "date": a["date"]}
+        {"title": a["title"], "url": a["url"], "journal": a["journal"],
+         "date": a["date"], "category": a["category"]}
         for a in articles
         if a["url"] and a["url"] in briefing
     ]

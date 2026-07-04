@@ -11,6 +11,8 @@ repoet: `/root/nyheter-app`, remote `git@github.com:OleDrange/nyheter-app.git`, 
   - `research_briefing.py` — maks 5 nye fagfellevurderte studier fra Europe PMC.
 - **Nettside** (`web/`, Astro 5 SSR på Node) — leser JSON ved hver forespørsel og viser
   dagens briefing + arkiv. Nytt *innhold* vises uten rebuild; *kodeendringer* krever rebuild.
+  Samme app serverer også **https://forskning.modr.no** (host-rutet i `web/src/middleware.js`)
+  med full forskningsbriefing; nyhetssiden viser kun titler som lenker dit.
 
 ## Utviklingsflyt (standard)
 
@@ -49,7 +51,9 @@ Rollback: `git revert <commit> && git push`, deretter rebuild + `up -d web`.
   etter endring). **`CRON_TZ` virker ikke** på Debians cron — ikke legg den i crontab.
   Container-TZ (`TZ=Europe/Oslo` i Dockerfile + compose) styrer innholdets dato/værvinduer.
 - **Proxy:** Caddy i `~/modr-proxy`. `nyheter.modr.no { encode gzip; reverse_proxy nyheter-web:8080 }`;
-  `nyheter.modr.online` og `n.modr.no` 301-redirecter dit. Caddy har `admin off` → reload med
+  `nyheter.modr.online` og `n.modr.no` 301-redirecter dit. **forskning.modr.no** skal ha
+  identisk blokk (samme container — appen ruter på host); krever DNS A-post →
+  serverens IP før Caddy kan hente sertifikat. Caddy har `admin off` → reload med
   `docker compose restart caddy` (validér først:
   `docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile`).
 - **Inspisere data:** `docker compose exec web ls -la /data/briefings` /
@@ -150,11 +154,15 @@ logikkgåter — dette er det ene stedet quiz/gåter bruker Claude. Dedup: tidli
 ### Forskningsbriefing (`research_briefing.py`)
 
 - **Kilde:** Europe PMC `search`-REST (ingen nøkkel), `resultType=core` (fulle abstracts),
-  `SRC:MED` = kun fagfellevurdert.
-- **Konstanter øverst i fila:** `LOOKBACK_DAYS = 2`, `MAX_ITEMS = 5`, `CANDIDATE_POOL = 25`,
-  `EUROPE_PMC_QUERY` (endre denne for å justere tema).
-- **Format per studie:** `## [tittel](url)` + **Hva som ble gjort** / **Resultat** / **Relevans**
-  (nettsiden parser disse etikettene). Heller færre enn svake.
+  `SRC:MED` = kun fagfellevurdert. Hentes **per kategori** via `CATEGORY_QUERIES`
+  (medisin/trening/kosthold — daglig volum målt 2026-07: ~4 700 / ~300 / ~500 nye artikler,
+  så poolen fylles alltid). Kryss-kategori-duplikater fjernes (første kategori vinner).
+- **Konstanter øverst i fila:** `LOOKBACK_DAYS = 2`, `MAX_ITEMS = 20`,
+  `CANDIDATE_POOL = 30` (per kategori), `CATEGORY_QUERIES` (endre for å justere tema).
+- **Format per studie:** `## [tittel](url)` + **Kategori** (Medisin/Trening/Kosthold) +
+  **Hva som ble gjort** / **Resultat** / **Relevans** (nettsiden parser disse etikettene;
+  `splitResearch()` løfter Kategori ut som eget `category`-felt). Heller færre enn svake.
+- `research_items` i JSON-en har også `category` (kandidatens kilde-kategori).
 - **Dedup:** `research_seen_dois.json` (DOI-er, prunes etter `SEEN_RETENTION_DAYS = 14`).
   Kun studier Claude faktisk valgte markeres som sett. Ligger i `BRIEFING_DATA_DIR` —
   **må persisteres** (volumet), ellers nullstilles dedup.
@@ -189,11 +197,19 @@ bygges uten ekstra datainnhenting.
 - Astro 5, `output: 'server'`, `@astrojs/node` standalone. Lytter på `0.0.0.0:8080` i
   container (`HOST`/`PORT` env). `BRIEFING_DIR=/data/briefings` i prod-Dockerfile; uten
   env-var faller `briefings.js` tilbake til repo-lokal `briefings/`.
-- **Ruter:** `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
+- **Ruter (nyheter):** `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
+- **Ruter (forskning):** `/forskning`, `/forskning/arkiv`, `/forskning/b/<dato>`.
+  `src/middleware.js` ruter host `forskning.*` internt til disse (rene URL-er på
+  subdomenet: `/`, `/arkiv`, `/b/<dato>`) og setter `locals.fbase` = lenkeprefiks
+  ('' på subdomenet, '/forskning' ved sti-tilgang/dev). `Base.astro` tar
+  `site="forskning"` + `base` for egen header/nav. Anker `#s<i>` per studie
+  (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
 - **Komponenter:**
-  - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort + forskningskort mellom
-    forside og enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → nyheter →
-    forskning.
+  - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
+    enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → nyheter → forskning
+    (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
+  - `ResearchList.astro` — full forskningsvisning (forskning-sidene): studiekort gruppert
+    etter kategori (`RESEARCH_CATEGORIES` i `briefings.js`), ukategoriserte under «Øvrig».
   - `WeatherCard.astro` — vær-widget; viser `WeatherPlayer.astro` når `weather.hourly` finnes,
     ellers statisk stat-grid (gamle briefinger).
   - `WeatherPlayer.astro` — time-for-time «video» (ikon/temp/status/nedbør/UV) med slider og
@@ -214,8 +230,8 @@ bygges uten ekstra datainnhenting.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
   `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (per
   «## »-seksjon; håndterer flagg-emoji som 🇳🇴), `splitResearch(research_md)` →
-  `[{ title, url, parts, html }]` (`parts` = de merkede avsnittene Hva som ble gjort/Resultat/
-  Relevans; `html` er fallback), `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
+  `[{ title, url, category, parts, html }]` (`parts` = de merkede avsnittene Hva som ble
+  gjort/Resultat/Relevans; `category` løftes ut av **Kategori**-etiketten; `html` er fallback), `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
 - **Temaer:** 5 stk via `[data-theme]` på `<html>`, lagres i `localStorage` (`theme`), settes
   før paint av `is:inline`-skript i `<head>`. **Nytt tema = (1) `[data-theme="<id>"]`-blokk i
   `src/styles/global.css`, (2) én linje i `src/lib/themes.js`** — resten bygges fra registeret.

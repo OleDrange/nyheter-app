@@ -1,0 +1,24 @@
+---
+// forskning.modr.no/b/<dato> — forskningsbriefingen for én dag.
+import Base from '../../../layouts/Base.astro';
+import ResearchList from '../../../components/ResearchList.astro';
+import { getBriefing, formatDateNo } from '../../../lib/briefings.js';
+
+const base = Astro.locals.fbase ?? '/forskning';
+
+const { date } = Astro.params;
+const b = await getBriefing(date);
+
+if (!b) {
+  return new Response('Ikke funnet', { status: 404 });
+}
+---
+
+<Base title={b.date} site="forskning" base={base}>
+  <p class="back"><a href={`${base}/arkiv`}>← Tilbake til arkiv</a></p>
+  <div class="page-head">
+    <h1>Forskning</h1>
+    <div class="date">{formatDateNo(b.date)}</div>
+  </div>
+  <ResearchList b={b} />
+</Base>

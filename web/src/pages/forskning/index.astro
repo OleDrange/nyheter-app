@@ -1,0 +1,34 @@
+---
+// forskning.modr.no — nyeste dag med forskningsbriefing.
+import Base from '../../layouts/Base.astro';
+import ResearchList from '../../components/ResearchList.astro';
+import { listDates, getBriefing, formatDateNo } from '../../lib/briefings.js';
+
+const base = Astro.locals.fbase ?? '/forskning';
+
+const dates = await listDates();
+let b = null;
+for (const d of dates) {
+  const cand = await getBriefing(d);
+  if (cand?.research_md) {
+    b = cand;
+    break;
+  }
+}
+---
+
+<Base title={b ? b.date : 'i dag'} site="forskning" base={base}>
+  {
+    b ? (
+      <>
+        <div class="page-head">
+          <h1>Dagens forskning</h1>
+          <div class="date">{formatDateNo(b.date)}</div>
+        </div>
+        <ResearchList b={b} />
+      </>
+    ) : (
+      <p class="empty">Ingen forskningsbriefing generert ennå.</p>
+    )
+  }
+</Base>
