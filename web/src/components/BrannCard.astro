@@ -1,0 +1,72 @@
+---
+// SK Brann-status — vises nederst i «Bergen og Vestland»-kortet.
+// Data fra `brann`-feltet (NIFS + Google News, hentet av generatoren).
+const { brann } = Astro.props;
+const t = brann.table;
+const last = brann.last_match;
+const next = brann.next_match;
+
+// "2026-07-06T18:00:00+02:00" → "søndag 6. juli kl. 18.00" (container-TZ er Europe/Oslo)
+const kickoff = (iso) => {
+  try {
+    const d = new Date(iso);
+    const day = new Intl.DateTimeFormat('nb-NO', {
+      weekday: 'long', day: 'numeric', month: 'long',
+    }).format(d);
+    const time = new Intl.DateTimeFormat('nb-NO', {
+      hour: '2-digit', minute: '2-digit',
+    }).format(d).replace(':', '.');
+    return `${day} kl. ${time}`;
+  } catch {
+    return iso;
+  }
+};
+
+const vs = (m) => (m.home ? `Brann – ${m.opponent}` : `${m.opponent} – Brann`);
+const outcomeClass =
+  last?.outcome === 'seier' ? 'brann__outcome--win'
+  : last?.outcome === 'tap' ? 'brann__outcome--loss'
+  : '';
+const outcomeLabel = { seier: 'Seier', tap: 'Tap', uavgjort: 'Uavgjort' }[last?.outcome];
+---
+
+<div class="brann">
+  <header class="brann__head">
+    <span class="brann__badge">⚽ SK Brann</span>
+    {t?.place && (
+      <span class="brann__table">
+        {t.place}. plass · {t.points} poeng etter {t.played} kamper
+      </span>
+    )}
+  </header>
+  <ul class="brann__facts">
+    {next && (
+      <li>
+        <span class="brann__label">Neste kamp</span>
+        <span>
+          {vs(next)} · {kickoff(next.date)}
+          {next.stadium && ` · ${next.stadium}`}
+        </span>
+      </li>
+    )}
+    {last && last.outcome && (
+      <li>
+        <span class="brann__label">Sist</span>
+        <span>
+          <strong class={outcomeClass}>{outcomeLabel} {last.brann_goals}–{last.opponent_goals}</strong>
+          {' '}{last.home ? 'hjemme mot' : 'borte mot'} {last.opponent}
+        </span>
+      </li>
+    )}
+  </ul>
+  {brann.news?.length > 0 && (
+    <ul class="brann__news">
+      {brann.news.map((n) => (
+        <li>
+          <a href={n.url} target="_blank" rel="noopener">{n.title}</a>
+          {n.source && <span class="brann__news-src">{n.source}</span>}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>

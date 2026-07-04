@@ -4,6 +4,8 @@ import WeatherCard from './WeatherCard.astro';
 import MarketStrip from './MarketStrip.astro';
 import QuizCard from './QuizCard.astro';
 import RiddleCard from './RiddleCard.astro';
+import LearningCard from './LearningCard.astro';
+import BrannCard from './BrannCard.astro';
 import {
   splitNewsSections,
   splitResearch,
@@ -41,6 +43,13 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
   </section>
 )}
 
+{(b.learning?.podcasts?.length > 0 || b.learning?.books?.length > 0) && (
+  <section>
+    <h2 class="section-label">Dagens inspirasjon</h2>
+    <LearningCard learning={b.learning} />
+  </section>
+)}
+
 <section>
   <h2 class="section-label">Nyhetsbriefing</h2>
   {
@@ -53,6 +62,7 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
               <h3 class="section-card__title">{s.title}</h3>
             </header>
             <div class="prose" set:html={s.html} />
+            {b.brann && /bergen/i.test(s.title) && <BrannCard brann={b.brann} />}
           </article>
         ))}
       </div>

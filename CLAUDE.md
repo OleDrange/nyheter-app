@@ -151,6 +151,27 @@ logikkgåter — dette er det ene stedet quiz/gåter bruker Claude. Dedup: tidli
 `_RIDDLES_SEEN_RETENTION_DAYS = 120`) sendes med i prompten som unngå-liste
 (`_RIDDLES_AVOID_IN_PROMPT = 60`). Myk feil → `riddles`-feltet utelates den dagen.
 
+### Dagens inspirasjon (podcast-råd + boktips)
+
+`fetch_daily_learning()` i `news_briefing.py`: 1–2 podcast-råd + 1–2 boktips, kuratert av
+Claude i ett lite kall. Episoder hentes fra `PODCAST_FEEDS` (Lenny's Podcast, Huberman Lab,
+Tim Ferriss, Dwarkesh, Diary Of A CEO — RSS, siste `_LEARNING_LOOKBACK_DAYS = 14` dager).
+Claude refererer episoder kun via indeks-id mot vår liste, så podcast/tittel/URL aldri kan
+hallusineres — kun rådsteksten («tip») og boktipsene kommer fra Claude. Dedup:
+`learning_seen.json` i `BRIEFING_DATA_DIR` (**må persisteres**; episode- + boktitler,
+prunes etter `_LEARNING_SEEN_RETENTION_DAYS = 180`; tidligere bøker sendes som unngå-liste).
+Myk feil → `learning`-feltet utelates den dagen.
+
+### SK Brann (`brann`-feltet)
+
+`fetch_brann_info()` i `news_briefing.py` — ingen Claude-bruk:
+- **NIFS-API** (`api.nifs.no`, åpent, ingen nøkkel): tabellplassering, siste resultat og
+  neste kamp i Eliteserien. Brann herrer = team-id `1`, Eliteserien = turnering-id `5`;
+  riktig sesong-stage slås opp per år (`yearStart == inneværende år`).
+- **Google News RSS** (`"SK Brann"`-søk): 3 siste nyheter (skader/overganger o.l.),
+  kildenavnet løftes ut av tittelen (« - Kilde»-suffikset).
+Myk feil per del; feltet utelates kun hvis alt feiler.
+
 ### Forskningsbriefing (`research_briefing.py`)
 
 - **Kilde:** Europe PMC `search`-REST (ingen nøkkel), `resultType=core` (fulle abstracts),
@@ -185,7 +206,15 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "market": { ... },           // fetch_market_snapshot()-dict
   "research_items": [ { "title", "url", "journal", "date" } ],
   "quiz": [ { "level", "difficulty", "category", "question", "options", "answer" } ],
-  "riddles": [ { "level", "question", "answer", "explanation" } ]
+  "riddles": [ { "level", "question", "answer", "explanation" } ],
+  "learning": { "podcasts": [ { "podcast", "episode", "url", "date", "tip" } ],
+                "books": [ { "title", "author", "year", "why" } ] },
+  "brann": { "team", "season",
+             "table": { "place", "played", "won", "draw", "lost", "points", "teams" },
+             "last_match": { "opponent", "home", "date", "round", "stadium",
+                             "brann_goals", "opponent_goals", "outcome" },
+             "next_match": { "opponent", "home", "date", "round", "stadium" },
+             "news": [ { "title", "url", "source", "published" } ] }
 }
 ```
 
@@ -206,8 +235,14 @@ bygges uten ekstra datainnhenting.
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
-    enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → nyheter → forskning
-    (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
+    enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → Dagens inspirasjon →
+    nyheter → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
+    `BrannCard` rendres inne i Bergen og Vestland-kortet (tittelmatch `/bergen/i`).
+  - `LearningCard.astro` — «Dagens inspirasjon»: podcast-råd (🎧) og boktips (📚) fra
+    `learning`-feltet, to kort i `cards-grid`. Ren HTML uten klient-JS.
+  - `BrannCard.astro` — SK Brann-blokk fra `brann`-feltet: tabellplassering, neste kamp
+    (norsk dato/klokkeslett via Intl, følger container-TZ), siste resultat (farget utfall)
+    og nyhetslenker. Ren HTML uten klient-JS.
   - `ResearchList.astro` — full forskningsvisning (forskning-sidene): studiekort gruppert
     etter kategori (`RESEARCH_CATEGORIES` i `briefings.js`), ukategoriserte under «Øvrig».
   - `WeatherCard.astro` — vær-widget; viser `WeatherPlayer.astro` når `weather.hourly` finnes,
@@ -251,8 +286,8 @@ bygges uten ekstra datainnhenting.
   `<cmd>` i stedet for briefingen; uten `<cmd>` kjøres hele briefingen (Claude-kvote). Inspiser
   data via `docker compose exec web …`.
 - **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
-  `quiz_seen.json` og `riddles_seen.json` MÅ ligge i `/data` (`BRIEFING_DATA_DIR=/data`),
-  ellers tomt arkiv + nullstilt dedup.
+  `quiz_seen.json`, `riddles_seen.json` og `learning_seen.json` MÅ ligge i `/data`
+  (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup.
 - **Tidssone:** cron-tidspunkt = verts-TZ (`CRON_TZ` virker ikke på Debian); innholdets
   dato/værvinduer = container-TZ. Begge skal være `Europe/Oslo`.
 - **`docker-entrypoint.sh` må ha LF** (sikret av `.gitattributes`).

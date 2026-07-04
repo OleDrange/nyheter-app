@@ -51,7 +51,7 @@ def _load_dotenv() -> None:
 
 def store_briefing(date_str, *, news_md=None, research_md=None,
                    weather=None, market=None, research_items=None,
-                   quiz=None, riddles=None) -> None:
+                   quiz=None, riddles=None, learning=None, brann=None) -> None:
     """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
 
     Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
@@ -87,6 +87,10 @@ def store_briefing(date_str, *, news_md=None, research_md=None,
         data["quiz"] = quiz
     if riddles is not None:
         data["riddles"] = riddles
+    if learning is not None:
+        data["learning"] = learning
+    if brann is not None:
+        data["brann"] = brann
 
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -730,6 +734,351 @@ def fetch_daily_riddles() -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dagens læring (podcast-råd + boktips — Claude kuraterer fra podcast-RSS)
+# ─────────────────────────────────────────────────────────────────────────────
+
+PODCAST_FEEDS: dict[str, str] = {
+    "Lenny's Podcast": "https://api.substack.com/feed/podcast/10845.rss",
+    "Huberman Lab": "https://feeds.megaphone.fm/hubermanlab",
+    "The Tim Ferriss Show": "https://rss.art19.com/tim-ferriss-show",
+    "Dwarkesh Podcast": "https://api.substack.com/feed/podcast/69345.rss",
+    "The Diary Of A CEO": "https://feeds.megaphone.fm/thediaryofaceo",
+}
+
+_LEARNING_SEEN_FILE = "learning_seen.json"  # i BRIEFING_DATA_DIR — må persisteres
+_LEARNING_SEEN_RETENTION_DAYS = 180
+_LEARNING_LOOKBACK_DAYS = 14
+_LEARNING_MAX_PER_FEED = 4
+_LEARNING_DESC_CHARS = 500
+_LEARNING_MAX_TOKENS = 2000
+
+_LEARNING_SYSTEM_PROMPT = """Du kuraterer daglig læring på norsk for en investor i Bergen \
+som er interessert i AI, produktutvikling, investering, helse og selvutvikling.
+
+Du får en nummerert liste med ferske podcast-episoder (tittel + beskrivelse). Oppgaven:
+
+1. PODCAST-RÅD: Velg de 1–2 episodene med mest konkret, anvendbar innsikt for brukeren.
+   For hver: skriv «tip» — selve rådet/innsikten fra episoden i 1–2 setninger på norsk.
+   Rådet skal stå på egne ben (leseren skal lære noe uten å høre episoden), utledet av
+   tittel og beskrivelse. Ikke skriv «i denne episoden …» — gi selve rådet.
+   Referer episoden KUN med «id» fra listen. Er ingen episoder gode nok, returner færre
+   eller tom liste.
+
+2. BOKTIPS: Anbefal 1–2 bøker for læring — selvutvikling, fakta/sakprosa eller tenkning.
+   Foretrekk nyere, aktuelle bøker; tidløse moderne klassikere er OK som én av to.
+   «why» = 1–2 setninger på norsk om hvorfor akkurat denne, knyttet til brukerens
+   interesser. Ikke anbefal bøker fra unngå-listen.
+
+SVAR KUN med gyldig JSON, ingen tekst utenfor, ingen markdown-fences:
+{"podcasts": [{"id": 3, "tip": "…"}], "books": [{"title": "…", "author": "…", "year": 2025, "why": "…"}]}"""
+
+
+def _learning_seen_path() -> str:
+    return os.path.join(os.environ.get("BRIEFING_DATA_DIR", "."), _LEARNING_SEEN_FILE)
+
+
+def _load_learning_seen() -> dict:
+    """{"episodes": {norm tittel: dato}, "books": {norm tittel: dato}}, prunet."""
+    try:
+        with open(_learning_seen_path(), encoding="utf-8") as f:
+            seen = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        seen = {}
+    cutoff = (datetime.now() - timedelta(days=_LEARNING_SEEN_RETENTION_DAYS)).strftime(
+        "%Y-%m-%d"
+    )
+    return {
+        part: {
+            k: v
+            for k, v in (seen.get(part) or {}).items()
+            if isinstance(v, str) and v >= cutoff
+        }
+        for part in ("episodes", "books")
+    }
+
+
+def _save_learning_seen(seen: dict) -> None:
+    path = _learning_seen_path()
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(seen, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+
+
+def _strip_html(text: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text)).strip()
+
+
+def _fetch_podcast_episodes(seen_episodes: dict) -> list[dict]:
+    """Ferske episoder fra PODCAST_FEEDS: [{ podcast, title, url, date, description }].
+    Myk feil per feed. Episoder som allerede er brukt (seen) hoppes over."""
+    cutoff = datetime.now(timezone.utc) - timedelta(days=_LEARNING_LOOKBACK_DAYS)
+    episodes: list[dict] = []
+    for podcast, url in PODCAST_FEEDS.items():
+        try:
+            resp = httpx.get(url, headers=_FETCH_HEADERS, timeout=15, follow_redirects=True)
+            resp.raise_for_status()
+            feed = feedparser.parse(resp.content)
+            count = 0
+            for entry in feed.entries:
+                if count >= _LEARNING_MAX_PER_FEED:
+                    break
+                raw = getattr(entry, "published_parsed", None) or getattr(
+                    entry, "updated_parsed", None
+                )
+                if not raw:
+                    continue
+                try:
+                    published = datetime.fromtimestamp(time.mktime(raw), tz=timezone.utc)
+                except (OverflowError, ValueError, OSError):
+                    continue
+                if published < cutoff:
+                    continue
+                title = entry.get("title", "").strip()
+                if not title or _norm_title(title) in seen_episodes:
+                    continue
+                episodes.append(
+                    {
+                        "podcast": podcast,
+                        "title": title,
+                        "url": entry.get("link", ""),
+                        "date": published.strftime("%Y-%m-%d"),
+                        "description": _strip_html(
+                            entry.get("summary", entry.get("description", ""))
+                        )[:_LEARNING_DESC_CHARS],
+                    }
+                )
+                count += 1
+            print(f"  ✓  {podcast}: {count} episoder" if count else f"  –  {podcast}: ingen nye episoder")
+        except Exception as exc:
+            print(f"  ✗  {podcast}: feil ved henting — {exc}")
+    return episodes
+
+
+def fetch_daily_learning() -> dict | None:
+    """
+    Kuratér dagens læring: 1–2 podcast-råd (fra ferske episoder i PODCAST_FEEDS)
+    + 1–2 boktips, valgt av Claude i ett lite kall. Myk feil — returnerer None.
+
+    Returnerer {"podcasts": [{ podcast, episode, url, date, tip }],
+                "books": [{ title, author, year, why }]}.
+    Episode-referanser skjer via id mot vår egen liste, så podcast/tittel/URL
+    aldri kan hallusineres — kun rådsteksten kommer fra Claude.
+    """
+    seen = _load_learning_seen()
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    episodes = _fetch_podcast_episodes(seen["episodes"])
+
+    ep_lines = [
+        f"#{i} [{e['podcast']}] {e['title']} ({e['date']})\n{e['description']}"
+        for i, e in enumerate(episodes)
+    ]
+    avoid_books = sorted(seen["books"], key=seen["books"].get, reverse=True)
+    user_content = (
+        f"Dato: {today}\n\nFerske podcast-episoder:\n\n"
+        + ("\n---\n".join(ep_lines) if ep_lines else "(ingen nye episoder i dag)")
+        + (
+            "\n\nUNNGÅ disse bøkene (allerede anbefalt):\n"
+            + "\n".join(f"- {b}" for b in avoid_books)
+            if avoid_books
+            else ""
+        )
+    )
+
+    try:
+        client = anthropic.Anthropic()
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=_LEARNING_MAX_TOKENS,
+            system=_LEARNING_SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_content}],
+        )
+        text = resp.content[0].text
+        start, end = text.find("{"), text.rfind("}")
+        if start == -1 or end <= start:
+            raise ValueError("fant ingen JSON i svaret")
+        parsed = json.loads(text[start : end + 1])
+
+        podcasts: list[dict] = []
+        for p in (parsed.get("podcasts") or [])[:2]:
+            try:
+                idx = int(p["id"])
+            except (KeyError, ValueError, TypeError):
+                continue
+            if not 0 <= idx < len(episodes):
+                continue
+            e = episodes[idx]
+            tip = str(p.get("tip", "")).strip()
+            if not tip:
+                continue
+            podcasts.append(
+                {
+                    "podcast": e["podcast"],
+                    "episode": e["title"],
+                    "url": e["url"],
+                    "date": e["date"],
+                    "tip": tip,
+                }
+            )
+            seen["episodes"][_norm_title(e["title"])] = today
+
+        books: list[dict] = []
+        for b in (parsed.get("books") or [])[:2]:
+            title = str(b.get("title", "")).strip()
+            if not title:
+                continue
+            books.append(
+                {
+                    "title": title,
+                    "author": str(b.get("author", "")).strip(),
+                    "year": b.get("year"),
+                    "why": str(b.get("why", "")).strip(),
+                }
+            )
+            seen["books"][_norm_title(title)] = today
+
+        if not podcasts and not books:
+            return None
+        _save_learning_seen(seen)
+        return {"podcasts": podcasts, "books": books}
+    except Exception as exc:
+        print(f"  ✗  læring: feil ved kuratering — {exc}")
+        return None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SK Brann (NIFS API — åpen, ingen nøkkel; nyheter via Google News RSS)
+# ─────────────────────────────────────────────────────────────────────────────
+
+_NIFS_BASE = "https://api.nifs.no"
+_BRANN_TEAM_ID = 1  # SK Brann herrer i NIFS
+_ELITESERIEN_TOURNAMENT_ID = 5
+_BRANN_NEWS_RSS = (
+    "https://news.google.com/rss/search?q=%22SK+Brann%22&hl=no&gl=NO&ceid=NO:no"
+)
+_BRANN_NEWS_MAX = 3
+
+
+def _nifs_get(path: str):
+    resp = httpx.get(
+        f"{_NIFS_BASE}/{path}",
+        headers={"User-Agent": "news-briefing/1.0 (personal script)"},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
+def _brann_match_dict(m: dict) -> dict:
+    """Kompakt kampdict sett fra Branns side (NIFS-kampobjekt inn)."""
+    home = m["homeTeam"]["name"] == "Brann"
+    opponent = m["awayTeam"]["name"] if home else m["homeTeam"]["name"]
+    out = {
+        "opponent": opponent,
+        "home": home,
+        "date": m.get("timestamp"),
+        "round": m.get("round"),
+        "stadium": (m.get("stadium") or {}).get("name"),
+    }
+    hs = (m.get("result") or {}).get("homeScore90")
+    as_ = (m.get("result") or {}).get("awayScore90")
+    if hs is not None and as_ is not None:
+        brann_goals, opp_goals = (hs, as_) if home else (as_, hs)
+        out["brann_goals"] = brann_goals
+        out["opponent_goals"] = opp_goals
+        out["outcome"] = (
+            "seier" if brann_goals > opp_goals
+            else "tap" if brann_goals < opp_goals
+            else "uavgjort"
+        )
+    return out
+
+
+def fetch_brann_info() -> dict | None:
+    """
+    SK Brann-status fra NIFS: tabellplassering, siste resultat og neste kamp i
+    Eliteserien, pluss siste nyheter (skader/overganger o.l.) fra Google News.
+    Myk feil per del; returnerer None kun hvis alt feiler.
+    """
+    info: dict = {"team": "SK Brann"}
+
+    try:
+        stages = _nifs_get(f"tournaments/{_ELITESERIEN_TOURNAMENT_ID}/stages/")
+        year = datetime.now().year
+        stage = next((s for s in stages if s.get("yearStart") == year), stages[0])
+        info["season"] = stage.get("fullName")
+
+        matches = _nifs_get(f"stages/{stage['id']}/matches/?teamId={_BRANN_TEAM_ID}")
+        matches.sort(key=lambda m: m.get("timestamp") or "")
+        played = [
+            m for m in matches
+            if (m.get("result") or {}).get("homeScore90") is not None
+        ]
+        def _match_time(m):
+            try:
+                return datetime.fromisoformat(m.get("timestamp") or "")
+            except ValueError:
+                return None
+
+        now = datetime.now().astimezone()
+        upcoming = [
+            m for m in matches
+            if (m.get("result") or {}).get("homeScore90") is None
+            and (t := _match_time(m)) is not None and t >= now
+        ]
+        if played:
+            info["last_match"] = _brann_match_dict(played[-1])
+        if upcoming:
+            info["next_match"] = _brann_match_dict(upcoming[0])
+
+        table = _nifs_get(f"stages/{stage['id']}/table/")
+        teams = table.get("teams") or []
+        entry = next((t for t in teams if t.get("name") == "Brann"), None)
+        if entry:
+            info["table"] = {
+                "place": entry.get("place"),
+                "played": entry.get("played"),
+                "won": entry.get("won"),
+                "draw": entry.get("draw"),
+                "lost": entry.get("lost"),
+                "points": entry.get("points"),
+                "teams": len(teams),
+            }
+    except Exception as exc:
+        print(f"  ✗  Brann: feil mot NIFS — {exc}")
+
+    try:
+        resp = httpx.get(_BRANN_NEWS_RSS, headers=_FETCH_HEADERS, timeout=15,
+                         follow_redirects=True)
+        resp.raise_for_status()
+        feed = feedparser.parse(resp.content)
+        news = []
+        for entry in feed.entries[:_BRANN_NEWS_MAX]:
+            title = entry.get("title", "").strip()
+            if not title:
+                continue
+            # Google News-titler slutter på « - Kilde» — løft kilden ut for seg
+            head, sep, src = title.rpartition(" - ")
+            item = {"title": head if sep else title, "url": entry.get("link", "")}
+            if sep and src:
+                item["source"] = src
+            raw = getattr(entry, "published_parsed", None)
+            if raw:
+                item["published"] = time.strftime("%Y-%m-%d", raw)
+            news.append(item)
+        if news:
+            info["news"] = news
+    except Exception as exc:
+        print(f"  ✗  Brann: feil ved nyhetshenting — {exc}")
+
+    # Kun team-navn (og ev. season) → alt feilet
+    if not any(k in info for k in ("table", "last_match", "next_match", "news")):
+        return None
+    return info
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # RSS-henting
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -1244,6 +1593,30 @@ def main() -> None:
     print(f"  {len(riddles)} gåter" if riddles else "  ⚠  ingen gåter i dag")
     print()
 
+    print("Henter SK Brann-status (NIFS)...")
+    brann = fetch_brann_info()
+    if brann:
+        t = brann.get("table") or {}
+        nm = brann.get("next_match") or {}
+        print(
+            f"  {t.get('place', '?')}. plass, {t.get('points', '?')} poeng"
+            + (f" — neste: {'hjemme mot' if nm.get('home') else 'borte mot'} {nm.get('opponent')}" if nm else "")
+        )
+    else:
+        print("  ⚠  ingen Brann-info i dag")
+    print()
+
+    print("Kuraterer dagens læring (podcasts + boktips, Claude)...")
+    learning = fetch_daily_learning()
+    if learning:
+        print(
+            f"  {len(learning.get('podcasts', []))} podcast-råd, "
+            f"{len(learning.get('books', []))} boktips"
+        )
+    else:
+        print("  ⚠  ingen læring i dag")
+    print()
+
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")
     articles = fetch_articles()
 
@@ -1261,6 +1634,7 @@ def main() -> None:
     store_briefing(
         today_str, news_md=briefing, weather=weather, market=market,
         quiz=quiz or None, riddles=riddles or None,
+        learning=learning, brann=brann,
     )
 
     # Notion

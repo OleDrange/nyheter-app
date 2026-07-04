@@ -1,0 +1,49 @@
+---
+// Dagens inspirasjon — 1–2 podcast-råd + 1–2 boktips fra learning-feltet
+// (kuratert av Claude i den daglige kjøringen). Ren HTML, ingen klient-JS.
+const { learning } = Astro.props;
+const podcasts = learning.podcasts || [];
+const books = learning.books || [];
+---
+
+<div class="cards-grid">
+  {podcasts.length > 0 && (
+    <article class="card learn-card">
+      <header class="section-card__head">
+        <span class="section-card__emoji" aria-hidden="true">🎧</span>
+        <h3 class="section-card__title">Fra podkastene</h3>
+      </header>
+      <ul class="learn-list">
+        {podcasts.map((p) => (
+          <li>
+            <p class="learn-item__tip">{p.tip}</p>
+            <p class="learn-item__src">
+              <a href={p.url} target="_blank" rel="noopener">{p.episode}</a>
+              <span class="learn-item__meta"> · {p.podcast}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </article>
+  )}
+  {books.length > 0 && (
+    <article class="card learn-card">
+      <header class="section-card__head">
+        <span class="section-card__emoji" aria-hidden="true">📚</span>
+        <h3 class="section-card__title">Boktips</h3>
+      </header>
+      <ul class="learn-list">
+        {books.map((bk) => (
+          <li>
+            <p class="learn-item__book">
+              {bk.title}
+              {bk.author && <span class="learn-item__meta"> — {bk.author}</span>}
+              {bk.year && <span class="learn-item__meta"> ({bk.year})</span>}
+            </p>
+            {bk.why && <p class="learn-item__tip">{bk.why}</p>}
+          </li>
+        ))}
+      </ul>
+    </article>
+  )}
+</div>

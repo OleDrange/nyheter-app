@@ -936,6 +936,134 @@ main {
   color: var(--text-muted);
 }
 
+/* ── Dagens inspirasjon (podcast-råd + boktips) ─────────────────────────── */
+.learn-card {
+  padding: 18px 20px;
+}
+.learn-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.learn-list li {
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.learn-list li:first-child {
+  border-top: none;
+  padding-top: 4px;
+}
+.learn-item__tip {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.learn-item__src {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+}
+.learn-item__src a {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.learn-item__src a:hover {
+  color: var(--accent);
+}
+.learn-item__book {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.learn-item__meta {
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* ── SK Brann (i Bergen og Vestland-kortet) ─────────────────────────────── */
+.brann {
+  margin-top: 12px;
+  padding: 14px 0 10px;
+  border-top: 1px solid var(--border);
+}
+.brann__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.brann__badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.brann__table {
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--text-muted);
+}
+.brann__facts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.brann__facts li {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.brann__label {
+  flex: none;
+  width: 88px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  padding-top: 2px;
+}
+.brann__outcome--win {
+  color: var(--up);
+}
+.brann__outcome--loss {
+  color: var(--down);
+}
+.brann__news {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.brann__news li {
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.brann__news li a {
+  font-weight: 600;
+  color: var(--text);
+}
+.brann__news li a:hover {
+  color: var(--accent);
+}
+.brann__news-src {
+  margin-left: 8px;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
 /* ── Arkiv ──────────────────────────────────────────────────────────────── */
 .archive-grid {
   display: grid;
