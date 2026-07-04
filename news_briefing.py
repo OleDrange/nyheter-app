@@ -51,7 +51,7 @@ def _load_dotenv() -> None:
 
 def store_briefing(date_str, *, news_md=None, research_md=None,
                    weather=None, market=None, research_items=None,
-                   quiz=None) -> None:
+                   quiz=None, riddles=None) -> None:
     """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
 
     Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
@@ -85,6 +85,8 @@ def store_briefing(date_str, *, news_md=None, research_md=None,
         data["research_items"] = research_items
     if quiz is not None:
         data["quiz"] = quiz
+    if riddles is not None:
+        data["riddles"] = riddles
 
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -605,6 +607,129 @@ def fetch_daily_quiz() -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dagens gåter (logikkgåter på norsk, generert av Claude — ingen ekstern API
+# finnes for dette; kallet er lite og kjøres i samme daglige kjøring)
+# ─────────────────────────────────────────────────────────────────────────────
+
+_RIDDLES_SEEN_FILE = "riddles_seen.json"  # i BRIEFING_DATA_DIR — må persisteres
+_RIDDLES_SEEN_RETENTION_DAYS = 120
+_RIDDLES_AVOID_IN_PROMPT = 60  # hvor mange tidligere gåter Claude bes unngå
+_RIDDLES_MAX_TOKENS = 3000
+
+_RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 5 gåter som IKKE krever \
+faktakunnskap — kun logisk tenkning og enkel hoderegning skal lede til svaret.
+
+KRAV:
+- Nivå 1 (middels lett) til nivå 5 (vanskelig, men løsbar i hodet med litt tid).
+- Variér typene mellom dagene og innad i settet: regnegåter (à la «Ronny har 5 epler mer \
+enn Tom, Tom har 50 % mer enn Ola …»), aldersgåter, sann/løgn-deduksjon, rekkefølge- og \
+sammenlikningslogikk, klassiske lateral-tenkning-gåter, mønster i tallrekker.
+- Entydig fasit. Ingen ordspill som bare fungerer på engelsk. Ingen kunnskapsspørsmål.
+- Norske navn og hverdagslige situasjoner.
+- Tenk gjennom løsningen FØR du skriver gåten, og verifiser at fasiten stemmer.
+- "explanation" = ryddig løsningsvei på maks 3 setninger — aldri prøving/feiling eller \
+frem-og-tilbake-resonnering.
+
+SVAR KUN med en gyldig JSON-array, ingen tekst utenfor, ingen markdown-fences:
+[{"level": 1, "question": "…", "answer": "kort fasit", "explanation": "kort løsningsvei"}, …]"""
+
+
+def _riddles_seen_path() -> str:
+    return os.path.join(os.environ.get("BRIEFING_DATA_DIR", "."), _RIDDLES_SEEN_FILE)
+
+
+def _load_riddles_seen() -> dict:
+    """{gåtetekst: 'YYYY-MM-DD' brukt}, prunet etter retention."""
+    try:
+        with open(_riddles_seen_path(), encoding="utf-8") as f:
+            seen = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    cutoff = (datetime.now() - timedelta(days=_RIDDLES_SEEN_RETENTION_DAYS)).strftime(
+        "%Y-%m-%d"
+    )
+    return {k: v for k, v in seen.items() if isinstance(v, str) and v >= cutoff}
+
+
+def _save_riddles_seen(seen: dict) -> None:
+    path = _riddles_seen_path()
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(seen, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
+
+
+def _parse_riddles_json(text: str) -> list[dict]:
+    """Trekk JSON-arrayen ut av Claude-svaret (tåler ev. fences/omkringliggende tekst)."""
+    start = text.find("[")
+    end = text.rfind("]")
+    if start == -1 or end <= start:
+        raise ValueError("fant ingen JSON-array i svaret")
+    items = json.loads(text[start : end + 1])
+    riddles: list[dict] = []
+    for item in items:
+        q = str(item.get("question", "")).strip()
+        a = str(item.get("answer", "")).strip()
+        if not q or not a:
+            continue
+        riddles.append(
+            {
+                "level": len(riddles) + 1,
+                "question": q,
+                "answer": a,
+                "explanation": str(item.get("explanation", "")).strip(),
+            }
+        )
+    return riddles[:5]
+
+
+def fetch_daily_riddles() -> list[dict]:
+    """
+    Generer 5 norske logikkgåter (nivå 1–5) med Claude. Myk feil — returnerer []
+    ved API-feil. Tidligere gåter (riddles_seen.json) sendes med i prompten som
+    unngå-liste slik at gåtene er nye hver dag.
+
+    Returnerer liste av { level, question, answer, explanation }.
+    """
+    seen = _load_riddles_seen()
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    recent = sorted(seen.items(), key=lambda kv: kv[1], reverse=True)
+    avoid = [q for q, _ in recent[:_RIDDLES_AVOID_IN_PROMPT]]
+    avoid_text = (
+        "\n\nUNNGÅ gåter som er like eller ligner på disse tidligere brukte:\n"
+        + "\n".join(f"- {q}" for q in avoid)
+        if avoid
+        else ""
+    )
+
+    try:
+        client = anthropic.Anthropic()
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=_RIDDLES_MAX_TOKENS,
+            system=_RIDDLES_SYSTEM_PROMPT,
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Dato: {today}. Lag dagens 5 gåter.{avoid_text}",
+                }
+            ],
+        )
+        riddles = _parse_riddles_json(resp.content[0].text)
+        if len(riddles) < 5:
+            print(f"  ⚠  gåter: fikk bare {len(riddles)}/5 gyldige gåter")
+        for r in riddles:
+            seen[r["question"]] = today
+        if riddles:
+            _save_riddles_seen(seen)
+        return riddles
+    except Exception as exc:
+        print(f"  ✗  gåter: feil ved generering — {exc}")
+        return []
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # RSS-henting
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -1114,6 +1239,11 @@ def main() -> None:
     print(f"  {len(quiz)} spørsmål (nivå 1–{len(quiz)})" if quiz else "  ⚠  ingen quiz i dag")
     print()
 
+    print("Genererer dagens gåter (Claude)...")
+    riddles = fetch_daily_riddles()
+    print(f"  {len(riddles)} gåter" if riddles else "  ⚠  ingen gåter i dag")
+    print()
+
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")
     articles = fetch_articles()
 
@@ -1130,7 +1260,7 @@ def main() -> None:
     # Lagre dagens briefing til datalageret som nettsiden leser
     store_briefing(
         today_str, news_md=briefing, weather=weather, market=market,
-        quiz=quiz or None,
+        quiz=quiz or None, riddles=riddles or None,
     )
 
     # Notion

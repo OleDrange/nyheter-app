@@ -137,6 +137,16 @@ Nivåstige `_QUIZ_LADDER`: 1×easy + 2×medium + 2×hard → nivå 1–5. Rate l
 spørsmålstekst, prunes etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres**
 (volumet). Myk feil → tom liste, `quiz`-feltet utelates den dagen.
 
+### Dagens gåter (Claude-generert)
+
+`fetch_daily_riddles()` i `news_briefing.py`: 5 norske **logikkgåter** (nivå 1–5, ingen
+faktakunnskap) generert av Claude i samme daglige kjøring (`_RIDDLES_SYSTEM_PROMPT`,
+JSON-output parses av `_parse_riddles_json()`). Ingen ekstern API finnes for norske
+logikkgåter — dette er det ene stedet quiz/gåter bruker Claude. Dedup: tidligere gåter
+(`riddles_seen.json` i `BRIEFING_DATA_DIR`, **må persisteres**, prunes etter
+`_RIDDLES_SEEN_RETENTION_DAYS = 120`) sendes med i prompten som unngå-liste
+(`_RIDDLES_AVOID_IN_PROMPT = 60`). Myk feil → `riddles`-feltet utelates den dagen.
+
 ### Forskningsbriefing (`research_briefing.py`)
 
 - **Kilde:** Europe PMC `search`-REST (ingen nøkkel), `resultType=core` (fulle abstracts),
@@ -166,7 +176,8 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "weather": { ... },          // fetch_bergen_weather()-dict
   "market": { ... },           // fetch_market_snapshot()-dict
   "research_items": [ { "title", "url", "journal", "date" } ],
-  "quiz": [ { "level", "difficulty", "category", "question", "options", "answer" } ]
+  "quiz": [ { "level", "difficulty", "category", "question", "options", "answer" } ],
+  "riddles": [ { "level", "question", "answer", "explanation" } ]
 }
 ```
 
@@ -190,10 +201,13 @@ bygges uten ekstra datainnhenting.
   - `MarketStrip.astro` — markedswidget med dagsendring + mini-dagsgraf per ticker
     (`MarketTrend.astro` — inline SVG, ingen klient-JS). Serien fra `getMarketHistory()`
     (default 5 dager, `endDate` avgrenser til dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
-  - `QuizCard.astro` — «Dagens hjernetrim»: 5 flervalgsspørsmål fra `quiz`-feltet
+  - `QuizCard.astro` — «Dagens quiz»: 5 flervalgsspørsmål fra `quiz`-feltet
     (vises kun når feltet finnes). Fasit skjult til bruker trykker et alternativ —
     riktig grønt (`--up`), feil rødt (`--down`), score-linje når alle 5 er besvart.
     Inline-script, ingen bundling.
+  - `RiddleCard.astro` — «Dagens gåter»: 5 logikkgåter fra `riddles`-feltet. Fasit +
+    løsningsvei i `<details>` («Vis fasit»), ren HTML uten klient-JS. Gjenbruker
+    `quiz-q__level`-badgene.
   - `ThemePicker.astro` — temavelger i headeren.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
   `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (per
@@ -216,9 +230,9 @@ bygges uten ekstra datainnhenting.
 - **Generator-container har CMD, ikke ENTRYPOINT** — `docker compose run generator <cmd>` kjører
   `<cmd>` i stedet for briefingen; uten `<cmd>` kjøres hele briefingen (Claude-kvote). Inspiser
   data via `docker compose exec web …`.
-- **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json` og
-  `quiz_seen.json` MÅ ligge i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv +
-  nullstilt dedup.
+- **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
+  `quiz_seen.json` og `riddles_seen.json` MÅ ligge i `/data` (`BRIEFING_DATA_DIR=/data`),
+  ellers tomt arkiv + nullstilt dedup.
 - **Tidssone:** cron-tidspunkt = verts-TZ (`CRON_TZ` virker ikke på Debian); innholdets
   dato/værvinduer = container-TZ. Begge skal være `Europe/Oslo`.
 - **`docker-entrypoint.sh` må ha LF** (sikret av `.gitattributes`).

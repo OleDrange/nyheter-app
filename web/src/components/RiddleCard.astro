@@ -1,0 +1,30 @@
+---
+// Dagens gåter — 5 logikkgåter (nivå 1–5) fra riddles-feltet.
+// Fasit + løsningsvei ligger i en <details> og er skjult til man trykker
+// «Vis fasit». Ren HTML — ingen klient-JS.
+const { riddles } = Astro.props;
+
+// Gjenbruker quiz-badgens fargelogikk: 1–2 lett, 3 middels, 4–5 vanskelig.
+const levelClass = (lvl) =>
+  lvl >= 4 ? 'quiz-q__level--hard' : lvl >= 3 ? 'quiz-q__level--medium' : 'quiz-q__level--easy';
+---
+
+<div class="cards-grid">
+  {riddles.map((r, i) => (
+    <article class="card quiz-q riddle">
+      <header class="quiz-q__head">
+        <span class={`quiz-q__level ${levelClass(r.level ?? i + 1)}`}>
+          Nivå {r.level ?? i + 1}
+        </span>
+      </header>
+      <p class="quiz-q__question">{r.question}</p>
+      <details class="riddle__reveal">
+        <summary class="riddle__summary">Vis fasit</summary>
+        <div class="riddle__answer">
+          <p class="riddle__solution">{r.answer}</p>
+          {r.explanation && <p class="riddle__explanation">{r.explanation}</p>}
+        </div>
+      </details>
+    </article>
+  ))}
+</div>

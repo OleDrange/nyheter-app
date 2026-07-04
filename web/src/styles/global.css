@@ -820,6 +820,53 @@ main {
   color: var(--text);
 }
 
+/* Gåter — fasit i <details>, skjult til man trykker */
+.riddle__reveal {
+  margin-top: auto;
+}
+.riddle__summary {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 650;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.riddle__summary::-webkit-details-marker {
+  display: none;
+}
+.riddle__summary:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.riddle__reveal[open] .riddle__summary {
+  display: none;
+}
+.riddle__answer {
+  background: var(--up-bg);
+  border-left: 3px solid var(--up);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 14px;
+}
+.riddle__solution {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--up);
+}
+.riddle__explanation {
+  margin: 6px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
 /* ── Arkiv ──────────────────────────────────────────────────────────────── */
 .archive-grid {
   display: grid;

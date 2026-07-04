@@ -3,6 +3,7 @@
 import WeatherCard from './WeatherCard.astro';
 import MarketStrip from './MarketStrip.astro';
 import QuizCard from './QuizCard.astro';
+import RiddleCard from './RiddleCard.astro';
 import { splitNewsSections, splitResearch, getMarketHistory } from '../lib/briefings.js';
 
 const { b } = Astro.props;
@@ -80,9 +81,16 @@ const PART_ICON = {
   }
 </section>
 
+{b.riddles?.length > 0 && (
+  <section>
+    <h2 class="section-label">Dagens gåter</h2>
+    <RiddleCard riddles={b.riddles} />
+  </section>
+)}
+
 {b.quiz?.length > 0 && (
   <section>
-    <h2 class="section-label">Dagens hjernetrim</h2>
+    <h2 class="section-label">Dagens quiz</h2>
     <QuizCard quiz={b.quiz} />
   </section>
 )}
