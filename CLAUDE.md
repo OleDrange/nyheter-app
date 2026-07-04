@@ -130,16 +130,16 @@ Dataene sendes **ikke** til Claude — Claude forklarer *hvorfor* markedet beveg
 
 ### Dagens quiz (OpenTDB)
 
-`fetch_daily_quiz()` i `news_briefing.py` henter 5 flervalgsspørsmål fra **Open Trivia
+`fetch_daily_quiz()` i `news_briefing.py` henter 3 flervalgsspørsmål fra **Open Trivia
 Database** (`opentdb.com/api.php` — gratis, ingen nøkkel, **engelsk**; ingen Claude-bruk).
-Nivåstige `_QUIZ_LADDER`: 1×easy + 2×medium + 2×hard → nivå 1–5. Rate limit 1 kall/5 s
+Nivåstige `_QUIZ_LADDER`: 1×easy + 1×medium + 1×hard → nivå 1–3. Rate limit 1 kall/5 s
 (`_QUIZ_RATE_LIMIT_S`). Dedup mot `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert
 spørsmålstekst, prunes etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres**
 (volumet). Myk feil → tom liste, `quiz`-feltet utelates den dagen.
 
 ### Dagens gåter (Claude-generert)
 
-`fetch_daily_riddles()` i `news_briefing.py`: 5 norske **logikkgåter** (nivå 1–5, ingen
+`fetch_daily_riddles()` i `news_briefing.py`: 3 norske **logikkgåter** (nivå 1–3, ingen
 faktakunnskap) generert av Claude i samme daglige kjøring (`_RIDDLES_SYSTEM_PROMPT`,
 JSON-output parses av `_parse_riddles_json()`). Ingen ekstern API finnes for norske
 logikkgåter — dette er det ene stedet quiz/gåter bruker Claude. Dedup: tidligere gåter
@@ -191,7 +191,9 @@ bygges uten ekstra datainnhenting.
   env-var faller `briefings.js` tilbake til repo-lokal `briefings/`.
 - **Ruter:** `/` (nyeste), `/arkiv` (liste), `/b/<dato>` (én dag).
 - **Komponenter:**
-  - `BriefingView.astro` — deler topp-grid + nyhetskort + forskningskort mellom forside og enkeltdag.
+  - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort + forskningskort mellom
+    forside og enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → nyheter →
+    forskning.
   - `WeatherCard.astro` — vær-widget; viser `WeatherPlayer.astro` når `weather.hourly` finnes,
     ellers statisk stat-grid (gamle briefinger).
   - `WeatherPlayer.astro` — time-for-time «video» (ikon/temp/status/nedbør/UV) med slider og
@@ -201,11 +203,11 @@ bygges uten ekstra datainnhenting.
   - `MarketStrip.astro` — markedswidget med dagsendring + mini-dagsgraf per ticker
     (`MarketTrend.astro` — inline SVG, ingen klient-JS). Serien fra `getMarketHistory()`
     (default 5 dager, `endDate` avgrenser til dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
-  - `QuizCard.astro` — «Dagens quiz»: 5 flervalgsspørsmål fra `quiz`-feltet
+  - `QuizCard.astro` — «Dagens quiz»: 3 flervalgsspørsmål fra `quiz`-feltet
     (vises kun når feltet finnes). Fasit skjult til bruker trykker et alternativ —
-    riktig grønt (`--up`), feil rødt (`--down`), score-linje når alle 5 er besvart.
+    riktig grønt (`--up`), feil rødt (`--down`), score-linje når alle er besvart.
     Inline-script, ingen bundling.
-  - `RiddleCard.astro` — «Dagens gåter»: 5 logikkgåter fra `riddles`-feltet. Fasit +
+  - `RiddleCard.astro` — «Dagens gåter»: 3 logikkgåter fra `riddles`-feltet. Fasit +
     løsningsvei i `<details>` («Vis fasit»), ren HTML uten klient-JS. Gjenbruker
     `quiz-q__level`-badgene.
   - `ThemePicker.astro` — temavelger i headeren.
@@ -218,6 +220,8 @@ bygges uten ekstra datainnhenting.
   før paint av `is:inline`-skript i `<head>`. **Nytt tema = (1) `[data-theme="<id>"]`-blokk i
   `src/styles/global.css`, (2) én linje i `src/lib/themes.js`** — resten bygges fra registeret.
 - **Stiler:** `src/styles/global.css` (design-tokens som CSS-variabler, importert i `Base.astro`).
+  Global tekstskala: `html { font-size: 112.5% }` (18px) — alle rem-størrelser følger denne.
+  Sidebredde: `--maxw: 1400px`, sidemarger 16px (10px under 520px).
 - Rask lokal sjekk (valgfritt): `cd web && npm run dev` → `localhost:4321` (trenger JSON i
   repo-lokal `briefings/`).
 

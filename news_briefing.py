@@ -499,9 +499,9 @@ def market_notion_blocks(market: dict) -> list[dict]:
 _QUIZ_API = "https://opentdb.com/api.php"
 _QUIZ_SEEN_FILE = "quiz_seen.json"  # i BRIEFING_DATA_DIR — må persisteres (volumet)
 _QUIZ_SEEN_RETENTION_DAYS = 365
-# Nivå 1–5: OpenTDB har tre vanskelighetsgrader; stigen bygges som
-# 1×easy + 2×medium + 2×hard → nivå 1 (lettest) til 5 (vanskeligst).
-_QUIZ_LADDER = [("easy", 1), ("medium", 2), ("hard", 2)]
+# Nivå 1–3: OpenTDB har tre vanskelighetsgrader; stigen bygges som
+# 1×easy + 1×medium + 1×hard → nivå 1 (lettest) til 3 (vanskeligst).
+_QUIZ_LADDER = [("easy", 1), ("medium", 1), ("hard", 1)]
 _QUIZ_RATE_LIMIT_S = 5.5  # OpenTDB: maks 1 kall per 5 s per IP
 
 
@@ -532,7 +532,7 @@ def _save_quiz_seen(seen: dict) -> None:
 
 def fetch_daily_quiz() -> list[dict]:
     """
-    Hent 5 flervalgsspørsmål fra Open Trivia DB, nivå 1–5 (lett → vanskelig).
+    Hent 3 flervalgsspørsmål fra Open Trivia DB, nivå 1–3 (lett → vanskelig).
     Myk feil — returnerer [] hvis API-et er nede. Dedup mot quiz_seen.json så
     samme spørsmål ikke gjentas innen retention-vinduet.
 
@@ -616,11 +616,11 @@ _RIDDLES_SEEN_RETENTION_DAYS = 120
 _RIDDLES_AVOID_IN_PROMPT = 60  # hvor mange tidligere gåter Claude bes unngå
 _RIDDLES_MAX_TOKENS = 3000
 
-_RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 5 gåter som IKKE krever \
+_RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 3 gåter som IKKE krever \
 faktakunnskap — kun logisk tenkning og enkel hoderegning skal lede til svaret.
 
 KRAV:
-- Nivå 1 (middels lett) til nivå 5 (vanskelig, men løsbar i hodet med litt tid).
+- Nivå 1 (middels lett) til nivå 3 (vanskelig, men løsbar i hodet med litt tid).
 - Variér typene mellom dagene og innad i settet: regnegåter (à la «Ronny har 5 epler mer \
 enn Tom, Tom har 50 % mer enn Ola …»), aldersgåter, sann/løgn-deduksjon, rekkefølge- og \
 sammenlikningslogikk, klassiske lateral-tenkning-gåter, mønster i tallrekker.
@@ -680,12 +680,12 @@ def _parse_riddles_json(text: str) -> list[dict]:
                 "explanation": str(item.get("explanation", "")).strip(),
             }
         )
-    return riddles[:5]
+    return riddles[:3]
 
 
 def fetch_daily_riddles() -> list[dict]:
     """
-    Generer 5 norske logikkgåter (nivå 1–5) med Claude. Myk feil — returnerer []
+    Generer 3 norske logikkgåter (nivå 1–3) med Claude. Myk feil — returnerer []
     ved API-feil. Tidligere gåter (riddles_seen.json) sendes med i prompten som
     unngå-liste slik at gåtene er nye hver dag.
 
@@ -712,13 +712,13 @@ def fetch_daily_riddles() -> list[dict]:
             messages=[
                 {
                     "role": "user",
-                    "content": f"Dato: {today}. Lag dagens 5 gåter.{avoid_text}",
+                    "content": f"Dato: {today}. Lag dagens 3 gåter.{avoid_text}",
                 }
             ],
         )
         riddles = _parse_riddles_json(resp.content[0].text)
-        if len(riddles) < 5:
-            print(f"  ⚠  gåter: fikk bare {len(riddles)}/5 gyldige gåter")
+        if len(riddles) < 3:
+            print(f"  ⚠  gåter: fikk bare {len(riddles)}/3 gyldige gåter")
         for r in riddles:
             seen[r["question"]] = today
         if riddles:

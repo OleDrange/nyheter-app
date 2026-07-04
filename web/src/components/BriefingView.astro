@@ -26,6 +26,20 @@ const PART_ICON = {
   </div>
 )}
 
+{b.riddles?.length > 0 && (
+  <section>
+    <h2 class="section-label">Dagens gåter</h2>
+    <RiddleCard riddles={b.riddles} />
+  </section>
+)}
+
+{b.quiz?.length > 0 && (
+  <section>
+    <h2 class="section-label">Dagens quiz</h2>
+    <QuizCard quiz={b.quiz} />
+  </section>
+)}
+
 <section>
   <h2 class="section-label">Nyhetsbriefing</h2>
   {
@@ -80,17 +94,3 @@ const PART_ICON = {
     )
   }
 </section>
-
-{b.riddles?.length > 0 && (
-  <section>
-    <h2 class="section-label">Dagens gåter</h2>
-    <RiddleCard riddles={b.riddles} />
-  </section>
-)}
-
-{b.quiz?.length > 0 && (
-  <section>
-    <h2 class="section-label">Dagens quiz</h2>
-    <QuizCard quiz={b.quiz} />
-  </section>
-)}
