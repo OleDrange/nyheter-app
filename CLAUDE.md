@@ -132,14 +132,29 @@ Innenrikspolitikk uten markedseffekt og eiendomsmarkedet kuttes alltid.
 ETH (`ETH-USD`) og Nordnet Global (nøkkel `nordnet`, MSCI World-proxy via `URTH`).
 Dataene sendes **ikke** til Claude — Claude forklarer *hvorfor* markedet beveget seg.
 
-### Dagens quiz (OpenTDB)
+### Dagens quiz (lokalt spørsmålsbibliotek)
 
-`fetch_daily_quiz()` i `news_briefing.py` henter 3 flervalgsspørsmål fra **Open Trivia
-Database** (`opentdb.com/api.php` — gratis, ingen nøkkel, **engelsk**; ingen Claude-bruk).
-Nivåstige `_QUIZ_LADDER`: 1×easy + 1×medium + 1×hard → nivå 1–3. Rate limit 1 kall/5 s
-(`_QUIZ_RATE_LIMIT_S`). Dedup mot `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert
-spørsmålstekst, prunes etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres**
-(volumet). Myk feil → tom liste, `quiz`-feltet utelates den dagen.
+`fetch_daily_quiz()` i `news_briefing.py` trekker spørsmål fra et **lokalt norsk
+bibliotek** i `quiz_bank/<kategori>.json` (ligger i repoet, følger med i imaget via
+`COPY . .`). Ingen ekstern API, ingen Claude-bruk. **Én fil = én kategori**; hver dag
+trekkes ett nytt spørsmål per kategorifil, så **antall spørsmål/dag = antall filer** —
+legg til en ny `quiz_bank/*.json` for flere spørsmål/dag, uten kodeendring.
+
+- **Filformat:** `{ "category": "<visningsnavn>", "questions": [ { "difficulty":
+  "easy|medium|hard", "question", "answer", "options": [4 alternativer, answer inkludert] } ] }`.
+  `options` stokkes ved servering; `answer` er fasitteksten.
+- **Rekkefølge:** `_QUIZ_CATEGORY_ORDER` (filnavn uten `.json`) styrer rekkefølgen;
+  ukjente filer legges bakerst alfabetisk.
+- **Nivårotasjon:** `_QUIZ_DIFFICULTY_CYCLE` (easy→medium→hard) roterer per dag/kategori
+  (`(dag-ordinal + kategori-indeks) % 3`), med fallback til andre nivåer, og til slutt
+  gjenbruk hvis banken er mindre enn retention-vinduet.
+- **Dedup:** `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert spørsmålstekst, prunes
+  etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres** (volumet).
+- Myk feil → tom liste, `quiz`-feltet utelates den dagen.
+
+Per nå finnes `norsk_samfunn.json` og `medisin_og_kropp.json` (~60 spm hver, dekker ~2 mnd).
+`historie` og `geografi` står i `_QUIZ_CATEGORY_ORDER`, men filene er ikke lagt til ennå —
+legg dem til for å komme opp i 4 spm/dag.
 
 ### Dagens gåter (Claude-generert)
 

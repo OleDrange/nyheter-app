@@ -497,16 +497,29 @@ def market_notion_blocks(market: dict) -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Dagens quiz (Open Trivia Database — gratis, ingen nøkkel, engelsk)
+# Dagens quiz (lokalt spørsmålsbibliotek — norsk, ingen ekstern API/Claude)
 # ─────────────────────────────────────────────────────────────────────────────
+#
+# Spørsmålene bor i quiz_bank/<kategori>.json (i repoet, følger med i imaget).
+# Én fil = én kategori; hver dag trekkes ett nytt spørsmål per kategorifil, så
+# antall spørsmål/dag = antall filer. Legg til flere kategorifiler → flere
+# spørsmål/dag, uten kodeendring. Rekkefølgen på kategoriene i quizen styres av
+# _QUIZ_CATEGORY_ORDER (kjente filer først, resten alfabetisk).
 
-_QUIZ_API = "https://opentdb.com/api.php"
+_QUIZ_BANK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quiz_bank")
 _QUIZ_SEEN_FILE = "quiz_seen.json"  # i BRIEFING_DATA_DIR — må persisteres (volumet)
 _QUIZ_SEEN_RETENTION_DAYS = 365
-# Nivå 1–3: OpenTDB har tre vanskelighetsgrader; stigen bygges som
-# 1×easy + 1×medium + 1×hard → nivå 1 (lettest) til 3 (vanskeligst).
-_QUIZ_LADDER = [("easy", 1), ("medium", 1), ("hard", 1)]
-_QUIZ_RATE_LIMIT_S = 5.5  # OpenTDB: maks 1 kall per 5 s per IP
+# Foretrukket rekkefølge (filnavn uten .json). Ukjente filer legges bakerst
+# alfabetisk, så nye kategorier virker uten å endre denne lista.
+_QUIZ_CATEGORY_ORDER = [
+    "historie",
+    "geografi",
+    "norsk_samfunn",
+    "medisin_og_kropp",
+]
+# Vanskelighetsgrad roterer per dag/kategori så en bruker møter en blanding
+# over uka i stedet for samme nivå hver gang.
+_QUIZ_DIFFICULTY_CYCLE = ["easy", "medium", "hard"]
 
 
 def _quiz_seen_path() -> str:
@@ -534,76 +547,102 @@ def _save_quiz_seen(seen: dict) -> None:
     os.replace(tmp, path)
 
 
+def _load_quiz_bank() -> list[tuple[str, dict]]:
+    """
+    Les alle kategorifiler i quiz_bank/, sortert etter _QUIZ_CATEGORY_ORDER
+    (kjente først, resten alfabetisk). Returnerer [(slug, data)] der data er
+    { "category": <visningsnavn>, "questions": [ { difficulty, question,
+    answer, options } ] }. Myk feil per fil.
+    """
+    try:
+        files = [f for f in os.listdir(_QUIZ_BANK_DIR) if f.endswith(".json")]
+    except OSError:
+        return []
+
+    def sort_key(fname: str):
+        slug = fname[:-5]
+        try:
+            return (0, _QUIZ_CATEGORY_ORDER.index(slug), "")
+        except ValueError:
+            return (1, 0, slug)
+
+    banks: list[tuple[str, dict]] = []
+    for fname in sorted(files, key=sort_key):
+        path = os.path.join(_QUIZ_BANK_DIR, fname)
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"  ⚠  quiz: kunne ikke lese {fname} — {exc}")
+            continue
+        if isinstance(data.get("questions"), list) and data["questions"]:
+            banks.append((fname[:-5], data))
+    return banks
+
+
 def fetch_daily_quiz() -> list[dict]:
     """
-    Hent 3 flervalgsspørsmål fra Open Trivia DB, nivå 1–3 (lett → vanskelig).
-    Myk feil — returnerer [] hvis API-et er nede. Dedup mot quiz_seen.json så
-    samme spørsmål ikke gjentas innen retention-vinduet.
+    Trekk ett nytt spørsmål per kategori fra det lokale spørsmålsbiblioteket
+    (quiz_bank/). Dedup mot quiz_seen.json så samme spørsmål ikke gjentas innen
+    retention-vinduet. Vanskelighetsgraden roterer per dag/kategori for en
+    blanding over uka; går tom for ferske spørsmål på ønsket nivå faller vi
+    tilbake til andre nivåer, og til slutt til allerede sette (biblioteket kan
+    være mindre enn retention-vinduet).
 
-    Returnerer liste av
-      { level, difficulty, category, question, options, answer }
-    der options er stokket og answer er fasitteksten (på engelsk — OpenTDB
-    har ikke norske spørsmål).
+    Returnerer liste av { level, difficulty, category, question, options,
+    answer } der options er stokket og answer er fasitteksten.
     """
-    import html
     import random
+
+    banks = _load_quiz_bank()
+    if not banks:
+        print("  ⚠  quiz: fant ingen kategorifiler i quiz_bank/")
+        return []
 
     seen = _load_quiz_seen()
     today = datetime.now().strftime("%Y-%m-%d")
+    day_ord = datetime.now().toordinal()
     quiz: list[dict] = []
 
-    try:
-        for i, (difficulty, need) in enumerate(_QUIZ_LADDER):
-            if i:
-                time.sleep(_QUIZ_RATE_LIMIT_S)
-            # Hent med god margin så dedup har noe å velge i
-            resp = httpx.get(
-                _QUIZ_API,
-                params={
-                    "amount": need * 4,
-                    "difficulty": difficulty,
-                    "type": "multiple",
-                },
-                timeout=15,
-            )
-            resp.raise_for_status()
-            payload = resp.json()
-            if payload.get("response_code") != 0:
-                print(f"  ⚠  quiz: OpenTDB response_code {payload.get('response_code')} ({difficulty})")
-                continue
+    for cat_i, (slug, data) in enumerate(banks):
+        label = data.get("category", slug)
+        questions = data["questions"]
+        # Kandidater som ikke er brukt innen retention-vinduet.
+        unseen = [q for q in questions if _norm_title(q.get("question", "")) not in seen]
+        pool = unseen or questions  # tom bank → tillat gjenbruk
 
-            candidates = payload.get("results", [])
-            picked = 0
-            for cand in candidates:
-                if picked >= need:
-                    break
-                question = html.unescape(cand.get("question", "")).strip()
-                answer = html.unescape(cand.get("correct_answer", "")).strip()
-                wrong = [html.unescape(w).strip() for w in cand.get("incorrect_answers", [])]
-                if not question or not answer or len(wrong) < 3:
-                    continue
-                key = _norm_title(question)
-                if key in seen:
-                    continue
-                options = wrong + [answer]
-                random.shuffle(options)
-                quiz.append(
-                    {
-                        "level": len(quiz) + 1,
-                        "difficulty": difficulty,
-                        "category": html.unescape(cand.get("category", "")).strip(),
-                        "question": question,
-                        "options": options,
-                        "answer": answer,
-                    }
-                )
-                seen[key] = today
-                picked += 1
-            if picked < need:
-                print(f"  ⚠  quiz: fikk bare {picked}/{need} nye {difficulty}-spørsmål")
+        # Ønsket nivå roterer per dag og kategori.
+        want = _QUIZ_DIFFICULTY_CYCLE[(day_ord + cat_i) % len(_QUIZ_DIFFICULTY_CYCLE)]
+        # Prøv ønsket nivå først, deretter resten i syklusrekkefølge.
+        ordered_diffs = _QUIZ_DIFFICULTY_CYCLE[_QUIZ_DIFFICULTY_CYCLE.index(want):] + \
+            _QUIZ_DIFFICULTY_CYCLE[:_QUIZ_DIFFICULTY_CYCLE.index(want)]
+        chosen = None
+        for diff in ordered_diffs:
+            matches = [q for q in pool if q.get("difficulty") == diff]
+            if matches:
+                chosen = random.choice(matches)
+                break
+        if chosen is None:
+            chosen = random.choice(pool)
 
-    except Exception as exc:
-        print(f"  ✗  quiz: feil ved henting — {exc}")
+        options = list(chosen.get("options", []))
+        answer = chosen.get("answer", "")
+        question = chosen.get("question", "")
+        if not question or not answer or len(options) < 2:
+            print(f"  ⚠  quiz: hoppet over ugyldig spørsmål i {slug}")
+            continue
+        random.shuffle(options)
+        quiz.append(
+            {
+                "level": len(quiz) + 1,
+                "difficulty": chosen.get("difficulty", ""),
+                "category": label,
+                "question": question,
+                "options": options,
+                "answer": answer,
+            }
+        )
+        seen[_norm_title(question)] = today
 
     if quiz:
         _save_quiz_seen(seen)
@@ -1583,9 +1622,13 @@ def main() -> None:
         )
     print()
 
-    print("Henter dagens quiz (OpenTDB)...")
+    print("Henter dagens quiz (lokalt bibliotek)...")
     quiz = fetch_daily_quiz()
-    print(f"  {len(quiz)} spørsmål (nivå 1–{len(quiz)})" if quiz else "  ⚠  ingen quiz i dag")
+    if quiz:
+        cats = ", ".join(q["category"] for q in quiz)
+        print(f"  {len(quiz)} spørsmål ({cats})")
+    else:
+        print("  ⚠  ingen quiz i dag")
     print()
 
     print("Genererer dagens gåter (Claude)...")

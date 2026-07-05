@@ -1,0 +1,698 @@
+{
+  "category": "Medisin og kropp",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva er kroppens største organ?",
+      "answer": "Huden",
+      "options": [
+        "Huden",
+        "Leveren",
+        "Hjernen",
+        "Tarmen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange knokler har en voksen menneskekropp omtrent?",
+      "answer": "206",
+      "options": [
+        "206",
+        "150",
+        "300",
+        "412"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange kamre har hjertet?",
+      "answer": "4",
+      "options": [
+        "4",
+        "2",
+        "3",
+        "6"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket organ pumper blod rundt i kroppen?",
+      "answer": "Hjertet",
+      "options": [
+        "Hjertet",
+        "Leveren",
+        "Lungene",
+        "Milten"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva frakter de røde blodcellene rundt i kroppen?",
+      "answer": "Oksygen",
+      "options": [
+        "Oksygen",
+        "Karbondioksid alene",
+        "Hormoner",
+        "Avfallsstoffer alene"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket organ renser blodet og produserer urin?",
+      "answer": "Nyrene",
+      "options": [
+        "Nyrene",
+        "Leveren",
+        "Milten",
+        "Blæren"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor i kroppen finner du trommehinnen?",
+      "answer": "I øret",
+      "options": [
+        "I øret",
+        "I øyet",
+        "I halsen",
+        "I nesen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket vitamin lager huden når den utsettes for sollys?",
+      "answer": "Vitamin D",
+      "options": [
+        "Vitamin D",
+        "Vitamin C",
+        "Vitamin A",
+        "Vitamin B12"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles kroppens naturlige forsvar mot infeksjoner?",
+      "answer": "Immunforsvaret",
+      "options": [
+        "Immunforsvaret",
+        "Nervesystemet",
+        "Hormonsystemet",
+        "Lymfeanlegget"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket organ styrer tanker, følelser og bevegelser?",
+      "answer": "Hjernen",
+      "options": [
+        "Hjernen",
+        "Hjertet",
+        "Ryggmargen alene",
+        "Hypofysen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter kroppens minste knokkel, som sitter i øret?",
+      "answer": "Stigbøylen",
+      "options": [
+        "Stigbøylen",
+        "Hammeren",
+        "Ambolten",
+        "Lillefingerknokkelen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter det største benet i kroppen?",
+      "answer": "Lårbenet",
+      "options": [
+        "Lårbenet",
+        "Skinnebenet",
+        "Overarmsbenet",
+        "Hoftebenet"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilke organer bruker vi til å puste?",
+      "answer": "Lungene",
+      "options": [
+        "Lungene",
+        "Nyrene",
+        "Leveren og milten",
+        "Bronkiene alene"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter muskelen som skiller brysthulen fra bukhulen og hjelper oss å puste?",
+      "answer": "Mellomgulvet",
+      "options": [
+        "Mellomgulvet",
+        "Magemuskelen",
+        "Ribbeinsmuskelen",
+        "Brystmuskelen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken blodtype kalles universalgiver?",
+      "answer": "O negativ",
+      "options": [
+        "O negativ",
+        "AB positiv",
+        "A positiv",
+        "B negativ"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva måler man med et blodtrykksapparat?",
+      "answer": "Trykket i blodårene",
+      "options": [
+        "Trykket i blodårene",
+        "Puls alene",
+        "Blodsukker",
+        "Oksygenmetning"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange tenner har et fullt voksent tannsett med visdomstenner?",
+      "answer": "32",
+      "options": [
+        "32",
+        "28",
+        "30",
+        "36"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter det vi kaller kroppens temperatur ved feber over?",
+      "answer": "Cirka 38 grader",
+      "options": [
+        "Cirka 38 grader",
+        "Cirka 37 grader",
+        "Cirka 39,5 grader",
+        "Cirka 36 grader"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket organ produserer insulin?",
+      "answer": "Bukspyttkjertelen",
+      "options": [
+        "Bukspyttkjertelen",
+        "Leveren",
+        "Nyrene",
+        "Milten"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken sykdom skyldes mangel på insulin eller nedsatt insulinvirkning?",
+      "answer": "Diabetes",
+      "options": [
+        "Diabetes",
+        "Astma",
+        "Gikt",
+        "Anemi"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles cellene som bekjemper infeksjoner i blodet?",
+      "answer": "Hvite blodceller",
+      "options": [
+        "Hvite blodceller",
+        "Røde blodceller",
+        "Blodplater",
+        "Plasmaceller"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket organ bryter ned alkohol i kroppen?",
+      "answer": "Leveren",
+      "options": [
+        "Leveren",
+        "Nyrene",
+        "Magesekken",
+        "Bukspyttkjertelen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter røret som fører mat fra munnen til magesekken?",
+      "answer": "Spiserøret",
+      "options": [
+        "Spiserøret",
+        "Luftrøret",
+        "Tolvfingertarmen",
+        "Svelget alene"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor i fordøyelsen tas mesteparten av næringsstoffene opp?",
+      "answer": "Tynntarmen",
+      "options": [
+        "Tynntarmen",
+        "Tykktarmen",
+        "Magesekken",
+        "Spiserøret"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva produserer galleblæren-systemet — hvor lages gallen?",
+      "answer": "I leveren",
+      "options": [
+        "I leveren",
+        "I galleblæren",
+        "I bukspyttkjertelen",
+        "I milten"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket hormon kalles «stresshormonet»?",
+      "answer": "Kortisol",
+      "options": [
+        "Kortisol",
+        "Insulin",
+        "Østrogen",
+        "Melatonin"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket hormon regulerer søvnrytmen?",
+      "answer": "Melatonin",
+      "options": [
+        "Melatonin",
+        "Kortisol",
+        "Adrenalin",
+        "Serotonin i blodet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter kjertelen i hjernen som styrer mange andre hormonkjertler?",
+      "answer": "Hypofysen",
+      "options": [
+        "Hypofysen",
+        "Skjoldbruskkjertelen",
+        "Binyrene",
+        "Pinealkjertelen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken kjertel på halsen regulerer stoffskiftet?",
+      "answer": "Skjoldbruskkjertelen",
+      "options": [
+        "Skjoldbruskkjertelen",
+        "Hypofysen",
+        "Spyttkjertelen",
+        "Biskjoldkjertlene alene"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles blodmangel med for lite hemoglobin?",
+      "answer": "Anemi",
+      "options": [
+        "Anemi",
+        "Leukemi",
+        "Trombose",
+        "Hemofili"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket mineral trenger kroppen for å lage hemoglobin?",
+      "answer": "Jern",
+      "options": [
+        "Jern",
+        "Kalsium",
+        "Magnesium",
+        "Sink"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket vitamin trenger vi for at blodet skal koagulere?",
+      "answer": "Vitamin K",
+      "options": [
+        "Vitamin K",
+        "Vitamin C",
+        "Vitamin D",
+        "Vitamin B6"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken sykdom skyldes alvorlig C-vitaminmangel?",
+      "answer": "Skjørbuk",
+      "options": [
+        "Skjørbuk",
+        "Rakitt",
+        "Beriberi",
+        "Pellagra"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken sykdom hos barn skyldes D-vitaminmangel?",
+      "answer": "Rakitt (engelsk syke)",
+      "options": [
+        "Rakitt (engelsk syke)",
+        "Skjørbuk",
+        "Anemi",
+        "Meslinger"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den delen av hjernen som styrer balanse og koordinasjon?",
+      "answer": "Lillehjernen",
+      "options": [
+        "Lillehjernen",
+        "Storhjernen",
+        "Hjernestammen",
+        "Hypothalamus"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter nervecellenes utløpere som sender signaler videre?",
+      "answer": "Aksoner",
+      "options": [
+        "Aksoner",
+        "Dendritter",
+        "Synapser",
+        "Myelin"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles koblingspunktet mellom to nerveceller?",
+      "answer": "Synapse",
+      "options": [
+        "Synapse",
+        "Akson",
+        "Nevron",
+        "Reseptor"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket stoff gir huden og håret farge?",
+      "answer": "Melanin",
+      "options": [
+        "Melanin",
+        "Keratin",
+        "Kollagen",
+        "Karotin"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter proteinet som gjør huden elastisk og fast?",
+      "answer": "Kollagen",
+      "options": [
+        "Kollagen",
+        "Melanin",
+        "Hemoglobin",
+        "Insulin"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er normal hvilepuls for en voksen omtrent?",
+      "answer": "60–80 slag i minuttet",
+      "options": [
+        "60–80 slag i minuttet",
+        "40–50 slag i minuttet",
+        "90–110 slag i minuttet",
+        "110–130 slag i minuttet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken del av øyet regulerer hvor mye lys som slipper inn?",
+      "answer": "Pupillen (styrt av regnbuehinnen)",
+      "options": [
+        "Pupillen (styrt av regnbuehinnen)",
+        "Netthinnen",
+        "Linsen",
+        "Hornhinnen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor i øyet sitter sansecellene som oppfatter lys?",
+      "answer": "Netthinnen",
+      "options": [
+        "Netthinnen",
+        "Hornhinnen",
+        "Linsen",
+        "Regnbuehinnen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter de to typene sanseceller i netthinnen?",
+      "answer": "Staver og tapper",
+      "options": [
+        "Staver og tapper",
+        "Nåler og kjegler",
+        "Prikker og streker",
+        "Kuler og staver"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken blodtype er universalmottaker?",
+      "answer": "AB positiv",
+      "options": [
+        "AB positiv",
+        "O negativ",
+        "A negativ",
+        "B positiv"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles årene som fører blod fra hjertet og ut i kroppen?",
+      "answer": "Arterier",
+      "options": [
+        "Arterier",
+        "Vener",
+        "Kapillærer",
+        "Lymfeårer"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles de minste blodårene der utvekslingen av stoffer skjer?",
+      "answer": "Kapillærer",
+      "options": [
+        "Kapillærer",
+        "Arterier",
+        "Vener",
+        "Aorta-grener"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter kroppens hovedpulsåre?",
+      "answer": "Aorta",
+      "options": [
+        "Aorta",
+        "Halspulsåren",
+        "Lungearterien",
+        "Portåren"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket organ lagrer og konsentrerer galle?",
+      "answer": "Galleblæren",
+      "options": [
+        "Galleblæren",
+        "Leveren",
+        "Milten",
+        "Bukspyttkjertelen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva slags type ledd er kneet?",
+      "answer": "Hengselledd",
+      "options": [
+        "Hengselledd",
+        "Kuleledd",
+        "Dreieledd",
+        "Glideledd"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva slags type ledd er skulderen?",
+      "answer": "Kuleledd",
+      "options": [
+        "Kuleledd",
+        "Hengselledd",
+        "Dreieledd",
+        "Sadeledd"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvor mange ryggvirvler har mennesket totalt, medregnet sammenvokste?",
+      "answer": "33",
+      "options": [
+        "33",
+        "24",
+        "26",
+        "30"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter blodcellene som sørger for at blodet levrer seg?",
+      "answer": "Blodplater (trombocytter)",
+      "options": [
+        "Blodplater (trombocytter)",
+        "Hvite blodceller",
+        "Røde blodceller",
+        "Plasmaceller"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken del av hjernen regulerer kroppstemperatur, tørst og sult?",
+      "answer": "Hypothalamus",
+      "options": [
+        "Hypothalamus",
+        "Hippocampus",
+        "Amygdala",
+        "Lillehjernen"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken hjernestruktur er sentral for hukommelse og læring?",
+      "answer": "Hippocampus",
+      "options": [
+        "Hippocampus",
+        "Amygdala",
+        "Hypofysen",
+        "Basalgangliene"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter fargestoffet som gjør at avføring og urin får farge, dannet ved nedbryting av hemoglobin?",
+      "answer": "Bilirubin",
+      "options": [
+        "Bilirubin",
+        "Melanin",
+        "Karotin",
+        "Kreatinin"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken sykdom gir gulsott når stoffet hoper seg opp?",
+      "answer": "Bilirubin-opphopning ved leversykdom",
+      "options": [
+        "Bilirubin-opphopning ved leversykdom",
+        "Jernmangel",
+        "Kalsiummangel",
+        "Høyt kolesterol"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva måler HbA1c-prøven?",
+      "answer": "Langtidsblodsukker",
+      "options": [
+        "Langtidsblodsukker",
+        "Kolesterol",
+        "Jernlager",
+        "Nyrefunksjon"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter den vanligste formen for arvelig blødersykdom?",
+      "answer": "Hemofili A",
+      "options": [
+        "Hemofili A",
+        "Hemofili C",
+        "Von Willebrand type 3 alene",
+        "Trombofili"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket organ produserer erytropoietin (EPO) som stimulerer produksjon av røde blodceller?",
+      "answer": "Nyrene",
+      "options": [
+        "Nyrene",
+        "Leveren",
+        "Beinmargen",
+        "Milten"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvor produseres røde blodceller hos voksne?",
+      "answer": "I beinmargen",
+      "options": [
+        "I beinmargen",
+        "I milten",
+        "I leveren",
+        "I lymfeknutene"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter legemiddelgruppen som senker kolesterol og er blant verdens mest brukte?",
+      "answer": "Statiner",
+      "options": [
+        "Statiner",
+        "Betablokkere",
+        "ACE-hemmere",
+        "Diuretika"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem oppdaget penicillinet i 1928?",
+      "answer": "Alexander Fleming",
+      "options": [
+        "Alexander Fleming",
+        "Louis Pasteur",
+        "Robert Koch",
+        "Edward Jenner"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem utviklet den første vaksinen, mot kopper?",
+      "answer": "Edward Jenner",
+      "options": [
+        "Edward Jenner",
+        "Louis Pasteur",
+        "Alexander Fleming",
+        "Jonas Salk"
+      ]
+    }
+  ]
+}

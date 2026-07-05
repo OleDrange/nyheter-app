@@ -1,0 +1,687 @@
+{
+  "category": "Norsk samfunn",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange representanter sitter på Stortinget?",
+      "answer": "169",
+      "options": [
+        "169",
+        "150",
+        "175",
+        "200"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor ofte er det stortingsvalg i Norge?",
+      "answer": "Hvert 4. år",
+      "options": [
+        "Hvert 4. år",
+        "Hvert 5. år",
+        "Hvert 3. år",
+        "Hvert 2. år"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er stemmerettsalderen ved stortingsvalg?",
+      "answer": "18 år",
+      "options": [
+        "18 år",
+        "16 år",
+        "20 år",
+        "21 år"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges nasjonaldag?",
+      "answer": "17. mai",
+      "options": [
+        "17. mai",
+        "7. juni",
+        "1. mai",
+        "24. desember"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges valuta?",
+      "answer": "Norske kroner",
+      "options": [
+        "Norske kroner",
+        "Euro",
+        "Daler",
+        "Norske mark"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges øverste domstol?",
+      "answer": "Høyesterett",
+      "options": [
+        "Høyesterett",
+        "Lagmannsretten",
+        "Tingretten",
+        "Riksretten"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem er Norges statsoverhode?",
+      "answer": "Kongen",
+      "options": [
+        "Kongen",
+        "Statsministeren",
+        "Stortingspresidenten",
+        "Høyesterettsjustitiarius"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter det norske kongeslottet i Oslo?",
+      "answer": "Slottet",
+      "options": [
+        "Slottet",
+        "Akershus festning",
+        "Oscarshall",
+        "Bygdøy kongsgård"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter den norske statens pensjonsfond utland til daglig?",
+      "answer": "Oljefondet",
+      "options": [
+        "Oljefondet",
+        "Folketrygdfondet",
+        "Statsfondet",
+        "Petroleumskassen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken etat håndterer arbeidsledighetstrygd og pensjon i Norge?",
+      "answer": "NAV",
+      "options": [
+        "NAV",
+        "Skatteetaten",
+        "UDI",
+        "Helfo"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges nasjonalforsamling?",
+      "answer": "Stortinget",
+      "options": [
+        "Stortinget",
+        "Riksdagen",
+        "Folketinget",
+        "Landstinget"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange år varer grunnskolen i Norge?",
+      "answer": "10 år",
+      "options": [
+        "10 år",
+        "9 år",
+        "12 år",
+        "13 år"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles den norske folkedrakten?",
+      "answer": "Bunad",
+      "options": [
+        "Bunad",
+        "Kofte",
+        "Lusekofte",
+        "Stakk"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken brun norsk ost lages av myse?",
+      "answer": "Brunost",
+      "options": [
+        "Brunost",
+        "Gamalost",
+        "Nøkkelost",
+        "Pultost"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter den offentlige kringkasteren i Norge?",
+      "answer": "NRK",
+      "options": [
+        "NRK",
+        "TV 2",
+        "TVNorge",
+        "P4"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilke to offisielle målformer har norsk?",
+      "answer": "Bokmål og nynorsk",
+      "options": [
+        "Bokmål og nynorsk",
+        "Bokmål og samisk",
+        "Riksmål og landsmål",
+        "Bokmål og dansk"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter det samiske folkevalgte organet i Norge?",
+      "answer": "Sametinget",
+      "options": [
+        "Sametinget",
+        "Sameparlamentet",
+        "Samerådet",
+        "Finnmarkstinget"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken kirke var norsk statskirke fram til skillet fra staten?",
+      "answer": "Den norske kirke",
+      "options": [
+        "Den norske kirke",
+        "Frikirken",
+        "Metodistkirken",
+        "Pinsebevegelsen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges største avis målt i digitale lesere gjennom mange år?",
+      "answer": "VG",
+      "options": [
+        "VG",
+        "Aftenposten",
+        "Dagbladet",
+        "Dagens Næringsliv"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket skianlegg i Oslo er nasjonalanlegg for hopp?",
+      "answer": "Holmenkollen",
+      "options": [
+        "Holmenkollen",
+        "Vikersund",
+        "Granåsen",
+        "Lysgårdsbakken"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva spiser mange nordmenn tradisjonelt på julaften på Vestlandet?",
+      "answer": "Pinnekjøtt",
+      "options": [
+        "Pinnekjøtt",
+        "Ribbe kun",
+        "Lutefisk kun",
+        "Kalkun"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem utnevner formelt regjeringen i Norge?",
+      "answer": "Kongen i statsråd",
+      "options": [
+        "Kongen i statsråd",
+        "Stortingspresidenten",
+        "Høyesterett",
+        "Valgdirektoratet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles prinsippet om at regjeringen må ha Stortingets tillit?",
+      "answer": "Parlamentarisme",
+      "options": [
+        "Parlamentarisme",
+        "Maktfordeling",
+        "Folkesuverenitet",
+        "Konstitusjonalisme"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange fylker har Norge etter oppdelingen i 2024?",
+      "answer": "15",
+      "options": [
+        "15",
+        "11",
+        "19",
+        "13"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter Stortingets kontrollorgan for forvaltningen ledet av en ombudsperson?",
+      "answer": "Sivilombudet",
+      "options": [
+        "Sivilombudet",
+        "Riksrevisjonen",
+        "Kontrollkomiteen",
+        "Statsforvalteren"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket organ reviderer statens regnskaper?",
+      "answer": "Riksrevisjonen",
+      "options": [
+        "Riksrevisjonen",
+        "Sivilombudet",
+        "Skatteetaten",
+        "Finanstilsynet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er sperregrensen for utjevningsmandater ved stortingsvalg?",
+      "answer": "4 prosent",
+      "options": [
+        "4 prosent",
+        "2 prosent",
+        "5 prosent",
+        "3 prosent"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter det folkevalgte organet som velges ved kommunevalg?",
+      "answer": "Kommunestyret",
+      "options": [
+        "Kommunestyret",
+        "Formannskapet",
+        "Fylkestinget",
+        "Regjeringen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter ordningen der alle innbyggere har rett til en fast allmennlege?",
+      "answer": "Fastlegeordningen",
+      "options": [
+        "Fastlegeordningen",
+        "Legevaktordningen",
+        "Pasientombudet",
+        "Helfo-ordningen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken skatt betales ved kjøp av de fleste varer og tjenester i Norge?",
+      "answer": "Merverdiavgift",
+      "options": [
+        "Merverdiavgift",
+        "Toll",
+        "Formuesskatt",
+        "Dokumentavgift"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er den generelle merverdiavgiftssatsen i Norge?",
+      "answer": "25 prosent",
+      "options": [
+        "25 prosent",
+        "15 prosent",
+        "20 prosent",
+        "12 prosent"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter fondet som forvalter oljeformuen, formelt?",
+      "answer": "Statens pensjonsfond utland",
+      "options": [
+        "Statens pensjonsfond utland",
+        "Statens oljefond",
+        "Folketrygdfondet",
+        "Petoro"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken institusjon forvalter Oljefondet?",
+      "answer": "Norges Bank",
+      "options": [
+        "Norges Bank",
+        "Finansdepartementet",
+        "DNB",
+        "Folketrygdfondet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles regelen som begrenser bruken av oljepenger i statsbudsjettet?",
+      "answer": "Handlingsregelen",
+      "options": [
+        "Handlingsregelen",
+        "Budsjettbalansen",
+        "Oljebremsen",
+        "Finanspakten"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter Norges sentralbank?",
+      "answer": "Norges Bank",
+      "options": [
+        "Norges Bank",
+        "Den norske bank",
+        "Sentralbanken AS",
+        "Statsbanken"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket rovdyr er fredet og mest omdiskutert i norsk ulvesone-debatt?",
+      "answer": "Ulv",
+      "options": [
+        "Ulv",
+        "Bjørn",
+        "Gaupe",
+        "Jerv"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den norske allemannsretten nedfelt i?",
+      "answer": "Friluftsloven",
+      "options": [
+        "Friluftsloven",
+        "Naturmangfoldloven",
+        "Plan- og bygningsloven",
+        "Grunnloven"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken lov gir innsyn i offentlige dokumenter?",
+      "answer": "Offentleglova",
+      "options": [
+        "Offentleglova",
+        "Forvaltningsloven",
+        "Personopplysningsloven",
+        "Arkivloven"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den norske urfolksgruppen?",
+      "answer": "Samene",
+      "options": [
+        "Samene",
+        "Kvenene",
+        "Romanifolket",
+        "Skogfinnene"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken by regnes som samisk hovedstad i Norge med Sametinget?",
+      "answer": "Karasjok",
+      "options": [
+        "Karasjok",
+        "Kautokeino",
+        "Alta",
+        "Tromsø"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den tradisjonelle norske sommermat-retten av spekekjøtt, egg og flatbrød?",
+      "answer": "Spekemat",
+      "options": [
+        "Spekemat",
+        "Rakfisk",
+        "Smalahove",
+        "Fårikål"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er Norges nasjonalrett ifølge en kjent kåring?",
+      "answer": "Fårikål",
+      "options": [
+        "Fårikål",
+        "Pinnekjøtt",
+        "Kjøttkaker",
+        "Raspeball"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Når feires sankthans i Norge?",
+      "answer": "23. juni",
+      "options": [
+        "23. juni",
+        "21. juni",
+        "24. juli",
+        "29. juni"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den norske grunnlovens forsamlingssted i 1814, i dag museum?",
+      "answer": "Eidsvollsbygningen",
+      "options": [
+        "Eidsvollsbygningen",
+        "Stortinget",
+        "Akershus slott",
+        "Oscarsborg"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land er den største kjøperen av norsk rørgass?",
+      "answer": "Tyskland",
+      "options": [
+        "Tyskland",
+        "Sverige",
+        "USA",
+        "Kina"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter arbeidstakernes største hovedorganisasjon?",
+      "answer": "LO",
+      "options": [
+        "LO",
+        "NHO",
+        "Unio",
+        "YS"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter arbeidsgivernes største hovedorganisasjon?",
+      "answer": "NHO",
+      "options": [
+        "NHO",
+        "LO",
+        "Virke",
+        "Spekter"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det årlige oppgjøret mellom partene i arbeidslivet?",
+      "answer": "Lønnsoppgjøret",
+      "options": [
+        "Lønnsoppgjøret",
+        "Statsbudsjettet",
+        "Trontalen",
+        "Jordbruksoppgjøret"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem åpner Stortinget hver høst med trontalen?",
+      "answer": "Kongen",
+      "options": [
+        "Kongen",
+        "Statsministeren",
+        "Stortingspresidenten",
+        "Finansministeren"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken statsråd legger fram statsbudsjettet for Stortinget?",
+      "answer": "Finansministeren",
+      "options": [
+        "Finansministeren",
+        "Statsministeren",
+        "Næringsministeren",
+        "Stortingspresidenten"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken paragraf i Grunnloven slår fast at Norge er et fritt og udelelig rike?",
+      "answer": "Paragraf 1",
+      "options": [
+        "Paragraf 1",
+        "Paragraf 100",
+        "Paragraf 112",
+        "Paragraf 17"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken grunnlovsparagraf beskytter ytringsfriheten?",
+      "answer": "Paragraf 100",
+      "options": [
+        "Paragraf 100",
+        "Paragraf 1",
+        "Paragraf 97",
+        "Paragraf 105"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken grunnlovsparagraf handler om retten til et sunt miljø?",
+      "answer": "Paragraf 112",
+      "options": [
+        "Paragraf 112",
+        "Paragraf 100",
+        "Paragraf 2",
+        "Paragraf 93"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter domstolen som behandler saker mot statsråder for embetsforbrytelser?",
+      "answer": "Riksretten",
+      "options": [
+        "Riksretten",
+        "Høyesterett",
+        "Lagmannsretten",
+        "Statsrådsdomstolen"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvor mange dommere har Høyesterett i Norge inkludert justitiarius?",
+      "answer": "20",
+      "options": [
+        "20",
+        "9",
+        "15",
+        "25"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter ordningen der Stortinget kan kreve dokumenter og høringer av regjeringen gjennom sin kontrollkomité — hva heter komiteen?",
+      "answer": "Kontroll- og konstitusjonskomiteen",
+      "options": [
+        "Kontroll- og konstitusjonskomiteen",
+        "Justiskomiteen",
+        "Finanskomiteen",
+        "Granskingskomiteen"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble kirken formelt skilt fra staten som eget rettssubjekt?",
+      "answer": "2017",
+      "options": [
+        "2017",
+        "2012",
+        "2008",
+        "2020"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter loven som regulerer forholdet mellom forvaltningen og innbyggerne i enkeltvedtak?",
+      "answer": "Forvaltningsloven",
+      "options": [
+        "Forvaltningsloven",
+        "Offentleglova",
+        "Tvisteloven",
+        "Kommuneloven"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble kvinnelig verneplikt innført i Norge?",
+      "answer": "2015",
+      "options": [
+        "2015",
+        "2010",
+        "2018",
+        "2005"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var Norges folketall omtrent ved inngangen til 2025?",
+      "answer": "Cirka 5,6 millioner",
+      "options": [
+        "Cirka 5,6 millioner",
+        "Cirka 5,0 millioner",
+        "Cirka 6,2 millioner",
+        "Cirka 4,8 millioner"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken norsk øy-kommune har eget skattefritak for merverdiavgift og lav skatt etter traktat?",
+      "answer": "Svalbard (Longyearbyen)",
+      "options": [
+        "Svalbard (Longyearbyen)",
+        "Utsira",
+        "Røst",
+        "Jan Mayen"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter det rådgivende organet som setter etiske grenser for Oljefondets investeringer?",
+      "answer": "Etikkrådet",
+      "options": [
+        "Etikkrådet",
+        "Finanstilsynet",
+        "Norges Banks hovedstyre",
+        "Stortingets finanskomité"
+      ]
+    }
+  ]
+}
