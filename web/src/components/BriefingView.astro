@@ -23,34 +23,34 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
 ---
 
 {(b.weather || b.market) && (
-  <div class="top-grid">
+  <div class="top-grid jump-target" id="vaer-marked">
     {b.weather && <WeatherCard weather={b.weather} />}
     {b.market && <MarketStrip market={b.market} history={marketHistory} />}
   </div>
 )}
 
 {b.riddles?.length > 0 && (
-  <section>
-    <h2 class="section-label">Dagens gåter</h2>
+  <section class="jump-target" id="gaater">
+    <h2 class="section-label">Gåter</h2>
     <RiddleCard riddles={b.riddles} />
   </section>
 )}
 
 {b.quiz?.length > 0 && (
-  <section>
-    <h2 class="section-label">Dagens quiz</h2>
+  <section class="jump-target" id="quiz">
+    <h2 class="section-label">Quiz</h2>
     <QuizCard quiz={b.quiz} />
   </section>
 )}
 
 {(b.learning?.podcasts?.length > 0 || b.learning?.books?.length > 0) && (
-  <section>
-    <h2 class="section-label">Dagens inspirasjon</h2>
+  <section class="jump-target" id="inspirasjon">
+    <h2 class="section-label">Inspirasjon</h2>
     <LearningCard learning={b.learning} />
   </section>
 )}
 
-<section>
+<section class="jump-target" id="nyheter">
   <h2 class="section-label">Nyhetsbriefing</h2>
   {
     sections.length ? (

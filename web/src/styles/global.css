@@ -230,6 +230,39 @@ a:hover {
   color: var(--accent);
 }
 
+/* ── Hopp til seksjon (kompakt rad nederst i headeren) ─────────────────── */
+.jumpnav {
+  border-top: 1px solid var(--border);
+}
+.jumpnav__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 3px 16px;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.jumpnav__inner::-webkit-scrollbar {
+  display: none;
+}
+.jumpnav a {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.jumpnav a:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+.jump-target {
+  scroll-margin-top: 96px; /* fallback for direkte #anker-last under sticky header */
+}
+
 /* ── Hovedinnhold ───────────────────────────────────────────────────────── */
 main {
   max-width: var(--maxw);
@@ -265,6 +298,10 @@ main {
   }
   .theme-toggle__label {
     display: none;
+  }
+  .jumpnav__inner {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

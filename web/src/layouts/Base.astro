@@ -71,7 +71,54 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
           <ThemePicker />
         </div>
       </div>
+      {!isForskning && (
+        <nav class="jumpnav" aria-label="Hopp til seksjon" hidden>
+          <div class="jumpnav__inner">
+            <a href="#vaer-marked">Vær og marked</a>
+            <a href="#gaater">Gåter</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#inspirasjon">Inspirasjon</a>
+            <a href="#nyheter">Nyheter</a>
+          </div>
+        </nav>
+      )}
     </header>
+
+    {/* Hopp-raden: vis kun lenker med eksisterende mål (arkivsiden har ingen),
+        og scroll dit med kort animasjon (~0,5 s) i stedet for hardt hopp. */}
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nav = document.querySelector('.jumpnav');
+        if (!nav) return;
+        let any = false;
+        nav.querySelectorAll('a').forEach((a) => {
+          const el = document.getElementById(a.getAttribute('href').slice(1));
+          if (!el) { a.remove(); return; }
+          any = true;
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            const headerH = document.querySelector('.site-header')?.offsetHeight ?? 0;
+            const targetY = el.getBoundingClientRect().top + window.scrollY - headerH - 10;
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              window.scrollTo(0, targetY);
+              return;
+            }
+            const startY = window.scrollY;
+            const dist = targetY - startY;
+            const dur = 500;
+            const t0 = performance.now();
+            const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+            const step = (now) => {
+              const t = Math.min((now - t0) / dur, 1);
+              window.scrollTo(0, startY + dist * ease(t));
+              if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        });
+        if (any) nav.hidden = false;
+      });
+    </script>
 
     <main>
       <slot />

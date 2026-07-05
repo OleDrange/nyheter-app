@@ -237,9 +237,13 @@ bygges uten ekstra datainnhenting.
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
-    enkeltdag. Rekkefølge: vær/marked → Dagens gåter → Dagens quiz → Dagens inspirasjon →
+    enkeltdag. Rekkefølge: vær/marked → Gåter → Quiz → Inspirasjon →
     nyheter → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
     `BrannCard` rendres inne i Bergen og Vestland-kortet (tittelmatch `/bergen/i`).
+    Seksjonene har anker-id-er (`#vaer-marked`, `#gaater`, `#quiz`, `#inspirasjon`,
+    `#nyheter`) som headerens hopp-rad bruker (`.jumpnav` i `Base.astro`, kun
+    nyhetssiden): 0,5 s scroll-animasjon; lenker uten mål på siden skjules av
+    inline-skriptet, så raden forsvinner helt på f.eks. arkivsiden.
   - `LearningCard.astro` — «Dagens inspirasjon»: podcast-råd (🎧) og boktips (📚) fra
     `learning`-feltet, to kort i `cards-grid`. Ren HTML uten klient-JS.
   - `BrannCard.astro` — SK Brann-blokk fra `brann`-feltet: tabellplassering, neste kamp
