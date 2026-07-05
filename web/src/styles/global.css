@@ -725,6 +725,7 @@ main {
 .study {
   padding: 18px 22px;
   scroll-margin-top: 80px; /* anker-hopp fra nyhetssiden lander under sticky header */
+  min-width: 0; /* grid-element skal aldri sprenges av lang, ikke-brytbar tekst (f.eks. rå-URL) */
 }
 .study__title {
   font-size: 1.05rem;
@@ -732,6 +733,7 @@ main {
   letter-spacing: -0.01em;
   line-height: 1.3;
   margin: 0 0 10px;
+  overflow-wrap: anywhere; /* bryt lange tokens (URL-er) i stedet for å tvinge kortbredden ut */
 }
 .study .prose p {
   margin: 0 0 8px;

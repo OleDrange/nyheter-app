@@ -140,7 +140,10 @@ export function splitResearch(md) {
       const nl = part.indexOf('\n');
       const heading = (nl === -1 ? part : part.slice(0, nl)).trim();
       const body = nl === -1 ? '' : part.slice(nl + 1).trim();
-      const link = heading.match(/^\[(.*?)\]\((.*?)\)\s*$/);
+      // Vanlig form: «[tittel](url)». Claude dropper av og til den innledende
+      // «[», så «[» er valgfri — ellers ville tittelen + rå-URL rendret som tekst
+      // (ikke-brytbar lenke → sprengt kortbredde).
+      const link = heading.match(/^\[?(.*?)\]\((.*?)\)\s*$/);
 
       const parts = [];
       let category = null;
