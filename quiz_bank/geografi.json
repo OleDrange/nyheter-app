@@ -1,0 +1,347 @@
+{
+  "category": "Geografi",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Norge?",
+      "answer": "Oslo",
+      "options": ["Oslo", "Bergen", "Trondheim", "Stavanger"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Sverige?",
+      "answer": "Stockholm",
+      "options": ["Stockholm", "Göteborg", "Oslo", "København"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Frankrike?",
+      "answer": "Paris",
+      "options": ["Paris", "Lyon", "Marseille", "Nice"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket hav ligger vest for Norge?",
+      "answer": "Nordsjøen / Atlanterhavet",
+      "options": ["Nordsjøen / Atlanterhavet", "Østersjøen", "Middelhavet", "Svartehavet"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er verdens største hav?",
+      "answer": "Stillehavet",
+      "options": ["Stillehavet", "Atlanterhavet", "Det indiske hav", "Nordishavet"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land er størst i areal i verden?",
+      "answer": "Russland",
+      "options": ["Russland", "Canada", "Kina", "USA"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket fjell er Norges høyeste?",
+      "answer": "Galdhøpiggen",
+      "options": ["Galdhøpiggen", "Glittertind", "Snøhetta", "Store Skagastølstind"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter den lengste elven i Norge?",
+      "answer": "Glomma",
+      "options": ["Glomma", "Gudbrandsdalslågen", "Numedalslågen", "Otra"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by er kjent som «Norges nest største by»?",
+      "answer": "Bergen",
+      "options": ["Bergen", "Trondheim", "Stavanger", "Tromsø"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Danmark?",
+      "answer": "København",
+      "options": ["København", "Aarhus", "Odense", "Aalborg"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket kontinent ligger Egypt i hovedsak på?",
+      "answer": "Afrika",
+      "options": ["Afrika", "Asia", "Europa", "Sør-Amerika"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i USA?",
+      "answer": "Washington D.C.",
+      "options": ["Washington D.C.", "New York", "Los Angeles", "Chicago"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land ligger rett øst for Norge?",
+      "answer": "Sverige",
+      "options": ["Sverige", "Finland", "Russland", "Danmark"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter verdens største ørken (varm)?",
+      "answer": "Sahara",
+      "options": ["Sahara", "Gobi", "Kalahari", "Atacama"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land er kjent for pyramidene i Giza?",
+      "answer": "Egypt",
+      "options": ["Egypt", "Mexico", "Peru", "Irak"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Storbritannia?",
+      "answer": "London",
+      "options": ["London", "Manchester", "Edinburgh", "Birmingham"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by ligger lengst nord i Norge av disse?",
+      "answer": "Tromsø",
+      "options": ["Tromsø", "Bodø", "Trondheim", "Bergen"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedstaden i Italia?",
+      "answer": "Roma",
+      "options": ["Roma", "Milano", "Napoli", "Venezia"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land har flest innbyggere i verden?",
+      "answer": "India",
+      "options": ["India", "Kina", "USA", "Indonesia"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter den store øygruppen nord for fastlands-Norge?",
+      "answer": "Svalbard",
+      "options": ["Svalbard", "Lofoten", "Færøyene", "Island"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter verdens lengste elv?",
+      "answer": "Nilen",
+      "options": ["Nilen", "Amazonas", "Yangtze", "Mississippi"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land er hovedstaden Canberra i?",
+      "answer": "Australia",
+      "options": ["Australia", "New Zealand", "Canada", "Sør-Afrika"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter det høyeste fjellet i verden?",
+      "answer": "Mount Everest",
+      "options": ["Mount Everest", "K2", "Kilimanjaro", "Mont Blanc"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket norsk fylke ligger Bergen i?",
+      "answer": "Vestland",
+      "options": ["Vestland", "Rogaland", "Møre og Romsdal", "Hordaland"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedstaden i Finland?",
+      "answer": "Helsingfors",
+      "options": ["Helsingfors", "Turku", "Tampere", "Oslo"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken elv renner gjennom London?",
+      "answer": "Themsen",
+      "options": ["Themsen", "Seinen", "Rhinen", "Donau"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter verdens største øy?",
+      "answer": "Grønland",
+      "options": ["Grønland", "Ny-Guinea", "Borneo", "Madagaskar"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land grenser Norge til i nordøst?",
+      "answer": "Russland",
+      "options": ["Russland", "Finland", "Sverige", "Estland"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedstaden i Spania?",
+      "answer": "Madrid",
+      "options": ["Madrid", "Barcelona", "Sevilla", "Valencia"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket kontinent er minst i areal?",
+      "answer": "Oseania (Australia)",
+      "options": ["Oseania (Australia)", "Europa", "Antarktis", "Sør-Amerika"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den lengste fjorden i Norge?",
+      "answer": "Sognefjorden",
+      "options": ["Sognefjorden", "Hardangerfjorden", "Geirangerfjorden", "Oslofjorden"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land ligger hovedstaden Wien i?",
+      "answer": "Østerrike",
+      "options": ["Østerrike", "Sveits", "Tyskland", "Ungarn"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter verdens største regnskog?",
+      "answer": "Amazonas",
+      "options": ["Amazonas", "Kongo", "Borneo", "Taiga"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Gjennom hvilket land renner elven Donau IKKE?",
+      "answer": "Frankrike",
+      "options": ["Frankrike", "Østerrike", "Ungarn", "Romania"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedstaden i Portugal?",
+      "answer": "Lisboa",
+      "options": ["Lisboa", "Porto", "Madrid", "Barcelona"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket hav skiller Europa fra Afrika i sør?",
+      "answer": "Middelhavet",
+      "options": ["Middelhavet", "Svartehavet", "Rødehavet", "Atlanterhavet"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den nest største byen i Norge etter Oslo og Bergen?",
+      "answer": "Trondheim",
+      "options": ["Trondheim", "Stavanger", "Drammen", "Tromsø"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land ligger byen Istanbul i?",
+      "answer": "Tyrkia",
+      "options": ["Tyrkia", "Hellas", "Egypt", "Iran"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedstaden i Nederland?",
+      "answer": "Amsterdam",
+      "options": ["Amsterdam", "Haag", "Rotterdam", "Brussel"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedstaden i Canada?",
+      "answer": "Ottawa",
+      "options": ["Ottawa", "Toronto", "Montreal", "Vancouver"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedstaden i Australia?",
+      "answer": "Canberra",
+      "options": ["Canberra", "Sydney", "Melbourne", "Perth"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket land har hovedstaden Nairobi?",
+      "answer": "Kenya",
+      "options": ["Kenya", "Tanzania", "Etiopia", "Uganda"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter verdens dypeste innsjø?",
+      "answer": "Bajkalsjøen",
+      "options": ["Bajkalsjøen", "Tanganyikasjøen", "Det kaspiske hav", "Titicacasjøen"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket land er hovedstaden Brasília i?",
+      "answer": "Brasil",
+      "options": ["Brasil", "Argentina", "Chile", "Colombia"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter det høyeste fjellet i Afrika?",
+      "answer": "Kilimanjaro",
+      "options": ["Kilimanjaro", "Mount Kenya", "Ras Dashen", "Atlasfjellene"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket sund skiller Danmark fra Sverige ved Helsingør?",
+      "answer": "Øresund",
+      "options": ["Øresund", "Storebælt", "Kattegat", "Skagerrak"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedstaden i New Zealand?",
+      "answer": "Wellington",
+      "options": ["Wellington", "Auckland", "Christchurch", "Hamilton"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken elv er den lengste i Sør-Amerika?",
+      "answer": "Amazonas",
+      "options": ["Amazonas", "Paraná", "Orinoco", "São Francisco"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter det laveste punktet på jordas landoverflate?",
+      "answer": "Dødehavet",
+      "options": ["Dødehavet", "Death Valley", "Det kaspiske hav", "Qattara-lavlandet"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket land har flest naboland (grenser til flest andre land)?",
+      "answer": "Kina",
+      "options": ["Kina", "Russland", "Brasil", "Tyskland"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedstaden i Sør-Korea?",
+      "answer": "Seoul",
+      "options": ["Seoul", "Busan", "Pyongyang", "Incheon"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket land omtales som «landet med tusen innsjøer» og har hovedstad Helsingfors?",
+      "answer": "Finland",
+      "options": ["Finland", "Sverige", "Canada", "Estland"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter den store fjellkjeden som skiller Europa fra Asia?",
+      "answer": "Uralfjellene",
+      "options": ["Uralfjellene", "Kaukasus", "Alpene", "Karpatene"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedstaden i Sveits?",
+      "answer": "Bern",
+      "options": ["Bern", "Zürich", "Genève", "Basel"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken kanal forbinder Middelhavet med Rødehavet?",
+      "answer": "Suezkanalen",
+      "options": ["Suezkanalen", "Panamakanalen", "Kielkanalen", "Korint-kanalen"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter Norges nordligste fastlandspunkt (kjent turistpunkt)?",
+      "answer": "Nordkapp / Knivskjellodden",
+      "options": ["Nordkapp / Knivskjellodden", "Lindesnes", "Kirkenes", "Vardø"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket land ligger innsjøen Victoriasjøen hovedsakelig mellom?",
+      "answer": "Tanzania, Uganda og Kenya",
+      "options": ["Tanzania, Uganda og Kenya", "Kongo og Angola", "Etiopia og Sudan", "Nigeria og Kamerun"]
+    }
+  ]
+}

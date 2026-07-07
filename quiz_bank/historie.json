@@ -1,0 +1,353 @@
+{
+  "category": "Historie",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "I hvilket år ble Norges grunnlov underskrevet på Eidsvoll?",
+      "answer": "1814",
+      "options": ["1814", "1905", "1789", "1824"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken norsk konge samlet Norge til ett rike etter slaget i Hafrsfjord?",
+      "answer": "Harald Hårfagre",
+      "options": ["Harald Hårfagre", "Olav den hellige", "Håkon den gode", "Sverre Sigurdsson"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket år ble unionen mellom Norge og Sverige oppløst?",
+      "answer": "1905",
+      "options": ["1905", "1814", "1884", "1925"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land angrep Norge 9. april 1940?",
+      "answer": "Tyskland",
+      "options": ["Tyskland", "Sovjetunionen", "Storbritannia", "Finland"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var Norges konge under andre verdenskrig?",
+      "answer": "Haakon VII",
+      "options": ["Haakon VII", "Olav V", "Harald V", "Oscar II"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles perioden i norsk historie fra ca. 800 til 1050?",
+      "answer": "Vikingtiden",
+      "options": ["Vikingtiden", "Steinalderen", "Bronsealderen", "Middelalderen"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket år ble svartedauden brakt til Norge?",
+      "answer": "1349",
+      "options": ["1349", "1249", "1449", "1149"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by var Norges hovedstad i middelalderen før Oslo?",
+      "answer": "Bergen",
+      "options": ["Bergen", "Trondheim", "Stavanger", "Tønsberg"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het den norske oppdageren som nådde Sydpolen først i 1911?",
+      "answer": "Roald Amundsen",
+      "options": ["Roald Amundsen", "Fridtjof Nansen", "Thor Heyerdahl", "Otto Sverdrup"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket år ble Berlinmuren revet?",
+      "answer": "1989",
+      "options": ["1989", "1991", "1985", "1979"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem malte «Skrik»?",
+      "answer": "Edvard Munch",
+      "options": ["Edvard Munch", "Christian Krohg", "Theodor Kittelsen", "Harald Sohlberg"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket år begynte første verdenskrig?",
+      "answer": "1914",
+      "options": ["1914", "1918", "1912", "1920"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land bygde de store pyramidene i Giza?",
+      "answer": "Egypt",
+      "options": ["Egypt", "Hellas", "Roma", "Mesopotamia"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var den første mennesket på månen?",
+      "answer": "Neil Armstrong",
+      "options": ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "Michael Collins"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het skipet Thor Heyerdahl seilte over Stillehavet med i 1947?",
+      "answer": "Kon-Tiki",
+      "options": ["Kon-Tiki", "Fram", "Gjøa", "Ra"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket år ble Norge medlem av NATO?",
+      "answer": "1949",
+      "options": ["1949", "1945", "1955", "1972"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var Sovjetunionens leder under mesteparten av andre verdenskrig?",
+      "answer": "Josef Stalin",
+      "options": ["Josef Stalin", "Vladimir Lenin", "Nikita Khrusjtsjov", "Leo Trotskij"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket land startet reformasjonen med Martin Luther i 1517?",
+      "answer": "Tyskland",
+      "options": ["Tyskland", "England", "Frankrike", "Italia"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles tiden da Norge var i union med Danmark (1380–1814)?",
+      "answer": "Dansketiden",
+      "options": ["Dansketiden", "Svensketiden", "Hanseatertiden", "Kalmartiden"]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket år ble Amerika «oppdaget» av Christofer Columbus?",
+      "answer": "1492",
+      "options": ["1492", "1498", "1450", "1520"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var Norges første statsminister etter unionsoppløsningen i 1905?",
+      "answer": "Christian Michelsen",
+      "options": ["Christian Michelsen", "Johan Sverdrup", "Gunnar Knudsen", "Otto Blehr"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket slag i 1030 regnes ofte som slutten på vikingtiden i Norge?",
+      "answer": "Slaget på Stiklestad",
+      "options": ["Slaget på Stiklestad", "Slaget i Hafrsfjord", "Slaget ved Nesjar", "Slaget ved Svolder"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den tyske rikskommissæren i Norge under okkupasjonen 1940–1945?",
+      "answer": "Josef Terboven",
+      "options": ["Josef Terboven", "Vidkun Quisling", "Heinrich Himmler", "Wilhelm Rediess"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket år innførte Norge parlamentarisme?",
+      "answer": "1884",
+      "options": ["1884", "1814", "1905", "1898"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den handelsorganisasjonen som dominerte Bergen i senmiddelalderen?",
+      "answer": "Hansaforbundet",
+      "options": ["Hansaforbundet", "Kalmarunionen", "Vindilerforbundet", "Det ostindiske kompani"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem ledet den russiske revolusjonen i 1917?",
+      "answer": "Vladimir Lenin",
+      "options": ["Vladimir Lenin", "Josef Stalin", "Karl Marx", "Leo Trotskij"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket år fikk kvinner allmenn stemmerett i Norge?",
+      "answer": "1913",
+      "options": ["1913", "1898", "1905", "1920"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het freden som avsluttet trettiårskrigen i 1648?",
+      "answer": "Den westfalske fred",
+      "options": ["Den westfalske fred", "Kielfreden", "Freden i Roskilde", "Wienerkongressen"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var keiser i Frankrike og tapte slaget ved Waterloo i 1815?",
+      "answer": "Napoleon Bonaparte",
+      "options": ["Napoleon Bonaparte", "Ludvig XVI", "Karl den store", "Louis-Philippe"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Ved hvilken fredsavtale ble Norge avstått fra Danmark til Sverige i 1814?",
+      "answer": "Kielfreden",
+      "options": ["Kielfreden", "Den westfalske fred", "Freden i Roskilde", "Moss-konvensjonen"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket norsk polarskip ble brukt av både Nansen og Amundsen?",
+      "answer": "Fram",
+      "options": ["Fram", "Gjøa", "Maud", "Kon-Tiki"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken amerikansk president holdt Gettysburg-talen under borgerkrigen?",
+      "answer": "Abraham Lincoln",
+      "options": ["Abraham Lincoln", "George Washington", "Ulysses S. Grant", "Thomas Jefferson"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket år falt Vestromerriket?",
+      "answer": "476",
+      "options": ["476", "410", "500", "395"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het motstandsgruppen som sank tungtvann på Rjukan under krigen?",
+      "answer": "Kompani Linge / tungtvannssabotørene",
+      "options": ["Kompani Linge / tungtvannssabotørene", "Milorg-avdeling 13", "XU", "Osvaldgruppen"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken by var sentrum for det bysantinske riket?",
+      "answer": "Konstantinopel",
+      "options": ["Konstantinopel", "Roma", "Athen", "Alexandria"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem grunnla det mongolske verdensriket på 1200-tallet?",
+      "answer": "Djengis Khan",
+      "options": ["Djengis Khan", "Kublai Khan", "Attila", "Tamerlan"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket år ble FN grunnlagt?",
+      "answer": "1945",
+      "options": ["1945", "1919", "1948", "1950"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den franske revolusjonens periode med massehenrettelser 1793–94?",
+      "answer": "Terrorveldet",
+      "options": ["Terrorveldet", "Restaurasjonen", "Direktoriet", "Konsulatet"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land koloniserte størstedelen av Sør-Amerika utenom Brasil?",
+      "answer": "Spania",
+      "options": ["Spania", "Portugal", "Frankrike", "Nederland"]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var dronning av England i den elisabethanske gullalderen?",
+      "answer": "Elisabet I",
+      "options": ["Elisabet I", "Maria I", "Victoria", "Anne"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble Kalmarunionen mellom de nordiske landene inngått?",
+      "answer": "1397",
+      "options": ["1397", "1319", "1450", "1523"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var norsk statsminister ved unionsoppløsningen som gikk av like før 1905, og som ga navn til «Sverdrup-linjen»?",
+      "answer": "Johan Sverdrup",
+      "options": ["Johan Sverdrup", "Christian Michelsen", "Frederik Stang", "Emil Stang"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket slag i 1066 gjorde slutt på det norske Harald Hardrådes forsøk på å erobre England?",
+      "answer": "Slaget ved Stamford Bridge",
+      "options": ["Slaget ved Stamford Bridge", "Slaget ved Hastings", "Slaget ved Svolder", "Slaget ved Nesjar"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den egyptiske farao hvis nesten intakte grav ble funnet av Howard Carter i 1922?",
+      "answer": "Tutankhamon",
+      "options": ["Tutankhamon", "Ramses II", "Kheops", "Akhenaten"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble den amerikanske uavhengighetserklæringen vedtatt?",
+      "answer": "1776",
+      "options": ["1776", "1789", "1783", "1765"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het traktaten i 1919 som avsluttet første verdenskrig formelt?",
+      "answer": "Versaillestraktaten",
+      "options": ["Versaillestraktaten", "Brest-Litovsk-traktaten", "Locarno-avtalen", "Trianon-traktaten"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken traktat i 1920 anerkjente norsk suverenitet over Svalbard?",
+      "answer": "Svalbardtraktaten",
+      "options": ["Svalbardtraktaten", "Kielfreden", "Barentstraktaten", "Spitsbergentraktaten fra 1925"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var den siste tsaren av Russland?",
+      "answer": "Nikolai II",
+      "options": ["Nikolai II", "Aleksander III", "Peter den store", "Ivan den grusomme"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket dynasti styrte Kina fra 1368 til 1644?",
+      "answer": "Ming",
+      "options": ["Ming", "Qing", "Tang", "Han"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het slaget i 1815 der en preussisk-britisk styrke endelig beseiret Napoleon?",
+      "answer": "Slaget ved Waterloo",
+      "options": ["Slaget ved Waterloo", "Slaget ved Leipzig", "Slaget ved Austerlitz", "Slaget ved Borodino"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken norsk konge innførte kristenretten på Moster rundt år 1024?",
+      "answer": "Olav Haraldsson (den hellige)",
+      "options": ["Olav Haraldsson (den hellige)", "Håkon den gode", "Olav Tryggvason", "Harald Hårfagre"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble den franske revolusjonen innledet med stormingen av Bastillen?",
+      "answer": "1789",
+      "options": ["1789", "1776", "1799", "1804"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den greske bystaten som ledet forsvaret mot perserne ved Thermopylene?",
+      "answer": "Sparta",
+      "options": ["Sparta", "Athen", "Theben", "Korint"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble Roma-traktaten som grunnla EEC (forløperen til EU) undertegnet?",
+      "answer": "1957",
+      "options": ["1957", "1951", "1967", "1973"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var Norges statsminister som ledet regjeringen i eksil i London under krigen?",
+      "answer": "Johan Nygaardsvold",
+      "options": ["Johan Nygaardsvold", "Einar Gerhardsen", "Christian Michelsen", "Trygve Lie"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den kinesiske muren-byggende dynastiet som forente Kina i 221 f.Kr.?",
+      "answer": "Qin",
+      "options": ["Qin", "Han", "Zhou", "Ming"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år begynte den industrielle revolusjonen omtrent, med utgangspunkt i England?",
+      "answer": "Rundt 1760",
+      "options": ["Rundt 1760", "Rundt 1650", "Rundt 1850", "Rundt 1700"]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var den første norske generalsekretæren i FN?",
+      "answer": "Trygve Lie",
+      "options": ["Trygve Lie", "Dag Hammarskjöld", "Gro Harlem Brundtland", "Jens Stoltenberg"]
+    }
+  ]
+}
