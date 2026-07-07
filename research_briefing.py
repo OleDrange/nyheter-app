@@ -21,6 +21,7 @@ import re
 import sys
 import html
 import json
+import time
 import argparse
 from datetime import datetime, timedelta
 
@@ -53,6 +54,10 @@ LOOKBACK_DAYS = 2          # vindu på publiseringsdato (toleranse for indekseri
 MAX_ITEMS = 20             # maks studier i briefen (styres også i SYSTEM_PROMPT)
 CANDIDATE_POOL = 30        # antall ferske studier som hentes PER KATEGORI og sendes til Claude
 MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
+
+# Robusthet mot tomt/mislykket Claude-svar (transient API-hikke gir noen ganger 0 tegn)
+CLAUDE_MAX_ATTEMPTS = 3    # antall forsøk hvis streamen kommer tom tilbake
+CLAUDE_RETRY_DELAY = 5     # sekunder mellom forsøk
 
 # Dedup mot gjentakelser på tvers av dager
 SEEN_FILE = "research_seen_dois.json"
@@ -276,19 +281,36 @@ def summarize_research_with_claude(articles: list[dict]) -> str:
     print("\nVelger og oppsummerer forskning med Claude (streamer svar)...\n")
     print("─" * 70)
 
+    # Streamen kommer av og til tom tilbake (transient API-hikke gir en tom
+    # assistant-melding, uten unntak). Prøv på nytt før vi gir opp — et ekte
+    # "ingen gode studier"-svar er teksten "Ingen vesentlige nye studier i dag.",
+    # ikke en tom streng, så en blank streng er alltid en feil.
     collected = ""
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_content}],
-    ) as stream:
-        for chunk in stream.text_stream:
-            print(chunk, end="", flush=True)
-            collected += chunk
+    for attempt in range(1, CLAUDE_MAX_ATTEMPTS + 1):
+        collected = ""
+        try:
+            with client.messages.stream(
+                model=MODEL,
+                max_tokens=MAX_TOKENS,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_content}],
+            ) as stream:
+                for chunk in stream.text_stream:
+                    print(chunk, end="", flush=True)
+                    collected += chunk
+        except Exception as exc:  # nettverks-/API-feil under streaming
+            print(f"\n⚠  Claude-kall feilet (forsøk {attempt}/{CLAUDE_MAX_ATTEMPTS}): {exc}")
 
-    print()  # linjeskift etter streaming
-    return collected
+        print()  # linjeskift etter streaming
+        if collected.strip():
+            return collected
+
+        if attempt < CLAUDE_MAX_ATTEMPTS:
+            print(f"⚠  Tomt svar fra Claude — nytt forsøk om {CLAUDE_RETRY_DELAY} s "
+                  f"({attempt}/{CLAUDE_MAX_ATTEMPTS})...")
+            time.sleep(CLAUDE_RETRY_DELAY)
+
+    return collected  # tom etter alle forsøk — main() håndterer dette
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -405,6 +427,15 @@ def main() -> None:
     briefing = summarize_research_with_claude(articles)
 
     print("─" * 70)
+
+    # Guard: et tomt svar (etter alle retry-forsøk) skal ALDRI lagres — det ville
+    # overskrevet dagsfilen med en blank research_md og feilaktig se ut som en
+    # stille dag. Avslutt uten å skrive; feltet utelates da for dagen (myk feil,
+    # jf. øvrige seksjoner), og dedup-cachen røres ikke så studiene kan velges i morgen.
+    if not briefing.strip():
+        print("\n✗  Tomt svar fra Claude etter alle forsøk — lagrer IKKE tom "
+              "forskningsbriefing. Feltet utelates for i dag.")
+        sys.exit(1)
 
     # Marker valgte studier som sett (de hvis URL faktisk dukker opp i briefingen)
     selected = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
