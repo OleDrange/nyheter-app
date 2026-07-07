@@ -967,6 +967,11 @@ def fetch_daily_learning() -> dict | None:
             title = str(b.get("title", "")).strip()
             if not title:
                 continue
+            norm = _norm_title(title)
+            if norm in seen["books"]:
+                # Hard kontroll: Claude overså UNNGÅ-lista — hopp over duplikat.
+                print(f"  –  boktips «{title}» allerede anbefalt før, hoppes over")
+                continue
             books.append(
                 {
                     "title": title,
@@ -975,7 +980,7 @@ def fetch_daily_learning() -> dict | None:
                     "why": str(b.get("why", "")).strip(),
                 }
             )
-            seen["books"][_norm_title(title)] = today
+            seen["books"][norm] = today
 
         if not podcasts and not books:
             return None
