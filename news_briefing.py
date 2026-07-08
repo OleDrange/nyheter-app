@@ -658,6 +658,10 @@ _RIDDLES_SEEN_FILE = "riddles_seen.json"  # i BRIEFING_DATA_DIR — må persiste
 _RIDDLES_SEEN_RETENTION_DAYS = 120
 _RIDDLES_AVOID_IN_PROMPT = 60  # hvor mange tidligere gåter Claude bes unngå
 _RIDDLES_MAX_TOKENS = 3000
+# Robusthet: av og til svarer Claude med tekst uten gyldig JSON-array (transient
+# hikke eller preamble). Prøv på nytt før vi gir opp, jf. retry i research_briefing.
+_RIDDLES_MAX_ATTEMPTS = 3
+_RIDDLES_RETRY_DELAY = 5  # sekunder mellom forsøk
 
 _RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 3 gåter som IKKE krever \
 faktakunnskap — kun logisk tenkning og enkel hoderegning skal lede til svaret.
@@ -746,30 +750,40 @@ def fetch_daily_riddles() -> list[dict]:
         else ""
     )
 
-    try:
-        client = anthropic.Anthropic()
-        resp = client.messages.create(
-            model=MODEL,
-            max_tokens=_RIDDLES_MAX_TOKENS,
-            system=_RIDDLES_SYSTEM_PROMPT,
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"Dato: {today}. Lag dagens 3 gåter.{avoid_text}",
-                }
-            ],
-        )
-        riddles = _parse_riddles_json(resp.content[0].text)
-        if len(riddles) < 3:
-            print(f"  ⚠  gåter: fikk bare {len(riddles)}/3 gyldige gåter")
-        for r in riddles:
-            seen[r["question"]] = today
-        if riddles:
+    client = anthropic.Anthropic()
+    for attempt in range(1, _RIDDLES_MAX_ATTEMPTS + 1):
+        try:
+            resp = client.messages.create(
+                model=MODEL,
+                max_tokens=_RIDDLES_MAX_TOKENS,
+                system=_RIDDLES_SYSTEM_PROMPT,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Dato: {today}. Lag dagens 3 gåter.{avoid_text}",
+                    }
+                ],
+            )
+            text = resp.content[0].text if resp.content else ""
+            riddles = _parse_riddles_json(text)
+        except Exception as exc:
+            print(f"  ✗  gåter: feil ved generering (forsøk "
+                  f"{attempt}/{_RIDDLES_MAX_ATTEMPTS}) — {exc}")
+            riddles = []
+
+        if len(riddles) == 3:
+            for r in riddles:
+                seen[r["question"]] = today
             _save_riddles_seen(seen)
-        return riddles
-    except Exception as exc:
-        print(f"  ✗  gåter: feil ved generering — {exc}")
-        return []
+            return riddles
+
+        if attempt < _RIDDLES_MAX_ATTEMPTS:
+            print(f"  ⚠  gåter: fikk bare {len(riddles)}/3 — nytt forsøk om "
+                  f"{_RIDDLES_RETRY_DELAY} s ({attempt}/{_RIDDLES_MAX_ATTEMPTS})...")
+            time.sleep(_RIDDLES_RETRY_DELAY)
+
+    print("  ⚠  gåter: fikk ikke 3 gyldige gåter etter alle forsøk — utelates i dag")
+    return []
 
 
 # ─────────────────────────────────────────────────────────────────────────────
