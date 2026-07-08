@@ -1,8 +1,9 @@
 ---
-// Dagens gåter — 5 logikkgåter (nivå 1–5) fra riddles-feltet.
+// Dagens gåter — logikkgåter (nivå 1–5) fra riddles-feltet.
 // Fasit + løsningsvei ligger i en <details> og er skjult til man trykker
-// «Vis fasit». Ren HTML — ingen klient-JS.
-const { riddles } = Astro.props;
+// «Vis fasit». «✏️ Tavle»-knappen åpner Whiteboard-overlayet (klient-JS der).
+import Whiteboard from './Whiteboard.astro';
+const { riddles, date = '' } = Astro.props;
 
 // Gjenbruker quiz-badgens fargelogikk: 1–2 lett, 3 middels, 4–5 vanskelig.
 const levelClass = (lvl) =>
@@ -18,13 +19,25 @@ const levelClass = (lvl) =>
         </span>
       </header>
       <p class="quiz-q__question">{r.question}</p>
-      <details class="riddle__reveal">
-        <summary class="riddle__summary">Vis fasit</summary>
-        <div class="riddle__answer">
-          <p class="riddle__solution">{r.answer}</p>
-          {r.explanation && <p class="riddle__explanation">{r.explanation}</p>}
-        </div>
-      </details>
+      <div class="riddle__actions">
+        <button
+          type="button"
+          class="riddle__tavle"
+          data-riddle={r.question}
+          data-key={`wb:${date}:${i}`}
+        >
+          ✏️ Tavle
+        </button>
+        <details class="riddle__reveal">
+          <summary class="riddle__summary">Vis fasit</summary>
+          <div class="riddle__answer">
+            <p class="riddle__solution">{r.answer}</p>
+            {r.explanation && <p class="riddle__explanation">{r.explanation}</p>}
+          </div>
+        </details>
+      </div>
     </article>
   ))}
 </div>
+
+<Whiteboard />

@@ -54,7 +54,7 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
 {b.riddles?.length > 0 && (
   <section class="jump-target" id="gaater">
     <h2 class="section-label">Gåter</h2>
-    <RiddleCard riddles={b.riddles} />
+    <RiddleCard riddles={b.riddles} date={b.date} />
   </section>
 )}
 

@@ -1,0 +1,337 @@
+---
+// Whiteboard — fullskjerms tegnetavle for gåtene. Rendres én gang; åpnes av
+// «✏️ Tavle»-knappene i RiddleCard (data-riddle = gåtetekst, data-key =
+// localStorage-nøkkel «wb:<dato>:<indeks>»).
+//
+// Lerret = vektorstrøk i verdenskoordinater, tegnet via canvas-transform
+// (translate/scale), så minnebruken følger antall strøk – ikke lerretstørrelsen.
+// Lerret ≈ 3× bredde × 5× høyde av skjermen. Individuelt per nettleser; strøk
+// lagres i localStorage og overlever lukking.
+//
+// Interaksjon (Pointer Events):
+//   mobil:  1 finger tegner · 2 fingre panorerer + pinch-zoomer
+//   PC:     klikk-dra tegner · mellomrom/midtknapp panorerer · hjul panorerer ·
+//           Ctrl+hjul zoomer
+//   universelt: ✏️/🧽/✋-verktøyknapper
+//
+// Ren klient-JS, ingen avhengigheter.
+---
+
+<dialog class="wb" aria-label="Tegnetavle for gåte">
+  <div class="wb__bar">
+    <p class="wb__riddle" id="wbRiddle"></p>
+    <button type="button" class="wb__close" data-wb="close" aria-label="Lukk tavle">✕</button>
+  </div>
+  <canvas class="wb__canvas" id="wbCanvas"></canvas>
+  <div class="wb__hint" id="wbHint" aria-hidden="true"></div>
+  <div class="wb__tools" role="toolbar" aria-label="Tegneverktøy">
+    <button type="button" data-wb="pen" class="is-active" title="Tegn" aria-label="Tegn">✏️</button>
+    <button type="button" data-wb="eraser" title="Viskelær" aria-label="Viskelær">🧽</button>
+    <button type="button" data-wb="hand" title="Flytt" aria-label="Flytt">✋</button>
+    <span class="wb__sep" aria-hidden="true"></span>
+    <button type="button" data-wb="undo" title="Angre" aria-label="Angre">↶</button>
+    <button type="button" data-wb="clear" title="Tøm tavle" aria-label="Tøm tavle">🗑️</button>
+    <button type="button" data-wb="home" title="Til start" aria-label="Til start">⌖</button>
+  </div>
+</dialog>
+
+<script>
+  const dlg = document.querySelector('.wb');
+  if (dlg) {
+    const canvas = document.getElementById('wbCanvas');
+    const ctx = canvas.getContext('2d');
+    const riddleEl = document.getElementById('wbRiddle');
+    const hintEl = document.getElementById('wbHint');
+
+    const PEN_W = 2.6;      // strøkbredde i verdensenheter
+    const ERASE_W = 26;
+    const MIN_SCALE = 0.4;
+    const MAX_SCALE = 4;
+
+    let cssW = 0, cssH = 0, dpr = 1;
+    let worldW = 0, worldH = 0;
+    let scale = 1, ox = 0, oy = 0;        // world→screen: screen = world*scale + o
+    let strokes = [];
+    let curKey = null;
+    let tool = 'pen';                     // 'pen' | 'eraser'
+    let navMode = false;                  // ✋ – én finger panorerer
+    let spaceDown = false;
+    let ink = '#111', gridCol = '#ccc', borderCol = '#aaa';
+
+    // aktiv gestikk
+    const pointers = new Map();           // pointerId → {x,y} (canvas-relativt)
+    let stroke = null;
+    let panning = false, panLast = null;
+    let pinchMid = null, pinchDist = 0;
+
+    // ── hjelpere ────────────────────────────────────────────────────────────
+    const clampScale = (s) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, s));
+    const toCanvas = (e) => {
+      const r = canvas.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    };
+    const toWorld = (p) => ({ x: (p.x - ox) / scale, y: (p.y - oy) / scale });
+
+    function clampOffset() {
+      if (worldW * scale <= cssW) ox = (cssW - worldW * scale) / 2;
+      else ox = Math.min(0, Math.max(cssW - worldW * scale, ox));
+      if (worldH * scale <= cssH) oy = (cssH - worldH * scale) / 2;
+      else oy = Math.min(0, Math.max(cssH - worldH * scale, oy));
+    }
+
+    function zoomAround(pt, factor) {
+      const ns = clampScale(scale * factor);
+      const f = ns / scale;
+      ox = pt.x - (pt.x - ox) * f;
+      oy = pt.y - (pt.y - oy) * f;
+      scale = ns;
+    }
+
+    function readColors() {
+      const cs = getComputedStyle(dlg);
+      ink = cs.getPropertyValue('--text').trim() || '#111';
+      gridCol = cs.getPropertyValue('--border').trim() || '#ccc';
+      borderCol = cs.getPropertyValue('--border-strong').trim() || '#aaa';
+    }
+
+    function sizeCanvas() {
+      const r = canvas.getBoundingClientRect();
+      cssW = r.width; cssH = r.height;
+      dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(cssW * dpr);
+      canvas.height = Math.round(cssH * dpr);
+    }
+
+    function home() {
+      scale = 1;
+      ox = (cssW - worldW) / 2;   // horisontalt sentrert
+      oy = 0;                     // toppen
+      clampOffset();
+    }
+
+    // ── opptegning ──────────────────────────────────────────────────────────
+    function drawGrid() {
+      const step = 48;
+      ctx.lineWidth = 1 / scale;
+      ctx.strokeStyle = gridCol;
+      ctx.beginPath();
+      for (let x = 0; x <= worldW + 0.5; x += step) { ctx.moveTo(x, 0); ctx.lineTo(x, worldH); }
+      for (let y = 0; y <= worldH + 0.5; y += step) { ctx.moveTo(0, y); ctx.lineTo(worldW, y); }
+      ctx.stroke();
+      ctx.lineWidth = 2 / scale;
+      ctx.strokeStyle = borderCol;
+      ctx.strokeRect(0, 0, worldW, worldH);
+    }
+
+    function render() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+      ctx.setTransform(dpr * scale, 0, 0, dpr * scale, ox * dpr, oy * dpr);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      for (const s of strokes) {
+        const pts = s.points;
+        if (!pts.length) continue;
+        ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+        ctx.strokeStyle = ink;
+        ctx.lineWidth = s.width;
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.stroke();
+      }
+      // rutenett bak blekket, så viskelæret ikke fjerner det
+      ctx.globalCompositeOperation = 'destination-over';
+      drawGrid();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    // ── lagring ─────────────────────────────────────────────────────────────
+    function load(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return [];
+        const d = JSON.parse(raw);
+        return Array.isArray(d) ? d : [];
+      } catch { return []; }
+    }
+    function save() {
+      if (!curKey) return;
+      try { localStorage.setItem(curKey, JSON.stringify(strokes)); } catch {}
+    }
+
+    // ── strøk ───────────────────────────────────────────────────────────────
+    function beginStroke(p) {
+      const w = toWorld(p);
+      stroke = { erase: tool === 'eraser', width: tool === 'eraser' ? ERASE_W : PEN_W,
+                 points: [{ x: r1(w.x), y: r1(w.y) }] };
+      strokes.push(stroke);
+    }
+    function addPoint(p) {
+      const w = toWorld(p);
+      stroke.points.push({ x: r1(w.x), y: r1(w.y) });
+    }
+    function finalizeStroke() {
+      if (stroke.points.length === 1) {
+        const p0 = stroke.points[0];
+        stroke.points.push({ x: p0.x + 0.01, y: p0.y + 0.01 }); // prikk ved enkeltklikk
+      }
+      stroke = null;
+      save();
+    }
+    const r1 = (n) => Math.round(n * 10) / 10;
+
+    // ── pekerhåndtering ─────────────────────────────────────────────────────
+    function beginPinch() {
+      const [a, b] = [...pointers.values()];
+      pinchMid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      pinchDist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    }
+
+    function onDown(e) {
+      if (!dlg.open) return;
+      const p = toCanvas(e);
+      try { canvas.setPointerCapture(e.pointerId); } catch {}
+      pointers.set(e.pointerId, p);
+      if (pointers.size >= 2) {
+        if (stroke) { strokes.pop(); stroke = null; }
+        panning = false;
+        beginPinch();
+        return;
+      }
+      const wantPan = navMode || spaceDown || (e.pointerType === 'mouse' && e.button === 1);
+      if (wantPan) { panning = true; panLast = p; }
+      else beginStroke(p);
+    }
+
+    function onMove(e) {
+      if (!pointers.has(e.pointerId)) return;
+      const p = toCanvas(e);
+      pointers.set(e.pointerId, p);
+      if (pointers.size >= 2) {
+        const [a, b] = [...pointers.values()];
+        const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const dist = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+        ox += mid.x - pinchMid.x; oy += mid.y - pinchMid.y;
+        zoomAround(mid, dist / pinchDist);
+        pinchMid = mid; pinchDist = dist;
+        clampOffset(); render();
+        return;
+      }
+      if (panning) {
+        ox += p.x - panLast.x; oy += p.y - panLast.y;
+        panLast = p; clampOffset(); render();
+      } else if (stroke) {
+        addPoint(p); render();
+      }
+    }
+
+    function onUp(e) {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      try { canvas.releasePointerCapture(e.pointerId); } catch {}
+      if (stroke) finalizeStroke();
+      if (pointers.size === 1) {
+        // én finger igjen etter pinch → la den panorere, ikke tegne
+        panning = true; panLast = [...pointers.values()][0];
+      } else if (pointers.size === 0) {
+        panning = false;
+      }
+    }
+
+    function onWheel(e) {
+      if (!dlg.open) return;
+      e.preventDefault();
+      if (e.ctrlKey) {
+        zoomAround(toCanvas(e), e.deltaY < 0 ? 1.1 : 1 / 1.1);
+      } else {
+        ox -= e.deltaX; oy -= e.deltaY;
+      }
+      clampOffset(); render();
+    }
+
+    // ── verktøy ─────────────────────────────────────────────────────────────
+    function setActive(name) {
+      dlg.querySelectorAll('.wb__tools [data-wb]').forEach((b) => {
+        if (['pen', 'eraser', 'hand'].includes(b.dataset.wb))
+          b.classList.toggle('is-active', b.dataset.wb === name);
+      });
+    }
+    function selectTool(t) {
+      if (t === 'hand') { navMode = true; setActive('hand'); }
+      else { tool = t; navMode = false; setActive(t); }
+      canvas.style.cursor = navMode ? 'grab' : 'crosshair';
+    }
+
+    dlg.querySelector('.wb__tools').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-wb]');
+      if (!b) return;
+      const a = b.dataset.wb;
+      if (a === 'pen' || a === 'eraser' || a === 'hand') selectTool(a);
+      else if (a === 'undo') { strokes.pop(); save(); render(); }
+      else if (a === 'clear') { strokes = []; save(); render(); }
+      else if (a === 'home') { home(); render(); }
+    });
+
+    // ── åpne / lukke ────────────────────────────────────────────────────────
+    function openBoard(key, text) {
+      curKey = key;
+      riddleEl.textContent = text || '';
+      strokes = load(key);
+      tool = 'pen'; navMode = false; setActive('pen');
+      dlg.showModal();
+      readColors();
+      sizeCanvas();
+      worldW = cssW * 3;
+      worldH = cssH * 5;
+      home();
+      canvas.style.cursor = 'crosshair';
+      render();
+      showHint();
+    }
+
+    function showHint() {
+      const touch = matchMedia('(pointer: coarse)').matches;
+      hintEl.textContent = touch
+        ? '1 finger tegner · 2 fingre flytter og zoomer'
+        : 'Dra for å tegne · mellomrom eller ✋ for å flytte · Ctrl+scroll zoomer';
+      hintEl.classList.add('is-shown');
+      clearTimeout(showHint._t);
+      showHint._t = setTimeout(() => hintEl.classList.remove('is-shown'), 3200);
+    }
+
+    document.querySelectorAll('.riddle__tavle').forEach((btn) => {
+      btn.addEventListener('click', () =>
+        openBoard(btn.dataset.key, btn.dataset.riddle));
+    });
+
+    dlg.querySelector('[data-wb="close"]').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('close', () => { pointers.clear(); stroke = null; panning = false; });
+
+    // ── globale lyttere ───────────────────────────────────────────────────
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointercancel', onUp);
+    canvas.addEventListener('wheel', onWheel, { passive: false });
+
+    window.addEventListener('keydown', (e) => {
+      if (!dlg.open) return;
+      if (e.code === 'Space' && !spaceDown) {
+        spaceDown = true;
+        if (!stroke) canvas.style.cursor = 'grab';
+        e.preventDefault();
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        spaceDown = false;
+        canvas.style.cursor = navMode ? 'grab' : 'crosshair';
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (!dlg.open) return;
+      sizeCanvas(); clampOffset(); render();
+    });
+  }
+</script>
