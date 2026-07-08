@@ -184,6 +184,18 @@ hallusineres — kun rådsteksten («tip») og boktipsene kommer fra Claude. Ded
 prunes etter `_LEARNING_SEEN_RETENTION_DAYS = 180`; tidligere bøker sendes som unngå-liste).
 Myk feil → `learning`-feltet utelates den dagen.
 
+### Dagens refleksjon (`reflection`-feltet)
+
+`fetch_daily_reflection(news_md, learning)` i `news_briefing.py`: inntil to **åpne
+refleksjonsspørsmål** (uten fasit) generert av Claude i ett lite kall
+(`_REFLECTION_SYSTEM_PROMPT`, JSON-array parses inline). Ett spørsmål forankres i en konkret
+sak fra dagens nyheter (`focus: "nyheter"`), ett i dagens inspirasjon — podcast-råd/boktips
+(`focus: "inspirasjon"`). Mangler en kilde, lages kun spørsmålet for den som finnes; maks ett
+per `focus`. Elaborering/refleksjon støtter læring. **Kalles sist i `main()`** (etter at
+`news_md` og `learning` er klare, før `store_briefing`). Ingen dedup/persistert state —
+spørsmålene varierer med dagens innhold. Myk feil → tom liste → `reflection`-feltet utelates.
+Nettsiden viser dem i `ReflectionCard.astro` («Til ettertanke»-seksjonen, etter Inspirasjon).
+
 ### SK Brann (`brann`-feltet)
 
 `fetch_brann_info()` i `news_briefing.py` — ingen Claude-bruk:
@@ -233,6 +245,7 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "riddles": [ { "level", "question", "answer", "explanation" } ],
   "learning": { "podcasts": [ { "podcast", "episode", "url", "date", "tip" } ],
                 "books": [ { "title", "author", "year", "why" } ] },
+  "reflection": [ { "focus": "nyheter|inspirasjon", "prompt" } ],
   "brann": { "team", "season",
              "table": { "place", "played", "won", "draw", "lost", "points", "teams" },
              "last_match": { "opponent", "home", "date", "round", "stadium",
@@ -259,15 +272,17 @@ bygges uten ekstra datainnhenting.
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
-    enkeltdag. Rekkefølge: vær/marked → Gåter → Quiz → Inspirasjon →
-    nyheter → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
+    enkeltdag. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →
+    Til ettertanke → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
     `BrannCard` rendres inne i Bergen og Vestland-kortet (tittelmatch `/bergen/i`).
-    Seksjonene har anker-id-er (`#vaer-marked`, `#gaater`, `#quiz`, `#inspirasjon`,
-    `#nyheter`) som headerens hopp-rad bruker (`.jumpnav` i `Base.astro`, kun
+    Seksjonene har anker-id-er (`#vaer-marked`, `#nyheter`, `#gaater`, `#quiz`, `#inspirasjon`,
+    `#refleksjon`) som headerens hopp-rad bruker (`.jumpnav` i `Base.astro`, kun
     nyhetssiden): 0,5 s scroll-animasjon; lenker uten mål på siden skjules av
     inline-skriptet, så raden forsvinner helt på f.eks. arkivsiden.
   - `LearningCard.astro` — «Dagens inspirasjon»: podcast-råd (🎧) og boktips (📚) fra
     `learning`-feltet, to kort i `cards-grid`. Ren HTML uten klient-JS.
+  - `ReflectionCard.astro` — «Til ettertanke»: 1–2 åpne refleksjonsspørsmål fra
+    `reflection`-feltet (📰 fra nyhetene / 🎧 fra inspirasjonen), accent-tonet kort. Ren HTML.
   - `BrannCard.astro` — SK Brann-blokk fra `brann`-feltet: tabellplassering, neste kamp
     (norsk dato/klokkeslett via Intl, følger container-TZ), siste resultat (farget utfall)
     og nyhetslenker. Ren HTML uten klient-JS.

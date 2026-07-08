@@ -51,7 +51,8 @@ def _load_dotenv() -> None:
 
 def store_briefing(date_str, *, news_md=None, research_md=None,
                    weather=None, market=None, research_items=None,
-                   quiz=None, riddles=None, learning=None, brann=None) -> None:
+                   quiz=None, riddles=None, learning=None, brann=None,
+                   reflection=None) -> None:
     """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
 
     Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
@@ -91,6 +92,8 @@ def store_briefing(date_str, *, news_md=None, research_md=None,
         data["learning"] = learning
     if brann is not None:
         data["brann"] = brann
+    if reflection is not None:
+        data["reflection"] = reflection
 
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
@@ -1110,6 +1113,95 @@ def fetch_daily_learning() -> dict | None:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dagens refleksjon (Claude — 2 åpne refleksjonsspørsmål forankret i dagens
+# nyheter og inspirasjon; elaborering/refleksjon er godt dokumentert for læring)
+# ─────────────────────────────────────────────────────────────────────────────
+
+_REFLECTION_MAX_TOKENS = 700
+
+_REFLECTION_SYSTEM_PROMPT = """Du lager daglige refleksjonsspørsmål på norsk for en \
+investor i Bergen som vil lære og vokse som person. Målet er elaborering: at leseren \
+knytter dagens innhold til eget liv, tenkning eller handling.
+
+KRAV:
+- Lag inntil to spørsmål: ETT forankret i en konkret sak/tema fra dagens nyheter \
+(focus "nyheter") og ETT forankret i dagens inspirasjon — et konkret podcast-råd eller \
+boktips (focus "inspirasjon"). Mangler en av kildene, lag kun spørsmålet for den som finnes.
+- Åpne spørsmål UTEN fasit. Aldri ja/nei, aldri faktaspørsmål. Personlig og handlingsrettet \
+(«Hva ville du…», «Hvordan påvirker dette…», «Hva kan du gjøre annerledes…»).
+- Forankre i det konkrete innholdet (nevn saken/rådet kort), men hold spørsmålet om leseren.
+- Maks to setninger per spørsmål. Naturlig, ikke svulstig norsk.
+
+SVAR KUN med en gyldig JSON-array, ingen tekst utenfor, ingen markdown-fences:
+[{"focus": "nyheter", "prompt": "…"}, {"focus": "inspirasjon", "prompt": "…"}]"""
+
+
+def _learning_prompt_context(learning: dict | None) -> str:
+    """Kompakt tekst om dagens inspirasjon til refleksjonsprompten (eller '')."""
+    if not learning:
+        return ""
+    lines: list[str] = []
+    for p in learning.get("podcasts", []):
+        lines.append(f"Podcast-råd ({p.get('podcast', '')}): {p.get('tip', '')}")
+    for b in learning.get("books", []):
+        author = f" av {b['author']}" if b.get("author") else ""
+        lines.append(f"Boktips: «{b.get('title', '')}»{author} — {b.get('why', '')}")
+    return "\n".join(lines)
+
+
+def fetch_daily_reflection(news_md: str, learning: dict | None) -> list[dict]:
+    """
+    Generer inntil to åpne refleksjonsspørsmål med Claude: ett forankret i dagens
+    nyheter, ett i dagens inspirasjon. Myk feil — returnerer [] ved API-/parsefeil.
+
+    Returnerer liste av { focus, prompt } (focus ∈ {"nyheter", "inspirasjon"}).
+    """
+    if not news_md and not learning:
+        return []
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    insp = _learning_prompt_context(learning)
+    user_content = (
+        f"Dato: {today}\n\nDAGENS NYHETER (markdown):\n\n{news_md or '(ingen nyheter i dag)'}"
+        + (
+            f"\n\nDAGENS INSPIRASJON:\n{insp}"
+            if insp
+            else "\n\nDAGENS INSPIRASJON: (ingen i dag — lag kun nyhets-spørsmålet)"
+        )
+    )
+
+    try:
+        client = anthropic.Anthropic()
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=_REFLECTION_MAX_TOKENS,
+            system=_REFLECTION_SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_content}],
+        )
+        text = resp.content[0].text if resp.content else ""
+        start, end = text.find("["), text.rfind("]")
+        if start == -1 or end <= start:
+            raise ValueError("fant ingen JSON-array i svaret")
+        items = json.loads(text[start : end + 1])
+    except Exception as exc:
+        print(f"  ✗  refleksjon: feil ved generering — {exc}")
+        return []
+
+    out: list[dict] = []
+    seen_focus: set[str] = set()
+    for item in items:
+        focus = str(item.get("focus", "")).strip().lower()
+        prompt = str(item.get("prompt", "")).strip()
+        if focus not in ("nyheter", "inspirasjon") or not prompt:
+            continue
+        if focus in seen_focus:  # maks ett per kilde
+            continue
+        seen_focus.add(focus)
+        out.append({"focus": focus, "prompt": prompt})
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # SK Brann (NIFS API — åpen, ingen nøkkel; nyheter via Google News RSS)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -1796,11 +1888,19 @@ def main() -> None:
 
     print("─" * 70)
 
+    print("\nGenererer dagens refleksjonsspørsmål (Claude)...")
+    reflection = fetch_daily_reflection(briefing, learning)
+    print(
+        f"  {len(reflection)} refleksjonsspørsmål"
+        if reflection
+        else "  ⚠  ingen refleksjon i dag"
+    )
+
     # Lagre dagens briefing til datalageret som nettsiden leser
     store_briefing(
         today_str, news_md=briefing, weather=weather, market=market,
         quiz=quiz or None, riddles=riddles or None,
-        learning=learning, brann=brann,
+        learning=learning, brann=brann, reflection=reflection or None,
     )
 
     # Notion

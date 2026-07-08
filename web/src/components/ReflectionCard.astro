@@ -1,0 +1,28 @@
+---
+// Dagens refleksjon — 1–2 åpne refleksjonsspørsmål (uten fasit) forankret i
+// dagens nyheter og inspirasjon. Elaborering/refleksjon støtter læring.
+// Ren HTML, ingen klient-JS. Rendres kun når `reflection`-feltet finnes.
+const { reflection } = Astro.props;
+
+const FOCUS_META = {
+  nyheter: { emoji: '📰', label: 'Fra nyhetene' },
+  inspirasjon: { emoji: '🎧', label: 'Fra inspirasjonen' },
+};
+---
+
+<div class="cards-grid reflection-grid">
+  {reflection.map((r) => {
+    const meta = FOCUS_META[r.focus] ?? { emoji: '💭', label: 'Til ettertanke' };
+    return (
+      <article class="card reflection">
+        <header class="reflection__head">
+          <span class="reflection__focus">
+            <span aria-hidden="true">{meta.emoji}</span> {meta.label}
+          </span>
+        </header>
+        <p class="reflection__prompt">{r.prompt}</p>
+        <p class="reflection__hint">Ta et øyeblikk — det finnes ikke noe fasitsvar.</p>
+      </article>
+    );
+  })}
+</div>

@@ -5,6 +5,7 @@ import MarketStrip from './MarketStrip.astro';
 import QuizCard from './QuizCard.astro';
 import RiddleCard from './RiddleCard.astro';
 import LearningCard from './LearningCard.astro';
+import ReflectionCard from './ReflectionCard.astro';
 import BrannCard from './BrannCard.astro';
 import {
   splitNewsSections,
@@ -69,6 +70,13 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
   <section class="jump-target" id="inspirasjon">
     <h2 class="section-label">Inspirasjon</h2>
     <LearningCard learning={b.learning} />
+  </section>
+)}
+
+{b.reflection?.length > 0 && (
+  <section class="jump-target" id="refleksjon">
+    <h2 class="section-label">Til ettertanke</h2>
+    <ReflectionCard reflection={b.reflection} />
   </section>
 )}
 
