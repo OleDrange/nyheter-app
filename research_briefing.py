@@ -56,8 +56,15 @@ CANDIDATE_POOL = 30        # antall ferske studier som hentes PER KATEGORI og se
 MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
 
 # Robusthet mot tomt/mislykket Claude-svar (transient API-hikke gir noen ganger 0 tegn)
-CLAUDE_MAX_ATTEMPTS = 3    # antall forsøk hvis streamen kommer tom tilbake
+CLAUDE_MAX_ATTEMPTS = 3    # antall forsøk hvis streamen kommer TOM (transient hikke)
 CLAUDE_RETRY_DELAY = 5     # sekunder mellom forsøk
+
+# Robusthet mot Claudes sikkerhetsklassifikator: enkelte medisinske abstracts
+# (typisk bio-relatert innhold) trigger `stop_reason == "refusal"`, som stopper HELE
+# batchen. En refusal er deterministisk — retry hjelper ikke. I stedet isolerer vi
+# problemabstractene med billige probe-kall og kjører oppsummeringen på nytt uten dem.
+CLAUDE_REFUSAL_MAX_ROUNDS = 4   # maks antall isoler-og-fjern-runder før vi gir opp
+CLAUDE_PROBE_MAX_TOKENS = 16    # små kall kun for å avgjøre refusal (ja/nei)
 
 # Dedup mot gjentakelser på tvers av dager
 SEEN_FILE = "research_seen_dois.json"
@@ -265,52 +272,137 @@ def build_candidates_text(articles: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def summarize_research_with_claude(articles: list[dict]) -> str:
-    client = anthropic.Anthropic()  # leser ANTHROPIC_API_KEY automatisk fra env
-
+def _build_user_content(articles: list[dict]) -> str:
     today_str = datetime.now().strftime("%A %d. %B %Y")
-    candidates = build_candidates_text(articles)
-
-    user_content = (
+    return (
         f"Dato: {today_str}\n\n"
         f"{len(articles)} kandidatstudier fra siste {LOOKBACK_DAYS} dager. "
         f"Velg opptil {MAX_ITEMS} av dem:\n\n"
-        f"{candidates}"
+        f"{build_candidates_text(articles)}"
     )
+
+
+def _stream_summary(client: "anthropic.Anthropic", articles: list[dict]) -> tuple[str, str | None]:
+    """Ett streaming-kall. Returnerer (tekst, stop_reason).
+
+    En sikkerhets-refusal gir TOM tekst uten å kaste unntak — streamen leverer
+    da null tekst-chunks, og `stop_reason == "refusal"`. Vi henter derfor
+    stop_reason fra sluttmeldingen slik at kalleren kan skille refusal fra en
+    transient tom hikke."""
+    collected = ""
+    stop_reason: str | None = None
+    try:
+        with client.messages.stream(
+            model=MODEL,
+            max_tokens=MAX_TOKENS,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": _build_user_content(articles)}],
+        ) as stream:
+            for chunk in stream.text_stream:
+                print(chunk, end="", flush=True)
+                collected += chunk
+            stop_reason = stream.get_final_message().stop_reason
+    except Exception as exc:  # nettverks-/API-feil under streaming
+        print(f"\n⚠  Claude-kall feilet: {exc}")
+    print()  # linjeskift etter streaming
+    return collected, stop_reason
+
+
+def _batch_refuses(client: "anthropic.Anthropic", articles: list[dict]) -> bool:
+    """Billig probe (max_tokens=16, ikke streaming): trigger dette kandidatsettet
+    sikkerhets-refusal? Bruker SAMME input-form som det ekte kallet, så svaret
+    stemmer med hva `_stream_summary` ville gjort. En transient API-feil under
+    proben tolkes konservativt som «ikke refusal» (vi vil ikke kaste bort gode
+    abstracts på en nettverkshikke)."""
+    try:
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=CLAUDE_PROBE_MAX_TOKENS,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": _build_user_content(articles)}],
+        )
+    except Exception as exc:
+        print(f"  ⚠  Refusal-probe feilet ({exc}) — antar ikke-refusal.")
+        return False
+    return resp.stop_reason == "refusal"
+
+
+def _find_refusing_articles(
+    client: "anthropic.Anthropic", articles: list[dict]
+) -> list[dict]:
+    """Bisect fram til abstractene som trigger refusal, med billige probe-kall.
+    Returnerer settet som bør fjernes. En enkelt «giftig» abstract avvises i
+    enhver delmengde den er med i, så halvering isolerer den i O(k·log n) kall.
+    Dersom en halvdel avvises som KOMBINASJON (ingen enkeltdel avvises alene),
+    fjernes den minste halvdelen for å bryte kombinasjonen."""
+
+    def bisect(subset: list[dict]) -> list[dict]:
+        if not _batch_refuses(client, subset):
+            return []
+        if len(subset) == 1:
+            return list(subset)
+        mid = len(subset) // 2
+        left, right = subset[:mid], subset[mid:]
+        bad = bisect(left) + bisect(right)
+        if bad:
+            return bad
+        # Refusal skyldes en kombinasjon på tvers av halvdelene, ikke én artikkel.
+        return list(left if len(left) <= len(right) else right)
+
+    return bisect(articles)
+
+
+def summarize_research_with_claude(articles: list[dict]) -> str:
+    client = anthropic.Anthropic()  # leser ANTHROPIC_API_KEY automatisk fra env
+
+    pool = list(articles)
 
     print("\nVelger og oppsummerer forskning med Claude (streamer svar)...\n")
     print("─" * 70)
 
-    # Streamen kommer av og til tom tilbake (transient API-hikke gir en tom
-    # assistant-melding, uten unntak). Prøv på nytt før vi gir opp — et ekte
-    # "ingen gode studier"-svar er teksten "Ingen vesentlige nye studier i dag.",
-    # ikke en tom streng, så en blank streng er alltid en feil.
-    collected = ""
-    for attempt in range(1, CLAUDE_MAX_ATTEMPTS + 1):
-        collected = ""
-        try:
-            with client.messages.stream(
-                model=MODEL,
-                max_tokens=MAX_TOKENS,
-                system=SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": user_content}],
-            ) as stream:
-                for chunk in stream.text_stream:
-                    print(chunk, end="", flush=True)
-                    collected += chunk
-        except Exception as exc:  # nettverks-/API-feil under streaming
-            print(f"\n⚠  Claude-kall feilet (forsøk {attempt}/{CLAUDE_MAX_ATTEMPTS}): {exc}")
-
-        print()  # linjeskift etter streaming
+    # To feilmoduser håndteres ulikt:
+    #  • TOM streng uten refusal  → transient hikke; prøv på nytt (samme input).
+    #  • stop_reason == "refusal" → sikkerhetsklassifikatoren stoppet batchen;
+    #    deterministisk, så retry er nytteløst. Isolér og fjern problemabstract(er),
+    #    kjør så på nytt med det rensede settet.
+    # Et ekte «ingen gode studier»-svar er teksten "Ingen vesentlige nye studier
+    # i dag.", ikke en tom streng, så blank tekst er alltid en feil.
+    transient_attempts = 0
+    refusal_rounds = 0
+    while True:
+        collected, stop_reason = _stream_summary(client, pool)
         if collected.strip():
             return collected
 
-        if attempt < CLAUDE_MAX_ATTEMPTS:
-            print(f"⚠  Tomt svar fra Claude — nytt forsøk om {CLAUDE_RETRY_DELAY} s "
-                  f"({attempt}/{CLAUDE_MAX_ATTEMPTS})...")
-            time.sleep(CLAUDE_RETRY_DELAY)
+        if stop_reason == "refusal":
+            refusal_rounds += 1
+            if refusal_rounds > CLAUDE_REFUSAL_MAX_ROUNDS:
+                print("✗  For mange avvisningsrunder — gir opp forskningsbriefingen.")
+                return ""
+            print("\n⚠  Claude avviste batchen (sikkerhetsklassifikator). "
+                  "Isolerer problemabstract(er)...")
+            bad = _find_refusing_articles(client, pool)
+            if not bad:
+                print("✗  Fant ingen enkeltabstract å fjerne — gir opp.")
+                return ""
+            drop_ids = {id(a) for a in bad}
+            for a in bad:
+                print(f"    – fjernet: {a['title'][:90]}")
+            pool = [a for a in pool if id(a) not in drop_ids]
+            print(f"  {len(pool)} kandidater igjen — prøver på nytt.")
+            if not pool:
+                print("✗  Ingen kandidater igjen etter filtrering — gir opp.")
+                return ""
+            print("─" * 70)
+            continue
 
-    return collected  # tom etter alle forsøk — main() håndterer dette
+        # Tom uten refusal → transient.
+        transient_attempts += 1
+        if transient_attempts >= CLAUDE_MAX_ATTEMPTS:
+            return ""  # tom etter alle forsøk — main() håndterer dette
+        print(f"⚠  Tomt svar fra Claude — nytt forsøk om {CLAUDE_RETRY_DELAY} s "
+              f"({transient_attempts}/{CLAUDE_MAX_ATTEMPTS})...")
+        time.sleep(CLAUDE_RETRY_DELAY)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
