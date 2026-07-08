@@ -44,7 +44,7 @@
     const hintEl = document.getElementById('wbHint');
 
     const PEN_W = 2.6;      // strøkbredde i verdensenheter
-    const ERASE_W = 26;
+    const ERASE_W = 78;     // viskelær ≈ 3× penn-området for rask fjerning
     const MIN_SCALE = 0.4;
     const MAX_SCALE = 4;
 
@@ -273,8 +273,30 @@
       else if (a === 'home') { home(); render(); }
     });
 
+    // ── scroll-lås (holder siden bak nøyaktig i ro mens tavla er åpen) ───────
+    let savedScrollY = 0;
+    function lockScroll() {
+      savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      const sbw = window.innerWidth - document.documentElement.clientWidth;
+      const b = document.body;
+      b.style.position = 'fixed';
+      b.style.top = `-${savedScrollY}px`;
+      b.style.left = '0';
+      b.style.right = '0';
+      b.style.width = '100%';
+      b.style.overflow = 'hidden';
+      if (sbw > 0) b.style.paddingRight = `${sbw}px`;
+    }
+    function unlockScroll() {
+      const b = document.body;
+      for (const p of ['position', 'top', 'left', 'right', 'width', 'overflow', 'paddingRight'])
+        b.style[p] = '';
+      window.scrollTo(0, savedScrollY);
+    }
+
     // ── åpne / lukke ────────────────────────────────────────────────────────
     function openBoard(key, text) {
+      lockScroll();
       curKey = key;
       riddleEl.textContent = text || '';
       strokes = load(key);
@@ -306,7 +328,10 @@
     });
 
     dlg.querySelector('[data-wb="close"]').addEventListener('click', () => dlg.close());
-    dlg.addEventListener('close', () => { pointers.clear(); stroke = null; panning = false; });
+    dlg.addEventListener('close', () => {
+      pointers.clear(); stroke = null; panning = false;
+      unlockScroll();
+    });
 
     // ── globale lyttere ───────────────────────────────────────────────────
     canvas.addEventListener('pointerdown', onDown);
@@ -314,6 +339,18 @@
     canvas.addEventListener('pointerup', onUp);
     canvas.addEventListener('pointercancel', onUp);
     canvas.addEventListener('wheel', onWheel, { passive: false });
+
+    // iOS Safari: blokker sidens egen pinch-zoom + rubber-band mens tavla er åpen,
+    // så viewporten (og verktøylinja) står helt i ro. Gjelder kun når dialogen er
+    // oppe – resten av siden beholder normal zoom.
+    const blockGesture = (e) => { if (dlg.open) e.preventDefault(); };
+    document.addEventListener('gesturestart', blockGesture, { passive: false });
+    document.addEventListener('gesturechange', blockGesture, { passive: false });
+    document.addEventListener('gestureend', blockGesture, { passive: false });
+    document.addEventListener('touchmove', (e) => {
+      // la gåteteksten scrolle; alt annet på tavla holdes i ro
+      if (dlg.open && !e.target.closest('.wb__riddle')) e.preventDefault();
+    }, { passive: false });
 
     window.addEventListener('keydown', (e) => {
       if (!dlg.open) return;
