@@ -148,8 +148,15 @@ legg til en ny `quiz_bank/*.json` for flere spørsmål/dag, uten kodeendring.
 - **Nivårotasjon:** `_QUIZ_DIFFICULTY_CYCLE` (easy→medium→hard) roterer per dag/kategori
   (`(dag-ordinal + kategori-indeks) % 3`), med fallback til andre nivåer, og til slutt
   gjenbruk hvis banken er mindre enn retention-vinduet.
-- **Dedup:** `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert spørsmålstekst, prunes
-  etter `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres** (volumet).
+- **Dedup + spaced repetition:** `quiz_seen.json` i `BRIEFING_DATA_DIR` (normalisert
+  spørsmålstekst → `{ "last": dato, "reps": antall ganger vist }`, prunes etter
+  `_QUIZ_SEEN_RETENTION_DAYS = 365`) — **må persisteres** (volumet). Bakoverkompatibel med
+  det gamle formatet (verdi = ren datostreng = vist én gang). I tillegg til dagens ferske
+  spørsmål hentes **ett tidligere sett spørsmål tilbake som repetisjon** når det er forfalt:
+  et spørsmål vist `reps` ganger forfaller når alderen ≥ `_QUIZ_REVIEW_INTERVALS[reps-1]`
+  (`[7, 30, 90, 180]` dager, klemt) — utvidende intervall (retrieval practice + spacing).
+  Mest forfalte velges, legges sist, merkes `repeat: True` (`QuizCard` viser 🔁-badge og
+  grønn kant). Ingen forfalte (tidlige dager) → intet repetisjonsspørsmål.
 - Myk feil → tom liste, `quiz`-feltet utelates den dagen.
 
 Per nå finnes `norsk_samfunn.json` og `medisin_og_kropp.json` (~60 spm hver, dekker ~2 mnd).
@@ -222,7 +229,7 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "weather": { ... },          // fetch_bergen_weather()-dict
   "market": { ... },           // fetch_market_snapshot()-dict
   "research_items": [ { "title", "url", "journal", "date" } ],
-  "quiz": [ { "level", "difficulty", "category", "question", "options", "answer" } ],
+  "quiz": [ { "level", "difficulty", "category", "question", "options", "answer", "repeat"? } ],
   "riddles": [ { "level", "question", "answer", "explanation" } ],
   "learning": { "podcasts": [ { "podcast", "episode", "url", "date", "tip" } ],
                 "books": [ { "title", "author", "year", "why" } ] },

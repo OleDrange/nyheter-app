@@ -520,6 +520,13 @@ _QUIZ_CATEGORY_ORDER = [
 # Vanskelighetsgrad roterer per dag/kategori så en bruker møter en blanding
 # over uka i stedet for samme nivå hver gang.
 _QUIZ_DIFFICULTY_CYCLE = ["easy", "medium", "hard"]
+# Spaced repetition: i tillegg til dagens ferske spørsmål hentes ett tidligere
+# sett spørsmål tilbake når det er «forfalt» for repetisjon (retrieval practice
+# + spacing er den best dokumenterte lærings­kombinasjonen). Intervallet vokser
+# med antall ganger spørsmålet er vist (utvidende repetisjon, Leitner-aktig):
+# indeks = reps-1, klemt til siste. Repetisjonsspørsmålet merkes `repeat: True`
+# så nettsiden kan vise et repetisjonsmerke.
+_QUIZ_REVIEW_INTERVALS = [7, 30, 90, 180]  # dager før neste repetisjon
 
 
 def _quiz_seen_path() -> str:
@@ -527,16 +534,32 @@ def _quiz_seen_path() -> str:
 
 
 def _load_quiz_seen() -> dict:
-    """{normalisert spørsmål: 'YYYY-MM-DD' sist brukt}, prunet etter retention."""
+    """{normalisert spørsmål: {"last": 'YYYY-MM-DD', "reps": int}}, prunet.
+
+    Bakoverkompatibel med det gamle formatet der verdien var en ren datostreng
+    (= spørsmålet vist én gang). Prunes etter retention på sist-sett-datoen.
+    """
     try:
         with open(_quiz_seen_path(), encoding="utf-8") as f:
-            seen = json.load(f)
+            raw = json.load(f)
     except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(raw, dict):
         return {}
     cutoff = (datetime.now() - timedelta(days=_QUIZ_SEEN_RETENTION_DAYS)).strftime(
         "%Y-%m-%d"
     )
-    return {k: v for k, v in seen.items() if isinstance(v, str) and v >= cutoff}
+    seen: dict = {}
+    for k, v in raw.items():
+        if isinstance(v, str):
+            rec = {"last": v, "reps": 1}
+        elif isinstance(v, dict) and isinstance(v.get("last"), str):
+            rec = {"last": v["last"], "reps": int(v.get("reps", 1) or 1)}
+        else:
+            continue
+        if rec["last"] >= cutoff:
+            seen[k] = rec
+    return seen
 
 
 def _save_quiz_seen(seen: dict) -> None:
@@ -580,6 +603,40 @@ def _load_quiz_bank() -> list[tuple[str, dict]]:
     return banks
 
 
+def _pick_review_question(seen: dict, bank_map: dict, day_ord: int):
+    """
+    Velg ett tidligere sett spørsmål som er forfalt for repetisjon (spaced
+    repetition). Et spørsmål vist `reps` ganger er forfalt når alderen (dager
+    siden sist sett) ≥ _QUIZ_REVIEW_INTERVALS[reps-1] (klemt til siste). Blant
+    forfalte velges det mest forfalte (størst overskridelse); uavgjort brytes
+    deterministisk av innsettingsrekkefølgen. Spørsmål som ikke lenger finnes i
+    banken ignoreres.
+
+    `bank_map`: {normalisert spørsmål: (slug, label, question_dict)}.
+    Returnerer (norm_key, question_dict, label) eller None.
+    """
+    best = None
+    best_overdue = -1
+    for key, rec in seen.items():
+        entry = bank_map.get(key)
+        if entry is None:
+            continue
+        reps = max(1, rec.get("reps", 1))
+        interval = _QUIZ_REVIEW_INTERVALS[min(reps, len(_QUIZ_REVIEW_INTERVALS)) - 1]
+        try:
+            last_ord = datetime.strptime(rec["last"], "%Y-%m-%d").toordinal()
+        except (ValueError, KeyError, TypeError):
+            continue
+        overdue = (day_ord - last_ord) - interval
+        if overdue >= 0 and overdue > best_overdue:
+            best_overdue = overdue
+            best = (key, entry)
+    if best is None:
+        return None
+    key, (_slug, label, q) = best
+    return key, q, label
+
+
 def fetch_daily_quiz() -> list[dict]:
     """
     Trekk ett nytt spørsmål per kategori fra det lokale spørsmålsbiblioteket
@@ -589,8 +646,13 @@ def fetch_daily_quiz() -> list[dict]:
     tilbake til andre nivåer, og til slutt til allerede sette (biblioteket kan
     være mindre enn retention-vinduet).
 
+    I tillegg hentes ett tidligere sett spørsmål tilbake som repetisjon når det
+    er forfalt (spaced repetition, se _pick_review_question). Dette merkes
+    `repeat: True` og legges sist. Finnes ingen forfalte spørsmål (tidlige
+    dager) utelates det.
+
     Returnerer liste av { level, difficulty, category, question, options,
-    answer } der options er stokket og answer er fasitteksten.
+    answer[, repeat] } der options er stokket og answer er fasitteksten.
     """
     import random
 
@@ -603,6 +665,20 @@ def fetch_daily_quiz() -> list[dict]:
     today = datetime.now().strftime("%Y-%m-%d")
     day_ord = datetime.now().toordinal()
     quiz: list[dict] = []
+    drawn_keys: set[str] = set()
+
+    # Oppslag normalisert spørsmål → (slug, label, question_dict) for å hente
+    # tilbake fulle data til repetisjonsspørsmålet. Velg kandidaten fra
+    # gårsdagens seen-tilstand (før dagens ferske spørsmål markeres) så dagens
+    # nye spørsmål aldri kan bli valgt som repetisjon.
+    bank_map: dict = {}
+    for slug, data in banks:
+        label = data.get("category", slug)
+        for q in data["questions"]:
+            qn = _norm_title(q.get("question", ""))
+            if qn:
+                bank_map.setdefault(qn, (slug, label, q))
+    review = _pick_review_question(seen, bank_map, day_ord)
 
     for cat_i, (slug, data) in enumerate(banks):
         label = data.get("category", slug)
@@ -642,7 +718,35 @@ def fetch_daily_quiz() -> list[dict]:
                 "answer": answer,
             }
         )
-        seen[_norm_title(question)] = today
+        key = _norm_title(question)
+        drawn_keys.add(key)
+        prev = seen.get(key)
+        reps = (prev.get("reps", 1) + 1) if isinstance(prev, dict) else 1
+        seen[key] = {"last": today, "reps": reps}
+
+    # Repetisjonsspørsmål sist — hopp over hvis det tilfeldigvis er trukket som
+    # ferskt spørsmål i dag (kan skje i fallback-grenen når banken er liten).
+    if review is not None:
+        rkey, rq, rlabel = review
+        options = list(rq.get("options", []))
+        answer = rq.get("answer", "")
+        question = rq.get("question", "")
+        if rkey not in drawn_keys and question and answer and len(options) >= 2:
+            random.shuffle(options)
+            quiz.append(
+                {
+                    "level": len(quiz) + 1,
+                    "difficulty": rq.get("difficulty", ""),
+                    "category": rlabel,
+                    "question": question,
+                    "options": options,
+                    "answer": answer,
+                    "repeat": True,
+                }
+            )
+            prev = seen.get(rkey)
+            reps = (prev.get("reps", 1) + 1) if isinstance(prev, dict) else 2
+            seen[rkey] = {"last": today, "reps": reps}
 
     if quiz:
         _save_quiz_seen(seen)

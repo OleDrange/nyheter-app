@@ -898,6 +898,26 @@ main {
   background: var(--down-bg);
   color: var(--down);
 }
+.quiz-q__badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.quiz-q__repeat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--up-bg);
+  color: var(--up);
+  white-space: nowrap;
+}
+.quiz-q--repeat {
+  border-color: var(--up);
+}
 .quiz-q__category {
   font-size: 0.72rem;
   color: var(--text-faint);

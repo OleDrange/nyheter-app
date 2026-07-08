@@ -11,10 +11,17 @@ const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
 
 <div class="cards-grid quiz-grid">
   {quiz.map((q, i) => (
-    <article class="card quiz-q" data-answer={q.answer}>
+    <article class={`card quiz-q${q.repeat ? ' quiz-q--repeat' : ''}`} data-answer={q.answer}>
       <header class="quiz-q__head">
-        <span class={`quiz-q__level quiz-q__level--${q.difficulty}`}>
-          Nivå {q.level ?? i + 1} · {DIFF_NO[q.difficulty] ?? q.difficulty}
+        <span class="quiz-q__badges">
+          <span class={`quiz-q__level quiz-q__level--${q.difficulty}`}>
+            Nivå {q.level ?? i + 1} · {DIFF_NO[q.difficulty] ?? q.difficulty}
+          </span>
+          {q.repeat && (
+            <span class="quiz-q__repeat" title="Du har sett dette før — prøv å huske svaret">
+              🔁 Repetisjon
+            </span>
+          )}
         </span>
         {q.category && <span class="quiz-q__category">{q.category}</span>}
       </header>
