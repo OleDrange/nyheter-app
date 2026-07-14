@@ -77,9 +77,12 @@ CLAUDE_RETRY_DELAY = 5     # sekunder mellom forsøk
 CLAUDE_REFUSAL_MAX_ROUNDS = 4   # maks antall isoler-og-fjern-runder før vi gir opp
 CLAUDE_PROBE_MAX_TOKENS = 16    # små kall kun for å avgjøre refusal (ja/nei)
 
-# Dedup mot gjentakelser på tvers av dager. To nivåer, fordi et 180-dagers vindu ellers ville
+# Dedup mot gjentakelser på tvers av dager. Tre nivåer, fordi et 180-dagers vindu ellers ville
 # servert de samme toppkandidatene dag etter dag:
 #   • valgt av Claude (picked)      → aldri vist igjen (SEEN_RETENTION_DAYS)
+#   • avvist av sikkerhetsklassifikatoren (refused) → blokkert like lenge som picked. En
+#     refusal er deterministisk, så å sende abstractet igjen etter karantenen ville bare
+#     utløst en ny (dyr) isoler-og-fjern-runde. Lagres OGSÅ når kjøringen gir opp helt.
 #   • sendt, men ikke valgt         → karantene (UNPICKED_COOLDOWN_DAYS), så den ikke brenner
 #                                     input-tokens hver dag, men kan komme tilbake senere
 SEEN_FILE = "research_seen_dois.json"
@@ -196,10 +199,12 @@ def _seen_path() -> str:
 
 
 def _load_seen() -> dict:
-    """Les dedup-cachen og normaliser til {doi: {"last": dato, "picked": bool}}.
+    """Les dedup-cachen og normaliser til
+    {doi: {"last": dato, "picked": bool, "refused": bool}}.
 
     Bakoverkompatibel: det gamle formatet lagret en ren datostreng per DOI, og alle
-    oppføringene der var studier Claude faktisk valgte — de tolkes som picked=True."""
+    oppføringene der var studier Claude faktisk valgte — de tolkes som picked=True.
+    Oppføringer skrevet før refused-flagget fantes leses som refused=False."""
     try:
         with open(_seen_path(), encoding="utf-8") as f:
             raw = json.load(f)
@@ -209,9 +214,13 @@ def _load_seen() -> dict:
     seen: dict[str, dict] = {}
     for doi, val in (raw or {}).items():
         if isinstance(val, str):  # gammelt format: bare datoen
-            seen[doi] = {"last": val, "picked": True}
+            seen[doi] = {"last": val, "picked": True, "refused": False}
         elif isinstance(val, dict) and val.get("last"):
-            seen[doi] = {"last": val["last"], "picked": bool(val.get("picked"))}
+            seen[doi] = {
+                "last": val["last"],
+                "picked": bool(val.get("picked")),
+                "refused": bool(val.get("refused")),
+            }
     return seen
 
 
@@ -219,27 +228,41 @@ def _is_blocked(seen: dict, doi: str, today: date | None = None) -> bool:
     """Skal denne DOI-en holdes utenfor dagens kandidatpool?
 
     Valgt tidligere → blokkert helt ut SEEN_RETENTION_DAYS (leseren skal aldri se samme
-    studie to ganger). Sendt til Claude uten å bli valgt → blokkert i UNPICKED_COOLDOWN_DAYS,
-    så den slutter å brenne input-tokens hver dag, men kan komme tilbake senere."""
+    studie to ganger). Avvist av sikkerhetsklassifikatoren → blokkert like lenge (en
+    refusal er deterministisk; å prøve igjen koster bare en ny bisect-runde). Sendt til
+    Claude uten å bli valgt → blokkert i UNPICKED_COOLDOWN_DAYS, så den slutter å brenne
+    input-tokens hver dag, men kan komme tilbake senere."""
     entry = seen.get(doi)
     if not entry:
         return False
-    days = SEEN_RETENTION_DAYS if entry["picked"] else UNPICKED_COOLDOWN_DAYS
+    long_block = entry["picked"] or entry.get("refused")
+    days = SEEN_RETENTION_DAYS if long_block else UNPICKED_COOLDOWN_DAYS
     cutoff = ((today or datetime.now().date()) - timedelta(days=days)).isoformat()
     return entry["last"] >= cutoff
 
 
-def _save_seen(seen: dict, sent_dois: list[str], picked_dois: list[str]) -> None:
+def _save_seen(
+    seen: dict,
+    sent_dois: list[str],
+    picked_dois: list[str],
+    refused_dois: list[str] | None = None,
+) -> None:
     """Merk dagens kandidater som sett. `sent_dois` er alle som ble sendt til Claude,
-    `picked_dois` de som faktisk havnet i briefingen (picked=True veier tyngst — en DOI
-    som først var sendt-og-forkastet og senere blir valgt, oppgraderes)."""
+    `picked_dois` de som faktisk havnet i briefingen, `refused_dois` de som ble fjernet
+    fordi de trigget sikkerhetsklassifikatoren. picked/refused er klebrige — en DOI som
+    først var sendt-og-forkastet og senere blir valgt (eller avvist), oppgraderes."""
     today = datetime.now().date().isoformat()
     picked = set(picked_dois)
+    refused = set(refused_dois or [])
     for doi in sent_dois:
         if not doi:
             continue
-        was_picked = seen.get(doi, {}).get("picked", False)
-        seen[doi] = {"last": today, "picked": doi in picked or was_picked}
+        prev = seen.get(doi, {})
+        seen[doi] = {
+            "last": today,
+            "picked": doi in picked or prev.get("picked", False),
+            "refused": doi in refused or prev.get("refused", False),
+        }
 
     # Prun oppføringer som ikke lenger kan blokkere noe (ISO-datoer sammenlignes som tekst).
     keep_from = (
@@ -618,10 +641,14 @@ def _find_refusing_articles(
     return bisect(articles)
 
 
-def summarize_research_with_claude(articles: list[dict]) -> str:
+def summarize_research_with_claude(articles: list[dict]) -> tuple[str, list[str]]:
+    """Returnerer (briefing, refused_dois). `refused_dois` er DOI-ene til abstracts som
+    ble fjernet fordi de trigget sikkerhetsklassifikatoren — kalleren skal persistere dem
+    (refused-flagget) uansett om briefingen lyktes, så de aldri sendes inn igjen."""
     client = anthropic.Anthropic()  # leser ANTHROPIC_API_KEY automatisk fra env
 
     pool = list(articles)
+    refused_dois: list[str] = []
 
     print("\nVelger og oppsummerer forskning med Claude (streamer svar)...\n")
     print("─" * 70)
@@ -638,34 +665,36 @@ def summarize_research_with_claude(articles: list[dict]) -> str:
     while True:
         collected, stop_reason = _stream_summary(client, pool)
         if collected.strip():
-            return collected
+            return collected, refused_dois
 
         if stop_reason == "refusal":
             refusal_rounds += 1
             if refusal_rounds > CLAUDE_REFUSAL_MAX_ROUNDS:
                 print("✗  For mange avvisningsrunder — gir opp forskningsbriefingen.")
-                return ""
+                return "", refused_dois
             print("\n⚠  Claude avviste batchen (sikkerhetsklassifikator). "
                   "Isolerer problemabstract(er)...")
             bad = _find_refusing_articles(client, pool)
             if not bad:
                 print("✗  Fant ingen enkeltabstract å fjerne — gir opp.")
-                return ""
+                return "", refused_dois
             drop_ids = {id(a) for a in bad}
             for a in bad:
                 print(f"    – fjernet: {a['title'][:90]}")
+                if a.get("doi"):
+                    refused_dois.append(a["doi"])
             pool = [a for a in pool if id(a) not in drop_ids]
             print(f"  {len(pool)} kandidater igjen — prøver på nytt.")
             if not pool:
                 print("✗  Ingen kandidater igjen etter filtrering — gir opp.")
-                return ""
+                return "", refused_dois
             print("─" * 70)
             continue
 
         # Tom uten refusal → transient.
         transient_attempts += 1
         if transient_attempts >= CLAUDE_MAX_ATTEMPTS:
-            return ""  # tom etter alle forsøk — main() håndterer dette
+            return "", refused_dois  # tom etter alle forsøk — main() håndterer dette
         print(f"⚠  Tomt svar fra Claude — nytt forsøk om {CLAUDE_RETRY_DELAY} s "
               f"({transient_attempts}/{CLAUDE_MAX_ATTEMPTS})...")
         time.sleep(CLAUDE_RETRY_DELAY)
@@ -785,7 +814,7 @@ def main() -> None:
 
     print(f"\n  {len(articles)} kandidatstudier sendes til Claude.")
 
-    briefing = summarize_research_with_claude(articles)
+    briefing, refused_dois = summarize_research_with_claude(articles)
 
     print("─" * 70)
 
@@ -793,17 +822,25 @@ def main() -> None:
     # overskrevet dagsfilen med en blank research_md og feilaktig se ut som en
     # stille dag. Avslutt uten å skrive; feltet utelates da for dagen (myk feil,
     # jf. øvrige seksjoner), og dedup-cachen røres ikke så studiene kan velges i morgen.
+    # Unntak: abstracts som trigget sikkerhetsklassifikatoren persisteres LIKEVEL med
+    # refused-flagget — en refusal er deterministisk, og uten dette ville nøyaktig samme
+    # pool kommet tilbake i morgen og betalt hele isoler-og-fjern-runden på nytt.
     if not briefing.strip():
+        if refused_dois:
+            _save_seen(_load_seen(), refused_dois, [], refused_dois)
+            print(f"  ⓘ  {len(refused_dois)} avvist(e) abstract(s) merket refused — "
+                  "sendes aldri inn igjen.")
         print("\n✗  Tomt svar fra Claude etter alle forsøk — lagrer IKKE tom "
               "forskningsbriefing. Feltet utelates for i dag.")
         sys.exit(1)
 
     # Marker dagens kandidater som sett. Valgte studier (URL-en dukker opp i briefingen)
-    # blokkeres for godt; de øvrige som ble sendt til Claude, får karantene — ellers ville
-    # de samme toppkandidatene blitt sendt inn på nytt hver eneste dag.
+    # blokkeres for godt; avviste (refusal) blokkeres like lenge; de øvrige som ble sendt
+    # til Claude, får karantene — ellers ville de samme toppkandidatene blitt sendt inn
+    # på nytt hver eneste dag.
     picked = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
     sent = [a["doi"] for a in articles if a["doi"]]
-    _save_seen(_load_seen(), sent, picked)
+    _save_seen(_load_seen(), sent, picked, refused_dois)
 
     # Lagre forskningsbriefingen til datalageret (merges inn i samme dagsfil som nyhetsbriefen)
     research_items = [

@@ -276,10 +276,14 @@ forkastes helt. Dette kuttet input fra ~32 000 til ~9 000 tokens/dag (~0,16 → 
 visningsnavn og slug). Heller færre enn svake.
 
 - `research_items` i JSON-en har også `category` (kandidatens kilde-kategori).
-- **Dedup — to nivåer** i `research_seen_dois.json` (`{doi: {last, picked}}`; gammelt format
-  = ren datostreng leses som `picked: true`). Valgt av Claude → blokkert `SEEN_RETENTION_DAYS
-  = 400` dager (leseren skal **aldri** se samme studie to ganger). Sendt, men ikke valgt →
-  karantene `UNPICKED_COOLDOWN_DAYS = 14` dager, så den ikke brenner input-tokens hver dag,
+- **Dedup — tre nivåer** i `research_seen_dois.json` (`{doi: {last, picked, refused}}`;
+  gammelt format = ren datostreng leses som `picked: true`). Valgt av Claude → blokkert
+  `SEEN_RETENTION_DAYS = 400` dager (leseren skal **aldri** se samme studie to ganger).
+  **Avvist av sikkerhetsklassifikatoren** (refusal) → `refused: true`, blokkert like lenge
+  som picked — en refusal er deterministisk, og uten flagget kom samme abstract tilbake
+  etter karantenen og betalte en ny bisect-runde med prober; refused-DOI-er lagres **også
+  når kjøringen gir opp helt** (før exit). Sendt, men ikke valgt → karantene
+  `UNPICKED_COOLDOWN_DAYS = 14` dager, så den ikke brenner input-tokens hver dag,
   men får komme tilbake (poolen er liten). Uten dette ville et 365-dagers vindu servert de
   samme toppkandidatene daglig. Ligger i `BRIEFING_DATA_DIR` — **må persisteres** (volumet).
 - **Legacy:** kategorien `medisin` produseres ikke lenger, men finnes i arkiverte briefinger —
