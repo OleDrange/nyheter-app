@@ -85,12 +85,19 @@ markdown-backup). Begge skriver **alltid** dagens briefing til datalageret via
 - **Streaming:** Claude-output streames til terminal, ikke bufret.
 - **Myke feil:** én RSS-feed, vær- eller markedsfeil stopper ikke resten av kjøringen.
 - **Artikler uten dato inkluderes alltid** (kan ikke fastslå alder).
-- `MAX_PER_FEED = 15`, `MAX_DESC_CHARS = 300`.
+- `MAX_PER_FEED = 25`, `MAX_DESC_CHARS = 300`, `NEWS_HISTORY_DAYS = 2`.
 - **RSS hentes med `httpx`** (browser-UA i `_FETCH_HEADERS` + `follow_redirects=True`), så
   `feedparser.parse(resp.content)`. Mange norske aviser blokkerer feedparsers bot-UA — ikke
   bytt tilbake til `feedparser.parse(url)`.
 - **Dedup før Claude:** `fetch_articles()` avslutter med `_dedup_articles()` (normalisert
   tittel + URL; beholder lengst ingress) — feedene overlapper mye.
+- **Dedup mot tidligere dager** (leseren skal ikke lese det samme to dager på rad):
+  `_load_recent_briefing_points()` leser `news_md` fra de siste `NEWS_HISTORY_DAYS`
+  dagsfilene i datalageret (ingen egen state-fil) og gir (1) URL-/tittelsett som
+  `fetch_articles(skip=…)` filtrerer mekanisk bort *før* MAX_PER_FEED-telling, og
+  (2) punkttekstene som sendes som unngå-liste i user-prompten («DEKKET I BRIEFINGENE
+  DE SISTE DAGENE») — fanger samme sak med ny overskrift. Prompt-regel: gjenta kun ved
+  vesentlig ny utvikling, og da med fokus på det nye.
 
 ### RSS-feeds
 
@@ -103,8 +110,10 @@ URLene `nrk.no/nyheter/rss.xml`, `e24.no/rss.xml`, `dn.no/rss.xml`.
 
 ### Briefing-seksjoner
 
-`SYSTEM_PROMPT` styrer output: Bloomberg-stil (tall og fakta, ingen fyllord), maks 450 ord,
-7 «## »-seksjoner (emojiene brukes av nettsidens parsing):
+`SYSTEM_PROMPT` styrer output: Bloomberg-stil (tall og fakta, ingen fyllord), men skrevet
+for en **smart allmennleser** — fagbegreper/forkortelser/ukjente selskaper forklares kort
+inne i punktet (maks to setninger per punkt; setning to kun til forklaring/konsekvens).
+Maks 550 ord, 7 «## »-seksjoner (emojiene brukes av nettsidens parsing):
 
 | Seksjon | Maks punkter |
 |---|---|

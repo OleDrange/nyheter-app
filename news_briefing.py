@@ -134,8 +134,9 @@ RSS_FEEDS: dict[str, str] = {
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 4096
 LOOKBACK_HOURS = 24
-MAX_PER_FEED = 15  # maks antall artikler per kilde
+MAX_PER_FEED = 25  # maks antall artikler per kilde
 MAX_DESC_CHARS = 300  # maks tegn fra ingress/beskrivelse per artikkel
+NEWS_HISTORY_DAYS = 2  # dedup: ikke gjenta saker fra briefingene de siste N dagene
 
 _FETCH_HEADERS = {
     "User-Agent": (
@@ -147,14 +148,22 @@ _FETCH_HEADERS = {
     "Accept-Language": "nb-NO,nb;q=0.9,en;q=0.8",
 }
 
-SYSTEM_PROMPT = """Nyhetsbriefing på norsk for en investor i Bergen. Skriv som en Bloomberg-terminal: tall og fakta, null pynt.
+SYSTEM_PROMPT = """Nyhetsbriefing på norsk for en smart allmennleser i Bergen med interesse for økonomi. Skriv som en Bloomberg-terminal: tall og fakta, null pynt — men alt skal kunne forstås uten å måtte søke opp begreper.
+
+FORKLAR UNDERVEIS:
+- Fagbegreper, forkortelser og mindre kjente selskaper/institusjoner forklares kort inne i punktet (2–6 ord): «styringsrenten (Norges Banks utlånsrente)», «brikkeprodusenten TSMC», «EMA (EUs legemiddelmyndighet)».
+- Allment kjente navn (Apple, Google, NATO, Norges Bank) trenger ingen forklaring.
 
 FORMAT:
 - Syv seksjoner med ## heading og • kulepunkter — ingenting annet.
 - Maks 3 punkter per seksjon, med unntak der lavere maks er angitt. Heller færre enn å fylle opp med svake nyheter.
-- Én setning per punkt. Subjekt + verb + tall/konsekvens. Slutt.
+- Én, maks to setninger per punkt. Subjekt + verb + tall/konsekvens. Setning to brukes kun til å forklare et begrep eller hvorfor saken betyr noe.
 - Alltid inline-lenke i nyhetspunkter: [tittel](url)
 - Tom nyhetseksjon → skriv kun: • Ingen viktige hendelser.
+
+GJENTAKELSE:
+- Saker listet under «DEKKET I BRIEFINGENE DE SISTE DAGENE» i meldingen skal ikke gjentas.
+- Unntak: vesentlig ny utvikling (nye tall, vedtak, eskalering) — da skal punktet handle om det som er nytt, ikke resirkulere gårsdagens vinkel.
 
 FORBUDT I OUTPUT:
 - Fyllfraser: "Det er verdt å merke seg", "I tillegg", "Som et resultat", "Det er viktig å"
@@ -202,7 +211,7 @@ Ta med KUN direkte hverdagskonsekvens:
 ✓ Helseadvarsler / sykehuskapasitet
 ✓ Store arbeidsplassnyheter (nedleggelse / nyetablering)
 
-TOTALBUDSJETT: Maks 450 ord for alle syv seksjoner samlet."""
+TOTALBUDSJETT: Maks 550 ord for alle syv seksjoner samlet."""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Værvarsling Bergen (Yr / MET Norway API)
@@ -1343,6 +1352,42 @@ def _norm_title(title: str) -> str:
     return re.sub(r"\s+", " ", t).strip()
 
 
+_MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+
+
+def _load_recent_briefing_points(days: int = NEWS_HISTORY_DAYS) -> dict:
+    """Hent punktene fra de siste dagenes nyhetsbriefinger i datalageret.
+
+    Returnerer {"urls", "titles", "points"}: URL-er og normaliserte lenketitler
+    filtrerer artikler mekanisk før Claude (sparer tokens), punkttekstene sendes
+    som unngå-liste i prompten (fanger samme sak med ny overskrift). Ingen egen
+    state-fil — briefingene er fasiten på hva leseren faktisk har fått servert.
+    """
+    data_dir = os.environ.get("BRIEFING_DATA_DIR", ".")
+    urls: set[str] = set()
+    titles: set[str] = set()
+    points: list[str] = []
+    for delta in range(1, days + 1):
+        date_str = (datetime.now() - timedelta(days=delta)).strftime("%Y-%m-%d")
+        path = os.path.join(data_dir, "briefings", f"{date_str}.json")
+        try:
+            with open(path, encoding="utf-8") as f:
+                news_md = json.load(f).get("news_md") or ""
+        except (OSError, json.JSONDecodeError):
+            continue
+        for line in news_md.splitlines():
+            text = line.strip().lstrip("•-* ").strip()
+            if not line.strip().startswith(("•", "- ", "* ")) or not text:
+                continue
+            if text.lower().startswith("ingen viktige hendelser"):
+                continue
+            for m in _MD_LINK_RE.finditer(text):
+                titles.add(_norm_title(m.group(1)))
+                urls.add(m.group(2).split("?")[0].rstrip("/"))
+            points.append(_MD_LINK_RE.sub(r"\1", text))
+    return {"urls": urls, "titles": titles, "points": points}
+
+
 def _dedup_articles(articles: list[dict]) -> list[dict]:
     """Slå sammen nær-identiske saker som dukker opp i flere feeds (sparer Claude-tokens
     og fjerner støy). Dedupliserer på normalisert tittel og på URL; ved tittelduplikat
@@ -1368,9 +1413,13 @@ def _dedup_articles(articles: list[dict]) -> list[dict]:
     return out
 
 
-def fetch_articles() -> list[dict]:
+def fetch_articles(skip: dict | None = None) -> list[dict]:
+    """Hent artikler fra alle feeds. `skip` (fra `_load_recent_briefing_points()`)
+    filtrerer bort saker som allerede sto i tidligere briefinger, før de teller
+    mot MAX_PER_FEED — plassene går til ferske saker."""
     cutoff = datetime.now(timezone.utc) - timedelta(hours=LOOKBACK_HOURS)
     articles: list[dict] = []
+    skipped_seen = 0
 
     for source, url in RSS_FEEDS.items():
         try:
@@ -1412,6 +1461,13 @@ def fetch_articles() -> list[dict]:
                 if not title:
                     continue
 
+                if skip and (
+                    link.split("?")[0].rstrip("/") in skip["urls"]
+                    or _norm_title(title) in skip["titles"]
+                ):
+                    skipped_seen += 1
+                    continue
+
                 articles.append(
                     {
                         "source": source,
@@ -1433,6 +1489,8 @@ def fetch_articles() -> list[dict]:
         except Exception as exc:
             print(f"  ✗  {source}: feil ved henting — {exc}")
 
+    if skipped_seen:
+        print(f"  ⓘ  {skipped_seen} artikler hoppet over (dekket i tidligere briefinger)")
     before = len(articles)
     articles = _dedup_articles(articles)
     removed = before - len(articles)
@@ -1458,7 +1516,7 @@ def build_articles_text(articles: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def summarize_with_claude(articles: list[dict]) -> str:
+def summarize_with_claude(articles: list[dict], prev_points: list[str] | None = None) -> str:
     client = anthropic.Anthropic()  # les ANTHROPIC_API_KEY automatisk fra env
 
     today_str = datetime.now().strftime("%A %d. %B %Y")
@@ -1469,6 +1527,12 @@ def summarize_with_claude(articles: list[dict]) -> str:
         f"Totalt {len(articles)} artikler fra siste {LOOKBACK_HOURS} timer:\n\n"
         f"{articles_text}"
     )
+    if prev_points:
+        user_content += (
+            f"\n\nDEKKET I BRIEFINGENE DE SISTE DAGENE "
+            "(ikke gjenta; kun ved vesentlig ny utvikling — fokuser da på det nye):\n"
+            + "\n".join(f"- {p}" for p in prev_points)
+        )
 
     print("\nOppsummerer med Claude (streamer svar)...\n")
     print("─" * 70)
@@ -1876,7 +1940,13 @@ def main() -> None:
     print()
 
     print(f"Henter nyheter fra {len(RSS_FEEDS)} kilder...")
-    articles = fetch_articles()
+    prev = _load_recent_briefing_points()
+    if prev["points"]:
+        print(
+            f"  ⓘ  dedup mot siste {NEWS_HISTORY_DAYS} dagers briefinger: "
+            f"{len(prev['points'])} tidligere punkter"
+        )
+    articles = fetch_articles(skip=prev)
 
     if not articles:
         print("\nIngen artikler funnet. Sjekk internettforbindelsen og RSS-URLene.")
@@ -1884,7 +1954,7 @@ def main() -> None:
 
     print(f"\nTotalt {len(articles)} artikler fra siste {LOOKBACK_HOURS} timer.")
 
-    briefing = summarize_with_claude(articles)
+    briefing = summarize_with_claude(articles, prev["points"])
 
     print("─" * 70)
 
