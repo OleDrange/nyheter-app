@@ -127,13 +127,21 @@ Maks 550 ord, 7 «## »-seksjoner (emojiene brukes av nettsidens parsing):
 
 Innenrikspolitikk uten markedseffekt og eiendomsmarkedet kuttes alltid.
 
-### Vær (Bergen)
+### Vær (Bergen + Oslo + Alicante)
 
-`fetch_bergen_weather()` → MET Locationforecast, **`complete`-endepunktet** (UV finnes ikke i
-`compact`). Returnerer `summary`, `rain_hours`, `sun_periods` (kl. 05–21), `max_uv`/`max_uv_hour`,
-`max_temp`/`max_temp_hour`, `temp_0700` og `hourly` — timesserie
-`[{ hour, temp, precip, uv, symbol }]` til værspilleren (`symbol` er MET-symbolkode;
-`precip`/`symbol` fra `next_1_hours`, `temp`/`uv` fra `instant.details`).
+`fetch_weather(lat, lon)` → MET Locationforecast, **`complete`-endepunktet** (UV finnes ikke i
+`compact`; API-et dekker hele verden, så Alicante går fint). `fetch_all_weather()` henter alle
+stedene i `WEATHER_LOCATIONS` og returnerer `(bergen, weather_alt)` — Bergen lagres som
+`weather` (og brukes i terminal/Notion), Oslo/Alicante i `weather_alt` (kun steder som lyktes).
+Per sted returneres `summary`, `rain_hours`, `sun_periods` (kl. 05–21), `max_uv`/`max_uv_hour`,
+`max_temp`/`max_temp_hour`, `temp_0700`, `fetched_at` (HH:MM, vises i panelet), `hourly` —
+timesserie for i dag `[{ hour, temp, precip, wind, gust, uv, symbol }]` — og `daily`:
+7 dagsvarsler (i dag + `_WEATHER_DAYS_AHEAD = 6`) fra `_build_daily()` med
+`{ date, min_temp, max_temp, precip, max_wind, max_gust, max_uv, symbols, hours }`.
+`symbols` er tre periodesymboler (morgen 05–11 / ettermiddag 11–17 / kveld 17–23) valgt med
+«verste vær vinner» (`_SYMBOL_SEVERITY`); `hours` er detaljrader med `span` 1 (timesoppløsning,
+første ~2 døgn) eller 6 (6-timersblokker lenger ut — mer gir ikke MET). Nedbørsummen unngår
+dobbelttelling i 1t→6t-overgangen via et `covered_until`-vindu.
 
 ### Marked
 
@@ -257,7 +265,8 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "created_at": "ISO-tidsstempel",
   "news_md": "nyhetsbriefing (markdown)",
   "research_md": "forskningsbriefing (markdown)",
-  "weather": { ... },          // fetch_bergen_weather()-dict
+  "weather": { ... },          // fetch_weather()-dict for Bergen (inkl. daily/hourly)
+  "weather_alt": { "oslo": { ... }, "alicante": { ... } },  // samme form som weather
   "market": { ... },           // fetch_market_snapshot()-dict
   "research_items": [ { "title", "url", "journal", "date" } ],
   "quiz": [ { "level", "difficulty", "category", "question", "options", "answer", "repeat"? } ],
@@ -307,12 +316,22 @@ bygges uten ekstra datainnhenting.
     og nyhetslenker. Ren HTML uten klient-JS.
   - `ResearchList.astro` — full forskningsvisning (forskning-sidene): studiekort gruppert
     etter kategori (`RESEARCH_CATEGORIES` i `briefings.js`), ukategoriserte under «Øvrig».
-  - `WeatherCard.astro` — vær-widget; viser `WeatherPlayer.astro` når `weather.hourly` finnes,
-    ellers statisk stat-grid (gamle briefinger).
-  - `WeatherPlayer.astro` — time-for-time «video» (ikon/temp/status/nedbør/UV) med slider og
-    autoplay (stopper ved brukerinput, respekterer `prefers-reduced-motion`) + dagssammendrag-rad.
-    Symbol→ikon-map speiler `_SYMBOL_NO` i generatoren. Klientlogikk via `define:vars={{ frames }}`
-    (inline, ingen bundling).
+  - `WeatherCard.astro` — vær-widget/dispatcher: viser `WeatherPanel.astro` når `weather.daily`
+    finnes (nye briefinger), ellers `WeatherPlayer.astro` (kun `hourly`) eller statisk stat-grid
+    (eldste briefinger) — arkivet ser uendret ut bakover.
+  - `WeatherPanel.astro` — Yr-inspirert værpanel: stedvelger-pills (Bergen standard, Oslo/
+    Alicante fra `weather_alt`; valget huskes i `localStorage` som `wx-loc`), nå-rad (ikon/temp/
+    status + dagens ↑↓temp, nedbør, vind `5 (15) m/s` med kast, UV) og morgen/ettermiddag/
+    kveld-ikoner. To `<details>`-folder: «Time for time» (klippes klient-side til «fra nå og ut
+    dagen» når briefingen er dagens dato; i arkivet vises hele dagen) og «Neste 6 dager»
+    (kompakte dagsrader, hver utvidbar til `WeatherHours.astro`-tabell). Alle steder SSR-rendres;
+    inline-skript (`define:vars`) bytter bare panel og oppdaterer nå-avlesningen.
+  - `WeatherHours.astro` — time-for-time-tabell (kl./ikon/temp/nedbør/vind/UV) for én dags
+    `daily[i].hours`; `span=6`-rader vises som «02–08». Delte symbol-/formathjelpere ligger i
+    `src/lib/weather.js` (speiler `_SYMBOL_NO` i generatoren).
+  - `WeatherPlayer.astro` — (legacy, kun gamle briefinger) time-for-time «video» med slider og
+    autoplay + dagssammendrag-rad. Klientlogikk via `define:vars={{ frames }}` (inline, ingen
+    bundling).
   - `MarketStrip.astro` — markedswidget med dagsendring + mini-dagsgraf per ticker
     (`MarketTrend.astro` — inline SVG, ingen klient-JS). Serien fra `getMarketHistory()`
     (default 5 dager, `endDate` avgrenser til dagen som vises). `MARKET_KEYS` styrer rekkefølgen.

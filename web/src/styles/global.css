@@ -529,6 +529,283 @@ main {
   white-space: nowrap;
 }
 
+/* ── Værpanel (Yr-stil: i dag + time for time + neste 6 dager) ──────────── */
+.wx {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wx-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.wx-pills {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+}
+.wx-pill {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.wx-pill:hover {
+  color: var(--text);
+}
+.wx-pill.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.wx-upd {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.wx-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wx-panel[hidden] {
+  display: none;
+}
+
+/* Nå-rad: stort ikon + temp/status + nøkkeltall for dagen */
+.wx-now {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.wx-now__icon {
+  font-size: 2.9rem;
+  line-height: 1;
+  flex: none;
+}
+.wx-now__read {
+  min-width: 0;
+}
+.wx-now__temp {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.wx-now__label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+.wx-now__stats {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.wx-stat {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.wx-stat b {
+  font-weight: 700;
+}
+
+/* Morgen / ettermiddag / kveld */
+.wx-periods {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.wx-period {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px 6px;
+  text-align: center;
+}
+.wx-period__label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+.wx-period__icon {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Sammenleggbare folder (Time for time / Neste 6 dager) */
+.wx-fold {
+  border-top: 1px solid var(--border);
+}
+.wx-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px 2px 8px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.wx-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.wx-fold > summary::after {
+  content: '▾';
+  margin-left: auto;
+  color: var(--text-faint);
+  transition: transform 0.2s ease;
+}
+.wx-fold[open] > summary::after {
+  transform: rotate(180deg);
+}
+.wx-fold > summary:hover {
+  color: var(--accent);
+}
+
+/* Timetabell */
+.wx-hours {
+  padding: 0 2px 8px;
+}
+.wx-hrow {
+  display: grid;
+  grid-template-columns: 3.4em 1.7em 2.6em 3em 4.4em 2em;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+}
+.wx-hrow--head {
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  padding-bottom: 4px;
+}
+.wx-hrow[hidden] {
+  display: none;
+}
+.wx-hrow__kl {
+  color: var(--text-muted);
+}
+.wx-hrow__temp,
+.wx-hrow__wind,
+.wx-hrow__mm {
+  font-weight: 600;
+}
+
+/* Dagsrader i 6-dagersvarselet */
+.wx-days {
+  padding-bottom: 6px;
+}
+.wx-day > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.wx-day > summary::-webkit-details-marker {
+  display: none;
+}
+.wx-day + .wx-day {
+  border-top: 1px solid var(--border);
+}
+.wx-drow {
+  display: grid;
+  grid-template-columns: 4.6em 3.9em 1fr 3.4em 4.4em 1em;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 2px;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+}
+.wx-drow:hover {
+  color: var(--accent);
+}
+.wx-drow__name {
+  color: var(--text-muted);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.wx-drow__syms {
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.wx-drow__temp {
+  text-align: center;
+  white-space: nowrap;
+}
+.wx-drow__temp b {
+  font-weight: 600;
+}
+.wx-drow__mm,
+.wx-drow__wind {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wx-drow__chev {
+  color: var(--text-faint);
+  transition: transform 0.2s ease;
+}
+.wx-day[open] .wx-drow__chev {
+  transform: rotate(90deg);
+}
+.wx-day .wx-hours {
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+  margin: 0 0 8px 2px;
+}
+
+/* Temperaturfarger (som Yr: rødt pluss, blått minus) + dempet tekst */
+.wx-plus {
+  color: var(--down);
+}
+.wx-minus {
+  color: var(--accent);
+}
+.wx-faint {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+@media (max-width: 480px) {
+  .wx-now__stats {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+  .wx-hrow {
+    grid-template-columns: 3.2em 1.6em 2.4em 2.8em 4em 1.8em;
+    gap: 6px;
+  }
+  .wx-drow {
+    grid-template-columns: 4.2em 3.6em 1fr 3em 3.8em 1em;
+    gap: 6px;
+  }
+}
+
 /* ── Markeds-widget ─────────────────────────────────────────────────────── */
 .market {
   padding: 18px 20px;

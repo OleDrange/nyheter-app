@@ -1,11 +1,22 @@
 ---
-// Vær-widget for Bergen. Bygger på det strukturerte `weather`-objektet
-// (fetch_bergen_weather): summary, rain_hours, sun_periods, max_uv(+hour),
-// max_temp(+hour), temp_0700, hourly[].
+// Vær-widget. Nye briefinger (med `daily`-felt) får det Yr-inspirerte
+// værpanelet med stedvelger (Bergen + weather_alt: Oslo/Alicante). Eldre
+// briefinger i arkivet faller tilbake til værspilleren (kun `hourly`) eller
+// det statiske stat-gridet (eldst).
 import WeatherPlayer from './WeatherPlayer.astro';
-const { weather } = Astro.props;
+import WeatherPanel from './WeatherPanel.astro';
+const { weather, weatherAlt } = Astro.props;
 const w = weather || {};
+const alt = weatherAlt || {};
 const hasHourly = Array.isArray(w.hourly) && w.hourly.length > 0;
+
+const hasDaily = (x) => Array.isArray(x?.daily) && x.daily.length > 0;
+const locations = [
+  { id: 'bergen', name: 'Bergen', w },
+  { id: 'oslo', name: 'Oslo', w: alt.oslo },
+  { id: 'alicante', name: 'Alicante', w: alt.alicante },
+].filter((l) => hasDaily(l.w));
+const usePanel = hasDaily(w);
 
 function weatherIcon(summary = '') {
   const s = summary.toLowerCase();
@@ -44,27 +55,33 @@ stats.push({
 ---
 
 <div class="card weather">
-  <div class="weather__top">
-    {!hasHourly && <span class="weather__icon" aria-hidden="true">{weatherIcon(w.summary)}</span>}
-    <div>
-      <div class="weather__place">Bergen</div>
-      <div class="weather__summary">{hasData ? w.summary : 'Vær utilgjengelig'}</div>
-    </div>
-  </div>
   {
-    hasHourly ? (
-      <WeatherPlayer hourly={w.hourly} />
+    usePanel ? (
+      <WeatherPanel locations={locations} />
     ) : (
-      hasData && (
-        <div class="weather__stats">
-          {stats.map((s) => (
-            <div class="wstat">
-              <span class="wstat__label">{s.label}</span>
-              <span class="wstat__value">{s.value}</span>
-            </div>
-          ))}
+      <>
+        <div class="weather__top">
+          {!hasHourly && <span class="weather__icon" aria-hidden="true">{weatherIcon(w.summary)}</span>}
+          <div>
+            <div class="weather__place">Bergen</div>
+            <div class="weather__summary">{hasData ? w.summary : 'Vær utilgjengelig'}</div>
+          </div>
         </div>
-      )
+        {hasHourly ? (
+          <WeatherPlayer hourly={w.hourly} />
+        ) : (
+          hasData && (
+            <div class="weather__stats">
+              {stats.map((s) => (
+                <div class="wstat">
+                  <span class="wstat__label">{s.label}</span>
+                  <span class="wstat__value">{s.value}</span>
+                </div>
+              ))}
+            </div>
+          )
+        )}
+      </>
     )
   }
 </div>

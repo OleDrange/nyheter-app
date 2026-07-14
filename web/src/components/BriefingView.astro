@@ -25,7 +25,7 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
 
 {(b.weather || b.market) && (
   <div class="top-grid jump-target" id="vaer-marked">
-    {b.weather && <WeatherCard weather={b.weather} />}
+    {b.weather && <WeatherCard weather={b.weather} weatherAlt={b.weather_alt} />}
     {b.market && <MarketStrip market={b.market} history={marketHistory} />}
   </div>
 )}

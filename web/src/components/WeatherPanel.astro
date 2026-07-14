@@ -1,0 +1,206 @@
+---
+// Yr-inspirert værpanel: nå-rad + nøkkeltall for dagen, morgen/ettermiddag/
+// kveld-symboler, og to sammenleggbare folder — «Time for time» (fra nå og ut
+// dagen) og «Neste 6 dager» (kompakte dagsrader som kan utvides til detalj).
+// Stedvelger øverst (Bergen standard, valget huskes i localStorage).
+// Alt rendres server-side for alle steder; klientskriptet bytter bare
+// synlig panel, klipper dagens timeliste og oppdaterer nå-avlesningen.
+import WeatherHours from './WeatherHours.astro';
+import { labelFor, emojiFor, fmtWind, fmtTemp, fmtMm, tempClass } from '../lib/weather.js';
+
+const { locations = [] } = Astro.props; // [{ id, name, w }]
+
+const dayName = (iso) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  const s = new Intl.DateTimeFormat('nb-NO', { weekday: 'short', day: 'numeric', month: 'numeric' })
+    .format(new Date(y, m - 1, d));
+  return s.replace(/\.$/, '');
+};
+
+const panels = locations.map(({ id, name, w }) => {
+  const d0 = w.daily[0];
+  const hours0 = d0.hours || [];
+  // SSR-standard for nå-raden: midt på dagen (klientskriptet bytter til
+  // faktisk klokkeslett når briefingen er dagens dato).
+  const def = hours0.find((h) => h.hour >= 12) || hours0[hours0.length - 1] || {};
+  return { id, name, w, d0, def };
+});
+
+const PERIODS = ['Morgen', 'Ettermiddag', 'Kveld'];
+
+// Klientdata til nå-avlesningen: dagens timer per sted.
+const clientData = Object.fromEntries(
+  panels.map((p) => [
+    p.id,
+    {
+      date: p.d0.date,
+      hours: (p.d0.hours || []).map((h) => ({
+        hour: h.hour,
+        temp: h.temp,
+        emoji: emojiFor(h.symbol),
+        label: labelFor(h.symbol),
+      })),
+    },
+  ])
+);
+---
+
+<div class="wx" data-wx>
+  <div class="wx-head">
+    {panels.length > 1 ? (
+      <div class="wx-pills" role="group" aria-label="Velg sted">
+        {panels.map((p, i) => (
+          <button
+            type="button"
+            class={`wx-pill${i === 0 ? ' is-active' : ''}`}
+            data-wx-pill={p.id}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >{p.name}</button>
+        ))}
+      </div>
+    ) : (
+      <div class="weather__place">{panels[0]?.name}</div>
+    )}
+    {panels[0]?.w.fetched_at && (
+      <span class="wx-upd">Varsel kl. {panels[0].w.fetched_at}</span>
+    )}
+  </div>
+
+  {panels.map((p, i) => (
+    <div class="wx-panel" data-wx-panel={p.id} hidden={i !== 0}>
+      <div class="wx-now">
+        <span class="wx-now__icon" data-wx-icon aria-hidden="true">{emojiFor(p.def.symbol)}</span>
+        <div class="wx-now__read">
+          <div class={`wx-now__temp ${tempClass(p.def.temp)}`} data-wx-temp>{fmtTemp(p.def.temp)}</div>
+          <div class="wx-now__label" data-wx-label>{labelFor(p.def.symbol)}</div>
+        </div>
+        <div class="wx-now__stats">
+          <span class="wx-stat" title="Høyeste og laveste temperatur i dag">
+            ↑<b class={tempClass(p.d0.max_temp)}>{fmtTemp(p.d0.max_temp)}</b>
+            ↓<b class={tempClass(p.d0.min_temp)}>{fmtTemp(p.d0.min_temp)}</b>
+          </span>
+          <span class="wx-stat" title="Nedbør i dag">💧 {fmtMm(p.d0.precip)} mm</span>
+          <span class="wx-stat" title="Vind (kast) i dag">💨 {fmtWind(p.d0.max_wind, p.d0.max_gust)} m/s</span>
+          {p.d0.max_uv != null && p.d0.max_uv >= 1 && (
+            <span class="wx-stat" title="Maks UV-indeks i dag">UV {Math.round(p.d0.max_uv)}</span>
+          )}
+        </div>
+      </div>
+
+      <div class="wx-periods">
+        {PERIODS.map((lbl, j) => (
+          <div class="wx-period">
+            <span class="wx-period__label">{lbl}</span>
+            <span class="wx-period__icon" aria-hidden="true">
+              {p.d0.symbols?.[j] ? emojiFor(p.d0.symbols[j]) : '·'}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {(p.d0.hours?.length ?? 0) > 0 && (
+        <details class="wx-fold">
+          <summary>Time for time</summary>
+          <WeatherHours hours={p.d0.hours} today={true} />
+        </details>
+      )}
+
+      {p.w.daily.length > 1 && (
+        <details class="wx-fold">
+          <summary>Neste {p.w.daily.length - 1} dager</summary>
+          <div class="wx-days">
+            {p.w.daily.slice(1).map((d) => (
+              <details class="wx-day">
+                <summary class="wx-drow">
+                  <span class="wx-drow__name">{dayName(d.date)}</span>
+                  <span class="wx-drow__syms" aria-hidden="true">
+                    {(d.symbols || []).map((s) => emojiFor(s)).join(' ')}
+                  </span>
+                  <span class="wx-drow__temp">
+                    <b class={tempClass(d.max_temp)}>{fmtTemp(d.max_temp)}</b>
+                    <span class="wx-faint">/</span>
+                    <b class={tempClass(d.min_temp)}>{fmtTemp(d.min_temp)}</b>
+                  </span>
+                  <span class={`wx-drow__mm${d.precip ? '' : ' wx-faint'}`}>{fmtMm(d.precip)} mm</span>
+                  <span class="wx-drow__wind">{fmtWind(d.max_wind, d.max_gust)}</span>
+                  <span class="wx-drow__chev" aria-hidden="true">▸</span>
+                </summary>
+                {(d.hours?.length ?? 0) > 0 && <WeatherHours hours={d.hours} />}
+              </details>
+            ))}
+          </div>
+        </details>
+      )}
+    </div>
+  ))}
+</div>
+
+<script define:vars={{ clientData }}>
+  (() => {
+    const root = document.querySelector('[data-wx]');
+    if (!root) return;
+    const panels = [...root.querySelectorAll('[data-wx-panel]')];
+    const pills = [...root.querySelectorAll('[data-wx-pill]')];
+
+    function show(id) {
+      panels.forEach((p) => { p.hidden = p.dataset.wxPanel !== id; });
+      pills.forEach((b) => {
+        const on = b.dataset.wxPill === id;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+    pills.forEach((b) =>
+      b.addEventListener('click', () => {
+        show(b.dataset.wxPill);
+        try { localStorage.setItem('wx-loc', b.dataset.wxPill); } catch {}
+      })
+    );
+    let saved = null;
+    try { saved = localStorage.getItem('wx-loc'); } catch {}
+    if (saved && saved !== panels[0]?.dataset.wxPanel && panels.some((p) => p.dataset.wxPanel === saved)) {
+      show(saved);
+    }
+
+    // Nå-avlesning + «fra nå»-klipp av timelisten — kun når briefingen er
+    // dagens dato (i arkivet vises hele dagen med SSR-standarden kl. 12).
+    const now = new Date();
+    const todayIso = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0'),
+    ].join('-');
+    const nowHour = now.getHours();
+
+    panels.forEach((panel) => {
+      const data = clientData[panel.dataset.wxPanel];
+      if (!data || data.date !== todayIso) return;
+
+      const cur = [...data.hours].reverse().find((h) => h.hour <= nowHour) || data.hours[0];
+      if (cur) {
+        const icon = panel.querySelector('[data-wx-icon]');
+        const temp = panel.querySelector('[data-wx-temp]');
+        const label = panel.querySelector('[data-wx-label]');
+        if (icon) icon.textContent = cur.emoji;
+        if (label) label.textContent = cur.label;
+        if (temp && cur.temp != null) {
+          temp.textContent = `${Math.round(cur.temp)}°`;
+          temp.classList.toggle('wx-plus', Math.round(cur.temp) >= 0);
+          temp.classList.toggle('wx-minus', Math.round(cur.temp) < 0);
+        }
+      }
+
+      const table = panel.querySelector('[data-wx-hours="today"]');
+      if (table) {
+        const rows = [...table.querySelectorAll('.wx-hrow:not(.wx-hrow--head)')];
+        let visible = 0;
+        rows.forEach((row) => {
+          const past = Number(row.dataset.end) <= nowHour;
+          row.hidden = past;
+          if (!past) visible++;
+        });
+        if (!visible) rows.forEach((row) => { row.hidden = false; });
+      }
+    });
+  })();
+</script>

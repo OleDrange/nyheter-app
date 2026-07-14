@@ -50,9 +50,9 @@ def _load_dotenv() -> None:
 
 
 def store_briefing(date_str, *, news_md=None, research_md=None,
-                   weather=None, market=None, research_items=None,
-                   quiz=None, riddles=None, learning=None, brann=None,
-                   reflection=None) -> None:
+                   weather=None, weather_alt=None, market=None,
+                   research_items=None, quiz=None, riddles=None,
+                   learning=None, brann=None, reflection=None) -> None:
     """Skriv/merge dagens briefing til <BRIEFING_DATA_DIR>/briefings/<date>.json.
 
     Begge scriptene (nyhet + forskning) skriver inn i samme dagsfil — kun feltene
@@ -80,6 +80,8 @@ def store_briefing(date_str, *, news_md=None, research_md=None,
         data["research_md"] = research_md
     if weather is not None:
         data["weather"] = weather
+    if weather_alt is not None:
+        data["weather_alt"] = weather_alt
     if market is not None:
         data["market"] = market
     if research_items is not None:
@@ -217,10 +219,19 @@ TOTALBUDSJETT: Maks 550 ord for alle syv seksjoner samlet."""
 # Værvarsling Bergen (Yr / MET Norway API)
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Bergen: 60.3928°N, 5.3241°E
 _YR_URL = (
-    "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.3928&lon=5.3241"
+    "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat={lat}&lon={lon}"
 )
+
+# Steder i værpanelet på nettsiden. «bergen» er hovedstedet: lagres som
+# `weather`-feltet og brukes i terminal/Notion. De øvrige lagres i `weather_alt`.
+WEATHER_LOCATIONS: dict[str, dict] = {
+    "bergen": {"name": "Bergen", "lat": 60.3928, "lon": 5.3241},
+    "oslo": {"name": "Oslo", "lat": 59.9139, "lon": 10.7522},
+    "alicante": {"name": "Alicante", "lat": 38.3452, "lon": -0.4810},
+}
+
+_WEATHER_DAYS_AHEAD = 6  # dagsvarsler utover i dag (7 dager totalt)
 
 _SYMBOL_NO: dict[str, str] = {
     "clearsky": "klarvær",
@@ -251,15 +262,158 @@ def _symbol_no(code: str) -> str:
     return _SYMBOL_NO.get(base, base)
 
 
-def fetch_bergen_weather() -> dict:
+# Rangering for valg av «dominerende» symbol per dagsperiode (morgen/
+# ettermiddag/kveld): verste vær vinner, slik at en regnbyge kl. 10 ikke
+# forsvinner bak sol resten av morgenen.
+_SYMBOL_SEVERITY: list[str] = [
+    "clearsky", "fair", "partlycloudy", "cloudy", "fog",
+    "lightrainshowers", "lightrain", "rainshowers", "rain",
+    "lightsleet", "sleetshowers", "sleet",
+    "lightsnow", "snowshowers", "snow",
+    "heavyrainshowers", "heavyrain",
+    "thunder", "rainandthunder", "heavyrainandthunder",
+]
+
+
+def _severity(code: str | None) -> int:
+    if not code:
+        return -1
+    base = re.sub(r"_(day|night|polartwilight)$", "", code)
+    try:
+        return _SYMBOL_SEVERITY.index(base)
+    except ValueError:
+        return len(_SYMBOL_SEVERITY)
+
+
+def _build_daily(ts: list, today) -> list[dict]:
+    """Aggreger MET-timeserien til dagsvarsler for i dag + _WEATHER_DAYS_AHEAD
+    dager frem: min/maks temp, nedbørsum, maks vind/vindkast/UV, tre
+    periodesymboler (morgen/ettermiddag/kveld) og detaljrader i `hours`
+    (1-timesoppløsning de første ~2 døgnene, deretter 6-timersblokker —
+    mer gir ikke MET-API-et så langt frem)."""
+    days: dict = {}
+    covered_until = None  # hindrer dobbelttelling av nedbør i 1t→6t-overgangen
+
+    for entry in ts:
+        t_local = datetime.fromisoformat(
+            entry["time"].replace("Z", "+00:00")
+        ).astimezone()
+        day = t_local.date()
+        if day < today:
+            continue
+        if (day - today).days > _WEATHER_DAYS_AHEAD:
+            break
+
+        d = entry["data"]
+        inst = d["instant"]["details"]
+        span = window = None
+        if "next_1_hours" in d:
+            span, window = 1, d["next_1_hours"]
+        elif "next_6_hours" in d:
+            span, window = 6, d["next_6_hours"]
+
+        b = days.setdefault(
+            day,
+            {
+                "date": day.isoformat(),
+                "min_temp": None, "max_temp": None,
+                "precip": 0.0,
+                "max_wind": None, "max_gust": None, "max_uv": None,
+                "_periods": [(-1, None), (-1, None), (-1, None)],
+                "hours": [],
+            },
+        )
+
+        temp = inst.get("air_temperature")
+        wind = inst.get("wind_speed")
+        gust = inst.get("wind_speed_of_gust")
+        uv = inst.get("ultraviolet_index_clear_sky")
+
+        # Min/maks temp — for 6-timersblokker finnes egne min/maks i vinduet
+        candidates = [temp]
+        if span == 6:
+            candidates += [
+                window["details"].get("air_temperature_min"),
+                window["details"].get("air_temperature_max"),
+            ]
+        for c in candidates:
+            if c is None:
+                continue
+            if b["min_temp"] is None or c < b["min_temp"]:
+                b["min_temp"] = c
+            if b["max_temp"] is None or c > b["max_temp"]:
+                b["max_temp"] = c
+
+        for key, val in (("max_wind", wind), ("max_gust", gust), ("max_uv", uv)):
+            if val is not None and (b[key] is None or val > b[key]):
+                b[key] = val
+
+        if window is None:
+            continue
+
+        precip = window["details"].get("precipitation_amount")
+        symbol = window["summary"].get("symbol_code")
+
+        if precip is not None and (covered_until is None or t_local >= covered_until):
+            b["precip"] += precip
+            covered_until = t_local + timedelta(hours=span)
+
+        # Periodesymbol vurderes på vinduets midtpunkt:
+        # morgen 05–11, ettermiddag 11–17, kveld 17–23 (natt teller ikke).
+        mid_hour = (t_local + timedelta(hours=span / 2)).hour
+        idx = (
+            0 if 5 <= mid_hour < 11
+            else 1 if 11 <= mid_hour < 17
+            else 2 if 17 <= mid_hour < 23
+            else None
+        )
+        if idx is not None:
+            sev = _severity(symbol)
+            if sev > b["_periods"][idx][0]:
+                b["_periods"][idx] = (sev, symbol)
+
+        b["hours"].append(
+            {
+                "hour": t_local.hour,
+                "span": span,
+                "temp": round(temp, 1) if temp is not None else None,
+                "precip": round(precip, 1) if precip is not None else None,
+                "wind": round(wind, 1) if wind is not None else None,
+                "gust": round(gust, 1) if gust is not None else None,
+                "uv": round(uv, 1) if uv is not None else None,
+                "symbol": symbol,
+            }
+        )
+
+    out: list[dict] = []
+    for day in sorted(days):
+        b = days[day]
+        b["symbols"] = [sym for _, sym in b.pop("_periods")]
+        b["precip"] = round(b["precip"], 1)
+        for key in ("min_temp", "max_temp"):
+            if b[key] is not None:
+                b[key] = round(b[key], 1)
+        for key in ("max_wind", "max_gust"):
+            if b[key] is not None:
+                b[key] = round(b[key], 1)
+        if b["max_uv"] is not None:
+            b["max_uv"] = round(b["max_uv"], 1)
+        out.append(b)
+    return out
+
+
+def fetch_weather(lat: float, lon: float) -> dict:
     """
-    Returnér værvarsling for Bergen som dict:
-      summary   — én kort linje (nåværende + ettermiddag)
-      rain_hours — liste med tidsspenn der nedbør >= 1 mm/t resten av dagen
+    Returnér værvarsling for én posisjon (MET Locationforecast) som dict:
+      summary    — én kort linje (nåværende + ettermiddag)
+      rain_hours — tidsspenn der nedbør >= 1 mm/t resten av dagen
+      hourly     — timesserie for i dag (temp/nedbør/vind/kast/UV/symbol)
+      daily      — 7 dagsvarsler (i dag + 6) fra _build_daily()
+      fetched_at — HH:MM da varselet ble hentet (vises på nettsiden)
     """
     try:
         resp = httpx.get(
-            _YR_URL,
+            _YR_URL.format(lat=lat, lon=lon),
             headers={"User-Agent": "news-briefing/1.0 (personal script)"},
             timeout=8,
         )
@@ -360,19 +514,23 @@ def fetch_bergen_weather() -> dict:
                 if mm >= 1.0:
                     rain_hours.append(f"{hour:02d}–{hour + 1:02d}")
 
-            # Timesserie for værspilleren på nettsiden (per time i dag).
-            # next_1_hours gir nedbør + symbol per time; instant gir temp + UV.
+            # Timesserie for værpanelet på nettsiden (per time i dag).
+            # next_1_hours gir nedbør + symbol per time; instant gir temp/vind/UV.
             h_precip = h_symbol = None
             if "next_1_hours" in d:
                 h_precip = round(
                     d["next_1_hours"]["details"].get("precipitation_amount", 0.0), 1
                 )
                 h_symbol = d["next_1_hours"]["summary"]["symbol_code"]
+            h_wind = inst.get("wind_speed")
+            h_gust = inst.get("wind_speed_of_gust")
             hourly.append(
                 {
                     "hour": hour,
                     "temp": round(t_val, 1) if t_val is not None else None,
                     "precip": h_precip,
+                    "wind": round(h_wind, 1) if h_wind is not None else None,
+                    "gust": round(h_gust, 1) if h_gust is not None else None,
                     "uv": round(uv, 1),
                     "symbol": h_symbol,
                 }
@@ -402,6 +560,8 @@ def fetch_bergen_weather() -> dict:
             "max_temp_hour": max_temp_hour,
             "temp_0700": temp_0700,
             "hourly": hourly,
+            "daily": _build_daily(ts, today_date),
+            "fetched_at": now_local.strftime("%H:%M"),
         }
 
     except Exception as exc:
@@ -415,7 +575,24 @@ def fetch_bergen_weather() -> dict:
             "max_temp_hour": None,
             "temp_0700": None,
             "hourly": [],
+            "daily": [],
+            "fetched_at": None,
         }
+
+
+def fetch_all_weather() -> tuple[dict, dict]:
+    """Hent vær for alle WEATHER_LOCATIONS. Returnerer (bergen, weather_alt)
+    der weather_alt kun inneholder steder som faktisk lyktes."""
+    results: dict[str, dict] = {}
+    for key, loc in WEATHER_LOCATIONS.items():
+        results[key] = fetch_weather(loc["lat"], loc["lon"])
+    bergen = results["bergen"]
+    alt = {
+        key: w
+        for key, w in results.items()
+        if key != "bergen" and not str(w.get("summary", "")).startswith("utilgjengelig")
+    }
+    return bergen, alt
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1915,11 +2092,13 @@ def main() -> None:
     print(f"  Nyhetsbriefing  —  {today_human}")
     print(f"{'─'*70}\n")
 
-    print("Henter vær for Bergen...")
-    weather = fetch_bergen_weather()
+    print("Henter vær (Bergen, Oslo, Alicante)...")
+    weather, weather_alt = fetch_all_weather()
     print(f"  Bergen: {weather['summary']}")
     if weather["rain_hours"]:
         print(f"  Regn over 1 mm/t: kl. {', '.join(weather['rain_hours'])}")
+    for key, w in weather_alt.items():
+        print(f"  {WEATHER_LOCATIONS[key]['name']}: {w['summary']}")
     print()
 
     print("Henter markedsdata...")
@@ -2014,7 +2193,8 @@ def main() -> None:
 
     # Lagre dagens briefing til datalageret som nettsiden leser
     store_briefing(
-        today_str, news_md=briefing, weather=weather, market=market,
+        today_str, news_md=briefing, weather=weather,
+        weather_alt=weather_alt or None, market=market,
         quiz=quiz or None, riddles=riddles or None,
         learning=learning, brann=brann, reflection=reflection or None,
     )

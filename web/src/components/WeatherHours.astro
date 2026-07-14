@@ -1,0 +1,36 @@
+---
+// Time-for-time-tabell for én dag i værpanelet. `hours` er daily[i].hours fra
+// generatoren ({ hour, span, temp, precip, wind, gust, uv, symbol }) —
+// 1-timesrader de nærmeste dagene, 6-timersblokker (span=6) lenger ut.
+// `today` markerer dagens tabell så klientskriptet kan klippe bort passerte
+// timer («fra nå og ut dagen»).
+import { emojiFor, fmtWind, fmtMm, tempClass } from '../lib/weather.js';
+
+const { hours = [], today = false } = Astro.props;
+
+const pad = (n) => String(n).padStart(2, '0');
+const klLabel = (h) =>
+  (h.span || 1) === 6 ? `${pad(h.hour)}–${pad((h.hour + 6) % 24)}` : pad(h.hour);
+---
+
+<div class="wx-hours" data-wx-hours={today ? 'today' : undefined}>
+  <div class="wx-hrow wx-hrow--head" aria-hidden="true">
+    <span>Kl.</span><span></span><span>°C</span><span>mm</span><span>m/s</span><span>UV</span>
+  </div>
+  {hours.map((h) => (
+    <div class="wx-hrow" data-end={h.hour + (h.span || 1)}>
+      <span class="wx-hrow__kl">{klLabel(h)}</span>
+      <span class="wx-hrow__ico" aria-hidden="true">{emojiFor(h.symbol)}</span>
+      <span class={`wx-hrow__temp ${tempClass(h.temp)}`}>
+        {h.temp == null ? '–' : `${Math.round(h.temp)}°`}
+      </span>
+      <span class={`wx-hrow__mm${h.precip ? '' : ' wx-faint'}`}>
+        {h.precip ? fmtMm(h.precip) : '–'}
+      </span>
+      <span class="wx-hrow__wind">{fmtWind(h.wind, h.gust)}</span>
+      <span class={`wx-hrow__uv${h.uv != null && h.uv >= 1 ? '' : ' wx-faint'}`}>
+        {h.uv != null && h.uv >= 1 ? Math.round(h.uv) : '–'}
+      </span>
+    </div>
+  ))}
+</div>
