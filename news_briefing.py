@@ -1104,6 +1104,8 @@ PODCAST_FEEDS: dict[str, str] = {
     "The Tim Ferriss Show": "https://rss.art19.com/tim-ferriss-show",
     "Dwarkesh Podcast": "https://api.substack.com/feed/podcast/69345.rss",
     "The Diary Of A CEO": "https://feeds.megaphone.fm/thediaryofaceo",
+    "Hard Fork": "https://feeds.simplecast.com/l2i9YnTd",
+    "All-In": "https://allinchamathjason.libsyn.com/rss",
 }
 
 _LEARNING_SEEN_FILE = "learning_seen.json"  # i BRIEFING_DATA_DIR — må persisteres
@@ -1113,22 +1115,28 @@ _LEARNING_MAX_PER_FEED = 4
 _LEARNING_DESC_CHARS = 500
 _LEARNING_MAX_TOKENS = 2000
 
-_LEARNING_SYSTEM_PROMPT = """Du kuraterer daglig læring på norsk for en investor i Bergen \
-som er interessert i AI, produktutvikling, investering, helse og selvutvikling.
+_LEARNING_SYSTEM_PROMPT = """Du kuraterer daglig læring på norsk for en leser i Bergen \
+med to hovedinteresser, i prioritert rekkefølge:
+
+1. SELVUTVIKLING — konkrete råd leseren kan bruke på seg selv: vaner, læring, tenkning,
+   produktivitet, helse, karriere og beslutninger.
+2. DE NYESTE, VIKTIGSTE TEKNOLOGITRENDENE — særlig AI: hva som nettopp har skjedd, hvorfor
+   det betyr noe, og hvordan leseren kan ligge i forkant. Foretrekk det ferske og
+   betydningsfulle fremfor generelle tech-samtaler.
 
 Du får en nummerert liste med ferske podcast-episoder (tittel + beskrivelse). Oppgaven:
 
-1. PODCAST-RÅD: Velg de 1–2 episodene med mest konkret, anvendbar innsikt for brukeren.
-   For hver: skriv «tip» — selve rådet/innsikten fra episoden i 1–2 setninger på norsk.
-   Rådet skal stå på egne ben (leseren skal lære noe uten å høre episoden), utledet av
-   tittel og beskrivelse. Ikke skriv «i denne episoden …» — gi selve rådet.
-   Referer episoden KUN med «id» fra listen. Er ingen episoder gode nok, returner færre
-   eller tom liste.
+1. PODCAST-RÅD: Velg de 1–2 episodene som best treffer interessene over — helst én fra
+   hver hvis kvaliteten holder. For hver: skriv «tip» — selve rådet/innsikten fra episoden
+   i 1–2 setninger på norsk. Rådet skal stå på egne ben (leseren skal lære noe uten å høre
+   episoden), utledet av tittel og beskrivelse. Ikke skriv «i denne episoden …» — gi selve
+   rådet. Referer episoden KUN med «id» fra listen. Er ingen episoder gode nok, returner
+   færre eller tom liste.
 
-2. BOKTIPS: Anbefal 1–2 bøker for læring — selvutvikling, fakta/sakprosa eller tenkning.
-   Foretrekk nyere, aktuelle bøker; tidløse moderne klassikere er OK som én av to.
-   «why» = 1–2 setninger på norsk om hvorfor akkurat denne, knyttet til brukerens
-   interesser. Ikke anbefal bøker fra unngå-listen.
+2. BOKTIPS: Anbefal 1–2 bøker innenfor interessene over — selvutvikling/tenkning eller
+   teknologi/AI og hvor verden er på vei. Foretrekk nyere, aktuelle bøker; tidløse moderne
+   klassikere er OK som én av to. «why» = 1–2 setninger på norsk om hvorfor akkurat denne,
+   knyttet til brukerens interesser. Ikke anbefal bøker fra unngå-listen.
 
 SVAR KUN med gyldig JSON, ingen tekst utenfor, ingen markdown-fences:
 {"podcasts": [{"id": 3, "tip": "…"}], "books": [{"title": "…", "author": "…", "year": 2025, "why": "…"}]}"""
