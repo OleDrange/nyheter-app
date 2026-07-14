@@ -1,0 +1,424 @@
+{
+  "riddles": [
+    {
+      "level": 1,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Nora sier: «Jonas lyver nå.» Jonas sier: «Både Nora og jeg snakker sant nå.» Hvem lyver?",
+      "answer": "Jonas lyver — Nora snakker sant.",
+      "explanation": "Hvis Jonas snakket sant, måtte også Nora snakke sant — men hun sier jo at Jonas lyver, en selvmotsigelse. Altså lyver Jonas, og da stemmer nettopp det Nora sier."
+    },
+    {
+      "level": 1,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Aksel lyver alltid, Brage snakker alltid sant — men du vet ikke hvem av de to du har foran deg. Han sier: «Vi lyver begge to.» Hvem er det?",
+      "answer": "Aksel.",
+      "explanation": "Brage kunne aldri sagt det — for ham ville det vært løgn. For Aksel er utsagnet falskt (Brage lyver jo ikke), og falskt er nettopp det Aksel alltid sier."
+    },
+    {
+      "level": 2,
+      "genre": "sann/løgn-deduksjon",
+      "question": "På en øy snakker hver innbygger enten alltid sant eller lyver alltid. Du møter tre: Kari sier: «Ola lyver.» Ola sier: «Silje lyver.» Silje sier: «Både Kari og Ola lyver.» Hvem snakker sant?",
+      "answer": "Bare Ola.",
+      "explanation": "Anta at Kari snakker sant: da lyver Ola, så Silje snakker sant — men Silje sier at Kari lyver, en motsigelse. Altså lyver Kari, Ola snakker sant, og Silje lyver — som stemmer, siden bare én av Kari og Ola lyver."
+    },
+    {
+      "level": 2,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Noen tømte kaffekannen på jobb uten å sette på ny trakting. Anna sier: «Det var Bendik.» Bendik sier: «Det var Dina.» Cecilie sier: «Det var ikke meg.» Dina sier: «Bendik lyver.» Nøyaktig én av de fire lyver. Hvem tømte kannen?",
+      "answer": "Bendik.",
+      "explanation": "Bendik og Dina motsier hverandre, så den ene løgneren er én av dem — dermed snakker Anna og Cecilie sant. Da tømte Bendik kannen, Bendiks anklage mot Dina er løgnen, og Dinas utsagn stemmer."
+    },
+    {
+      "level": 3,
+      "genre": "sann/løgn-deduksjon",
+      "question": "På en øy snakker hver innbygger enten alltid sant eller lyver alltid. Fem naboer sier: Arne: «Bodil og jeg er av samme type.» Bodil: «Cato lyver.» Cato: «Dagny snakker sant.» Dagny: «Av Arne og Cato er nøyaktig én løgner.» Eirik: «Bodil og Dagny er begge løgnere.» Hvem lyver?",
+      "answer": "Alle unntatt Bodil — Arne, Cato, Dagny og Eirik lyver.",
+      "explanation": "Anta at Cato snakker sant: da snakker Dagny sant, så nøyaktig én av Arne og Cato lyver — altså Arne; men da er Bodil av motsatt type, altså sannferdig, og hennes «Cato lyver» motsier antakelsen. Cato lyver derfor, så Dagny lyver også, og siden Dagnys utsagn er falskt, lyver både Arne og Cato. Arnes løgn gjør Bodil sannferdig (motsatt type av Arne), som stemmer med at hun sier Cato lyver — og Eirik lyver, siden Bodil ikke er løgner."
+    },
+    {
+      "level": 3,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Silje lyver alltid på mandager, tirsdager og onsdager og snakker alltid sant resten av uka. Broren Vetle lyver alltid på torsdager, fredager og lørdager og snakker sant ellers. En dag sier begge to: «I morgen lyver jeg.» Hvilken ukedag er det?",
+      "answer": "Onsdag.",
+      "explanation": "På en sannhetsdag kan setningen bare sies hvis den stemmer, og på en løgndag må den være falsk. For Silje går det bare opp på onsdag (løgndag, men i morgen snakker hun sant — utsagnet er falskt) og søndag (sannhetsdag, i morgen lyver hun — utsagnet er sant). For Vetle går det tilsvarende bare opp på onsdag og lørdag — eneste felles dag er onsdag."
+    },
+    {
+      "level": 1,
+      "genre": "plasseringslogikk",
+      "question": "Ada, Berit og Clara bor i hus nummer 1, 2 og 3 i samme gate. Ada bor ikke i nummer 1, og Berit bor i nummer 3. Hvem bor hvor?",
+      "answer": "Clara i nr. 1, Ada i nr. 2, Berit i nr. 3.",
+      "explanation": "Berit har nr. 3, og siden Ada ikke bor i nr. 1, må hun bo i nr. 2 — da står Clara igjen med nr. 1."
+    },
+    {
+      "level": 1,
+      "genre": "plasseringslogikk",
+      "question": "På kjøkkenhylla står tre like krukker med kaffe, te og kakao. Tekrukken står helt til venstre, og kaffekrukken står ikke ved siden av tekrukken. Hvor står kakaoen?",
+      "answer": "I midten.",
+      "explanation": "Kaffen kan ikke stå i midten, for da ville den vært nabo med teen — så kaffen står helt til høyre, og kakaoen tar plassen i midten."
+    },
+    {
+      "level": 2,
+      "genre": "plasseringslogikk",
+      "question": "Nils, Oda, Pål og Rita har pultene 1–4 på rad, der pult 1 står nærmest vinduet. Oda har pult 2. Pål sitter ikke inntil Oda. Nils sitter nærmere vinduet enn Rita. Hvem har hvilken pult?",
+      "answer": "Nils pult 1, Oda pult 2, Rita pult 3, Pål pult 4.",
+      "explanation": "Pål kan verken ha pult 1 eller 3 (begge er inntil Oda), så han har pult 4. Av de ledige pultene 1 og 3 må Nils ta pult 1 og Rita pult 3, siden Nils sitter nærmest vinduet av de to."
+    },
+    {
+      "level": 2,
+      "genre": "plasseringslogikk",
+      "question": "Fem bøker står på rad i hylla: en krim, en kokebok, et atlas, en roman og en diktsamling. Krimboka står helt til høyre og diktsamlingen helt til venstre. Kokeboka står rett til venstre for atlaset. Romanen står ikke inntil krimboka. Hvor i rekka står romanen?",
+      "answer": "På plass 2, rett til høyre for diktsamlingen.",
+      "explanation": "Plassene 2–4 skal fylles av romanen og paret kokebok–atlas, som må stå inntil hverandre. Romanen kan ikke stå på plass 4 (inntil krimboka), så paret tar plassene 3–4 og romanen plass 2."
+    },
+    {
+      "level": 3,
+      "genre": "plasseringslogikk",
+      "question": "Fire hus ligger på rad, nummerert 1–4 fra venstre, med hver sin farge, hver sin beboer og hvert sitt kjæledyr. (1) Erik bor i det røde huset. (2) Det gule huset ligger helt til venstre. (3) Frøya bor rett til høyre for Geir. (4) Katten bor i det hvite huset. (5) Helle har hunden. (6) Det røde huset ligger rett til venstre for det blå. (7) Geir bor i det gule huset. (8) Fuglen bor rett til venstre for hunden. Hvem eier fisken, og hvilken farge har huset deres?",
+      "answer": "Geir — i det gule huset (hus 1).",
+      "explanation": "Gult er hus 1 med Geir, så Frøya bor i hus 2. Rødt ligger rett til venstre for blått, og siden Erik bor i det røde og hus 2 er Frøyas, blir rødt hus 3 (Erik) og blått hus 4 — dermed er hus 2 hvitt, og Helle får hus 4. Katten bor i det hvite (Frøya), hunden hos Helle i hus 4, og fuglen rett til venstre for hunden gir fuglen til Erik i hus 3 — da står Geir igjen med fisken."
+    },
+    {
+      "level": 3,
+      "genre": "plasseringslogikk",
+      "question": "Ingrid, Jakob, Kristin og Leif trener hver sin ukedag (mandag til torsdag) og driver hver sin idrett: løping, svømming, klatring og sykling. (1) Ingrid trener dagen rett før svømmeren. (2) Jakob trener på torsdag. (3) Klatreren trener på mandag. (4) Kristin sykler ikke. (5) Kristin trener dagen rett etter Leif. (6) Sykleren trener på onsdag. Hvem gjør hva, og hvilken dag?",
+      "answer": "Leif klatrer mandag, Kristin løper tirsdag, Ingrid sykler onsdag, Jakob svømmer torsdag.",
+      "explanation": "Jakob har torsdag, så paret Leif–Kristin (rett etter hverandre) må ligge mandag–tirsdag eller tirsdag–onsdag. Sykleren trener onsdag, og Kristin sykler ikke — så Kristin kan ikke ha onsdag: paret blir mandag–tirsdag, og Ingrid får onsdag og er sykleren. Ingrid trener dagen rett før svømmeren, så svømmeren har torsdag (Jakob); klatreren har mandag (Leif), og Kristin står igjen med løping."
+    },
+    {
+      "level": 1,
+      "genre": "tallmønster",
+      "question": "Hvilket tall kommer neste i rekka: 2, 3, 5, 8, 12, …?",
+      "answer": "17.",
+      "explanation": "Differansen øker med én for hvert steg: +1, +2, +3, +4 — og neste steg er +5."
+    },
+    {
+      "level": 1,
+      "genre": "tallmønster",
+      "question": "Ett av tallene passer ikke inn: 4, 9, 16, 25, 27, 36. Hvilket?",
+      "answer": "27.",
+      "explanation": "Alle de andre er kvadrattall (2², 3², 4², 5², 6²) — 27 er ikke et kvadrat."
+    },
+    {
+      "level": 2,
+      "genre": "tallmønster",
+      "question": "Hva er neste ledd i rekka: 1, 11, 21, 1211, 111221, …?",
+      "answer": "312211.",
+      "explanation": "Hvert ledd beskriver det forrige lest høyt: «én 1-er» → 11, «to 1-ere» → 21, «én 2-er, én 1-er» → 1211. 111221 leses som «tre 1-ere, to 2-ere, én 1-er» — altså 312211."
+    },
+    {
+      "level": 2,
+      "genre": "tallmønster",
+      "question": "Finn regelen og neste tall: 5, 8, 14, 26, 50, …?",
+      "answer": "98.",
+      "explanation": "Hvert tall er det forrige ganget med 2 minus 2: 5·2−2 = 8, 8·2−2 = 14, 14·2−2 = 26, 26·2−2 = 50 — og 50·2−2 = 98."
+    },
+    {
+      "level": 3,
+      "genre": "tallmønster",
+      "question": "Jeg tenker på et tresifret tall. Tverrsummen er 15, hundresifferet er dobbelt så stort som enersifferet, og snur du tallet baklengs, får du et tall som er 396 mindre. Hvilket tall tenker jeg på?",
+      "answer": "834.",
+      "explanation": "Kall sifrene h, t og e: forskjellen mellom tallet og det baklengse er alltid 99·(h − e), så 99·(h − e) = 396 gir h − e = 4. Sammen med h = 2e gir det e = 4 og h = 8, og tverrsummen 15 gir t = 3. Kontroll: 834 − 438 = 396."
+    },
+    {
+      "level": 3,
+      "genre": "tallmønster",
+      "question": "Finn det firesifrede tallet som blir nøyaktig firedoblet når du snur sifrene baklengs — altså et tall ABCD slik at ABCD · 4 = DCBA.",
+      "answer": "2178 (2178 · 4 = 8712).",
+      "explanation": "A må være 1 eller 2 for at firedoblingen skal forbli firesifret, og siden DCBA ender på A, må A være et partall — altså A = 2. Da er DCBA minst 8000, så D ≥ 8, og 4·D skal ende på 2 — altså D = 8. Setter du inn og rydder opp, står du igjen med 13B + 1 = 2C, som med sifre 0–9 bare løses av B = 1 og C = 7."
+    },
+    {
+      "level": 1,
+      "genre": "aldersalgebra",
+      "question": "Sara er dobbelt så gammel som lillebroren Kim, og til sammen er de 18 år. Hvor gamle er de?",
+      "answer": "Sara er 12 og Kim er 6.",
+      "explanation": "Kims alder pluss det dobbelte av den er 18, så tre ganger Kims alder er 18 — Kim er 6 og Sara 12."
+    },
+    {
+      "level": 1,
+      "genre": "aldersalgebra",
+      "question": "Mor er 30 år eldre enn datteren. Om fem år er mor tre ganger så gammel som datteren. Hvor gammel er datteren nå?",
+      "answer": "10 år.",
+      "explanation": "Om fem år: 3·(d + 5) = d + 35, som gir d = 10. Kontroll: da er datteren 15 og mor 45."
+    },
+    {
+      "level": 2,
+      "genre": "aldersalgebra",
+      "question": "Far er i dag fire ganger så gammel som sønnen. For seks år siden var han ti ganger så gammel. Hvor gamle er de nå?",
+      "answer": "Sønnen er 9 og faren 36.",
+      "explanation": "Med sønnens alder s: 4s − 6 = 10·(s − 6), som gir 6s = 54 og s = 9. Kontroll: for seks år siden var de 3 og 30 — nettopp ti ganger."
+    },
+    {
+      "level": 2,
+      "genre": "aldersalgebra",
+      "question": "Anne er 24 år. Hun er dobbelt så gammel som Britt var da Anne var like gammel som Britt er nå. Hvor gammel er Britt?",
+      "answer": "18 år.",
+      "explanation": "Aldersforskjellen g er konstant: da Anne var like gammel som Britt er nå, var Britt 24 − 2g. Kravet 24 = 2·(24 − 2g) gir g = 6, så Britt er 18. Kontroll: da Anne var 18, var Britt 12 — og 24 er det dobbelte av 12."
+    },
+    {
+      "level": 3,
+      "genre": "aldersalgebra",
+      "question": "Even er fire år eldre enn Frida. For to år siden var Even dobbelt så gammel som Gustav. Om fire år er de tre til sammen 64 år. Hvor gamle er de nå?",
+      "answer": "Even er 22, Frida 18 og Gustav 12.",
+      "explanation": "Om fire år har hver blitt fire år eldre, så summen i dag er 64 − 12 = 52. Relasjonene gir E = F + 4 og E − 2 = 2·(G − 2), altså E = 2G − 2 og F = 2G − 6. Summen (2G − 2) + (2G − 6) + G = 52 gir 5G = 60 og G = 12 — dermed E = 22 og F = 18. Kontroll: for to år siden var Even 20 og Gustav 10."
+    },
+    {
+      "level": 3,
+      "genre": "aldersalgebra",
+      "question": "En gammel mann så tilbake på livet: «En sjettedel av livet var jeg barn, en tolvdel ungdom, og en sjudedel til gikk før jeg giftet meg. Fem år etter bryllupet fikk jeg en sønn. Sønnen levde halvparten så lenge som meg, og selv levde jeg fire år etter at han døde.» Hvor gammel ble mannen?",
+      "answer": "84 år.",
+      "explanation": "Kall levealderen L: L/6 + L/12 + L/7 + 5 + L/2 + 4 = L. Brøkene har fellesnevner 84 og utgjør 75L/84, så 9 = 9L/84 og L = 84. Kontroll: 14 + 7 + 12 + 5 = 38 år da sønnen ble født; sønnen levde 42 år, og 38 + 42 + 4 = 84."
+    },
+    {
+      "level": 1,
+      "genre": "vekt og veiing",
+      "question": "Åtte tilsynelatende like mynter — én er litt tyngre enn de andre. Du har en skålvekt uten lodd. Hvor få veiinger trenger du for garantert å finne den tunge?",
+      "answer": "2 veiinger.",
+      "explanation": "Vei 3 mot 3: ved balanse ligger den tunge blant de to siste — vei dem mot hverandre. Ved utslag ligger den blant tre: vei to av dem mot hverandre, og er det balanse, er det den tredje."
+    },
+    {
+      "level": 1,
+      "genre": "vekt og veiing",
+      "question": "En murstein veier ett kilo pluss en halv murstein. Hvor mye veier mursteinen?",
+      "answer": "2 kg.",
+      "explanation": "Trekker du en halv murstein fra begge sider, står det igjen at en halv murstein veier 1 kg — hele veier altså 2 kg."
+    },
+    {
+      "level": 2,
+      "genre": "vekt og veiing",
+      "question": "Du har ti poser med mynter. I ni av posene veier hver mynt 10 gram, men i én pose veier hver mynt bare 9 gram. Du har en digital kjøkkenvekt og får veie nøyaktig ÉN gang. Hvordan finner du den lette posen?",
+      "answer": "Legg 1 mynt fra pose 1, 2 fra pose 2 … og 10 fra pose 10 på vekta — antall gram under 550 er posenummeret.",
+      "explanation": "De 55 myntene skulle veid 550 g om alle var ekte. Hver lett mynt mangler nøyaktig 1 g, og du la posenummerets antall mynter fra hver pose — mangler det k gram, er det pose k."
+    },
+    {
+      "level": 2,
+      "genre": "vekt og veiing",
+      "question": "Ei kurv med egg veier 600 gram. Med dobbelt så mange egg veier den samme kurven 1 050 gram. Hva veier den tomme kurven?",
+      "answer": "150 gram.",
+      "explanation": "Ekstraeggene — like mange som de opprinnelige — veier 1 050 − 600 = 450 g. Da veier de opprinnelige eggene også 450 g, og kurven 600 − 450 = 150 g."
+    },
+    {
+      "level": 3,
+      "genre": "vekt og veiing",
+      "question": "Du har tolv mynter som ser helt like ut. Én er falsk og har feil vekt — men du vet ikke om den er for tung eller for lett. Du har bare en skålvekt uten lodd. Hva er det minste antallet veiinger som garantert avslører både hvilken mynt som er falsk og om den er for tung eller for lett?",
+      "answer": "3 veiinger.",
+      "explanation": "Det finnes 24 muligheter (12 mynter × tung/lett), og én veiing har bare tre utfall — to veiinger gir maks 9 utfall og kan umulig skille 24 tilfeller. Tre veiinger gir 27 utfall, og en plan finnes: vei først 4 mot 4. Ved balanse jaktes den falske blant de fire siste ved å veie tre av dem mot tre kjente ekte; ved utslag bytter og flytter du mynter mellom skålene i andre veiing, slik at hvert utfall peker på en egen liten gruppe som tredje veiing skiller."
+    },
+    {
+      "level": 3,
+      "genre": "vekt og veiing",
+      "question": "Et lodd på 40 kg falt i gulvet og knakk i fire biter. Til kjøpmannens overraskelse kan han nå veie alle hele vekter fra 1 til 40 kg på skålvekta si, ved å legge biter i én eller begge skåler. Hvor mye veier hver av de fire bitene?",
+      "answer": "1, 3, 9 og 27 kg.",
+      "explanation": "Legger du en bit i samme skål som varen, trekker den fra i stedet for å legge til — hver bit kan altså telle −1, 0 eller +1 gang. Det er det balanserte tretallssystemet, og med 1, 3, 9 og 27 når du alle hele verdier opp til 1 + 3 + 9 + 27 = 40. For eksempel: 2 = 3 − 1, 5 = 9 − 3 − 1, 22 = 27 − 9 + 3 + 1."
+    },
+    {
+      "level": 1,
+      "genre": "planlegging og kryssing",
+      "question": "Far og to barn skal krysse en elv. Robåten bærer enten faren alene eller de to barna sammen — mer tåler den ikke. Hvordan kommer alle tre seg over?",
+      "answer": "Barna ror over, ett barn ror tilbake, far ror over alene, barnet på andre siden ror tilbake, og til slutt ror begge barna over — fem turer.",
+      "explanation": "Faren kan aldri sitte i båten sammen med noen, så et barn må alltid stå klart på motsatt bredd for å ro båten tilbake til de andre."
+    },
+    {
+      "level": 1,
+      "genre": "planlegging og kryssing",
+      "question": "En snegle skal opp av en 10 meter dyp brønn. Hver dag klatrer den 3 meter, og hver natt sklir den 2 meter tilbake. Hvilken dag når den toppen?",
+      "answer": "Dag 8.",
+      "explanation": "Netto stiger den én meter per døgn — men den siste dagen sklir den ikke tilbake. Etter sju døgn står den på 7 meter, og i løpet av dag 8 klatrer den de siste 3 meterne til toppen."
+    },
+    {
+      "level": 2,
+      "genre": "planlegging og kryssing",
+      "question": "Du skal steke tre pannekaker, men panna har bare plass til to om gangen. Hver side trenger nøyaktig ett minutt. Hvor raskt kan alle tre bli ferdige, stekt på begge sider?",
+      "answer": "3 minutter.",
+      "explanation": "Minutt 1: stek første side av kake A og B. Minutt 2: snu A, ta ut B og legg inn C. Minutt 3: stek andre side av B og C. Seks pannekakesider à ett minutt, to om gangen, gjør 3 minutter til teoretisk minimum."
+    },
+    {
+      "level": 2,
+      "genre": "planlegging og kryssing",
+      "question": "Du står ved springen med en umerket 5-liters kanne og en umerket 3-liters kanne. Hvordan måler du opp nøyaktig 4 liter vann?",
+      "answer": "Fyll 5-literen og fyll 3-literen fra den (2 l igjen); tøm 3-literen og hell de 2 literne over i den; fyll 5-literen på nytt og topp opp 3-literen — da står 4 liter igjen i 5-literen.",
+      "explanation": "Etter omhellingen inneholder 3-literen 2 liter og har plass til nøyaktig 1 til. Siste omhelling tar derfor bare 1 liter fra den fulle 5-literen — 5 − 1 = 4."
+    },
+    {
+      "level": 3,
+      "genre": "planlegging og kryssing",
+      "question": "Fire turgåere kommer til en skral hengebru om natta. Brua bærer maks to om gangen, og den som går må ha med den ene lommelykten de har. De bruker 1, 2, 5 og 10 minutter hver på å krysse — går to sammen, går de i den tregestes tempo. Hvor raskt kan alle fire komme seg over?",
+      "answer": "17 minutter.",
+      "explanation": "Trikset er å la de to tregeste gå sammen, så 10-eren og 5-eren ikke koster hver sin tur: 1 og 2 går over (2 min), 1 går tilbake (1), 5 og 10 går over (10), 2 går tilbake (2), og 1 og 2 går over igjen (2). Totalt 2 + 1 + 10 + 2 + 2 = 17 minutter — sender du i stedet 1-eren frem og tilbake som fast «lyktebærer», ender du på 19."
+    },
+    {
+      "level": 3,
+      "genre": "planlegging og kryssing",
+      "question": "En 8-liters kanne er full av vann, og du har tomme, umerkede kanner på 5 og 3 liter. Del vannet i to like deler på 4 liter — med færrest mulige omhellinger. Hvor mange trenger du?",
+      "answer": "Sju omhellinger.",
+      "explanation": "Skriv tilstanden som (8-liter, 5-liter, 3-liter): (8,0,0) → (3,5,0) → (3,2,3) → (6,2,0) → (6,0,2) → (1,5,2) → (1,4,3) → (4,4,0). Hver omhelling må enten tømme en kanne eller fylle en annen helt, og ingen kortere vei fører til 4 + 4."
+    },
+    {
+      "level": 1,
+      "genre": "informasjonsdeduksjon",
+      "question": "I skuffen ligger ti svarte og ti hvite sokker hulter til bulter, og det er stummende mørkt. Hvor mange sokker må du minst ta med deg for å være helt sikker på å ha to i samme farge?",
+      "answer": "3.",
+      "explanation": "To sokker kan være én av hver farge. Men blant tre sokker må minst to dele farge — det finnes bare to farger."
+    },
+    {
+      "level": 1,
+      "genre": "informasjonsdeduksjon",
+      "question": "Av tre luer — to røde og én blå — får Eva og Sofie hver sin på hodet; den siste gjemmes bort. Eva ser Sofies lue, men ikke sin egen, og sier: «Jeg vet ikke hvilken farge jeg har.» Hvilken farge har Sofies lue?",
+      "answer": "Rød.",
+      "explanation": "Hadde Sofie hatt den blå lua (det finnes bare én), ville Eva visst at hun selv hadde rød. Når Eva er usikker, må Sofie ha rød."
+    },
+    {
+      "level": 2,
+      "genre": "informasjonsdeduksjon",
+      "question": "Tre venner står på rekke, alle vendt samme vei: bakerst ser de to foran seg, i midten ser bare den forreste, og forrest ser ingen. Fra en pose med tre svarte og to hvite luer får hver en lue på hodet uten å se sin egen. Bakerste sier: «Jeg vet ikke hvilken farge jeg har.» Midterste sier: «Jeg vet ikke jeg heller.» Da sier forreste: «Da vet jeg min farge!» Hvilken farge har forreste?",
+      "answer": "Svart.",
+      "explanation": "Hadde de to foran begge hatt hvit lue, ville bakerste visst at hans var svart (det finnes bare to hvite) — så de to foran har ikke to hvite. Midterste vet dette: hadde forreste vært hvit, ville midterste dermed visst at han selv var svart. Når midterste heller ikke vet, må forreste ha svart."
+    },
+    {
+      "level": 2,
+      "genre": "informasjonsdeduksjon",
+      "question": "På bordet ligger fire kort; hvert kort har en bokstav på én side og et tall på den andre. Du ser: A, K, 4 og 7. Påstand: «Hvis et kort har en vokal på den ene siden, har det et partall på den andre.» Hvilke kort MÅ du snu for å sjekke om påstanden stemmer?",
+      "answer": "A og 7.",
+      "explanation": "A kan skjule et oddetall og 7 kan skjule en vokal — begge ville motbevist regelen. K er irrelevant, og 4 kan ikke motbevise noe: regelen sier ikke at partall må ha vokal på baksiden."
+    },
+    {
+      "level": 3,
+      "genre": "informasjonsdeduksjon",
+      "question": "Runa, Sigrid og Tale har alle fått sot i panna uten å vite det selv. De ser hverandre, men har ingen speil, og ingen kommenterer det de ser. En voksen sier høyt: «Minst én av dere har sot i panna», og spør så alle samtidig: «Vet du sikkert om du har sot?» Alle svarer nei. Hun spør igjen: alle svarer nei. Så spør hun en tredje gang. Hva svarer de nå — og hvorfor?",
+      "answer": "Alle tre svarer ja — de vet nå at de har sot.",
+      "explanation": "Hadde bare én hatt sot, ville hun ikke sett sot hos noen og svart ja allerede i første runde. Hadde to hatt sot, ville hver av dem sett én sotete og tenkt: «svarte hun nei i sted, ser hun sot hos noen — det må være meg» — begge ville svart ja i andre runde. Når alle fortsatt svarer nei i andre runde, må alle tre ha sot, og dermed kan alle svare ja i tredje."
+    },
+    {
+      "level": 3,
+      "genre": "informasjonsdeduksjon",
+      "question": "Aksel og Live får hver sin lue som enten er rød eller blå — fargene trekkes tilfeldig og uavhengig av hverandre. De ser hverandres lue, men ikke sin egen, og må gjette sin egen farge samtidig, uten noen form for kommunikasjon etter at luene er på. Kan de på forhånd avtale en strategi som garanterer at minst én av dem gjetter riktig — uansett trekning?",
+      "answer": "Ja: Aksel gjetter samme farge som han ser på Live, Live gjetter motsatt farge av den hun ser på Aksel.",
+      "explanation": "Er luene like, har Aksel rett; er de ulike, har Live rett — og én av delene inntreffer alltid. Strategien fungerer fordi den ene satser på «likt par» og den andre på «ulikt par», og disse to tilfellene dekker alle muligheter."
+    },
+    {
+      "level": 1,
+      "genre": "kalender- og tidslogikk",
+      "question": "Hvis i overmorgen er onsdag — hvilken dag var det i forgårs?",
+      "answer": "Lørdag.",
+      "explanation": "I overmorgen er onsdag, så i dag er mandag — og to dager før mandag er lørdag."
+    },
+    {
+      "level": 1,
+      "genre": "kalender- og tidslogikk",
+      "question": "Kirkeklokka bruker 5 sekunder på å slå 6 slag, i helt jevnt tempo. Hvor lang tid bruker den på å slå 12 slag?",
+      "answer": "11 sekunder.",
+      "explanation": "Det er mellomrommene som tar tid: 6 slag har 5 mellomrom, så hvert mellomrom tar 1 sekund. 12 slag har 11 mellomrom — altså 11 sekunder."
+    },
+    {
+      "level": 2,
+      "genre": "kalender- og tidslogikk",
+      "question": "Nøyaktig hvor stor er vinkelen mellom viserne på en klokke kl. 15.15?",
+      "answer": "7,5 grader.",
+      "explanation": "Minuttviseren peker rett på 3-tallet (90°). Timeviseren har derimot flyttet seg et kvarter forbi 3-tallet: 90° + (15/60)·30° = 97,5°. Differansen er 7,5°."
+    },
+    {
+      "level": 2,
+      "genre": "kalender- og tidslogikk",
+      "question": "«I forgårs var jeg 20 år, og neste år fyller jeg 23», sier Petra — og alt stemmer. Hvordan er det mulig, og når har hun bursdag?",
+      "answer": "Hun sier det 1. januar og har bursdag 31. desember.",
+      "explanation": "Den 1. januar var «i forgårs» 30. desember i fjor — da var hun fortsatt 20. Hun fylte 21 dagen etter (31. desember), fyller 22 i år og 23 neste år."
+    },
+    {
+      "level": 3,
+      "genre": "kalender- og tidslogikk",
+      "question": "Petter vil ikke røpe bursdagen sin, men gir ti muligheter: 15. mai, 16. mai, 19. mai, 17. juni, 18. juni, 14. juli, 16. juli, 14. august, 15. august og 17. august. Så hvisker han måneden til Astrid og dagen (tallet) til Bjørn. Astrid sier: «Jeg vet ikke når bursdagen er, men jeg vet at Bjørn heller ikke vet.» Bjørn sier: «Først visste jeg ikke, men nå vet jeg.» Astrid sier: «Da vet jeg også.» Når har Petter bursdag?",
+      "answer": "16. juli.",
+      "explanation": "Astrid kan bare være sikker på at Bjørn ikke vet hvis måneden hennes mangler en unik dag; 19 finnes bare i mai og 18 bare i juni, så mai og juni er utelukket. Når Bjørn da vet svaret, kan dagen ikke være 14 — den finnes i både juli og august; igjen står 16. juli, 15. august og 17. august. Når Astrid nå også vet, må måneden hennes ha ett eneste gjenværende alternativ — det har bare juli."
+    },
+    {
+      "level": 3,
+      "genre": "kalender- og tidslogikk",
+      "question": "Du har to lunter og en fyrstikkeske. Hver lunte brenner ut på nøyaktig 60 minutter, men brenner helt ujevnt — halve lunten kan ta 5 minutter og resten 55. Hvordan måler du nøyaktig 45 minutter?",
+      "answer": "Tenn den ene lunten i begge ender og den andre i én ende samtidig; når den første er utbrent (30 min), tenner du den andre enden på lunte to — når den er utbrent, har det gått 45 minutter.",
+      "explanation": "En lunte tent i begge ender brenner ut på nøyaktig 30 minutter uansett hvor ujevn den er, for flammene deler de 60 minuttene mellom seg. Da har lunte to nøyaktig 30 minutters brennetid igjen — og tennes også dens andre ende, halveres det til 15. 30 + 15 = 45 minutter."
+    },
+    {
+      "level": 1,
+      "genre": "lateral tenkning",
+      "question": "En mann bor i 12. etasje. Hver morgen tar han heisen helt ned. Om ettermiddagen tar han heisen bare til 8. etasje og går trappene resten av veien — bortsett fra på regnværsdager, da tar han heisen helt opp. Hvorfor?",
+      "answer": "Han er kortvokst og når bare opp til knappen for 8. etasje — på regnværsdager har han med paraply og når 12-knappen med den.",
+      "explanation": "Ned går det fint: knappen for 1. etasje sitter nederst. Opp når han bare 8-knappen — med mindre han har paraplyen å strekke seg med."
+    },
+    {
+      "level": 1,
+      "genre": "lateral tenkning",
+      "question": "To fedre og to sønner var på fisketur og fikk tre fisker. Likevel fikk hver av dem nøyaktig én hel fisk. Hvordan er det mulig?",
+      "answer": "De var bare tre personer: bestefar, far og sønn.",
+      "explanation": "Mannen i midten er både far (til sønnen) og sønn (av bestefaren) — så «to fedre og to sønner» er tre personer, én fisk til hver."
+    },
+    {
+      "level": 2,
+      "genre": "lateral tenkning",
+      "question": "En kvinne skyter mannen sin. Etterpå holder hun ham under vann i flere minutter, og til slutt henger hun ham opp. Ti minutter senere spiser de middag sammen i fin stemning. Hvordan henger dette sammen?",
+      "answer": "Hun er fotograf: hun «skjøt» et bilde av ham, fremkalte filmen i væskebad og hang bildet opp til tørk.",
+      "explanation": "Alle tre handlingene beskriver gammeldags mørkeromsarbeid — å knipse, fremkalle og tørke et fotografi — ikke vold."
+    },
+    {
+      "level": 2,
+      "genre": "lateral tenkning",
+      "question": "Midt på et stort, åpent jorde ligger en mann død. Ved siden av ham ligger en uåpnet sekk. Det finnes ingen fotspor eller andre spor inn til stedet. Hva skjedde?",
+      "answer": "Han hoppet i fallskjerm, og skjermen — sekken — løste seg aldri ut.",
+      "explanation": "Han kom ovenfra, derfor finnes ingen spor på bakken. Den uåpnede «sekken» er fallskjermen som aldri foldet seg ut."
+    },
+    {
+      "level": 3,
+      "genre": "lateral tenkning",
+      "question": "En mann går inn i en bar og ber om et glass vann. Bartenderen trekker i stedet frem en pistol og retter den mot ham. Mannen sier «takk», snur seg og går fornøyd ut. Hva skjedde?",
+      "answer": "Mannen hadde hikke. Vannet skulle kurere den — men støkket fra pistolen gjorde jobben, så han takket og gikk.",
+      "explanation": "Både vannglasset og en real forskrekkelse er kjente hikke-kurer. Bartenderen skjønte hva mannen egentlig trengte og valgte den raskeste løsningen — derfor var mannen takknemlig i stedet for redd."
+    },
+    {
+      "level": 3,
+      "genre": "lateral tenkning",
+      "question": "Ida og Jonas ligger døde på stuegulvet blant glasskår og en vanndam. Vinduet står på gløtt, og familiens katt sitter i vinduskarmen og slikker seg rundt munnen. Ingen forbrytelse er begått, og ingen mennesker var innom. Hva skjedde?",
+      "answer": "Ida og Jonas er gullfisker — katten veltet gullfiskbollen i gulvet.",
+      "explanation": "Glasskårene er den knuste bollen og vanndammen er akvarievannet. Ingen forbrytelse: ofrene var aldri mennesker, og katten fulgte bare instinktene sine."
+    },
+    {
+      "level": 1,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "I et løp tar du igjen og passerer løperen som ligger på andreplass. Hvilken plass ligger du på da?",
+      "answer": "Andreplass.",
+      "explanation": "Du overtar plassen til den du passerer — lederen ligger fortsatt foran deg, så du er nummer to, ikke nummer én."
+    },
+    {
+      "level": 1,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Bjørn er høyere enn Arne. Kåre er lavere enn Arne. Dag er høyere enn Bjørn. Hvem er nest høyest?",
+      "answer": "Bjørn.",
+      "explanation": "Rekkefølgen blir Dag > Bjørn > Arne > Kåre — så Bjørn er nest høyest."
+    },
+    {
+      "level": 2,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Fem venner sammenlignet quizpoeng, og alle fikk ulik poengsum. Astrid fikk flere enn Brede, men færre enn Cato. Dina fikk flere enn Cato. Espen fikk færre enn Brede. Hvem havnet i midten?",
+      "answer": "Astrid.",
+      "explanation": "Ledetrådene gir én mulig rekkefølge: Dina > Cato > Astrid > Brede > Espen — og i midten står Astrid."
+    },
+    {
+      "level": 2,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Fire kandidater fikk alle ulik poengsum på en prøve. Vilde fikk ikke flest. Ulrik fikk flere enn både Vilde og Tea. Tea fikk ikke færrest. Sander fikk færre enn Tea. Hvem fikk flest?",
+      "answer": "Ulrik.",
+      "explanation": "Flest kan ikke være Sander (bak Tea), ikke Tea (bak Ulrik) og ikke Vilde (oppgitt) — bare Ulrik står igjen."
+    },
+    {
+      "level": 3,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Fem løpere — Amir, Bente, Chris, Dana og Erik — fullførte et løp uten deling av plasser. (1) Amir kom i mål rett etter Bente. (2) Chris kom i mål rett før Dana. (3) Dana slo Erik. (4) Amir slo Dana. I hvilken rekkefølge kom de i mål?",
+      "answer": "Bente, Amir, Chris, Dana, Erik.",
+      "explanation": "Bente–Amir og Chris–Dana henger sammen som to blokker, og siden Amir slo Dana, ligger Bente–Amir-blokken foran Chris–Dana-blokken. Erik kom etter Dana og må dermed helt sist. Da fyller blokkene plassene 1–4 i rekkefølgen Bente, Amir, Chris, Dana — med Erik på femteplass."
+    },
+    {
+      "level": 3,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "På en gård står 25 hester, og du vil finne de tre raskeste. Banen har bare fem spor, du har ingen stoppeklokke, og hvert heat forteller deg bare rekkefølgen hestene kom i mål. Hver hest løper alltid nøyaktig like fort. Hvor få heat trenger du?",
+      "answer": "7 heat.",
+      "explanation": "Kjør fem innledende heat med fem hester i hvert, og la så de fem heatvinnerne møtes i heat 6 — vinneren der er raskest av alle. Bare fem hester kan fortsatt ta 2.- og 3.-plassen: nummer to og tre fra vinnerens opprinnelige heat, nummer to i heat 6 og toeren fra dens heat, samt nummer tre i heat 6. Et sjuende heat mellom disse fem avgjør 2.- og 3.-plassen. Færre går ikke: seks heat gir ikke nok sammenlikninger til å skille kandidatene."
+    }
+  ]
+}

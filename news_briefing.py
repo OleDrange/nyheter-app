@@ -951,24 +951,22 @@ def fetch_daily_quiz() -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Dagens gåter (logikkgåter på norsk, generert av Claude — ingen ekstern API
-# finnes for dette; kallet er lite og kjøres i samme daglige kjøring)
+# Dagens gåter (logikkgåter på norsk fra lokal gåtebank — riddle_bank/gaater.json;
+# ingen Claude-bruk, ingen ekstern API)
 # ─────────────────────────────────────────────────────────────────────────────
 
 _RIDDLES_SEEN_FILE = "riddles_seen.json"  # i BRIEFING_DATA_DIR — må persisteres
 _RIDDLES_SEEN_RETENTION_DAYS = 120
-_RIDDLES_AVOID_IN_PROMPT = 60  # hvor mange tidligere gåter Claude bes unngå
-# Extended thinking: vanskeligere gåter (særlig nivå 3) krever at modellen faktisk
-# løser gåten grundig før den skriver fasit — uten thinking blir fasiten oftere feil.
-_RIDDLES_MAX_TOKENS = 12000
-_RIDDLES_THINKING_TOKENS = 8000
-# Robusthet: av og til svarer Claude med tekst uten gyldig JSON-array (transient
-# hikke eller preamble). Prøv på nytt før vi gir opp, jf. retry i research_briefing.
-_RIDDLES_MAX_ATTEMPTS = 3
-_RIDDLES_RETRY_DELAY = 5  # sekunder mellom forsøk
 
-# Sjangre roteres deterministisk per dag (dag-ordinal) så variasjonen er garantert,
-# ikke bare oppfordret — dagens tre typer sendes eksplisitt i prompten, én per nivå.
+# Gåtene bor i riddle_bank/gaater.json (i repoet, følger med i imaget via COPY . .).
+# Hver gåte har level (1–3), genre (må matche navnene i _RIDDLE_GENRES), question,
+# answer og explanation. Ingen Claude-bruk — banken er håndlaget og fasit-verifisert.
+_RIDDLE_BANK_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "riddle_bank", "gaater.json"
+)
+
+# Sjangre roteres deterministisk per dag (dag-ordinal) så variasjonen er garantert —
+# dagens tre typer styrer hvilke gåter som trekkes fra banken, én per nivå.
 _RIDDLE_GENRES: list[tuple[str, str]] = [
     ("sann/løgn-deduksjon", "noen snakker sant, andre lyver — finn ut hvem eller hva"),
     ("plasseringslogikk", "Einstein-aktig: personer, steder og egenskaper kobles ut fra ledetråder"),
@@ -981,30 +979,6 @@ _RIDDLE_GENRES: list[tuple[str, str]] = [
     ("lateral tenkning", "en tilsynelatende umulig situasjon med en logisk, ikke-språklig forklaring"),
     ("rekkefølge og sammenlikning", "hvem er eldst/raskest/høyest ut fra parvise sammenlikninger med tvist"),
 ]
-
-_RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 3 gåter som IKKE krever \
-faktakunnskap — kun logisk tenkning og hoderegning skal lede til svaret.
-
-NIVÅKRAV — tydelig stigning:
-- Nivå 1 (oppvarming): 1–2 resonneringssteg, løses i hodet på under 2 minutter.
-- Nivå 2 (utfordrende): 3–4 resonneringssteg, løses på 3–5 minutter, gjerne med litt notater.
-- Nivå 3 (skikkelig nøtt): 4–6 resonneringssteg som gjerne kombinerer to teknikker \
-(f.eks. løgn-deduksjon + eliminasjon). Penn og papir er forventet; en oppegående voksen \
-skal bruke 10–20 minutter. Vanskelig betyr flere steg og mer å holde styr på — \
-aldri vagere formulering eller tvetydig fasit.
-
-KRAV:
-- Brukeren oppgir dagens gåtetype per nivå — følg den, tilpasset nivåets vanskelighetsgrad.
-- Entydig fasit. Ingen ordspill som bare fungerer på engelsk. Ingen kunnskapsspørsmål.
-- Norske navn og hverdagslige situasjoner.
-- Løs hver gåte fullstendig FØR du skriver den ferdig, og verifiser fasiten baklengs: \
-sjekk at alle ledetråder stemmer med svaret og at ingen annen løsning oppfyller dem.
-- "explanation" = ryddig løsningsvei — maks 3 setninger for nivå 1–2, maks 5 for nivå 3. \
-Aldri prøving/feiling eller frem-og-tilbake-resonnering.
-
-SVAR KUN med en gyldig JSON-array, ingen tekst utenfor, ingen markdown-fences:
-[{"level": 1, "question": "…", "answer": "kort fasit", "explanation": "kort løsningsvei"}, …]"""
-
 
 def _todays_riddle_genres(today: datetime) -> list[tuple[str, str]]:
     """Tre sjangre for dagen (nivå 1–3), rotert deterministisk på dag-ordinal.
@@ -1042,95 +1016,82 @@ def _save_riddles_seen(seen: dict) -> None:
     os.replace(tmp, path)
 
 
-def _parse_riddles_json(text: str) -> list[dict]:
-    """Trekk JSON-arrayen ut av Claude-svaret (tåler ev. fences/omkringliggende tekst)."""
-    start = text.find("[")
-    end = text.rfind("]")
-    if start == -1 or end <= start:
-        raise ValueError("fant ingen JSON-array i svaret")
-    items = json.loads(text[start : end + 1])
-    riddles: list[dict] = []
-    for item in items:
+def _load_riddle_bank() -> list[dict]:
+    """Les gåtebanken; hopper over ugyldige oppføringer. Myk feil → tom liste."""
+    try:
+        with open(_RIDDLE_BANK_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"  ✗  gåter: kunne ikke lese {_RIDDLE_BANK_FILE} — {exc}")
+        return []
+    bank: list[dict] = []
+    for item in data.get("riddles", []):
         q = str(item.get("question", "")).strip()
         a = str(item.get("answer", "")).strip()
-        if not q or not a:
+        level = item.get("level")
+        if not q or not a or level not in (1, 2, 3):
             continue
-        riddles.append(
+        bank.append(
             {
-                "level": len(riddles) + 1,
+                "level": level,
+                "genre": str(item.get("genre", "")).strip(),
                 "question": q,
                 "answer": a,
                 "explanation": str(item.get("explanation", "")).strip(),
             }
         )
-    return riddles[:3]
+    return bank
 
 
 def fetch_daily_riddles() -> list[dict]:
     """
-    Generer 3 norske logikkgåter (nivå 1–3) med Claude. Myk feil — returnerer []
-    ved API-feil. Tidligere gåter (riddles_seen.json) sendes med i prompten som
-    unngå-liste slik at gåtene er nye hver dag.
+    Trekk 3 norske logikkgåter (nivå 1–3) fra den lokale gåtebanken
+    (riddle_bank/gaater.json). Ingen Claude-bruk. Dagens sjanger per nivå styres av
+    _todays_riddle_genres(); dedup mot riddles_seen.json sikrer at samme gåte aldri
+    trekkes igjen så lenge nivået har usette gåter. Først når alle på et nivå er
+    brukt (og eldre enn retention-vinduet ikke har frigjort noen), gjenbrukes den
+    som ble vist for lengst siden. Myk feil → [].
 
     Returnerer liste av { level, question, answer, explanation }.
     """
+    bank = _load_riddle_bank()
+    if not bank:
+        print("  ⚠  gåter: tom eller manglende gåtebank — utelates i dag")
+        return []
+
     seen = _load_riddles_seen()
     now = datetime.now()
     today = now.strftime("%Y-%m-%d")
-
     genres = _todays_riddle_genres(now)
-    genre_text = "\n".join(
-        f"- Nivå {i}: {name} ({desc})"
-        for i, (name, desc) in enumerate(genres, start=1)
-    )
 
-    recent = sorted(seen.items(), key=lambda kv: kv[1], reverse=True)
-    avoid = [q for q, _ in recent[:_RIDDLES_AVOID_IN_PROMPT]]
-    avoid_text = (
-        "\n\nUNNGÅ gåter som er like eller ligner på disse tidligere brukte:\n"
-        + "\n".join(f"- {q}" for q in avoid)
-        if avoid
-        else ""
-    )
+    riddles: list[dict] = []
+    for level, (genre_name, _desc) in enumerate(genres, start=1):
+        candidates = [r for r in bank if r["level"] == level]
+        unseen = [r for r in candidates if r["question"] not in seen]
+        in_genre = [r for r in unseen if r["genre"] == genre_name]
+        if in_genre:
+            pick = in_genre[0]
+        elif unseen:
+            pick = unseen[0]
+        elif candidates:
+            # Alt sett: gjenbruk den som ble vist for lengst siden (LRU).
+            pick = min(candidates, key=lambda r: seen.get(r["question"], ""))
+        else:
+            print(f"  ⚠  gåter: ingen gåter på nivå {level} i banken")
+            continue
+        seen[pick["question"]] = today
+        riddles.append(
+            {
+                "level": level,
+                "question": pick["question"],
+                "answer": pick["answer"],
+                "explanation": pick["explanation"],
+            }
+        )
 
-    client = anthropic.Anthropic()
-    for attempt in range(1, _RIDDLES_MAX_ATTEMPTS + 1):
-        try:
-            resp = client.messages.create(
-                model=MODEL,
-                max_tokens=_RIDDLES_MAX_TOKENS,
-                thinking={"type": "enabled", "budget_tokens": _RIDDLES_THINKING_TOKENS},
-                system=_RIDDLES_SYSTEM_PROMPT,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Dato: {today}. Lag dagens 3 gåter.\n"
-                        f"Dagens gåtetyper:\n{genre_text}{avoid_text}",
-                    }
-                ],
-            )
-            text = "".join(
-                b.text for b in resp.content if getattr(b, "type", "") == "text"
-            )
-            riddles = _parse_riddles_json(text)
-        except Exception as exc:
-            print(f"  ✗  gåter: feil ved generering (forsøk "
-                  f"{attempt}/{_RIDDLES_MAX_ATTEMPTS}) — {exc}")
-            riddles = []
-
-        if len(riddles) == 3:
-            for r in riddles:
-                seen[r["question"]] = today
-            _save_riddles_seen(seen)
-            return riddles
-
-        if attempt < _RIDDLES_MAX_ATTEMPTS:
-            print(f"  ⚠  gåter: fikk bare {len(riddles)}/3 — nytt forsøk om "
-                  f"{_RIDDLES_RETRY_DELAY} s ({attempt}/{_RIDDLES_MAX_ATTEMPTS})...")
-            time.sleep(_RIDDLES_RETRY_DELAY)
-
-    print("  ⚠  gåter: fikk ikke 3 gyldige gåter etter alle forsøk — utelates i dag")
-    return []
+    if riddles:
+        _save_riddles_seen(seen)
+    return riddles
 
 
 # ─────────────────────────────────────────────────────────────────────────────

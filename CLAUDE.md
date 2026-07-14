@@ -186,25 +186,29 @@ Per nå finnes `norsk_samfunn.json` og `medisin_og_kropp.json` (~60 spm hver, de
 `historie` og `geografi` står i `_QUIZ_CATEGORY_ORDER`, men filene er ikke lagt til ennå —
 legg dem til for å komme opp i 4 spm/dag.
 
-### Dagens gåter (Claude-generert)
+### Dagens gåter (lokal gåtebank)
 
 `fetch_daily_riddles()` i `news_briefing.py`: 3 norske **logikkgåter** (nivå 1–3, ingen
-faktakunnskap) generert av Claude i samme daglige kjøring (`_RIDDLES_SYSTEM_PROMPT`,
-JSON-output parses av `_parse_riddles_json()`). Ingen ekstern API finnes for norske
-logikkgåter — dette er det ene stedet quiz/gåter bruker Claude.
-- **Nivåkrav** (definert i systemprompten): nivå 1 = oppvarming (1–2 steg, < 2 min),
+faktakunnskap) trekkes fra en **lokal gåtebank** i `riddle_bank/gaater.json` (ligger i
+repoet, følger med i imaget via `COPY . .`). Ingen Claude-bruk, ingen ekstern API.
+- **Filformat:** `{ "riddles": [ { "level": 1|2|3, "genre": "<navn fra _RIDDLE_GENRES>",
+  "question", "answer", "explanation" } ] }`. Per nå 60 gåter: 20 per nivå = 2 per
+  sjanger per nivå — banken dekker 20 dager uten gjentak. **Utvid ved å legge til flere
+  oppføringer i fila** (fasit må være verifisert; `genre` må matche navnene i
+  `_RIDDLE_GENRES` for at sjangerrotasjonen skal treffe).
+- **Nivåkrav** (gjelder også nye gåter i banken): nivå 1 = oppvarming (1–2 steg, < 2 min),
   nivå 2 = 3–4 resonneringssteg (3–5 min), nivå 3 = skikkelig nøtt (4–6 steg, gjerne to
-  teknikker kombinert, penn og papir, 10–20 min).
+  teknikker kombinert, penn og papir, 10–20 min). Entydig fasit; `explanation` = ryddig
+  løsningsvei (maks 3 setninger nivå 1–2, maks 5 nivå 3).
 - **Sjangerrotasjon:** `_RIDDLE_GENRES` (10 typer) roteres deterministisk per dag
   (`_todays_riddle_genres()`: vindu på 3 som flyttes 3 plasser per dag-ordinal; 10 og 3 er
-  innbyrdes primiske, så alle kombinasjoner nås over 10 dager). Dagens tre typer sendes
-  eksplisitt i prompten, én per nivå — variasjon er mekanisk garantert, ikke bare oppfordret.
-- **Extended thinking** er på (`_RIDDLES_THINKING_TOKENS = 8000`) så modellen løser gåten
-  grundig før den skriver fasit — teksten hentes fra `text`-blokkene i svaret.
-Dedup: tidligere gåter
-(`riddles_seen.json` i `BRIEFING_DATA_DIR`, **må persisteres**, prunes etter
-`_RIDDLES_SEEN_RETENTION_DAYS = 120`) sendes med i prompten som unngå-liste
-(`_RIDDLES_AVOID_IN_PROMPT = 60`). Myk feil → `riddles`-feltet utelates den dagen.
+  innbyrdes primiske, så alle kombinasjoner nås over 10 dager). Dagens sjanger per nivå
+  styrer trekket fra banken.
+- **Dedup — samme gåte trekkes aldri to ganger** så lenge nivået har usette gåter:
+  `riddles_seen.json` i `BRIEFING_DATA_DIR` (**må persisteres**, prunes etter
+  `_RIDDLES_SEEN_RETENTION_DAYS = 120`). Trekk per nivå: usett i dagens sjanger → ellers
+  usett på nivået → ellers (alt sett) gjenbrukes den som ble vist for lengst siden (LRU).
+Myk feil (manglende/korrupt bank) → `riddles`-feltet utelates den dagen.
 
 ### Dagens inspirasjon (podcast-råd + boktips)
 
