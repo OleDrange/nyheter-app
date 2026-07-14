@@ -21,9 +21,10 @@ import re
 import sys
 import html
 import json
+import math
 import time
 import argparse
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 # Sørg for at terminalen håndterer UTF-8 (nødvendig på Windows)
 if hasattr(sys.stdout, "reconfigure"):
@@ -50,9 +51,19 @@ from news_briefing import (
 
 MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 8192
-LOOKBACK_DAYS = 2          # vindu på publiseringsdato (toleranse for indekseringsforsinkelse)
-MAX_ITEMS = 20             # maks studier i briefen (styres også i SYSTEM_PROMPT)
-CANDIDATE_POOL = 30        # antall ferske studier som hentes PER KATEGORI og sendes til Claude
+
+# Vindu på publiseringsdato. Forskning har ingen nyhetssyklus — en metaanalyse fra april er
+# like relevant som en fra i går — så vi jakter ikke på det ferskeste, men på det BESTE vi
+# ikke har vist før. Et bredt vindu er dessuten et *krav* for kvalitetsfiltrene under:
+# Europe PMC tildeler MeSH-termer og publikasjonstyper uker etter publisering, så en artikkel
+# som er to dager gammel er ennå ikke merket som menneskestudie eller RCT. Målt på `exercise`:
+# 2 dager → 0 treff med MESH:"Humans"; 30 dager → 24; 180 dager → rikelig.
+# 365 dager gir ~1 130 studier i poolen (~3 nye i døgnet) — nok til å levere daglig i årevis.
+LOOKBACK_DAYS = 365
+
+MAX_ITEMS = 5              # maks studier i briefen (styres også i SYSTEM_PROMPT)
+RAW_POOL = 100             # rå kandidater hentet PER KATEGORI (før lokal scoring)
+CANDIDATE_POOL = 6         # kandidater PER KATEGORI som sendes til Claude (etter scoring)
 MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
 
 # Robusthet mot tomt/mislykket Claude-svar (transient API-hikke gir noen ganger 0 tegn)
@@ -66,62 +77,110 @@ CLAUDE_RETRY_DELAY = 5     # sekunder mellom forsøk
 CLAUDE_REFUSAL_MAX_ROUNDS = 4   # maks antall isoler-og-fjern-runder før vi gir opp
 CLAUDE_PROBE_MAX_TOKENS = 16    # små kall kun for å avgjøre refusal (ja/nei)
 
-# Dedup mot gjentakelser på tvers av dager
+# Dedup mot gjentakelser på tvers av dager. To nivåer, fordi et 180-dagers vindu ellers ville
+# servert de samme toppkandidatene dag etter dag:
+#   • valgt av Claude (picked)      → aldri vist igjen (SEEN_RETENTION_DAYS)
+#   • sendt, men ikke valgt         → karantene (UNPICKED_COOLDOWN_DAYS), så den ikke brenner
+#                                     input-tokens hver dag, men kan komme tilbake senere
 SEEN_FILE = "research_seen_dois.json"
-SEEN_RETENTION_DAYS = 14
+SEEN_RETENTION_DAYS = 400
+UNPICKED_COOLDOWN_DAYS = 14  # kort: poolen er liten (~1 100), gode studier skal få komme igjen
 
 # Egen Notion-seksjon (adskilt fra nyhetsbriefens "Arkiv" / "Nyhetsbriefinger")
 ARCHIVE_TITLE = "Forskning Arkiv"
 ANCHOR_TEXT = "Forskningsbriefinger"
 
 # Én emnespørring per kategori — kandidater hentes separat og merkes med kategorien.
-# Syntaks: Europe PMC query language. SRC:MED = kun fagfellevurdert (MEDLINE/PubMed).
-# Daglig volum (LANG:eng + abstract, målt 2026-07): medisin ~4 700, kosthold ~500,
-# trening ~300 nye artikler — CANDIDATE_POOL per kategori er aldri et problem å fylle.
-_PMC_SUFFIX = " AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y"
+# Syntaks: Europe PMC query language.
+#
+# _PMC_SUFFIX er der utvalgskriteriene FAKTISK håndheves (før het det bare i systemprompten):
+#   SRC:MED     — kun fagfellevurdert (MEDLINE/PubMed)
+#   MESH:Humans — menneskestudier, ikke mus/cellekultur
+#   PUB_TYPE    — kun RCT, metaanalyse eller systematisk oversikt
+#
+# Emneordene er bundet til TITTELEN (`TITLE:"…"`), ikke fritekst. Uten det matcher Europe PMC
+# ordet hvor som helst i artikkelen, og ett tilfeldig «exercise» i et abstract om endometriose
+# gjør studien til en «trenings»-studie. Målt: fritekst ga en pool full av kreft, cellegift og
+# antipsykotika; tittelbinding ga treff som faktisk HANDLER om temaet. Prisen er volum
+# (~1 130 studier i et 365-dagers vindu, ~3 nye i døgnet) — rikelig når vi viser 5 om dagen.
+_PMC_SUFFIX = (
+    ' AND MESH:"Humans"'
+    ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
+    ' OR PUB_TYPE:"Systematic Review")'
+    " AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y"
+)
 CATEGORY_QUERIES: dict[str, str] = {
-    "medisin": (
-        '("clinical trial" OR "randomized controlled trial" OR treatment OR therapy '
-        'OR pharmacology OR cardiovascular OR metabolic OR diabetes OR obesity '
-        'OR cancer OR longevity OR "public health")' + _PMC_SUFFIX
+    "longevity": (
+        '(TITLE:"mortality" OR TITLE:"longevity" OR TITLE:"life expectancy" OR TITLE:"aging" '
+        'OR TITLE:"ageing" OR TITLE:"healthy aging" OR TITLE:"healthspan" '
+        'OR TITLE:"biological age" OR TITLE:"frailty" OR TITLE:"sarcopenia" '
+        'OR TITLE:"lifestyle" OR TITLE:"cardiovascular risk" OR TITLE:"older adults")'
+        + _PMC_SUFFIX
     ),
     "trening": (
-        '(exercise OR "physical activity" OR "strength training" OR "resistance training" '
-        'OR "aerobic exercise" OR "endurance training" OR "high-intensity interval training" '
-        'OR "sports medicine" OR "muscle hypertrophy" OR recovery)' + _PMC_SUFFIX
+        '(TITLE:"exercise" OR TITLE:"physical activity" OR TITLE:"training" '
+        'OR TITLE:"resistance training" OR TITLE:"strength training" OR TITLE:"aerobic" '
+        'OR TITLE:"interval training" OR TITLE:"muscle strength" OR TITLE:"hypertrophy" '
+        'OR TITLE:"fitness" OR TITLE:"walking" OR TITLE:"running" OR TITLE:"steps" '
+        'OR TITLE:"sedentary")' + _PMC_SUFFIX
     ),
     "kosthold": (
-        '(nutrition OR diet OR "dietary intake" OR "dietary supplement" OR "weight loss" '
-        'OR "intermittent fasting" OR protein OR "omega-3" OR micronutrient)' + _PMC_SUFFIX
+        '(TITLE:"diet" OR TITLE:"dietary" OR TITLE:"nutrition" OR TITLE:"supplementation" '
+        'OR TITLE:"supplement" OR TITLE:"protein intake" OR TITLE:"fasting" '
+        'OR TITLE:"caloric restriction" OR TITLE:"weight loss" OR TITLE:"obesity" '
+        'OR TITLE:"vitamin" OR TITLE:"omega-3" OR TITLE:"creatine" OR TITLE:"caffeine" '
+        # «fiber» alene matcher «Thulium Fiber Laser» — kostfiber må sies eksplisitt.
+        'OR TITLE:"alcohol" OR TITLE:"dietary fiber" OR TITLE:"probiotic")' + _PMC_SUFFIX
+    ),
+    # NB: «stress» og «recovery» kan IKKE stå alene — de matcher «oxidative stress» og
+    # postoperativ restitusjon, og dro inn prostata-MR og hjertekirurgi i poolen. Kun fraser.
+    "sovn_stress": (
+        '(TITLE:"sleep" OR TITLE:"insomnia" OR TITLE:"circadian" OR TITLE:"mindfulness" '
+        'OR TITLE:"meditation" OR TITLE:"psychological stress" OR TITLE:"perceived stress" '
+        'OR TITLE:"stress reduction" OR TITLE:"stress management" OR TITLE:"chronic stress" '
+        'OR TITLE:"burnout" OR TITLE:"resilience" OR TITLE:"anxiety" OR TITLE:"depression" '
+        'OR TITLE:"wellbeing" OR TITLE:"well-being" OR TITLE:"mental health" '
+        'OR TITLE:"cognitive behavioral therapy")' + _PMC_SUFFIX
     ),
 }
-CATEGORY_LABELS = {"medisin": "Medisin", "trening": "Trening", "kosthold": "Kosthold"}
+CATEGORY_LABELS = {
+    "longevity": "Longevity",
+    "trening": "Trening",
+    "kosthold": "Kosthold",
+    "sovn_stress": "Søvn og stress",
+    "medisin": "Medisin",  # legacy — kun i arkiverte briefinger
+}
 
 _API_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 _HEADERS = {"User-Agent": "research-briefing/1.0 (personal script)"}
 
-SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk om ny forskning innen medisin, trening og kosthold, for en interessert lekperson.
+SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for én bestemt leser: en oppegående lekperson som er opptatt av LONGEVITY — å leve lenge og friskt — og som vil vite hva han selv kan gjøre. Han bryr seg om trening, kosthold, søvn og stress, og han vil ha studier med tydelige tall han kan stole på.
 
-Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Velg de OPPTIL 20 mest relevante og betydningsfulle. Heller færre enn å fylle opp med svake studier. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
+Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt — utvelgelsen din handler derfor om RELEVANS og TYDELIGHET, ikke om å luke bort dyrestudier.
+
+Velg de OPPTIL 5 mest verdifulle. Heller tre sterke enn fem der to er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
 
 UTVALGSKRITERIER (prioritert rekkefølge):
-- Praktisk eller klinisk betydning for medisin, trening eller kosthold
-- Studiekvalitet: vekt randomiserte kontrollerte studier (RCT), metaanalyser, systematiske oversikter og store studier høyere enn små observasjonsstudier, dyrestudier og enkeltkasus
-- Nyhetsverdi og bredde — velg variasjon framfor mange nesten like studier
-- Fordeling: tilstreb studier fra alle tre kategoriene (minst 4 per kategori når kandidatene tillater det)
+1. Handlingsrom — kan leseren faktisk gjøre noe med dette selv (trene annerledes, spise annerledes, sove annerledes)? Klinisk behandling han aldri vil ta stilling til, velges bort.
+2. Tydelige tall — studien må rapportere konkrete effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer). Studier som kun sier "signifikant bedring" uten tall, velges bort.
+3. Betydning for lang og frisk levetid — harde utfall (dødelighet, hjerte-kar, diabetes, muskelmasse, kognisjon, søvnkvalitet) foran surrogatmål.
+4. Robusthet — store metaanalyser og RCT-er med mange deltakere foran små studier.
+5. Variasjon — unngå fem studier om nesten det samme. Spre gjerne over kategoriene, men aldri på bekostning av kvalitet.
 
 FORMAT — for hver valgte studie, nøyaktig denne strukturen:
 ## [Kort, dekkende norsk tittel](URL)
-**Kategori:** Medisin | Trening | Kosthold (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
-**Hva som ble gjort:** Design, populasjon/antall deltakere og intervensjon. 1–3 setninger.
-**Resultat:** Hovedfunn med konkrete tall (effektstørrelser, prosent, p-verdier der oppgitt). 1–3 setninger.
-**Relevans:** Én setning om hva dette betyr i praksis.
+**Kategori:** Longevity | Trening | Kosthold | Søvn og stress (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
+**Metode:** Hva slags studie er dette (RCT, metaanalyse av N studier, systematisk oversikt), hvor mange deltakere, hvem var de (alder, kjønn, helsetilstand), hvor lenge varte det, og hva gikk intervensjonen eller eksponeringen konkret ut på? Forklar designet slik at leseren skjønner hvorfor det gir grunn til å tro på resultatet. 3–4 setninger.
+**Resultat:** Hovedfunnene med konkrete tall — effektstørrelse, prosentvis endring, HR/RR/OR med konfidensintervall, p-verdi der den er oppgitt. Si alltid hva det ble sammenlignet MOT (kontrollgruppe, placebo, ingen endring). Ta med de viktigste sekundærfunnene hvis de er interessante. 3–4 setninger.
+**Hva det betyr for deg:** Oversett funnet til handling. Hvilken dose, frekvens eller mengde er det snakk om i praksis? Er effekten stor nok til å bry seg om? Hva bør leseren eventuelt endre — eller hva bekrefter dette at han kan fortsette med? Vær konkret; ingen runde formuleringer. 3–4 setninger.
+**Forbehold:** Hva studien IKKE viser. Observasjonsdata kan ikke vise årsak; kort varighet sier ingenting om livslang effekt; et smalt utvalg (kun eliteutøvere, kun eldre kvinner) generaliserer dårlig; industrifinansiering, høy heterogenitet eller lav studiekvalitet i en metaanalyse svekker konklusjonen. 1–2 setninger.
 
 REGLER:
 - Bruk ALLTID den oppgitte URL-en i lenken, uendret.
-- Oversett til norsk, men behold faguttrykk der det er naturlig.
+- Oversett til norsk, men behold faguttrykk der det er naturlig (RCT, metaanalyse, konfidensintervall).
+- Forklar forkortelser og mål første gang de brukes (f.eks. "HR 0,78" → "78 % av risikoen i kontrollgruppen").
 - Vær konkret og tallbasert. Ingen fyllord ("det er verdt å merke seg", "i tillegg", "interessant nok").
-- Ikke overdriv funn utover det sammendraget støtter. Nevn forbehold (lite utvalg, dyrestudie) kort der det er relevant.
+- Ikke overdriv funn utover det sammendraget støtter. Ikke dikt opp tall som ikke står i sammendraget.
 - Ingen innledning eller oppsummering — start rett på første ## studie."""
 
 
@@ -136,21 +195,56 @@ def _seen_path() -> str:
 
 
 def _load_seen() -> dict:
+    """Les dedup-cachen og normaliser til {doi: {"last": dato, "picked": bool}}.
+
+    Bakoverkompatibel: det gamle formatet lagret en ren datostreng per DOI, og alle
+    oppføringene der var studier Claude faktisk valgte — de tolkes som picked=True."""
     try:
         with open(_seen_path(), encoding="utf-8") as f:
-            return json.load(f)
+            raw = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
+    seen: dict[str, dict] = {}
+    for doi, val in (raw or {}).items():
+        if isinstance(val, str):  # gammelt format: bare datoen
+            seen[doi] = {"last": val, "picked": True}
+        elif isinstance(val, dict) and val.get("last"):
+            seen[doi] = {"last": val["last"], "picked": bool(val.get("picked"))}
+    return seen
 
-def _save_seen(seen: dict, new_dois: list[str]) -> None:
+
+def _is_blocked(seen: dict, doi: str, today: date | None = None) -> bool:
+    """Skal denne DOI-en holdes utenfor dagens kandidatpool?
+
+    Valgt tidligere → blokkert helt ut SEEN_RETENTION_DAYS (leseren skal aldri se samme
+    studie to ganger). Sendt til Claude uten å bli valgt → blokkert i UNPICKED_COOLDOWN_DAYS,
+    så den slutter å brenne input-tokens hver dag, men kan komme tilbake senere."""
+    entry = seen.get(doi)
+    if not entry:
+        return False
+    days = SEEN_RETENTION_DAYS if entry["picked"] else UNPICKED_COOLDOWN_DAYS
+    cutoff = ((today or datetime.now().date()) - timedelta(days=days)).isoformat()
+    return entry["last"] >= cutoff
+
+
+def _save_seen(seen: dict, sent_dois: list[str], picked_dois: list[str]) -> None:
+    """Merk dagens kandidater som sett. `sent_dois` er alle som ble sendt til Claude,
+    `picked_dois` de som faktisk havnet i briefingen (picked=True veier tyngst — en DOI
+    som først var sendt-og-forkastet og senere blir valgt, oppgraderes)."""
     today = datetime.now().date().isoformat()
-    for doi in new_dois:
-        if doi:
-            seen[doi] = today
-    # Prun oppføringer eldre enn SEEN_RETENTION_DAYS (ISO-datoer kan sammenlignes som tekst)
-    cutoff = (datetime.now().date() - timedelta(days=SEEN_RETENTION_DAYS)).isoformat()
-    seen = {doi: d for doi, d in seen.items() if d >= cutoff}
+    picked = set(picked_dois)
+    for doi in sent_dois:
+        if not doi:
+            continue
+        was_picked = seen.get(doi, {}).get("picked", False)
+        seen[doi] = {"last": today, "picked": doi in picked or was_picked}
+
+    # Prun oppføringer som ikke lenger kan blokkere noe (ISO-datoer sammenlignes som tekst).
+    keep_from = (
+        datetime.now().date() - timedelta(days=max(SEEN_RETENTION_DAYS, UNPICKED_COOLDOWN_DAYS))
+    ).isoformat()
+    seen = {doi: e for doi, e in seen.items() if e["last"] >= keep_from}
     try:
         with open(_seen_path(), "w", encoding="utf-8") as f:
             json.dump(seen, f, ensure_ascii=False, indent=2)
@@ -170,10 +264,166 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Lokal scoring — grovsorteringen skjer HER, ikke hos Claude
+#
+# Europe PMC-spørringen garanterer allerede menneskestudie + RCT/metaanalyse/oversikt.
+# Scoringen rangerer det som er igjen etter det leseren faktisk er ute etter: tydelige tall,
+# harde utfall, og noe han kan gjøre selv. Kun topp CANDIDATE_POOL per kategori sendes til
+# Claude — det kutter input fra ~32 000 til ~9 000 tokens/dag og gjør at Claude bruker
+# kapasiteten sin på å FORKLARE i stedet for å lete.
+# ─────────────────────────────────────────────────────────────────────────────
+
+MIN_SCORE = 3.0  # kandidater under dette forkastes helt — heller færre enn svake
+
+# Studiedesign (matches mot pubTypeList)
+_DESIGN_POINTS = [
+    ("meta-analysis", 4.0),
+    ("randomized controlled trial", 3.0),
+    ("systematic review", 2.0),
+]
+
+# Tydelige statistiske resultater — selve kravet: «studier med tydelige tall».
+_STATS_PATTERNS = [
+    r"\b95\s*%?\s*(ci|konfidens)",           # 95% CI
+    r"\bci\b\s*[:=]?\s*[\[(]",               # CI [0.71, 0.94]
+    r"\b(hazard ratio|hr)\s*[:=]?\s*\d",     # HR = 0.78
+    r"\b(risk ratio|relative risk|rr)\s*[:=]?\s*\d",
+    r"\b(odds ratio|or)\s*[:=]?\s*\d",
+    r"\b(smd|standardi[sz]ed mean difference)\b",
+    r"\b(md|mean difference)\s*[:=]?\s*-?\d",
+    r"\bp\s*[<=>]\s*0?\.\d",                 # p < 0.05
+    r"\b\d{1,3}(\.\d+)?\s*%\s*(lower|higher|reduction|increase|decrease|greater)",
+]
+
+# Harde/relevante utfall — det som faktisk betyr noe for et langt, friskt liv.
+_OUTCOME_TERMS = [
+    "all-cause mortality", "mortality", "life expectancy", "longevity", "healthspan",
+    "cardiovascular", "cardiorespiratory fitness", "vo2", "blood pressure", "hba1c",
+    "insulin sensitivity", "ldl", "body composition", "lean mass", "muscle mass",
+    "muscle strength", "sarcopenia", "frailty", "bone density", "cognition",
+    "cognitive decline", "dementia", "depression", "sleep quality", "sleep duration",
+    "biological age", "epigenetic age", "inflammation", "visceral fat", "type 2 diabetes",
+]
+
+# Smale pasientgrupper og ren klinikk. Tittelbindingen i spørringen sikrer at studien HANDLER
+# om trening/kosthold/søvn — men en RCT på trening hos pasienter med aksial spondylartritt eller
+# hos slagpasienter under rehabilitering sier lite om hva en frisk leser bør gjøre. Vektes ned
+# hardt, og på TITTELEN, som er der studiepopulasjonen faktisk står.
+_NARROW_POPULATION = [
+    # «patients with …» er det mest treffsikre enkeltsignalet på at studien gjelder en
+    # pasientgruppe leseren ikke tilhører.
+    "patients with", "patients undergoing", "in patients",
+    "cancer", "tumor", "tumour", "chemotherapy", "radiotherapy", "oncolog", "leukemia",
+    "myeloma", "lymphoma", "prostate", "palliative", "survivors",
+    "stroke", "parkinson", "alzheimer", "dementia patients", "schizophrenia", "psychiatric",
+    "bipolar", "psychosis", "autism", "adhd", "epilepsy", "multiple sclerosis",
+    "cerebral palsy", "spinal cord injury", "traumatic brain injury",
+    "dialysis", "hemodialysis", "kidney disease", "cirrhosis", "hepatitis", "hiv",
+    "copd", "cystic fibrosis", "asthma", "spondyl", "arthritis", "fibromyalgia", "lupus",
+    "preoperative", "postoperative", "perioperative", "procedural", "surgery", "surgical",
+    "anesthesia", "anaesthesia", "rehabilitation", "intensive care", "mechanical ventilation",
+    "sepsis", "transplant", "prosthesis", "denture", "dental", "orthodontic",
+    "wound healing", "catheter", "amputation", "long covid",
+    "neonatal", "preterm", "perinatal", "pediatric", "paediatric", "children", "adolescent",
+    "pregnan", "postpartum", "menopaus", "infertility", "dysmenorrhea", "endometriosis",
+]
+
+# Medikament-/prosedyre-/apparatintervensjoner: leseren tar aldri stilling til dette selv.
+_DRUG_TERMS = [
+    "drug", "pharmacolog", "antipsychotic", "antidepressant", "anticoagulant", "statin",
+    "metformin", "semaglutide", "colchicine", "corticosteroid", "chemotherap",
+    "immunotherap", "vaccine", "antibiotic", "acupuncture", "monoclonal",
+    "inhibitor", "agonist", "antagonist",
+    "transcranial", "electrical stimulation", "magnetic stimulation", "photobiomodulation",
+    "laser", "lithotripsy",
+    # Genetikk: interessant, men ikke noe leseren kan handle på.
+    "polymorphism", "genotype", "gene variant", "mendelian randomization",
+]
+
+_N_PATTERNS = [
+    r"\bn\s*=\s*([\d,\. ]{2,12})",
+    r"([\d,\. ]{2,12})\s*(participants|patients|adults|subjects|individuals|men|women)",
+    r"(?:including|involving|comprising)\s+([\d,\. ]{2,12})\s",
+]
+
+
+def _extract_sample_size(text: str) -> int:
+    """Største plausible deltakerantall i abstractet (0 hvis ingen funnet).
+    Vi tar det STØRSTE treffet fordi abstracts ofte nevner både delgrupper og totalen."""
+    best = 0
+    for pat in _N_PATTERNS:
+        for m in re.finditer(pat, text, flags=re.IGNORECASE):
+            raw = re.sub(r"[,\. ]", "", m.group(1) or "")
+            if raw.isdigit():
+                n = int(raw)
+                if 10 <= n <= 50_000_000:  # filtrer bort årstall/doser/ID-er
+                    best = max(best, n)
+    return best
+
+
+def _score_candidate(article: dict) -> tuple[float, str]:
+    """Rangér en kandidat. Returnerer (score, kort begrunnelse for terminalloggen).
+
+    Emnet er allerede garantert av tittelbindingen i spørringen, så scoringen rangerer på
+    det som skiller en studie leseren kan BRUKE fra en han ikke kan: tydelige tall, harde
+    utfall, robust utvalg — og at funnet gjelder folk som ham, ikke en smal pasientgruppe."""
+    title = article["title"].lower()
+    text = f"{title} {article['abstract']}".lower()
+    pub_types = " ".join(article.get("pub_types") or []).lower()
+    score = 0.0
+    why = []
+
+    for name, pts in _DESIGN_POINTS:
+        if name in pub_types:
+            score += pts
+            why.append(name.split()[0])
+            break  # kun den sterkeste designtypen teller
+
+    n = _extract_sample_size(text)
+    if n:
+        # log10 dempet: 100 deltakere → 1,6; 10 000 → 3,2. Store studier vinner, men en
+        # gigantisk kohort om noe irrelevant skal ikke kunne kjøpe seg til toppen.
+        score += min(0.8 * math.log10(n), 4.0)
+        why.append(f"n≈{n:,}".replace(",", " "))
+
+    stats_hits = sum(1 for pat in _STATS_PATTERNS if re.search(pat, text))
+    if stats_hits:
+        score += min(1.0 * stats_hits, 3.0)
+        why.append(f"{stats_hits} tallsignal")
+    else:
+        score -= 3.0  # ingen konkrete effektmål → ingenting å skrive «Resultat» av
+
+    outcome_hits = sum(1 for t in _OUTCOME_TERMS if t in text)
+    if outcome_hits:
+        score += min(0.8 * outcome_hits, 3.0)
+        why.append(f"{outcome_hits} utfall")
+
+    # Smal pasientgruppe / ren klinikk: straffes på TITTELEN (der populasjonen står), og
+    # svakere på abstractet (en nevnt bisetning skal ikke drepe en ellers god studie).
+    narrow_title = sum(1 for t in _NARROW_POPULATION if t in title)
+    if narrow_title:
+        score -= 4.0 * narrow_title
+        why.append(f"−smal populasjon×{narrow_title}")
+    elif any(t in article["abstract"].lower() for t in _NARROW_POPULATION):
+        score -= 1.0
+        why.append("−klinisk kontekst")
+
+    drug_hits = sum(1 for t in _DRUG_TERMS if t in title)
+    if drug_hits:
+        score -= 4.0 * drug_hits
+        why.append(f"−medikament×{drug_hits}")
+
+    return score, ", ".join(why)
+
+
 def fetch_research() -> list[dict]:
-    """Hent kandidatstudier per kategori (medisin/trening/kosthold) og slå sammen.
-    Hver artikkel merkes med `category`; duplikater på tvers av kategoriene
-    (samme DOI/id) beholdes kun én gang — første kategori vinner."""
+    """Hent og rangér kandidatstudier per kategori.
+
+    Per kategori: hent RAW_POOL nyest indekserte studier som matcher de harde filtrene,
+    fjern det leseren allerede har sett (og det som ligger i karantene), score lokalt, og
+    behold topp CANDIDATE_POOL. Duplikater på tvers av kategoriene beholdes kun én gang —
+    første kategori vinner."""
     import time as _time
 
     today = datetime.now().date()
@@ -184,6 +434,7 @@ def fetch_research() -> list[dict]:
     articles: list[dict] = []
     picked_ids: set[str] = set()
     skipped_seen = 0
+    skipped_weak = 0
 
     for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES.items()):
         if ci:
@@ -191,19 +442,19 @@ def fetch_research() -> list[dict]:
         params = {
             "query": cat_query + date_filter,
             "resultType": "core",
-            "sort": "P_PDATE_D desc",
-            "pageSize": str(CANDIDATE_POOL),
+            "sort": "P_PDATE_D desc",  # nyest indekserte først — poolen roterer av seg selv
+            "pageSize": str(RAW_POOL),
             "format": "json",
         }
         try:
-            resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=20)
+            resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=30)
             resp.raise_for_status()
             data = resp.json()
         except Exception as exc:
             print(f"  ✗  Europe PMC ({category}): feil ved henting — {exc}")
             continue
 
-        count = 0
+        scored: list[tuple[float, str, dict]] = []
         for r in data.get("resultList", {}).get("result", []):
             title = (r.get("title") or "").strip().rstrip(".")
             abstract = _strip_html(r.get("abstractText", ""))
@@ -211,7 +462,7 @@ def fetch_research() -> list[dict]:
                 continue
 
             doi = (r.get("doi") or "").strip().lower()
-            if doi and doi in seen:
+            if doi and _is_blocked(seen, doi, today):
                 skipped_seen += 1
                 continue
 
@@ -234,23 +485,35 @@ def fetch_research() -> list[dict]:
             else:
                 url = ""
 
-            articles.append(
-                {
-                    "category": category,
-                    "title": title,
-                    "abstract": abstract[:MAX_ABSTRACT_CHARS],
-                    "authors": (r.get("authorString") or "").strip(),
-                    "journal": journal,
-                    "date": r.get("firstPublicationDate", "—"),
-                    "doi": doi,
-                    "url": url,
-                }
-            )
-            count += 1
-        print(f"  ✓  {category}: {count} kandidater")
+            article = {
+                "category": category,
+                "title": title,
+                "abstract": abstract[:MAX_ABSTRACT_CHARS],
+                "authors": (r.get("authorString") or "").strip(),
+                "journal": journal,
+                "date": r.get("firstPublicationDate", "—"),
+                "doi": doi,
+                "url": url,
+                "pub_types": (r.get("pubTypeList") or {}).get("pubType") or [],
+            }
+            score, why = _score_candidate(article)
+            if score < MIN_SCORE:
+                skipped_weak += 1
+                continue
+            scored.append((score, why, article))
+
+        scored.sort(key=lambda t: t[0], reverse=True)
+        top = scored[:CANDIDATE_POOL]
+        print(f"  ✓  {category}: {len(top)} kandidater (av {len(scored)} over terskel)")
+        for score, why, article in top:
+            print(f"       {score:5.1f}  {article['title'][:72]}")
+            print(f"              ({why})")
+            articles.append(article)
 
     if skipped_seen:
-        print(f"  ({skipped_seen} allerede dekket tidligere — hoppet over)")
+        print(f"  ({skipped_seen} allerede vist eller i karantene — hoppet over)")
+    if skipped_weak:
+        print(f"  ({skipped_weak} forkastet av lokal scoring — under terskel {MIN_SCORE})")
     return articles
 
 
@@ -262,9 +525,10 @@ def fetch_research() -> list[dict]:
 def build_candidates_text(articles: list[dict]) -> str:
     lines = []
     for i, a in enumerate(articles, 1):
+        design = ", ".join(a.get("pub_types") or []) or "—"
         lines.append(
             f"[{i}] ({CATEGORY_LABELS.get(a.get('category'), a.get('category', '?'))}) {a['title']}\n"
-            f"Tidsskrift: {a['journal']} | Publisert: {a['date']}\n"
+            f"Design: {design} | Tidsskrift: {a['journal']} | Publisert: {a['date']}\n"
             f"URL: {a['url']}\n"
             f"Sammendrag: {a['abstract']}\n"
             "---"
@@ -276,7 +540,8 @@ def _build_user_content(articles: list[dict]) -> str:
     today_str = datetime.now().strftime("%A %d. %B %Y")
     return (
         f"Dato: {today_str}\n\n"
-        f"{len(articles)} kandidatstudier fra siste {LOOKBACK_DAYS} dager. "
+        f"{len(articles)} kandidatstudier, forhåndsfiltrert til menneskestudier "
+        f"(RCT / metaanalyse / systematisk oversikt) fra de siste {LOOKBACK_DAYS} dagene. "
         f"Velg opptil {MAX_ITEMS} av dem:\n\n"
         f"{build_candidates_text(articles)}"
     )
@@ -507,14 +772,17 @@ def main() -> None:
     print(f"  Forskningsbriefing  —  {today_human}")
     print(f"{'─'*70}\n")
 
-    print(f"Henter forskning fra Europe PMC (siste {LOOKBACK_DAYS} dager)...")
+    print(
+        f"Henter forskning fra Europe PMC — menneskestudier (RCT/metaanalyse/oversikt), "
+        f"siste {LOOKBACK_DAYS} dager..."
+    )
     articles = fetch_research()
 
     if not articles:
         print("\nIngen nye studier funnet (eller alle allerede dekket). Avslutter.")
         sys.exit(0)
 
-    print(f"  {len(articles)} kandidatstudier hentet.")
+    print(f"\n  {len(articles)} kandidatstudier sendes til Claude.")
 
     briefing = summarize_research_with_claude(articles)
 
@@ -529,9 +797,12 @@ def main() -> None:
               "forskningsbriefing. Feltet utelates for i dag.")
         sys.exit(1)
 
-    # Marker valgte studier som sett (de hvis URL faktisk dukker opp i briefingen)
-    selected = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
-    _save_seen(_load_seen(), selected)
+    # Marker dagens kandidater som sett. Valgte studier (URL-en dukker opp i briefingen)
+    # blokkeres for godt; de øvrige som ble sendt til Claude, får karantene — ellers ville
+    # de samme toppkandidatene blitt sendt inn på nytt hver eneste dag.
+    picked = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
+    sent = [a["doi"] for a in articles if a["doi"]]
+    _save_seen(_load_seen(), sent, picked)
 
     # Lagre forskningsbriefingen til datalageret (merges inn i samme dagsfil som nyhetsbriefen)
     research_items = [

@@ -8,7 +8,7 @@ repoet: `/root/nyheter-app`, remote `git@github.com:OleDrange/nyheter-app.git`, 
 
 - **Generator** (Python, cron 05:00 hver dag):
   - `news_briefing.py` — nyhetsbriefing fra RSS + Bergen-vær + markedssnapshot.
-  - `research_briefing.py` — maks 5 nye fagfellevurderte studier fra Europe PMC.
+  - `research_briefing.py` — maks 5 fagfellevurderte menneskestudier (longevity) fra Europe PMC.
 - **Nettside** (`web/`, Astro 5 SSR på Node) — leser JSON ved hver forespørsel og viser
   dagens briefing + arkiv. Nytt *innhold* vises uten rebuild; *kodeendringer* krever rebuild.
   Samme app serverer også **https://forskning.modr.no** (host-rutet i `web/src/middleware.js`)
@@ -238,19 +238,53 @@ Myk feil per del; feltet utelates kun hvis alt feiler.
 
 ### Forskningsbriefing (`research_briefing.py`)
 
-- **Kilde:** Europe PMC `search`-REST (ingen nøkkel), `resultType=core` (fulle abstracts),
-  `SRC:MED` = kun fagfellevurdert. Hentes **per kategori** via `CATEGORY_QUERIES`
-  (medisin/trening/kosthold — daglig volum målt 2026-07: ~4 700 / ~300 / ~500 nye artikler,
-  så poolen fylles alltid). Kryss-kategori-duplikater fjernes (første kategori vinner).
-- **Konstanter øverst i fila:** `LOOKBACK_DAYS = 2`, `MAX_ITEMS = 20`,
-  `CANDIDATE_POOL = 30` (per kategori), `CATEGORY_QUERIES` (endre for å justere tema).
-- **Format per studie:** `## [tittel](url)` + **Kategori** (Medisin/Trening/Kosthold) +
-  **Hva som ble gjort** / **Resultat** / **Relevans** (nettsiden parser disse etikettene;
-  `splitResearch()` løfter Kategori ut som eget `category`-felt). Heller færre enn svake.
+Målgruppe: **longevity** — menneskestudier med tydelige tall som leseren kan handle på selv.
+Utvalget skjer i **tre trinn** (spørring → lokal scoring → Claude), ikke hos Claude alene.
+
+**1. Europe PMC-spørring — her håndheves kvalitetskravene.** `search`-REST (ingen nøkkel),
+`resultType=core` (fulle abstracts). `_PMC_SUFFIX` krever `SRC:MED` (fagfellevurdert),
+`MESH:"Humans"` (ingen mus/celler) og `PUB_TYPE` = RCT / metaanalyse / systematisk oversikt.
+Fire kategorier i `CATEGORY_QUERIES`: **longevity / trening / kosthold / sovn_stress**.
+Kryss-kategori-duplikater fjernes (første kategori vinner).
+
+- **Emneordene er bundet til tittelen** (`TITLE:"exercise"`), ikke fritekst. Uten det matcher
+  Europe PMC ordet hvor som helst i artikkelen, og poolen fylles av kreft, cellegift og
+  antipsykotika (ett tilfeldig «exercise» i et endometriose-abstract gjorde studien til en
+  «trenings»-studie). **Ikke bytt tilbake til fritekst.** Fallgruver funnet ved testing:
+  `TITLE:"fiber"` matcher «Thulium **Fiber** Laser» (bruk `"dietary fiber"`), `TITLE:"stress"`
+  matcher «oxidative stress», og `TITLE:"recovery"` matcher postoperativ restitusjon — de to
+  siste må stå som fraser («psychological stress», «stress reduction» …).
+- **`LOOKBACK_DAYS = 365`, ikke 2.** Forskning har ingen nyhetssyklus, og et kort vindu gjør
+  kvalitetsfiltrene *utilgjengelige*: Europe PMC tildeler MeSH/PUB_TYPE uker etter publisering,
+  så en to dager gammel artikkel er ennå ikke merket som menneskestudie eller RCT (målt på
+  `exercise`: 2 dager → 0 treff med `MESH:"Humans"`, 30 dager → 24). Vinduet gir ~1 130 studier
+  (~3 nye i døgnet) — rikelig når vi viser 5 om dagen.
+
+**2. Lokal scoring (`_score_candidate`) — gratis grovsortering før Claude.** Rangerer de
+`RAW_POOL = 100` rå kandidatene per kategori og sender kun topp `CANDIDATE_POOL = 6`
+(→ maks 24) videre. Poeng for studiedesign (`pubTypeList`), utvalgsstørrelse (log10, dempet),
+tydelige effektmål (HR/RR/OR/CI/p — mangler de, trekkes det fra: da er det ingen «Resultat» å
+skrive) og harde utfall. **Trekk fra** for smale pasientgrupper (`_NARROW_POPULATION` — «patients
+with …» er det mest treffsikre signalet) og medikament-/apparat-/genetikkstudier (`_DRUG_TERMS`):
+en RCT på trening hos slagpasienter sier lite om hva en frisk leser bør gjøre. Under `MIN_SCORE`
+forkastes helt. Dette kuttet input fra ~32 000 til ~9 000 tokens/dag (~0,16 → ~0,05 $/dag).
+
+**3. Claude (`MAX_ITEMS = 5`)** velger og forklarer. Format per studie:
+`## [tittel](url)` + **Kategori** + **Metode** / **Resultat** / **Hva det betyr for deg** /
+**Forbehold** — 3–4 setninger på de tre første. Nettsiden parser etikettene;
+`splitResearch()` løfter Kategori ut som eget `category`-felt (`normalizeCategory()` godtar både
+visningsnavn og slug). Heller færre enn svake.
+
 - `research_items` i JSON-en har også `category` (kandidatens kilde-kategori).
-- **Dedup:** `research_seen_dois.json` (DOI-er, prunes etter `SEEN_RETENTION_DAYS = 14`).
-  Kun studier Claude faktisk valgte markeres som sett. Ligger i `BRIEFING_DATA_DIR` —
-  **må persisteres** (volumet), ellers nullstilles dedup.
+- **Dedup — to nivåer** i `research_seen_dois.json` (`{doi: {last, picked}}`; gammelt format
+  = ren datostreng leses som `picked: true`). Valgt av Claude → blokkert `SEEN_RETENTION_DAYS
+  = 400` dager (leseren skal **aldri** se samme studie to ganger). Sendt, men ikke valgt →
+  karantene `UNPICKED_COOLDOWN_DAYS = 14` dager, så den ikke brenner input-tokens hver dag,
+  men får komme tilbake (poolen er liten). Uten dette ville et 365-dagers vindu servert de
+  samme toppkandidatene daglig. Ligger i `BRIEFING_DATA_DIR` — **må persisteres** (volumet).
+- **Legacy:** kategorien `medisin` produseres ikke lenger, men finnes i arkiverte briefinger —
+  derfor ligger den fortsatt sist i `RESEARCH_CATEGORIES` (`web/src/lib/briefings.js`) og i
+  `CATEGORY_LABELS`. Tomme grupper skjules av `ResearchList.astro`.
 - Gjenbruker hjelpefunksjoner fra `news_briefing.py` (bl.a. `store_briefing`).
 
 ## Datalager — JSON-kontrakten
@@ -269,7 +303,7 @@ kun egne felter oppdateres. Skrivingen er **atomisk** (`.tmp` + `os.replace`).
   "weather": { ... },          // fetch_weather()-dict for Bergen (inkl. daily/hourly)
   "weather_alt": { "oslo": { ... }, "alicante": { ... } },  // samme form som weather
   "market": { ... },           // fetch_market_snapshot()-dict
-  "research_items": [ { "title", "url", "journal", "date" } ],
+  "research_items": [ { "title", "url", "journal", "date", "category" } ],
   "quiz": [ { "level", "difficulty", "category", "question", "options", "answer", "repeat"? } ],
   "riddles": [ { "level", "question", "answer", "explanation" } ],
   "learning": { "podcasts": [ { "podcast", "episode", "url", "date", "tip" } ],
@@ -347,8 +381,10 @@ bygges uten ekstra datainnhenting.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
   `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (per
   «## »-seksjon; håndterer flagg-emoji som 🇳🇴), `splitResearch(research_md)` →
-  `[{ title, url, category, parts, html }]` (`parts` = de merkede avsnittene Hva som ble
-  gjort/Resultat/Relevans; `category` løftes ut av **Kategori**-etiketten; `html` er fallback), `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
+  `[{ title, url, category, parts, html }]` (`parts` = de merkede avsnittene Metode/Resultat/
+  Hva det betyr for deg/Forbehold — og Hva som ble gjort/Relevans i arkiverte briefinger;
+  `category` løftes ut av **Kategori**-etiketten via `normalizeCategory()`; `html` er fallback),
+  `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
 - **Temaer:** 5 stk via `[data-theme]` på `<html>`, lagres i `localStorage` (`theme`), settes
   før paint av `is:inline`-skript i `<head>`. **Nytt tema = (1) `[data-theme="<id>"]`-blokk i
   `src/styles/global.css`, (2) én linje i `src/lib/themes.js`** — resten bygges fra registeret.

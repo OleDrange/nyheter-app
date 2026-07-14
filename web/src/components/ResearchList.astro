@@ -15,10 +15,24 @@ const groups = RESEARCH_CATEGORIES.map((cat) => ({
 const rest = studies.filter((st) => !RESEARCH_CATEGORIES.some((c) => c.id === st.category));
 if (rest.length) groups.push({ id: 'annet', label: 'Øvrig', emoji: '🔬', studies: rest });
 
+// Etikettene fra generatorens SYSTEM_PROMPT. «Hva som ble gjort» og «Relevans» er det gamle
+// formatet — beholdes så arkiverte briefinger fortsatt rendrer med ikon.
 const PART_ICON = {
+  Metode: '🔬',
   'Hva som ble gjort': '🔬',
   Resultat: '📊',
+  'Hva det betyr for deg': '💡',
   Relevans: '💡',
+  Forbehold: '⚠️',
+};
+
+// Konklusjonen — det leseren skal ta med seg — fremheves; forbeholdene dempes.
+const KEY_PARTS = ['Hva det betyr for deg', 'Relevans'];
+
+const partClass = (label) => {
+  if (KEY_PARTS.includes(label)) return 'study__part study__part--key';
+  if (label === 'Forbehold') return 'study__part study__part--caveat';
+  return 'study__part';
 };
 ---
 
@@ -36,7 +50,7 @@ const PART_ICON = {
               {st.parts.length ? (
                 <div class="study__parts">
                   {st.parts.map((p) => (
-                    <div class={p.label === 'Relevans' ? 'study__part study__part--key' : 'study__part'}>
+                    <div class={partClass(p.label)}>
                       <div class="study__label">
                         <span class="study__label-icon" aria-hidden="true">{PART_ICON[p.label] || '•'}</span>
                         {p.label}

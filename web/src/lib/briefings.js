@@ -59,10 +59,14 @@ export function weekdayNo(dateStr) {
 export const FORSKNING_URL = 'https://forskning.modr.no';
 
 // Kategoriene i forskningsbriefingen — rekkefølge og emoji brukes av visningen.
+// `medisin` ligger sist og er legacy: generatoren produserer den ikke lenger, men arkiverte
+// briefinger har den, og tomme grupper skjules uansett i ResearchList.
 export const RESEARCH_CATEGORIES = [
-  { id: 'medisin', label: 'Medisin', emoji: '🩺' },
+  { id: 'longevity', label: 'Longevity', emoji: '🧬' },
   { id: 'trening', label: 'Trening', emoji: '🏋️' },
   { id: 'kosthold', label: 'Kosthold', emoji: '🥗' },
+  { id: 'sovn_stress', label: 'Søvn og stress', emoji: '😴' },
+  { id: 'medisin', label: 'Medisin', emoji: '🩺' },
 ];
 
 // Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten.
@@ -122,6 +126,19 @@ export function splitNewsSections(md) {
 const STUDY_PART_RE = /\*\*\s*(.+?)\s*:\*\*\s*([\s\S]*?)(?=\n\s*\*\*|$)/g;
 
 /**
+ * Claude skriver kategorien som visningsnavn («Søvn og stress»), mens id-en i
+ * `research_items` er en slug (`sovn_stress`). Godta begge former.
+ */
+function normalizeCategory(raw) {
+  const val = String(raw || '').replace(/[*_]/g, ' ').trim().toLowerCase();
+  if (!val) return null;
+  const hit = RESEARCH_CATEGORIES.find(
+    (c) => c.label.toLowerCase() === val || c.id.replace(/_/g, ' ') === val,
+  );
+  return hit ? hit.id : val;
+}
+
+/**
  * Del forskningsbriefingen (`research_md`) per studie. Hver studie er
  * `## [tittel](url)` etterfulgt av merkede avsnitt (Kategori/Hva/Resultat/Relevans).
  * Returnerer [{ title, url, category, parts: [{ label, html }], html }] der
@@ -153,7 +170,7 @@ export function splitResearch(md) {
         const label = m[1].trim();
         const raw = m[2].trim();
         if (/^kategori$/i.test(label)) {
-          category = raw.replace(/[*_]/g, '').trim().toLowerCase() || null;
+          category = normalizeCategory(raw);
           continue;
         }
         parts.push({ label, html: marked.parseInline(raw) });
