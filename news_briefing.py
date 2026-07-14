@@ -1583,6 +1583,45 @@ def _norm_title(title: str) -> str:
     return re.sub(r"\s+", " ", t).strip()
 
 
+# Lokalt kutt-filter — systemprompten sier «KUTT ALLTID: sport, kjendis, krim,
+# underholdning, lokale ulykker», men artiklene ble likevel sendt til Claude, som
+# betalte input-tokens for å forkaste dem. Dette filteret kutter de åpenbare
+# tilfellene gratis FØR de teller mot MAX_PER_FEED, så plassene går til saker
+# Claude faktisk kan bruke.
+#
+# Kun TITTELEN sjekkes, og listen er bevisst konservativ: en sak som feilkuttes
+# her kan Claude aldri redde, mens en som slipper gjennom bare koster noen
+# input-tokens. Derfor f.eks. «drapssiktet»/«siktet for», men aldri bare «drept»
+# (som ville kuttet krigsnyheter under 🌍 Internasjonalt).
+_CUT_TITLE_PATTERNS = [
+    # Sport
+    r"fotball", r"\blandslag", r"eliteserien", r"obos-ligaen", r"toppserien",
+    r"champions league", r"europa league", r"premier league", r"bundesliga",
+    r"la liga", r"\bserie a\b", r"håndball", r"skiskyting", r"langrenn",
+    r"\balpint\b", r"hoppuka", r"friidrett", r"sykkelritt", r"tour de france",
+    r"\bwimbledon\b", r"\btennis\b", r"\bnba\b", r"\bnhl\b", r"\bnfl\b",
+    # (?<!')…(?!') unngår engelske sammentrekninger som «catch 'em all» / «good ol'»
+    r"formel 1", r"(?<!')\b(?:vm|em|ol)\b(?!')", r"\bfootball\b", r"\bsoccer\b",
+    r"\bcricket\b", r"\brugby\b", r"\bolympic", r"world cup", r"grand slam",
+    # Krim (konservativt — krig/geopolitikk skal IKKE treffes)
+    r"drapssiktet", r"drapstiltalt", r"drapsdømt", r"siktet for", r"tiltalt for",
+    r"pågrepet", r"varetektsfengsl", r"knivstukket", r"knivstikking",
+    r"voldtekt", r"\branet\b", r"væpnet ran", r"\binnbrudd\b", r"\bovergrep\b",
+    # NB: ikke «sentenced to»/«found guilty» — treffer krigsforbryterdommer (🌍) og
+    # store svindeldommer med markedseffekt (📈).
+    r"\bmurder\b", r"\bstabbed\b", r"\bstabbing\b", r"\bjailed\b",
+    r"\bmanslaughter\b", r"\brape\b",
+    # Kjendis og underholdning
+    r"\bkjendis", r"\beurovision\b", r"melodi grand prix", r"\bgrammy\b",
+    r"\boscars\b", r"realityserie", r"realitydeltaker", r"\binfluenser\b",
+    r"\bhollywood\b",
+    # Lokale ulykker
+    r"trafikkulykke", r"dødsulykke", r"frontkollisjon", r"kjørte av veien",
+    r"mc-ulykke", r"\bpåkjørt\b",
+]
+_CUT_TITLE_RE = re.compile("|".join(_CUT_TITLE_PATTERNS), re.IGNORECASE)
+
+
 _MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 
 
@@ -1646,11 +1685,14 @@ def _dedup_articles(articles: list[dict]) -> list[dict]:
 
 def fetch_articles(skip: dict | None = None) -> list[dict]:
     """Hent artikler fra alle feeds. `skip` (fra `_load_recent_briefing_points()`)
-    filtrerer bort saker som allerede sto i tidligere briefinger, før de teller
-    mot MAX_PER_FEED — plassene går til ferske saker."""
+    filtrerer bort saker som allerede sto i tidligere briefinger, og
+    `_CUT_TITLE_RE` kutter kategorier Claude uansett ville forkastet (sport, krim,
+    kjendis, ulykker) — begge før artiklene teller mot MAX_PER_FEED, så plassene
+    går til ferske, brukbare saker."""
     cutoff = datetime.now(timezone.utc) - timedelta(hours=LOOKBACK_HOURS)
     articles: list[dict] = []
     skipped_seen = 0
+    skipped_cut = 0
 
     for source, url in RSS_FEEDS.items():
         try:
@@ -1692,6 +1734,10 @@ def fetch_articles(skip: dict | None = None) -> list[dict]:
                 if not title:
                     continue
 
+                if _CUT_TITLE_RE.search(title):
+                    skipped_cut += 1
+                    continue
+
                 if skip and (
                     link.split("?")[0].rstrip("/") in skip["urls"]
                     or _norm_title(title) in skip["titles"]
@@ -1720,6 +1766,8 @@ def fetch_articles(skip: dict | None = None) -> list[dict]:
         except Exception as exc:
             print(f"  ✗  {source}: feil ved henting — {exc}")
 
+    if skipped_cut:
+        print(f"  ⓘ  {skipped_cut} artikler kuttet lokalt (sport/krim/kjendis/ulykker)")
     if skipped_seen:
         print(f"  ⓘ  {skipped_seen} artikler hoppet over (dekket i tidligere briefinger)")
     before = len(articles)

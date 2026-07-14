@@ -91,6 +91,11 @@ markdown-backup). Begge skriver **alltid** dagens briefing til datalageret via
   bytt tilbake til `feedparser.parse(url)`.
 - **Dedup før Claude:** `fetch_articles()` avslutter med `_dedup_articles()` (normalisert
   tittel + URL; beholder lengst ingress) — feedene overlapper mye.
+- **Lokalt kutt-filter:** `_CUT_TITLE_RE` i `news_briefing.py` kutter artikler hvis TITTEL
+  matcher kategorier systemprompten uansett forkaster (sport, krim, kjendis/underholdning,
+  lokale ulykker) — gratis, før MAX_PER_FEED-telling, sparer input-tokens. Listen er bevisst
+  konservativ (feilkutt kan ikke reddes av Claude): «drapssiktet»/«siktet for» er med, bare
+  «drept» er det IKKE (ville kuttet krigsnyheter).
 - **Dedup mot tidligere dager** (leseren skal ikke lese det samme to dager på rad):
   `_load_recent_briefing_points()` leser `news_md` fra de siste `NEWS_HISTORY_DAYS`
   dagsfilene i datalageret (ingen egen state-fil) og gir (1) URL-/tittelsett som
