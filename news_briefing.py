@@ -1134,9 +1134,13 @@ Du får en nummerert liste med ferske podcast-episoder (tittel + beskrivelse). O
    færre eller tom liste.
 
 2. BOKTIPS: Anbefal 1–2 bøker innenfor interessene over — selvutvikling/tenkning eller
-   teknologi/AI og hvor verden er på vei. Foretrekk nyere, aktuelle bøker; tidløse moderne
-   klassikere er OK som én av to. «why» = 1–2 setninger på norsk om hvorfor akkurat denne,
-   knyttet til brukerens interesser. Ikke anbefal bøker fra unngå-listen.
+   teknologi/AI og hvor verden er på vei. KRAV: utgitt 2020 eller senere (ferskt nok til å
+   treffe dagens marked og informasjonsbilde). Velg FAKTA- og TALLBASERTE bøker: forfattere
+   som bygger på statistikk, forskning og undersøkelser — ikke memoarer eller bøker som
+   hviler på forfatterens egne erfaringer og følelser. Smaksankere (allerede lest, ikke
+   anbefal dem): «Suveren på jobb» og «Factfulness» — finn bøker i samme ånd.
+   «why» = 1–2 setninger på norsk om hvorfor akkurat denne, knyttet til brukerens
+   interesser. Ikke anbefal bøker fra unngå-listen.
 
 SVAR KUN med gyldig JSON, ingen tekst utenfor, ingen markdown-fences:
 {"podcasts": [{"id": 3, "tip": "…"}], "books": [{"title": "…", "author": "…", "year": 2025, "why": "…"}]}"""

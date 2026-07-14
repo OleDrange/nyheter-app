@@ -215,6 +215,8 @@ Myk feil (manglende/korrupt bank) → `riddles`-feltet utelates den dagen.
 `fetch_daily_learning()` i `news_briefing.py`: 1–2 podcast-råd + 1–2 boktips, kuratert av
 Claude i ett lite kall. Profil (i `_LEARNING_SYSTEM_PROMPT`): selvutvikling først, deretter
 de nyeste viktigste teknologitrendene (særlig AI) — gjelder både episodevalg og boktips.
+Boktips i tillegg: utgitt **2020+**, fakta-/tallbasert (statistikk og undersøkelser, ikke
+erfarings-/følelsesbaserte memoarer); smaksankere «Suveren på jobb» og «Factfulness».
 Episoder hentes fra `PODCAST_FEEDS` (Lenny's Podcast, Huberman Lab, Tim Ferriss, Dwarkesh,
 Diary Of A CEO, Hard Fork, All-In — RSS, siste `_LEARNING_LOOKBACK_DAYS = 14` dager).
 Claude refererer episoder kun via indeks-id mot vår liste, så podcast/tittel/URL aldri kan
