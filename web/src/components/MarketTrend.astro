@@ -1,20 +1,23 @@
 ---
-// Kompakt dagsgraf for én ticker: 3–5 punkter (ett per dag), linje + prikker,
-// med verdien skrevet over hvert punkt og dag-i-måneden under. Inline SVG, ingen
-// klient-JS. Fargelegges av trenden (første → siste). Siste punkt fremhevet.
-const { points = [], width = 240, height = 48 } = Astro.props;
+// Kompakt dagsgraf for én ticker: linje + områdefyll over opptil ~8 punkter
+// (ett per handelsdag), verdi-etikett kun på første og siste punkt, dag-i-måneden
+// under hvert punkt. Inline SVG, ingen klient-JS — hover-verdier via native
+// <title> på usynlige kolonne-flater. Fargelegges av trenden (første → siste;
+// grå når flat). Siste punkt fremhevet med større dot og surface-ring.
+const { points = [], width = 280, height = 76 } = Astro.props;
 
 const pts = points.filter((p) => typeof p.value === 'number' && Number.isFinite(p.value));
 const has = pts.length >= 1;
 
-const padX = 24;
+const padX = 10;
 const plotTop = 18;
-const plotBottom = 33;
+const plotBottom = 58;
 const plotH = plotBottom - plotTop;
 
 let coords = [];
 let line = '';
-let up = true;
+let area = '';
+let trend = 'flat';
 
 if (has) {
   const vals = pts.map((p) => p.value);
@@ -26,39 +29,57 @@ if (has) {
   coords = pts.map((p, i) => {
     const x = n > 1 ? padX + i * stepX : width / 2;
     const y = plotBottom - ((p.value - min) / span) * plotH;
-    return { x, y, label: p.label, day: p.day, last: i === n - 1 };
+    return { x, y, label: p.label, day: p.day, first: i === 0, last: i === n - 1 };
+  });
+  // Usynlig hover-kolonne per punkt (native <title>-tooltip, ingen JS).
+  coords.forEach((c, i) => {
+    c.hx0 = i === 0 ? 0 : (coords[i - 1].x + c.x) / 2;
+    c.hx1 = i === n - 1 ? width : (c.x + coords[i + 1].x) / 2;
   });
   line = coords.map((c, i) => `${i ? 'L' : 'M'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
-  up = vals[n - 1] >= vals[0];
+  if (n > 1) {
+    area = `${line} L${coords[n - 1].x.toFixed(1)},${plotBottom} L${coords[0].x.toFixed(1)},${plotBottom} Z`;
+    trend = vals[n - 1] > vals[0] ? 'up' : vals[n - 1] < vals[0] ? 'down' : 'flat';
+  }
 }
+
+// Etikett over punktet når punktet ligger i nedre halvdel av båndet, ellers under
+// — etiketten havner alltid i den ledige delen av plottet.
+const labelY = (c) => (c.y < (plotTop + plotBottom) / 2 ? c.y + 16 : c.y - 8);
 ---
 
 {
   has ? (
     <svg
-      class={up ? 'mtrend mtrend--up' : 'mtrend mtrend--down'}
+      class={`mtrend mtrend--${trend}`}
       viewBox={`0 0 ${width} ${height}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
     >
+      {area && <path class="mtrend__area" d={area} />}
       {coords.length > 1 && <path class="mtrend__line" d={line} fill="none" />}
       {coords.map((c) => (
         <g>
-          <text
-            class={c.last ? 'mtrend__val mtrend__val--last' : 'mtrend__val'}
-            x={c.x}
-            y={c.y - 6 < 9 ? c.y + 11 : c.y - 6}
-            text-anchor="middle"
-          >
-            {c.label}
-          </text>
+          <rect class="mtrend__hit" x={c.hx0} y="0" width={c.hx1 - c.hx0} height={height}>
+            <title>{`${c.day}.: ${c.label}`}</title>
+          </rect>
+          {(c.first || c.last) && (
+            <text
+              class={c.last ? 'mtrend__val mtrend__val--last' : 'mtrend__val'}
+              x={c.x}
+              y={labelY(c)}
+              text-anchor={coords.length === 1 ? 'middle' : c.last ? 'end' : 'start'}
+            >
+              {c.label}
+            </text>
+          )}
           <circle
             class={c.last ? 'mtrend__dot mtrend__dot--last' : 'mtrend__dot'}
             cx={c.x}
             cy={c.y}
-            r={c.last ? 2.9 : 2.2}
+            r={c.last ? 4 : 2}
           />
-          <text class="mtrend__day" x={c.x} y={height - 3} text-anchor="middle">
+          <text class="mtrend__day" x={c.x} y={height - 4} text-anchor="middle">
             {c.day}
           </text>
         </g>

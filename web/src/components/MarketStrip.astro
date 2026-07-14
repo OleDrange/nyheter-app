@@ -2,6 +2,9 @@
 // Markeds-widget. Bygger på det strukturerte `market`-objektet
 // (fetch_market_snapshot): brent, sp500, osebx, btc, eth, nordnet (m/ *_chg).
 // `history` er per-ticker dagsserier fra getMarketHistory() → mini-dagsgrafer.
+// Prosent-badgen beregnes fra SAMME serie som grafen (siste vs. nest siste punkt),
+// så tall og graf aldri spriker; yfinance-endringen (*_chg) er kun fallback når
+// serien har < 2 punkter.
 import MarketTrend from './MarketTrend.astro';
 
 const { market, history = {} } = Astro.props;
@@ -10,6 +13,30 @@ const m = market || {};
 const fmt = (n, d = 2) =>
   n == null ? '–' : n.toLocaleString('nb-NO', { minimumFractionDigits: d, maximumFractionDigits: d });
 
+// Dagsserie → punkter med ferdig formatert verdi-etikett + dag-i-måneden.
+// Børsstengte dager (helg) gjentar forrige verdi — påfølgende identiske verdier
+// kollapses, men første i runet (handelsdagen) og siste punkt (briefing-dagen)
+// beholdes, så flate helger blir ett segment i stedet for tre like punkter.
+function trendPoints(key, d) {
+  const raw = (history[key] || []).filter(
+    (e) => typeof e.value === 'number' && Number.isFinite(e.value)
+  );
+  return raw
+    .filter((e, i) => i === 0 || i === raw.length - 1 || e.value !== raw[i - 1].value)
+    .map((e) => ({
+      value: e.value,
+      label: fmt(e.value, d),
+      day: String(e.date).slice(8), // «28»
+    }));
+}
+
+// Endring i % fra nest siste til siste punkt i grafen (null hvis < 2 punkter).
+function seriesChg(points) {
+  const n = points.length;
+  if (n < 2 || !points[n - 2].value) return null;
+  return (points[n - 1].value / points[n - 2].value - 1) * 100;
+}
+
 const ticks = [
   { key: 'brent', name: 'Brent', value: m.brent, chg: m.brent_chg, d: 1, unit: ' $' },
   { key: 'sp500', name: 'S&P 500', value: m.sp500, chg: m.sp500_chg, d: 0 },
@@ -17,16 +44,12 @@ const ticks = [
   { key: 'btc', name: 'BTC', value: m.btc, chg: m.btc_chg, d: 0, unit: ' $' },
   { key: 'eth', name: 'ETH', value: m.eth, chg: m.eth_chg, d: 0, unit: ' $' },
   { key: 'nordnet', name: 'Nordnet Global', value: m.nordnet, chg: m.nordnet_chg, d: 1, unit: ' $' },
-];
-
-// Dagsserie → punkter med ferdig formatert verdi-etikett + dag-i-måneden.
-function trendPoints(key, d) {
-  return (history[key] || []).map((e) => ({
-    value: e.value,
-    label: fmt(e.value, d),
-    day: String(e.date).slice(8), // «28»
-  }));
-}
+].map((t) => {
+  const points = trendPoints(t.key, t.d);
+  const chg = seriesChg(points) ?? t.chg ?? null;
+  const flat = chg != null && Math.abs(chg) < 0.005;
+  return { ...t, points, chg, flat };
+});
 
 const hasData = !m.error && ticks.some((t) => t.value != null);
 ---
@@ -35,27 +58,35 @@ const hasData = !m.error && ticks.some((t) => t.value != null);
   <div class="market__head">Marked</div>
   {
     hasData ? (
-      <div class="market__grid">
-        {ticks.map((t) => (
-          <div class="tick">
-            <div class="tick__head">
-              <span class="tick__name">{t.name}</span>
-              <span class="tick__now">
-                <span class="tick__value">
-                  {fmt(t.value, t.d)}
-                  {t.value != null && t.unit ? t.unit : ''}
-                </span>
-                {t.chg != null && (
-                  <span class={t.chg >= 0 ? 'tick__chg chg-up' : 'tick__chg chg-down'}>
-                    {t.chg >= 0 ? '▲' : '▼'} {Math.abs(t.chg).toFixed(2)}%
+      <>
+        <div class="market__grid">
+          {ticks.map((t) => (
+            <div class="tick">
+              <div class="tick__head">
+                <span class="tick__name">{t.name}</span>
+                <span class="tick__now">
+                  <span class="tick__value">
+                    {fmt(t.value, t.d)}
+                    {t.value != null && t.unit ? t.unit : ''}
                   </span>
-                )}
-              </span>
+                  {t.chg != null && (
+                    <span
+                      class={
+                        t.flat ? 'tick__chg chg-flat' : t.chg >= 0 ? 'tick__chg chg-up' : 'tick__chg chg-down'
+                      }
+                    >
+                      {t.flat ? '' : t.chg >= 0 ? '▲ ' : '▼ '}
+                      {Math.abs(t.chg).toFixed(2)}%
+                    </span>
+                  )}
+                </span>
+              </div>
+              <MarketTrend points={t.points} />
             </div>
-            <MarketTrend points={trendPoints(t.key, t.d)} />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+        <div class="market__note">% = endring fra forrige punkt i grafen · børsstengte dager slås sammen</div>
+      </>
     ) : (
       <p class="muted">Markedsdata utilgjengelig.</p>
     )

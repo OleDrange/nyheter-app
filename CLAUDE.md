@@ -385,8 +385,14 @@ bygges uten ekstra datainnhenting.
     autoplay + dagssammendrag-rad. Klientlogikk via `define:vars={{ frames }}` (inline, ingen
     bundling).
   - `MarketStrip.astro` — markedswidget med dagsendring + mini-dagsgraf per ticker
-    (`MarketTrend.astro` — inline SVG, ingen klient-JS). Serien fra `getMarketHistory()`
-    (default 5 dager, `endDate` avgrenser til dagen som vises). `MARKET_KEYS` styrer rekkefølgen.
+    (`MarketTrend.astro` — inline SVG, ingen klient-JS; hover-verdier via native `<title>`).
+    Serien fra `getMarketHistory()` (default 8 dager, `endDate` avgrenser til dagen som
+    vises). **Prosent-badgen beregnes fra serien** (siste vs. nest siste punkt) så den
+    alltid matcher grafen; lagret `*_chg` (yfinance, børsens handelsdøgn) er kun fallback
+    ved < 2 punkter. Påfølgende identiske verdier (børsstengte dager) kollapses — første
+    i runet + siste punkt beholdes; flat endring gir nøytral badge (`chg-flat`).
+    Graf: 280×76 viewBox, områdefyll, etikett kun på første/siste punkt; under 560px går
+    `market__grid` til 1 kolonne. `MARKET_KEYS` styrer rekkefølgen.
   - `QuizCard.astro` — «Dagens quiz»: 3 flervalgsspørsmål fra `quiz`-feltet
     (vises kun når feltet finnes). Fasit skjult til bruker trykker et alternativ —
     riktig grønt (`--up`), feil rødt (`--down`), score-linje når alle er besvart.

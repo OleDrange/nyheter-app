@@ -78,7 +78,7 @@ export const MARKET_KEYS = ['brent', 'sp500', 'osebx', 'btc', 'eth', 'nordnet'];
  * per dag. `endDate` (valgfri) avgrenser vinduet til t.o.m. den datoen, så
  * enkeltdag-siden viser trenden fram til den dagen og ikke nyere data.
  */
-export async function getMarketHistory({ limit = 5, endDate = null } = {}) {
+export async function getMarketHistory({ limit = 8, endDate = null } = {}) {
   let dates = await listDates(); // nyeste først
   if (endDate) dates = dates.filter((d) => d <= endDate);
   dates = dates.slice(0, limit).reverse(); // eldste → nyeste
