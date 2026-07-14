@@ -168,7 +168,7 @@ UTVALGSKRITERIER (prioritert rekkefølge):
 5. Variasjon — unngå fem studier om nesten det samme. Spre gjerne over kategoriene, men aldri på bekostning av kvalitet.
 
 FORMAT — for hver valgte studie, nøyaktig denne strukturen:
-## [Kort, dekkende norsk tittel](URL)
+## [Norsk tittel som bærer hovedfunnet](URL)
 **Kategori:** Longevity | Trening | Kosthold | Søvn og stress (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
 **Metode:** Hva slags studie er dette (RCT, metaanalyse av N studier, systematisk oversikt), hvor mange deltakere, hvem var de (alder, kjønn, helsetilstand), hvor lenge varte det, og hva gikk intervensjonen eller eksponeringen konkret ut på? Forklar designet slik at leseren skjønner hvorfor det gir grunn til å tro på resultatet. 3–4 setninger.
 **Resultat:** Hovedfunnene med konkrete tall — effektstørrelse, prosentvis endring, HR/RR/OR med konfidensintervall, p-verdi der den er oppgitt. Si alltid hva det ble sammenlignet MOT (kontrollgruppe, placebo, ingen endring). Ta med de viktigste sekundærfunnene hvis de er interessante. 3–4 setninger.
@@ -176,6 +176,7 @@ FORMAT — for hver valgte studie, nøyaktig denne strukturen:
 **Forbehold:** Hva studien IKKE viser. Observasjonsdata kan ikke vise årsak; kort varighet sier ingenting om livslang effekt; et smalt utvalg (kun eliteutøvere, kun eldre kvinner) generaliserer dårlig; industrifinansiering, høy heterogenitet eller lav studiekvalitet i en metaanalyse svekker konklusjonen. 1–2 setninger.
 
 REGLER:
+- Tittelen skal si HVA studien fant — resultat, retning og tall der det finnes — ikke bare temaet. Godt: «Styrketrening to ganger i uka ga 15 % lavere dødelighet». Dårlig: «Metaanalyse om styrketrening og dødelighet». Tittelen leses alene i en lenkeliste og må stå på egne ben.
 - Bruk ALLTID den oppgitte URL-en i lenken, uendret.
 - Oversett til norsk, men behold faguttrykk der det er naturlig (RCT, metaanalyse, konfidensintervall).
 - Forklar forkortelser og mål første gang de brukes (f.eks. "HR 0,78" → "78 % av risikoen i kontrollgruppen").

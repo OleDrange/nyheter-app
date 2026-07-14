@@ -173,7 +173,7 @@ export function splitResearch(md) {
           category = normalizeCategory(raw);
           continue;
         }
-        parts.push({ label, html: marked.parseInline(raw) });
+        parts.push({ label, html: marked.parseInline(raw), text: raw });
       }
 
       return {
@@ -184,4 +184,21 @@ export function splitResearch(md) {
         html: renderMarkdown(body),
       };
     });
+}
+
+// Teaser-prioritet for tittellisten på nyhetssiden: leserens «hva betyr dette»
+// først, deretter funnet, deretter legacy-etikettene fra arkiverte briefinger.
+const TEASER_LABELS = ['hva det betyr for deg', 'resultat', 'relevans', 'hva som ble gjort'];
+
+/**
+ * Beste én-avsnitts-teaser for en studie fra splitResearch(). Returnerer
+ * { label, html, text } eller null (studier uten merkede deler).
+ */
+export function studyTeaser(study) {
+  const parts = study?.parts || [];
+  for (const want of TEASER_LABELS) {
+    const p = parts.find((x) => x.label.toLowerCase() === want);
+    if (p) return p;
+  }
+  return parts[0] || null;
 }

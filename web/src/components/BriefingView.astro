@@ -10,6 +10,7 @@ import BrannCard from './BrannCard.astro';
 import {
   splitNewsSections,
   splitResearch,
+  studyTeaser,
   getMarketHistory,
   FORSKNING_URL,
   RESEARCH_CATEGORIES,
@@ -86,12 +87,18 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
     studies.length ? (
       <div class="card research-links-card">
         <ul class="research-links">
-          {studies.map((st, i) => (
-            <li>
-              <a href={`${FORSKNING_URL}/b/${b.date}#s${i}`}>{st.title}</a>
-              {catLabel(st.category) && <span class="research-links__cat">{catLabel(st.category)}</span>}
-            </li>
-          ))}
+          {studies.map((st, i) => {
+            const teaser = studyTeaser(st);
+            return (
+              <li>
+                <div class="research-links__row">
+                  <a href={`${FORSKNING_URL}/b/${b.date}#s${i}`}>{st.title}</a>
+                  {catLabel(st.category) && <span class="research-links__cat">{catLabel(st.category)}</span>}
+                </div>
+                {teaser && <p class="research-links__teaser" set:html={teaser.html} />}
+              </li>
+            );
+          })}
         </ul>
         <a class="research-links__more" href={`${FORSKNING_URL}/b/${b.date}`}>
           Les oppsummeringene på forskning.modr.no →

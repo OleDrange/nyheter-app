@@ -1136,12 +1136,24 @@ main {
   list-style: none;
 }
 .research-links li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.research-links__row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 14px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
+}
+.research-links__teaser {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .research-links li a {
   color: var(--text);
