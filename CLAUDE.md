@@ -391,7 +391,8 @@ bygges uten ekstra datainnhenting.
     alltid matcher grafen; lagret `*_chg` (yfinance, børsens handelsdøgn) er kun fallback
     ved < 2 punkter. Påfølgende identiske verdier (børsstengte dager) kollapses — første
     i runet + siste punkt beholdes; flat endring gir nøytral badge (`chg-flat`).
-    Graf: 280×76 viewBox, områdefyll, etikett kun på første/siste punkt; under 560px går
+    Graf: 280×92 viewBox, områdefyll, etikett på første/siste punkt + min/maks når de
+    ikke er endepunkter (maks over, min under sitt punkt); under 560px går
     `market__grid` til 1 kolonne. `MARKET_KEYS` styrer rekkefølgen.
   - `QuizCard.astro` — «Dagens quiz»: 3 flervalgsspørsmål fra `quiz`-feltet
     (vises kun når feltet finnes). Fasit skjult til bruker trykker et alternativ —
