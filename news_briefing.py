@@ -773,28 +773,63 @@ def fetch_daily_quiz() -> list[dict]:
 _RIDDLES_SEEN_FILE = "riddles_seen.json"  # i BRIEFING_DATA_DIR — må persisteres
 _RIDDLES_SEEN_RETENTION_DAYS = 120
 _RIDDLES_AVOID_IN_PROMPT = 60  # hvor mange tidligere gåter Claude bes unngå
-_RIDDLES_MAX_TOKENS = 3000
+# Extended thinking: vanskeligere gåter (særlig nivå 3) krever at modellen faktisk
+# løser gåten grundig før den skriver fasit — uten thinking blir fasiten oftere feil.
+_RIDDLES_MAX_TOKENS = 12000
+_RIDDLES_THINKING_TOKENS = 8000
 # Robusthet: av og til svarer Claude med tekst uten gyldig JSON-array (transient
 # hikke eller preamble). Prøv på nytt før vi gir opp, jf. retry i research_briefing.
 _RIDDLES_MAX_ATTEMPTS = 3
 _RIDDLES_RETRY_DELAY = 5  # sekunder mellom forsøk
 
+# Sjangre roteres deterministisk per dag (dag-ordinal) så variasjonen er garantert,
+# ikke bare oppfordret — dagens tre typer sendes eksplisitt i prompten, én per nivå.
+_RIDDLE_GENRES: list[tuple[str, str]] = [
+    ("sann/løgn-deduksjon", "noen snakker sant, andre lyver — finn ut hvem eller hva"),
+    ("plasseringslogikk", "Einstein-aktig: personer, steder og egenskaper kobles ut fra ledetråder"),
+    ("tallmønster", "finn neste tall eller det avvikende tallet i en rekke med skjult regel"),
+    ("aldersalgebra", "aldre nå, før og senere som må settes opp som likninger og løses"),
+    ("vekt og veiing", "finn den avvikende gjenstanden med færrest mulige veiinger o.l."),
+    ("planlegging og kryssing", "elvekryssing, omhelling mellom kanner, broer med tidsfrister o.l."),
+    ("informasjonsdeduksjon", "hatter/lapper: hva kan hver person slutte seg til ut fra det de ser og hører"),
+    ("kalender- og tidslogikk", "ukedager, datoer og tidsintervaller med en skjult tvist"),
+    ("lateral tenkning", "en tilsynelatende umulig situasjon med en logisk, ikke-språklig forklaring"),
+    ("rekkefølge og sammenlikning", "hvem er eldst/raskest/høyest ut fra parvise sammenlikninger med tvist"),
+]
+
 _RIDDLES_SYSTEM_PROMPT = """Du lager daglig hjernetrim på norsk: 3 gåter som IKKE krever \
-faktakunnskap — kun logisk tenkning og enkel hoderegning skal lede til svaret.
+faktakunnskap — kun logisk tenkning og hoderegning skal lede til svaret.
+
+NIVÅKRAV — tydelig stigning:
+- Nivå 1 (oppvarming): 1–2 resonneringssteg, løses i hodet på under 2 minutter.
+- Nivå 2 (utfordrende): 3–4 resonneringssteg, løses på 3–5 minutter, gjerne med litt notater.
+- Nivå 3 (skikkelig nøtt): 4–6 resonneringssteg som gjerne kombinerer to teknikker \
+(f.eks. løgn-deduksjon + eliminasjon). Penn og papir er forventet; en oppegående voksen \
+skal bruke 10–20 minutter. Vanskelig betyr flere steg og mer å holde styr på — \
+aldri vagere formulering eller tvetydig fasit.
 
 KRAV:
-- Nivå 1 (middels lett) til nivå 3 (vanskelig, men løsbar i hodet med litt tid).
-- Variér typene mellom dagene og innad i settet: regnegåter (à la «Ronny har 5 epler mer \
-enn Tom, Tom har 50 % mer enn Ola …»), aldersgåter, sann/løgn-deduksjon, rekkefølge- og \
-sammenlikningslogikk, klassiske lateral-tenkning-gåter, mønster i tallrekker.
+- Brukeren oppgir dagens gåtetype per nivå — følg den, tilpasset nivåets vanskelighetsgrad.
 - Entydig fasit. Ingen ordspill som bare fungerer på engelsk. Ingen kunnskapsspørsmål.
 - Norske navn og hverdagslige situasjoner.
-- Tenk gjennom løsningen FØR du skriver gåten, og verifiser at fasiten stemmer.
-- "explanation" = ryddig løsningsvei på maks 3 setninger — aldri prøving/feiling eller \
-frem-og-tilbake-resonnering.
+- Løs hver gåte fullstendig FØR du skriver den ferdig, og verifiser fasiten baklengs: \
+sjekk at alle ledetråder stemmer med svaret og at ingen annen løsning oppfyller dem.
+- "explanation" = ryddig løsningsvei — maks 3 setninger for nivå 1–2, maks 5 for nivå 3. \
+Aldri prøving/feiling eller frem-og-tilbake-resonnering.
 
 SVAR KUN med en gyldig JSON-array, ingen tekst utenfor, ingen markdown-fences:
 [{"level": 1, "question": "…", "answer": "kort fasit", "explanation": "kort løsningsvei"}, …]"""
+
+
+def _todays_riddle_genres(today: datetime) -> list[tuple[str, str]]:
+    """Tre sjangre for dagen (nivå 1–3), rotert deterministisk på dag-ordinal.
+
+    Vindu på 3 som flyttes 3 plasser per dag; med 10 sjangre (gcd(3, 10) = 1)
+    treffer vinduet alle startposisjoner over en 10-dagers syklus.
+    """
+    n = len(_RIDDLE_GENRES)
+    start = (today.toordinal() * 3) % n
+    return [_RIDDLE_GENRES[(start + i) % n] for i in range(3)]
 
 
 def _riddles_seen_path() -> str:
@@ -855,7 +890,14 @@ def fetch_daily_riddles() -> list[dict]:
     Returnerer liste av { level, question, answer, explanation }.
     """
     seen = _load_riddles_seen()
-    today = datetime.now().strftime("%Y-%m-%d")
+    now = datetime.now()
+    today = now.strftime("%Y-%m-%d")
+
+    genres = _todays_riddle_genres(now)
+    genre_text = "\n".join(
+        f"- Nivå {i}: {name} ({desc})"
+        for i, (name, desc) in enumerate(genres, start=1)
+    )
 
     recent = sorted(seen.items(), key=lambda kv: kv[1], reverse=True)
     avoid = [q for q, _ in recent[:_RIDDLES_AVOID_IN_PROMPT]]
@@ -872,15 +914,19 @@ def fetch_daily_riddles() -> list[dict]:
             resp = client.messages.create(
                 model=MODEL,
                 max_tokens=_RIDDLES_MAX_TOKENS,
+                thinking={"type": "enabled", "budget_tokens": _RIDDLES_THINKING_TOKENS},
                 system=_RIDDLES_SYSTEM_PROMPT,
                 messages=[
                     {
                         "role": "user",
-                        "content": f"Dato: {today}. Lag dagens 3 gåter.{avoid_text}",
+                        "content": f"Dato: {today}. Lag dagens 3 gåter.\n"
+                        f"Dagens gåtetyper:\n{genre_text}{avoid_text}",
                     }
                 ],
             )
-            text = resp.content[0].text if resp.content else ""
+            text = "".join(
+                b.text for b in resp.content if getattr(b, "type", "") == "text"
+            )
             riddles = _parse_riddles_json(text)
         except Exception as exc:
             print(f"  ✗  gåter: feil ved generering (forsøk "

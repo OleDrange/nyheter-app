@@ -177,7 +177,17 @@ legg dem til for å komme opp i 4 spm/dag.
 `fetch_daily_riddles()` i `news_briefing.py`: 3 norske **logikkgåter** (nivå 1–3, ingen
 faktakunnskap) generert av Claude i samme daglige kjøring (`_RIDDLES_SYSTEM_PROMPT`,
 JSON-output parses av `_parse_riddles_json()`). Ingen ekstern API finnes for norske
-logikkgåter — dette er det ene stedet quiz/gåter bruker Claude. Dedup: tidligere gåter
+logikkgåter — dette er det ene stedet quiz/gåter bruker Claude.
+- **Nivåkrav** (definert i systemprompten): nivå 1 = oppvarming (1–2 steg, < 2 min),
+  nivå 2 = 3–4 resonneringssteg (3–5 min), nivå 3 = skikkelig nøtt (4–6 steg, gjerne to
+  teknikker kombinert, penn og papir, 10–20 min).
+- **Sjangerrotasjon:** `_RIDDLE_GENRES` (10 typer) roteres deterministisk per dag
+  (`_todays_riddle_genres()`: vindu på 3 som flyttes 3 plasser per dag-ordinal; 10 og 3 er
+  innbyrdes primiske, så alle kombinasjoner nås over 10 dager). Dagens tre typer sendes
+  eksplisitt i prompten, én per nivå — variasjon er mekanisk garantert, ikke bare oppfordret.
+- **Extended thinking** er på (`_RIDDLES_THINKING_TOKENS = 8000`) så modellen løser gåten
+  grundig før den skriver fasit — teksten hentes fra `text`-blokkene i svaret.
+Dedup: tidligere gåter
 (`riddles_seen.json` i `BRIEFING_DATA_DIR`, **må persisteres**, prunes etter
 `_RIDDLES_SEEN_RETENTION_DAYS = 120`) sendes med i prompten som unngå-liste
 (`_RIDDLES_AVOID_IN_PROMPT = 60`). Myk feil → `riddles`-feltet utelates den dagen.
