@@ -138,8 +138,9 @@ Per sted returneres `summary`, `rain_hours`, `sun_periods` (kl. 05–21), `max_u
 timesserie for i dag `[{ hour, temp, precip, wind, gust, uv, symbol }]` — og `daily`:
 7 dagsvarsler (i dag + `_WEATHER_DAYS_AHEAD = 6`) fra `_build_daily()` med
 `{ date, min_temp, max_temp, precip, max_wind, max_gust, max_uv, symbols, hours }`.
-`symbols` er tre periodesymboler (morgen 05–11 / ettermiddag 11–17 / kveld 17–23) valgt med
-«verste vær vinner» (`_SYMBOL_SEVERITY`); `hours` er detaljrader med `span` 1 (timesoppløsning,
+`symbols` er tre periodesymboler (morgen 05–11 / ettermiddag 11–17 / kveld 17–23): det
+**vanligste** symbolet i perioden vinner, ved likt antall det mest optimistiske
+(`_SYMBOL_SEVERITY` som tie-break); `hours` er detaljrader med `span` 1 (timesoppløsning,
 første ~2 døgn) eller 6 (6-timersblokker lenger ut — mer gir ikke MET). Nedbørsummen unngår
 dobbelttelling i 1t→6t-overgangen via et `covered_until`-vindu.
 

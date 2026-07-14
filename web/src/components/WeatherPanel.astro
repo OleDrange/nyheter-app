@@ -162,6 +162,15 @@ const clientData = Object.fromEntries(
       show(saved);
     }
 
+    // Trykk hvor som helst i en utfoldet timetabell lukker nedtrekket
+    // (nærmeste <details> — i 6-dagersvarselet er det dagsraden).
+    root.querySelectorAll('.wx-hours').forEach((table) => {
+      table.addEventListener('click', () => {
+        const det = table.closest('details');
+        if (det) det.open = false;
+      });
+    });
+
     // Nå-avlesning + «fra nå»-klipp av timelisten — kun når briefingen er
     // dagens dato (i arkivet vises hele dagen med SSR-standarden kl. 12).
     const now = new Date();

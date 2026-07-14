@@ -262,9 +262,10 @@ def _symbol_no(code: str) -> str:
     return _SYMBOL_NO.get(base, base)
 
 
-# Rangering for valg av «dominerende» symbol per dagsperiode (morgen/
-# ettermiddag/kveld): verste vær vinner, slik at en regnbyge kl. 10 ikke
-# forsvinner bak sol resten av morgenen.
+# Rangering brukt som tie-break ved valg av periodesymbol (morgen/ettermiddag/
+# kveld): det VANLIGSTE symbolet i perioden vinner, og ved likt antall velges
+# det mest optimistiske (lavest indeks her) — sol skal ikke gjemmes bak en
+# enslig skyet time.
 _SYMBOL_SEVERITY: list[str] = [
     "clearsky", "fair", "partlycloudy", "cloudy", "fog",
     "lightrainshowers", "lightrain", "rainshowers", "rain",
@@ -319,7 +320,7 @@ def _build_daily(ts: list, today) -> list[dict]:
                 "min_temp": None, "max_temp": None,
                 "precip": 0.0,
                 "max_wind": None, "max_gust": None, "max_uv": None,
-                "_periods": [(-1, None), (-1, None), (-1, None)],
+                "_periods": [{}, {}, {}],  # base-symbol → [antall, full kode]
                 "hours": [],
             },
         )
@@ -367,10 +368,10 @@ def _build_daily(ts: list, today) -> list[dict]:
             else 2 if 17 <= mid_hour < 23
             else None
         )
-        if idx is not None:
-            sev = _severity(symbol)
-            if sev > b["_periods"][idx][0]:
-                b["_periods"][idx] = (sev, symbol)
+        if idx is not None and symbol:
+            base = re.sub(r"_(day|night|polartwilight)$", "", symbol)
+            slot = b["_periods"][idx].setdefault(base, [0, symbol])
+            slot[0] += 1
 
         b["hours"].append(
             {
@@ -385,10 +386,17 @@ def _build_daily(ts: list, today) -> list[dict]:
             }
         )
 
+    def _pick_symbol(counts: dict) -> str | None:
+        """Vanligste symbol i perioden; ved likt antall det mest optimistiske."""
+        if not counts:
+            return None
+        best = max(counts.values(), key=lambda s: (s[0], -_severity(s[1])))
+        return best[1]
+
     out: list[dict] = []
     for day in sorted(days):
         b = days[day]
-        b["symbols"] = [sym for _, sym in b.pop("_periods")]
+        b["symbols"] = [_pick_symbol(c) for c in b.pop("_periods")]
         b["precip"] = round(b["precip"], 1)
         for key in ("min_temp", "max_temp"):
             if b[key] is not None:
