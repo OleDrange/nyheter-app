@@ -234,6 +234,50 @@ export const STATS_GUIDE = [
           },
         ],
       },
+      {
+        id: 'wmd',
+        title: 'Vektet gjennomsnittsforskjell (WMD)',
+        keywords: 'wmd md mean difference metaanalyse vektet gjennomsnitt originalenheter',
+        sections: [
+          {
+            label: 'Hva',
+            html: 'Metaanalysens gjennomsnittsforskjell i <strong>originalenheter</strong> (mmHg, kg, minutter): hver studies forskjell vektes sammen til ett samlet estimat. Kalles også bare MD (mean difference).',
+          },
+          {
+            label: 'Formel',
+            formula: true,
+            html: fm(
+              'WMD = Σ(w<sub>i</sub> · MD<sub>i</sub>) / Σw<sub>i</sub>,&ensp;w<sub>i</sub> = 1 / SE<sub>i</sub><sup>2</sup>',
+              'WMD er lik summen av vekt i ganger gjennomsnittsforskjell i, delt på summen av vektene, der vekten for hver studie er 1 delt på studiens standardfeil i andre'
+            ),
+          },
+          {
+            label: 'Hvorfor',
+            html: 'Brukes i metaanalyser når alle studiene måler utfallet på <strong>samme skala</strong> — da kan resultatet stå i enheter leseren kjenner, i stedet for standardavvik. Store/presise studier (liten standardfeil) teller mest. Måler studiene på ulike skalaer, må man i stedet standardisere med SMD (Cohen’s d / Hedges’ g).',
+          },
+          {
+            label: 'Tolkning',
+            html: 'Leses direkte i måleenheten: WMD = −4 mmHg betyr 4 mmHg lavere i behandlingsgruppen. Grunnlinje 0.0 — krysser KI null, er funnet ikke signifikant.',
+          },
+        ],
+        children: [
+          {
+            id: 'wmd-eksempel',
+            title: 'Eksempel med tolkning',
+            keywords: 'eksempel blodtrykk metaanalyse',
+            sections: [
+              {
+                label: 'Eksempel',
+                html: `En metaanalyse av 8 studier på samme blodtrykksintervensjon finner ${fm('WMD = −4.2 mmHg', 'WMD er lik minus 4.2 millimeter kvikksølv')}, 95&nbsp;% KI [−6.1,&nbsp;−2.3].`,
+              },
+              {
+                label: 'Slik leses tallene',
+                html: 'Samlet over studiene senker intervensjonen systolisk blodtrykk med 4.2 mmHg; den sanne effekten ligger trolig mellom 2.3 og 6.1 mmHg reduksjon. Hele KI er under grunnlinjen 0.0 → signifikant (p &lt; 0.05). Fordelen med WMD: du kan vurdere direkte om 4 mmHg er klinisk relevant — uten omvei via standardavvik.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
