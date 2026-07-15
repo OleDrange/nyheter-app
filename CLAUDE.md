@@ -374,9 +374,10 @@ bygges uten ekstra datainnhenting.
     `StatsGuideNode` rendrer generisk (`Astro.self`) — **ny metode/eksempel = ny node i
     datafila, ingen UI-endring**. Formler er semantisk HTML (`<sub>`/`<sup>`, `role="math"`
     + aria-label via `fm()`-hjelperen), bevisst ikke KaTeX (null klientavhengigheter).
-    Inline-script (ingen bundling) håndterer: topptoggle husket i `localStorage`
-    (`lesguide-open`, default åpen), accordion per node (flere kan stå åpne), dyplenking
-    `#les-<node-id>` (åpner forfedre + scroller dit; vinner over lagret lukket-tilstand),
+    Inline-script (ingen bundling) håndterer: topptoggle — **alltid lukket ved lasting**
+    (ingen persistert tilstand; lukking nullstiller alle indre noder + søket, så neste
+    åpning starter sammenslått), accordion per node (flere kan stå åpne), dyplenking
+    `#les-<node-id>` (åpner seksjonen + forfedre + scroller dit),
     piltast-/Home/End-navigasjon og søkefeltet (filtrerer på tittel/tagline/keywords,
     åpner treffstien). Node-`id` må være unik i hele treet.
   - `WeatherCard.astro` — vær-widget/dispatcher: viser `WeatherPanel.astro` når `weather.daily`

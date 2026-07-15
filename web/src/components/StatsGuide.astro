@@ -4,10 +4,11 @@
 // tre: datatype → metode → eksempel); StatsGuideNode.astro rendrer det generisk.
 //
 // Alt SSR-rendres (ingen bundling); inline-scriptet under står for:
-//  - topptogglen (tilstand huskes i localStorage `lesguide-open`, default åpen)
+//  - topptogglen — alltid lukket ved lasting (ingen lagret tilstand); lukking
+//    nullstiller alle indre noder + søket, så neste åpning starter «rent»
 //  - accordion per node (aria-expanded + hidden) — flere grener kan stå åpne
 //  - dyplenking: åpen node speiles i URL-hash (#les-<id>); ved lasting åpnes
-//    noden + alle forfedre og det scrolles dit
+//    seksjonen + noden + alle forfedre og det scrolles dit
 //  - tastaturnavigasjon (piltaster/Home/End mellom synlige noder)
 //  - søkefeltet: filtrerer noder på tittel/tagline/keywords, åpner treffstien
 import { STATS_GUIDE } from '../lib/statsGuide.js';
@@ -15,12 +16,12 @@ import StatsGuideNode from './StatsGuideNode.astro';
 ---
 
 <section class="card sg" id="lesguide" aria-label="Slik leser du forskningstall">
-  <button type="button" class="sg__toggle" aria-expanded="true" aria-controls="sg-body">
-    <span class="sg-chev sg-chev--open" aria-hidden="true">▸</span>
+  <button type="button" class="sg__toggle" aria-expanded="false" aria-controls="sg-body">
+    <span class="sg-chev" aria-hidden="true">▸</span>
     <span class="sg__toggle-title">Slik leser du forskningstall</span>
     <span class="sg__toggle-sub">p-verdi · konfidensintervall · effektstørrelser</span>
   </button>
-  <div class="sg__body" id="sg-body">
+  <div class="sg__body" id="sg-body" hidden>
     <p class="sg__intro">
       Kort oppslagsverk for tallene i studiene under. Start med grunnbegrepene, eller gå rett
       til datatypen studien bruker — hver metode kan utvides til formel og regneeksempel.
@@ -45,20 +46,27 @@ import StatsGuideNode from './StatsGuideNode.astro';
   (() => {
     const root = document.getElementById('lesguide');
     if (!root) return;
-    const KEY = 'lesguide-open';
     const toggle = root.querySelector('.sg__toggle');
     const body = document.getElementById('sg-body');
     const chevTop = toggle.querySelector('.sg-chev');
 
-    const setOpen = (open, persist) => {
+    const setOpen = (open) => {
       toggle.setAttribute('aria-expanded', String(open));
       chevTop.classList.toggle('sg-chev--open', open);
       body.hidden = !open;
-      if (persist) {
-        try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
-      }
     };
-    toggle.addEventListener('click', () => setOpen(body.hidden, true));
+    // Lukking nullstiller alt (noder, søk, hash) — neste åpning starter alltid
+    // med et helt sammenslått tre.
+    toggle.addEventListener('click', () => {
+      const open = body.hidden;
+      setOpen(open);
+      if (!open) {
+        allNodes.forEach((li) => setNode(li, false));
+        resetFilter();
+        if (location.hash.startsWith('#les-'))
+          history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
 
     // ── Accordion per node ────────────────────────────────────────────────
     const allNodes = Array.from(root.querySelectorAll('.sg-node'));
@@ -120,12 +128,11 @@ import StatsGuideNode from './StatsGuideNode.astro';
       e.preventDefault();
     });
 
-    // ── Starttilstand: hash vinner over lagret sammenslått-valg ──────────
-    let openedByHash = false;
+    // ── Starttilstand: alltid lukket — kun en #les-dyplenke åpner ────────
     if (location.hash.startsWith('#les-')) {
       const target = document.getElementById(location.hash.slice(1));
       if (target && root.contains(target) && target.classList.contains('sg-node')) {
-        setOpen(true, false);
+        setOpen(true);
         setNode(target, true);
         let anc = target.parentElement.closest('.sg-node');
         while (anc) {
@@ -136,13 +143,7 @@ import StatsGuideNode from './StatsGuideNode.astro';
         requestAnimationFrame(() =>
           target.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' })
         );
-        openedByHash = true;
       }
-    }
-    if (!openedByHash) {
-      try {
-        if (localStorage.getItem(KEY) === '0') setOpen(false, false);
-      } catch (e) {}
     }
 
     // ── Søk/filter: node vises hvis den selv eller en etterkommer matcher ─
@@ -158,11 +159,15 @@ import StatsGuideNode from './StatsGuideNode.astro';
       if (childHit) setNode(li, true); // åpne stien ned til treffet
       return self || childHit;
     };
+    const resetFilter = () => {
+      input.value = '';
+      allNodes.forEach((li) => li.classList.remove('sg-node--hide'));
+      nohit.hidden = true;
+    };
     input.addEventListener('input', () => {
       const q = input.value.trim().toLowerCase();
       if (!q) {
-        allNodes.forEach((li) => li.classList.remove('sg-node--hide'));
-        nohit.hidden = true;
+        resetFilter();
         return;
       }
       let any = false;
