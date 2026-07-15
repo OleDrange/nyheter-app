@@ -192,8 +192,8 @@ legg dem til for å komme opp i 4 spm/dag.
 faktakunnskap) trekkes fra en **lokal gåtebank** i `riddle_bank/gaater.json` (ligger i
 repoet, følger med i imaget via `COPY . .`). Ingen Claude-bruk, ingen ekstern API.
 - **Filformat:** `{ "riddles": [ { "level": 1|2|3, "genre": "<navn fra _RIDDLE_GENRES>",
-  "question", "answer", "explanation" } ] }`. Per nå 60 gåter: 20 per nivå = 2 per
-  sjanger per nivå — banken dekker 20 dager uten gjentak. **Utvid ved å legge til flere
+  "question", "answer", "explanation" } ] }`. Per nå 150 gåter: 50 per nivå = 5 per
+  sjanger per nivå — banken dekker 50 dager uten gjentak. **Utvid ved å legge til flere
   oppføringer i fila** (fasit må være verifisert; `genre` må matche navnene i
   `_RIDDLE_GENRES` for at sjangerrotasjonen skal treffe).
 - **Nivåkrav** (gjelder også nye gåter i banken): nivå 1 = oppvarming (1–2 steg, < 2 min),

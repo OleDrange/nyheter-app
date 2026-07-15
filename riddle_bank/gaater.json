@@ -419,6 +419,636 @@
       "question": "På en gård står 25 hester, og du vil finne de tre raskeste. Banen har bare fem spor, du har ingen stoppeklokke, og hvert heat forteller deg bare rekkefølgen hestene kom i mål. Hver hest løper alltid nøyaktig like fort. Hvor få heat trenger du?",
       "answer": "7 heat.",
       "explanation": "Kjør fem innledende heat med fem hester i hvert, og la så de fem heatvinnerne møtes i heat 6 — vinneren der er raskest av alle. Bare fem hester kan fortsatt ta 2.- og 3.-plassen: nummer to og tre fra vinnerens opprinnelige heat, nummer to i heat 6 og toeren fra dens heat, samt nummer tre i heat 6. Et sjuende heat mellom disse fem avgjør 2.- og 3.-plassen. Færre går ikke: seks heat gir ikke nok sammenlikninger til å skille kandidatene."
+    },
+    {
+      "level": 1,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Kaja og Mads snakker enten alltid sant eller lyver alltid. Kaja sier: «Minst én av oss to lyver.» Hva er Kaja og Mads?",
+      "answer": "Kaja snakker sant, Mads lyver.",
+      "explanation": "Hvis Kaja løy, ville utsagnet hennes likevel vært sant — en løgner kan ikke si noe sant. Altså snakker Kaja sant, og da må løgneren utsagnet lover være Mads."
+    },
+    {
+      "level": 1,
+      "genre": "sann/løgn-deduksjon",
+      "question": "En vase er knust. Amalie sier: «Det var Birk.» Birk sier: «Det var ikke meg.» Cornelia sier: «Det var ikke meg.» Nøyaktig én av de tre snakker sant. Hvem knuste vasen?",
+      "answer": "Cornelia.",
+      "explanation": "Var Birk skyldig, snakket både Amalie og Cornelia sant — for mange. Var Amalie skyldig, snakket Birk og Cornelia sant — også for mange. Bare med Cornelia som skyldig er nøyaktig ett utsagn sant: Birks."
+    },
+    {
+      "level": 1,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Noen har spist den siste kakebiten. Ida sier: «Det var Sander.» Sander sier: «Det var Petter.» Petter sier: «Sander lyver.» Bare den skyldige lyver — de to andre snakker sant. Hvem tok kaka?",
+      "answer": "Sander.",
+      "explanation": "Var Ida skyldig, måtte Sander snakke sant og utpeke Petter — men da hadde det vært to skyldige. Var Petter skyldig, snakket Ida sant om at det var Sander — samme motsigelse. Med Sander som skyldig stemmer alt: Ida og Petter snakker sant, og Sanders anklage mot Petter er løgnen."
+    },
+    {
+      "level": 2,
+      "genre": "sann/løgn-deduksjon",
+      "question": "To dører: én fører til frihet, én til fangehullet. Foran dem står to voktere — én lyver alltid, én snakker alltid sant, og du vet ikke hvem som er hvem. Du får stille ETT ja/nei-spørsmål til én av dem. Hva spør du?",
+      "answer": "«Hvis jeg spurte den andre vokteren hvilken dør som fører til frihet — hvilken ville han pekt på?» Ta så den motsatte døren.",
+      "explanation": "Spørsmålet sender svaret gjennom begge vokterne, så det alltid inneholder nøyaktig én løgn. Spør du sannsigeren, gjengir han løgnerens gale svar; spør du løgneren, lyver han om sannsigerens rette svar — begge peker på feil dør, så det motsatte er alltid riktig."
+    },
+    {
+      "level": 2,
+      "genre": "sann/løgn-deduksjon",
+      "question": "På en øy snakker hver innbygger enten alltid sant eller lyver alltid. Du møter tre: Truls sier: «Vi lyver alle tre.» Ylva sier: «Nøyaktig én av oss snakker sant.» Steinar sier ingenting. Hva er de tre?",
+      "answer": "Ylva snakker sant, Truls og Steinar lyver.",
+      "explanation": "Truls kan ikke snakke sant — da ville han selv vært løgner, en motsigelse — så Truls lyver, og dermed snakker minst én av dem sant. Hvis Ylva løy, måtte antall sannsigere være noe annet enn én, og eneste kandidat var Steinar — men da var det jo nøyaktig én, en ny motsigelse. Altså snakker Ylva sant, og Steinar er løgner."
+    },
+    {
+      "level": 2,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Tre naboer snakker enten alltid sant eller lyver alltid. Randi sier: «Sindre og jeg er av samme type.» Sindre sier: «Tuva og jeg er av ulik type.» Tuva sier: «Randi lyver.» Hvem lyver?",
+      "answer": "Bare Tuva — Randi og Sindre snakker sant.",
+      "explanation": "Anta at Randi lyver: da er Sindre av motsatt type, altså sannferdig, og hans utsagn gjør Tuva til løgner — men Tuvas «Randi lyver» ville da vært usant, altså snakker Randi sant. Motsigelse. Randi snakker altså sant: Sindre er også sannferdig, hans utsagn gjør Tuva til løgner, og Tuvas påstand er ganske riktig usann."
+    },
+    {
+      "level": 3,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Noen tok det siste kakestykket på kontoret. Pia sier: «Det var Stine.» Rolf sier: «Det var Stine.» Stine sier: «Det var ikke meg.» Terje sier: «Det var ikke Vilde.» Vilde sier: «Det var ikke meg.» Nøyaktig én av de fem snakker sant. Hvem tok kakestykket?",
+      "answer": "Vilde — og den ene som snakker sant, er Stine.",
+      "explanation": "Prøv hver mulig skyldig og tell sanne utsagn: er Stine skyldig, snakker Pia, Rolf, Terje og Vilde sant (fire); er Pia, Rolf eller Terje skyldig, snakker tre sant. Bare med Vilde som skyldig blir tallet riktig: Pia og Rolf tar feil, Stines fornektelse er sann, Terjes forsvar av Vilde er usant, og Vildes egen fornektelse er løgn — nøyaktig ett sant utsagn."
+    },
+    {
+      "level": 3,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Fem søsken mistenkes for å lyve. Den første sier: «Nøyaktig én av oss fem lyver.» Den andre: «Nøyaktig to av oss lyver.» Den tredje: «Nøyaktig tre av oss lyver.» Den fjerde: «Nøyaktig fire av oss lyver.» Den femte: «Alle fem lyver.» Hvem snakker sant?",
+      "answer": "Bare den fjerde — nøyaktig fire av dem lyver.",
+      "explanation": "Utsagnene utelukker hverandre, så høyst ett kan være sant. Var alle usanne, løy alle fem — men da hadde den femtes utsagn vært sant, en motsigelse. Altså snakker nøyaktig én sant og fire lyver — og det er akkurat det den fjerde påstår."
+    },
+    {
+      "level": 3,
+      "genre": "sann/løgn-deduksjon",
+      "question": "Fire venner snakker enten alltid sant eller lyver alltid. Geir sier: «Hanna lyver.» Hanna sier: «Ivar lyver.» Ivar sier: «Jon lyver.» Jon sier: «Geir lyver.» Til slutt legger Geir til: «Blant oss fire er det flere løgnere enn sannsigere.» Hvem lyver?",
+      "answer": "Geir og Ivar lyver; Hanna og Jon snakker sant.",
+      "explanation": "Kjeden av anklager tvinger frem annenhver type, så det finnes bare to muligheter: Geir og Ivar sannferdige, eller Hanna og Jon sannferdige. I begge tilfeller er det to løgnere og to sannsigere — så Geirs tilleggsutsagn om «flere løgnere» er uansett usant. Da må Geir være løgner, og dermed snakker Hanna og Jon sant mens Ivar lyver — som stemmer med alle fire anklagene."
+    },
+    {
+      "level": 1,
+      "genre": "plasseringslogikk",
+      "question": "Tre biler — en rød, en blå og en grønn — står parkert på rad. Den røde står ikke ytterst, og den blå står til høyre for den røde. Hvilken rekkefølge står de i, sett fra venstre?",
+      "answer": "Grønn, rød, blå.",
+      "explanation": "Den røde står ikke ytterst og må stå i midten. Den blå skal stå til høyre for den røde — altså ytterst til høyre — og den grønne tar plassen til venstre."
+    },
+    {
+      "level": 1,
+      "genre": "plasseringslogikk",
+      "question": "Truls, Une og Sven sitter på en benk med tre plasser. Une sitter helt til venstre, og Truls sitter ikke i midten. Hvor sitter Sven?",
+      "answer": "I midten.",
+      "explanation": "Une har venstreplassen, så Truls og Sven deler midten og høyresiden. Truls sitter ikke i midten — da må han ytterst til høyre, og Sven i midten."
+    },
+    {
+      "level": 1,
+      "genre": "plasseringslogikk",
+      "question": "En lege, en tannlege og en frisør holder til i 1., 2. og 3. etasje i samme bygård — én i hver etasje. Frisøren er ikke i 1. etasje, og legen holder til i etasjen rett over frisøren. Hvem er hvor?",
+      "answer": "Tannlegen i 1., frisøren i 2., legen i 3. etasje.",
+      "explanation": "Frisøren kan ikke være i 3. etasje, for da fantes ingen etasje rett over til legen — altså er frisøren i 2. Legen er da i 3., og tannlegen får 1. etasje."
+    },
+    {
+      "level": 2,
+      "genre": "plasseringslogikk",
+      "question": "I køen foran kiosken står Even, Frida, Georg og Hilde. Hilde står verken først eller sist. Georg står rett bak Frida. Even står lenger frem enn Frida. Hvem står hvor i køen?",
+      "answer": "Even først, så Hilde, så Frida, og Georg sist.",
+      "explanation": "Frida og Georg henger sammen som et par og kan stå på plassene 2–3 eller 3–4. Sto de på 2–3, måtte Even ta plass 1 og Hilde plass 4 — men Hilde skal ikke stå sist. Altså står paret på 3–4, og siden Hilde heller ikke skal stå først, får Even plass 1 og Hilde plass 2."
+    },
+    {
+      "level": 2,
+      "genre": "plasseringslogikk",
+      "question": "Fem biler står på rekke, nummerert 1–5 fra venstre. Den hvite står helt til venstre, og den svarte står i midten. Den røde står rett til høyre for den blå, og den grå står inntil den svarte. Hvilken rekkefølge står bilene i?",
+      "answer": "Hvit, grå, svart, blå, rød.",
+      "explanation": "Hvit har plass 1 og svart plass 3, så grå må stå på plass 2 eller 4. Sto grå på 4, måtte paret blå–rød dele plassene 2 og 5 — som ikke er naboplasser. Altså står grå på 2, og blå–rød tar plassene 4 og 5."
+    },
+    {
+      "level": 2,
+      "genre": "plasseringslogikk",
+      "question": "Fire venner sitter rundt et kvadratisk bord, én på hver side: nord, øst, sør og vest. Pia sitter i vest, rett overfor Odd. Kine sitter til høyre for Pia, sett fra der Pia sitter. Hvor sitter Lars?",
+      "answer": "I nord.",
+      "explanation": "Odd sitter rett overfor Pia, altså i øst. Pia i vest vender inn mot bordet og har sør på sin høyre side — der sitter Kine. Da står bare nordsiden igjen til Lars."
+    },
+    {
+      "level": 3,
+      "genre": "plasseringslogikk",
+      "question": "Marit, Nora, Odin og Petter sitter i etasjene 1–4, én i hver, og drikker hver sin drikk: kaffe, te, kakao og vann. (1) Marit sitter i etasjen rett over tedrikkeren. (2) Odin sitter i 1. etasje. (3) Kaffedrikkeren sitter i 4. etasje. (4) Nora sitter høyere enn Petter. (5) Petter drikker ikke te. (6) Vanndrikkeren sitter i 2. etasje. (7) Odin drikker ikke te. Hvem sitter hvor, og hva drikker de?",
+      "answer": "Odin i 1. med kakao, Petter i 2. med vann, Nora i 3. med te, Marit i 4. med kaffe.",
+      "explanation": "Kaffen hører til 4. etasje og vannet til 2., så teen står i 1. eller 3. — og siden Odin i 1. ikke drikker te, står den i 3. Da sitter Marit rett over, i 4., med kaffen. Nora og Petter deler etasjene 2 og 3, og siden Nora sitter høyest og Petter ikke drikker te, får Nora 3. etasje med teen og Petter 2. med vannet — og Odin står igjen med kakaoen."
+    },
+    {
+      "level": 3,
+      "genre": "plasseringslogikk",
+      "question": "Ken, Lisa, Mia og Nils sitter på plassene 1–4 på kino, og hver har sitt snacks: popkorn, sjokolade, drops og nøtter. (1) Ken sitter ytterst, på plass 1 eller 4. (2) Den med popkorn sitter rett til venstre for Lisa. (3) Mia har drops. (4) Nils sitter rett ved siden av både Mia og Lisa. (5) Den på plass 1 har nøtter. Hvem sitter hvor, med hva?",
+      "answer": "Ken på 1 med nøtter, Mia på 2 med drops, Nils på 3 med popkorn, Lisa på 4 med sjokolade.",
+      "explanation": "Nils sitter mellom Mia og Lisa, så de tre fyller tre naboplasser og Ken tar en ende. Satt Ken på plass 4, måtte Mia eller Lisa sitte på plass 1 med nøtter — umulig, for Mia har drops, og med Lisa på 1 fantes ingen plass til venstre for popkornet. Altså sitter Ken på 1 med nøttene. Lisa kan ikke sitte på 2 (da måtte popkornet vært hos Ken, som har nøtter), så trioen sitter Mia–Nils–Lisa på 2–3–4: Nils får popkornet rett til venstre for Lisa, og Lisa står igjen med sjokoladen."
+    },
+    {
+      "level": 3,
+      "genre": "plasseringslogikk",
+      "question": "Fem foredragsholdere — Aas, Berg, Dahl, Eng og Foss — holder hvert sitt innlegg i timene 1–5, om hvert sitt emne: AI, helse, klima, romfart og økonomi. (1) Berg snakker om klima. (2) Klimainnlegget går rett før romfartsinnlegget. (3) Økonomi går i 3. time. (4) Aas har timen rett etter Dahl. (5) Foss snakker om AI. (6) Helse kommer senere på dagen enn AI. (7) Romfart går ikke sist. Hvem snakker om hva, og når?",
+      "answer": "Berg om klima i 1. time, Dahl om romfart i 2., Aas om økonomi i 3., Foss om AI i 4., Eng om helse i 5.",
+      "explanation": "Klima–romfart er et nabopar som ikke kan bruke 3. time (økonomi), så det ligger i timene 1–2 eller 4–5 — og siden romfart ikke går sist, blir det 1–2. Da fyller AI og helse timene 4 og 5, og siden helse kommer etter AI, får AI 4. time (Foss) og helse 5. Berg har klima i 1. time, så paret Dahl–Aas må ligge på de ledige nabotimene 2–3 — Dahl i 2. med romfart, Aas i 3. med økonomi — og Eng står igjen med helse i 5."
+    },
+    {
+      "level": 1,
+      "genre": "tallmønster",
+      "question": "Hvilket tall kommer neste i rekka: 3, 6, 12, 24, …?",
+      "answer": "48.",
+      "explanation": "Hvert tall er det dobbelte av det forrige — og det dobbelte av 24 er 48."
+    },
+    {
+      "level": 1,
+      "genre": "tallmønster",
+      "question": "Ett av tallene passer ikke inn: 3, 5, 7, 9, 11, 13. Hvilket?",
+      "answer": "9.",
+      "explanation": "Alle de andre er primtall. 9 er det eneste som kan deles på noe annet enn 1 og seg selv (3 · 3)."
+    },
+    {
+      "level": 1,
+      "genre": "tallmønster",
+      "question": "Hvilket tall kommer neste i rekka: 1, 1, 2, 3, 5, 8, …?",
+      "answer": "13.",
+      "explanation": "Hvert tall er summen av de to foregående — 5 + 8 = 13. Rekka er kjent som Fibonacci-tallene."
+    },
+    {
+      "level": 2,
+      "genre": "tallmønster",
+      "question": "Finn regelen og neste tall: 2, 6, 12, 20, 30, …?",
+      "answer": "42.",
+      "explanation": "Differansene øker med 2 for hvert steg: +4, +6, +8, +10 — neste steg er +12. Rekka er også n·(n+1): 1·2, 2·3, 3·4 … og 6·7 = 42."
+    },
+    {
+      "level": 2,
+      "genre": "tallmønster",
+      "question": "Hva er neste tall i rekka: 1, 10, 3, 20, 5, 30, …?",
+      "answer": "7.",
+      "explanation": "To rekker er flettet i hverandre: oddetallene 1, 3, 5, … på annenhver plass og tierne 10, 20, 30, … imellom. Neste ledd hører til oddetallsrekka — altså 7."
+    },
+    {
+      "level": 2,
+      "genre": "tallmønster",
+      "question": "Hvilket tosifret tall er nøyaktig dobbelt så stort som summen av sine egne sifre?",
+      "answer": "18.",
+      "explanation": "Med sifrene a og b krever oppgaven 10a + b = 2(a + b), som gir 8a = b. Eneste siffer-løsning er a = 1 og b = 8 — og 18 er ganske riktig det dobbelte av 1 + 8 = 9."
+    },
+    {
+      "level": 3,
+      "genre": "tallmønster",
+      "question": "Finn neste tall i rekka: 2, 12, 36, 80, 150, …?",
+      "answer": "252.",
+      "explanation": "Se på differansene i flere lag: første lag er 10, 24, 44, 70; andre lag er 14, 20, 26 — som vokser jevnt med 6. Neste andre-lags differanse er 32, som gir første-lags differanse 102 og dermed 150 + 102 = 252. Rekka er også n² · (n + 1): 6² · 7 = 252."
+    },
+    {
+      "level": 3,
+      "genre": "tallmønster",
+      "question": "Et tosifret tall er fire ganger så stort som summen av sifrene sine, og samtidig dobbelt så stort som produktet av dem. Hvilket tall er det?",
+      "answer": "36.",
+      "explanation": "Med sifrene a og b gir første krav 10a + b = 4(a + b), altså 6a = 3b og b = 2a. Satt inn i andre krav: 12a = 2 · a · 2a = 4a², som gir a = 3 og b = 6. Kontroll: 36 = 4 · 9 og 36 = 2 · 18."
+    },
+    {
+      "level": 3,
+      "genre": "tallmønster",
+      "question": "Velg et hvilket som helst firesifret tall der ikke alle sifrene er like. Sorter sifrene synkende og stigende, og trekk det minste tallet fra det største. Gjenta med svaret. Hvilket tall ender du alltid opp på — uansett hva du startet med?",
+      "answer": "6174.",
+      "explanation": "Prosessen kalles Kaprekars rutine, og 6174 er dens faste punkt: 7641 − 1467 = 6174, så derfra står du stille. Alle andre startverdier suges inn i løpet av høyst sju runder — prøv 3524: 5432 − 2345 = 3087, 8730 − 0378 = 8352, 8532 − 2358 = 6174."
+    },
+    {
+      "level": 1,
+      "genre": "aldersalgebra",
+      "question": "Jens og Vilma er til sammen 30 år, og Jens er fire år eldre enn Vilma. Hvor gamle er de?",
+      "answer": "Vilma er 13 og Jens er 17.",
+      "explanation": "Tar du bort de fire ekstra årene til Jens, er de like gamle og deler 26 år — 13 på hver. Jens får de fire årene tilbake og blir 17."
+    },
+    {
+      "level": 1,
+      "genre": "aldersalgebra",
+      "question": "Bestefar er 62 år og barnebarnet 6. Om hvor mange år er bestefaren nøyaktig fem ganger så gammel som barnebarnet?",
+      "answer": "Om 8 år.",
+      "explanation": "Om x år krever vi 62 + x = 5·(6 + x), altså 62 + x = 30 + 5x, som gir x = 8. Da er de 70 og 14 — og 70 er nettopp fem ganger 14."
+    },
+    {
+      "level": 1,
+      "genre": "aldersalgebra",
+      "question": "For tre år siden var Lea halvparten så gammel som hun blir om ni år. Hvor gammel er Lea nå?",
+      "answer": "15 år.",
+      "explanation": "Kravet er L − 3 = (L + 9)/2. Ganger du opp: 2L − 6 = L + 9, altså L = 15. Kontroll: for tre år siden var hun 12, og om ni år blir hun 24 — det dobbelte."
+    },
+    {
+      "level": 2,
+      "genre": "aldersalgebra",
+      "question": "Tvillingene og lillesøsteren deres er til sammen 27 år. Lillesøsteren er seks år yngre enn hver av tvillingene. Hvor gamle er de tre?",
+      "answer": "Tvillingene er 11 og lillesøsteren 5.",
+      "explanation": "Med tvillingalder t er summen t + t + (t − 6) = 27, altså 3t = 33 og t = 11. Lillesøsteren er da 11 − 6 = 5, og 11 + 11 + 5 = 27 stemmer."
+    },
+    {
+      "level": 2,
+      "genre": "aldersalgebra",
+      "question": "Kaja er i dag tre ganger så gammel som Emil. Om fire år er hun bare dobbelt så gammel som ham. Hvor gamle er de nå?",
+      "answer": "Emil er 4 og Kaja 12.",
+      "explanation": "Med Emils alder e er kravet 3e + 4 = 2·(e + 4), som gir e = 4 — og Kaja er 3 · 4 = 12. Kontroll: om fire år er de 8 og 16, og 16 er det dobbelte av 8."
+    },
+    {
+      "level": 2,
+      "genre": "aldersalgebra",
+      "question": "Mor og datter er til sammen 66 år, og aldersforskjellen er 18 år. Morens alder er datterens alder med sifrene byttet om. Hvor gamle er de?",
+      "answer": "Moren er 42 og datteren 24.",
+      "explanation": "Et tall og det samme tallet med byttede sifre har alltid en differanse som er delelig på 9: 9·(a − b) = 18 gir a − b = 2. Summen 66 gir samtidig a + b = 6, så sifrene er 4 og 2 — moren er 42, datteren 24."
+    },
+    {
+      "level": 3,
+      "genre": "aldersalgebra",
+      "question": "Marit er dobbelt så gammel som Per var da Marit var like gammel som Per er nå. Når Per blir like gammel som Marit er nå, er de to til sammen 63 år. Hvor gamle er de?",
+      "answer": "Marit er 28 og Per 21.",
+      "explanation": "Kall aldersforskjellen g: da Marit var like gammel som Per er nå — for g år siden — var Per P − g, og kravet M = 2(P − g) = 2(2P − M) gir 3M = 4P. Alderne er altså 4k og 3k med g = k, og når Per om k år når Marits alder 4k, er Marit 5k: summen 9k = 63 gir k = 7. Kontroll: da Marit var 21, var Per 14, og 28 er det dobbelte av 14; når Per blir 28, er Marit 35, og 28 + 35 = 63."
+    },
+    {
+      "level": 3,
+      "genre": "aldersalgebra",
+      "question": "«Hvor gamle er de tre døtrene dine?» spør naboen. Matematikeren svarer: «Produktet av aldrene er 36, og summen er lik husnummeret ditt.» Naboen regner, men må gi opp: «Det holder ikke!» Matematikeren legger til: «Den eldste spiller piano.» Da vet naboen svaret. Hvor gamle er døtrene?",
+      "answer": "9, 2 og 2 år.",
+      "explanation": "Naboen kjenner sitt eget husnummer, så når summen ikke holder, må flere faktoriseringer av 36 dele samme sum — og bare 13 går igjen: 1 + 6 + 6 og 2 + 2 + 9. Opplysningen om at det finnes én eldste utelukker 1, 6 og 6, der de to eldste er like gamle. Altså er døtrene 9, 2 og 2."
+    },
+    {
+      "level": 3,
+      "genre": "aldersalgebra",
+      "question": "Mor er dobbelt så gammel som datteren, og sønnen er sju år yngre enn datteren. For tre år siden var de tre til sammen 60 år. Hvor gamle er de nå?",
+      "answer": "Moren er 38, datteren 19 og sønnen 12.",
+      "explanation": "For tre år siden var hver av de tre 3 år yngre, så summen i dag er 60 + 9 = 69. Med datterens alder d er 2d + d + (d − 7) = 69, altså 4d = 76 og d = 19. Moren er da 38 og sønnen 12 — og for tre år siden var de 35 + 16 + 9 = 60."
+    },
+    {
+      "level": 1,
+      "genre": "vekt og veiing",
+      "question": "En katt og en hund veier til sammen 15 kg, og hunden veier 11 kg mer enn katten. Hva veier hver av dem?",
+      "answer": "Katten veier 2 kg og hunden 13 kg.",
+      "explanation": "Tar du bort de 11 ekstra kiloene til hunden, veier de likt og deler 4 kg — 2 kg på hver. Hunden får sine 11 kg tilbake og ender på 13."
+    },
+    {
+      "level": 1,
+      "genre": "vekt og veiing",
+      "question": "Et eple veier like mye som to plommer, og fire plommer veier like mye som én pære. Hva veier mest — to epler eller én pære?",
+      "answer": "De veier nøyaktig like mye.",
+      "explanation": "To epler veier like mye som fire plommer — og fire plommer veier nettopp like mye som én pære."
+    },
+    {
+      "level": 1,
+      "genre": "vekt og veiing",
+      "question": "Hva veier mest — en kilo fjær eller en kilo bly?",
+      "answer": "De veier like mye — en kilo er en kilo.",
+      "explanation": "Spørsmålet frister deg til å tenke på hvor tett og tungt bly kjennes, men vekten er allerede oppgitt: én kilo av hva som helst veier én kilo. Forskjellen er bare volumet — fjærhaugen er mye større."
+    },
+    {
+      "level": 2,
+      "genre": "vekt og veiing",
+      "question": "Tre venner veier seg parvis: Ari og Bo veier 130 kg sammen, Bo og Cato 140 kg, og Ari og Cato 150 kg. Hva veier hver av dem?",
+      "answer": "Ari 70 kg, Bo 60 kg og Cato 80 kg.",
+      "explanation": "Legger du sammen alle tre veiingene, er hver person talt med to ganger: 130 + 140 + 150 = 420, så alle tre veier 210 kg til sammen. Trekk fra hver parveiing for å finne den som sto over: Cato = 210 − 130 = 80, Ari = 210 − 140 = 70, Bo = 210 − 150 = 60."
+    },
+    {
+      "level": 2,
+      "genre": "vekt og veiing",
+      "question": "En vannmelon på 10 kg består av 99 % vann. Etter noen dager i sola har vanninnholdet sunket til 98 %. Hva veier melonen nå?",
+      "answer": "5 kg.",
+      "explanation": "Tørrstoffet endrer seg ikke: det er 1 % av 10 kg, altså 0,1 kg. Når vannet er 98 %, utgjør tørrstoffet 2 % av vekten — og 0,1 kg er 2 % av nøyaktig 5 kg. Ett fattig prosentpoeng halverer altså hele melonen."
+    },
+    {
+      "level": 2,
+      "genre": "vekt og veiing",
+      "question": "På en skålvekt balanserer 2 terninger og 1 kule mot 14 ringer, og 1 terning balanserer mot 1 kule og 1 ring. Hvor mange ringer balanserer mot 1 kule?",
+      "answer": "4 ringer.",
+      "explanation": "Bytt ut hver terning med innholdet den balanserer mot: 2 terninger og 1 kule blir da 3 kuler og 2 ringer, som altså veier det samme som 14 ringer. Da veier 3 kuler like mye som 12 ringer — én kule er verdt 4 ringer."
+    },
+    {
+      "level": 3,
+      "genre": "vekt og veiing",
+      "question": "Du har fem poser med mynter. I hver pose er enten alle myntene ekte (10 gram) eller alle falske (9 gram) — og det kan være flere falske poser, kanskje alle. Du har en digital vekt og får veie nøyaktig ÉN gang. Hvordan finner du ut nøyaktig hvilke poser som er falske?",
+      "answer": "Legg 1 mynt fra pose 1, 2 fra pose 2, 4 fra pose 3, 8 fra pose 4 og 16 fra pose 5 på vekta. Antall gram som mangler på 310, skrevet binært, peker ut de falske posene.",
+      "explanation": "De 31 myntene ville veid 310 g om alle var ekte, og hver falsk mynt mangler nøyaktig 1 g. Antallene 1, 2, 4, 8 og 16 er toerpotensene, og enhver sum av dem kan bare settes sammen på én måte — mangler det for eksempel 13 g, er 13 = 8 + 4 + 1, altså er posene 4, 3 og 1 falske. Med like antall fra hver pose hadde du bare visst hvor mange poser som var falske, ikke hvilke."
+    },
+    {
+      "level": 3,
+      "genre": "vekt og veiing",
+      "question": "Du har 9 kg sukker i en sekk, en skålvekt og ett eneste lodd på 250 gram. Hvordan deler du sukkeret i én porsjon på 2 kg og én på 7 kg med bare tre veiinger?",
+      "answer": "Del sukkeret i to like hauger på 4,5 kg; del den ene i to like på 2,25 kg; vei til slutt 250 g fra en 2,25-haug med loddet — resten av den haugen er nøyaktig 2 kg.",
+      "explanation": "De to første veiingene bruker bare balansen: like skåler gir 4,5 + 4,5 og deretter 2,25 + 2,25. Tredje veiing skiller ut 250 g mot loddet, så 2,25 − 0,25 = 2 kg står igjen. Alt det andre — 4,5 + 2,25 + 0,25 — utgjør nøyaktig 7 kg."
+    },
+    {
+      "level": 3,
+      "genre": "vekt og veiing",
+      "question": "En kjøpmann har en skålvekt med ulikt lange armer — den jukser. En kunde ber om 2 kg mel og foreslår: «Vei opp 1 kg med loddet i venstre skål, og så 1 kg til med loddet i høyre skål. Da jevner feilen seg vel ut?» Får kunden mer eller mindre enn 2 kg?",
+      "answer": "Mer enn 2 kg — kunden tjener på det.",
+      "explanation": "Med armlengder a og b gir loddet i venstre skål melmengden a/b kg, og loddet i høyre gir b/a kg. Summen a/b + b/a er alltid større enn 2 når a og b er ulike — for (a − b)² > 0 betyr a² + b² > 2ab. Feilene går altså begge i kundens favør; de opphever hverandre bare hvis armene er nøyaktig like lange."
+    },
+    {
+      "level": 1,
+      "genre": "planlegging og kryssing",
+      "question": "En bonde skal frakte en ulv, en geit og et kålhode over elva. Båten har bare plass til bonden og én av dem om gangen. Uten tilsyn spiser ulven geita, og geita spiser kålen. Hvordan får han alt trygt over?",
+      "answer": "Ta geita over først; dra tilbake tom; ta ulven over og ta geita MED tilbake; sett igjen geita og ta kålen over; dra tilbake tom og hent geita til slutt.",
+      "explanation": "Geita er den eneste som må skilles fra begge de andre, så hun må alltid være der bonden er — eller alene. Trikset er å ta geita med hjem igjen på returen, så ulv og kål aldri deler bredd med henne uten tilsyn."
+    },
+    {
+      "level": 1,
+      "genre": "planlegging og kryssing",
+      "question": "Legen gir deg tre tabletter og sier at du skal ta én hver halvtime. Hvor lang tid tar det før tablettene er brukt opp?",
+      "answer": "Én time.",
+      "explanation": "Den første tabletten tar du med én gang. Så går det en halvtime til nummer to og enda en halvtime til nummer tre — 30 + 30 = 60 minutter, ikke 90."
+    },
+    {
+      "level": 1,
+      "genre": "planlegging og kryssing",
+      "question": "Du skal koke et egg i nøyaktig 3 minutter, men har bare to timeglass: ett på 5 minutter og ett på 2. Hvordan gjør du det?",
+      "answer": "Snu begge glassene samtidig; når 2-minuttersglasset er tomt, legger du egget i vannet — når 5-minuttersglasset renner ut, er de 3 minuttene gått.",
+      "explanation": "Mens 2-glasset renner ut, teller 5-glasset ned de samme to minuttene — så det har nøyaktig 3 minutter igjen. Egget kokes altså i differansen mellom de to glassene."
+    },
+    {
+      "level": 2,
+      "genre": "planlegging og kryssing",
+      "question": "Du har to timeglass, ett på 7 minutter og ett på 11, og skal koke noe i nøyaktig 15 minutter. Hvordan måler du tiden?",
+      "answer": "Start kokingen og begge glassene samtidig. Når 7-glasset er tomt, snur du det; når 11-glasset er tomt, snur du 7-glasset igjen — når det renner ut, har det gått 15 minutter.",
+      "explanation": "Ved 11 minutter har det nysnudde 7-glasset rent i 4 minutter, så det ligger nøyaktig 4 minutters sand i bunnen. Snur du det da, renner de 4 minuttene tilbake — og 11 + 4 = 15."
+    },
+    {
+      "level": 2,
+      "genre": "planlegging og kryssing",
+      "question": "Du skal bo sju netter på et hotell og betale ett gulledd per natt, hver kveld. Betalingen er en gullkjede med sju ledd, men du får bare klippe opp ETT ledd. Hvordan kan du likevel gjøre opp for hver natt — når verten kan gi tilbake ledd han alt har fått?",
+      "answer": "Klipp opp ledd nummer tre. Da har du bitene 1, 2 og 4 — og kan betale hvilken som helst sum fra 1 til 7 ved å gi og få tilbake.",
+      "explanation": "Å klippe det tredje leddet løsner selve leddet (1) og deler resten i en toer- og en firerbit. Med 1, 2 og 4 dekkes alle beløp: natt 1 gir du eneren; natt 2 gir du toeren og får eneren tilbake; natt 3 legger du eneren til; natt 4 gir du fireren og får alt tilbake — og så videre."
+    },
+    {
+      "level": 2,
+      "genre": "planlegging og kryssing",
+      "question": "I kjelleren står tre lysbrytere; nøyaktig én av dem styrer lampa på loftet, som du ikke ser fra kjelleren. Du får gå opp på loftet bare ÉN gang. Hvordan finner du ut hvilken bryter som er riktig?",
+      "answer": "Slå på bryter 1 og la den stå i ti minutter; slå den av, slå på bryter 2 og gå rett opp. Lyser lampa, er det bryter 2; er pæra mørk, men varm, er det bryter 1; er den mørk og kald, er det bryter 3.",
+      "explanation": "Turen opp gir deg bare én observasjon, så du trenger mer informasjon enn av/på — og varmen i pæra er en ekstra kanal. Slik gir de tre bryterne tre ulike, entydige spor."
+    },
+    {
+      "level": 3,
+      "genre": "planlegging og kryssing",
+      "question": "Tre misjonærer og tre kannibaler skal over en elv i en båt med plass til to. Hvis kannibalene på noe tidspunkt er i flertall på en bredd der det står misjonærer, går det galt. Alle kan ro. Hva er det minste antallet turer (én retning = én tur) som får alle trygt over?",
+      "answer": "11 turer.",
+      "explanation": "En løsning: to kannibaler over, én tilbake; to kannibaler over, én tilbake; to misjonærer over, én misjonær og én kannibal tilbake; to misjonærer over, én kannibal tilbake; to kannibaler over, én tilbake; de to siste kannibalene over — 11 turer. Nøkkeltrekket er retur nummer seks, der en misjonær og en kannibal drar tilbake sammen for å holde balansen på begge bredder. Kortere går det ikke: hver rundtur netto flytter høyst én person, og analyse av tilstandene viser at 11 er minimum."
+    },
+    {
+      "level": 3,
+      "genre": "planlegging og kryssing",
+      "question": "En bonde har 3 000 bananer som skal til et marked 1 000 km unna. Kamelen hans bærer maks 1 000 bananer om gangen og spiser 1 banan for hver kilometer den går — uansett retning. Hva er det største antallet bananer han kan få frem til markedet?",
+      "answer": "533 bananer.",
+      "explanation": "Med 3 000 bananer må hver kilometer fraktes i tre vendinger — tre turer frem og to tilbake koster 5 bananer per km. Etter 200 km er det igjen 2 000 bananer; da holder to vendinger (3 bananer per km) i 333 km til, til det gjenstår rundt 1 000 bananer ved kilometer 533. Derfra bærer kamelen alt i én last de siste 467 km og kommer frem med 1 000 − 467 = 533."
+    },
+    {
+      "level": 3,
+      "genre": "planlegging og kryssing",
+      "question": "Du har to helt like egg og et hus på 100 etasjer. Det finnes en høyeste etasje egget tåler å slippes fra; slippes det høyere, knuser det. Knuste egg er brukt opp. Hvor få slipp trenger du i verste fall for garantert å finne den høyeste trygge etasjen?",
+      "answer": "14 slipp.",
+      "explanation": "Slipp første egg fra etasje 14, deretter 27, 39, 50, 60, 69, 77, 84, 90, 95, 99 og 100 — hoppene krymper med én for hver gang. Knuser det for eksempel på 27, tester du etasjene 15–26 én for én med egg nummer to: 1 slipp brukt pluss maks 13 nye gir 14 totalt, samme sum uansett hvor det knuser. Med 14 slipp dekker du 14 + 13 + … + 1 = 105 etasjer, mens 13 slipp bare dekker 91 — for få."
+    },
+    {
+      "level": 1,
+      "genre": "informasjonsdeduksjon",
+      "question": "Hvor mange personer må minst være samlet i et rom for at du skal være helt sikker på at to av dem er født på samme ukedag?",
+      "answer": "8.",
+      "explanation": "Det finnes bare sju ukedager. Sju personer kan så vidt dekke én hver, men den åttende må dele dag med noen."
+    },
+    {
+      "level": 1,
+      "genre": "informasjonsdeduksjon",
+      "question": "I en klasse har alle elevene kjæledyr: 12 har hund, 9 har katt, og 4 av dem har begge deler. Hvor mange elever er det i klassen?",
+      "answer": "17.",
+      "explanation": "Legger du sammen 12 og 9, har du talt de 4 som har begge dyrene to ganger. 12 + 9 − 4 = 17."
+    },
+    {
+      "level": 1,
+      "genre": "informasjonsdeduksjon",
+      "question": "I en krukke ligger røde, gule og grønne drops — minst ti av hver. Det er mørkt, og du vil være helt sikker på å få tre drops i SAMME farge. Hvor mange må du minst ta?",
+      "answer": "7.",
+      "explanation": "I verste fall trekker du to av hver farge — seks drops uten tre like. Drops nummer sju må gi en farge sin tredje."
+    },
+    {
+      "level": 2,
+      "genre": "informasjonsdeduksjon",
+      "question": "Tre esker: én med bare epler, én med bare appelsiner og én med begge deler. Alle tre er merket «epler», «appelsiner» og «blandet» — men alle lappene sitter på FEIL eske. Du får trekke én frukt fra én eske uten å se nedi. Hvordan kan du merke alle eskene riktig?",
+      "answer": "Trekk fra esken merket «blandet». Får du et eple, er det eple-esken; da må esken merket «epler» være appelsin-esken (den kan ikke være blandet, for da var lappen riktig), og den siste er blandet.",
+      "explanation": "Siden alle lapper er feil, er esken merket «blandet» garantert en ren eske — én frukt avslører hele innholdet. Deretter tvinger «alle lapper er feil»-regelen frem resten: ingen eske kan beholde sin egen merkelapp."
+    },
+    {
+      "level": 2,
+      "genre": "informasjonsdeduksjon",
+      "question": "I skuffen ligger 12 hansker hulter til bulter: 3 svarte venstrehansker, 3 svarte høyre, 3 brune venstre og 3 brune høyre. Det er stummende mørkt. Hvor mange må du minst ta med deg for å være sikker på et brukbart par — én venstre og én høyre i SAMME farge?",
+      "answer": "7.",
+      "explanation": "I verste fall får du seks hansker uten par — for eksempel alle seks venstrehanskene, eller tre svarte venstre og tre brune høyre. Hanske nummer sju må fullføre et par: uansett hva du alt har, finnes det da en motsatt hånd i en farge du allerede holder."
+    },
+    {
+      "level": 2,
+      "genre": "informasjonsdeduksjon",
+      "question": "Fire fanger får hatter på hodet: to svarte og to hvite. Arne står bak en vegg og ser ingen. Bjørn, Christian og David står på rekke mot veggen: Bjørn fremst og ser ingen, Christian ser Bjørns hatt, David ser både Bjørns og Christians. Ingen ser sin egen. Den som med sikkerhet vet sin egen farge, skal rope. Etter en lang stillhet roper én. Hvem — og hvordan vet han?",
+      "answer": "Christian. Han roper det motsatte av fargen han ser på Bjørn.",
+      "explanation": "Hadde Bjørn og Christian hatt samme farge, ville David visst at hans egen var den motsatte — to like foran ham bruker opp begge hattene i den fargen. Når David tier, skjønner Christian at han og Bjørn har ulike farger — og han ser jo Bjørns."
+    },
+    {
+      "level": 3,
+      "genre": "informasjonsdeduksjon",
+      "question": "En konge har 1 000 vinflasker, og nøyaktig én er forgiftet. Giften virker nøyaktig 24 timer etter inntak, og kongen har bare ett døgn på seg — men 10 smakstestere til rådighet. Hvordan finner han garantert den forgiftede flasken?",
+      "answer": "Nummerér flaskene 0–999 og skriv numrene binært med 10 sifre. Tester nummer k drikker en dråpe fra hver flaske der siffer k er 1. Etter 24 timer leses de syke testerne som et binærtall — det er flaskens nummer.",
+      "explanation": "Hver flaske får et unikt mønster av testere, siden 10 binære sifre skiller 1 024 muligheter — mer enn nok til 1 000 flasker. Alle drikker samtidig, så hele testen tar ett døgn. Blir for eksempel tester 0, 2 og 3 syke, er flasken nummer 1 + 4 + 8 = 13."
+    },
+    {
+      "level": 3,
+      "genre": "informasjonsdeduksjon",
+      "question": "Ti fanger kan slippes fri hvis de klarer dette: de hentes én og én, i vilkårlig rekkefølge, inn i et rom med én lampe som starter avslått — men alle blir hentet inn igjen og igjen, uendelig ofte. Inne i rommet kan de bare slå lampa på eller av. Når én fange med SIKKERHET kan si «alle ti har vært i rommet», er alle fri; tar han feil, taper de. De får legge en plan på forhånd. Hvilken plan fungerer?",
+      "answer": "Én utpekes som teller. Hver av de ni andre slår lampa PÅ første gang de finner den avslått — og bare den ene gangen; ellers rører de den ikke. Telleren slår lampa AV hver gang han finner den på og teller — når han har telt ni, vet han at alle har vært inne.",
+      "explanation": "Hvert «på» lampa noensinne får, kommer fra en ny fange, for hver av de ni tenner den bare én gang i livet. Telleren er den eneste som slukker, så hver slukking svarer til nøyaktig én ny fange — ni slukkinger betyr ni forskjellige, pluss ham selv. Siden alle hentes inn uendelig ofte, får hver fange før eller siden sjansen til å finne lampa avslått, så telleren når garantert ni til slutt."
+    },
+    {
+      "level": 3,
+      "genre": "informasjonsdeduksjon",
+      "question": "Fem perfekt logiske pirater — A eldst, så B, C, D og E — skal dele 100 gullmynter. Eldste gjenlevende foreslår en fordeling, og alle om bord stemmer; ved minst halvparten ja (forslagsstilleren stemmer selv) vedtas den, ellers kastes han over bord og nestemann foreslår. Alle vil først overleve, så få mest mulig gull — og kaster gjerne andre over bord når det ellers står likt. Hva foreslår A?",
+      "answer": "98 mynter til seg selv, 0 til B, 1 til C, 0 til D og 1 til E — og det vedtas.",
+      "explanation": "Regn bakfra: med bare D og E igjen tar D alt (hans egen stemme er halvparten), så E får null der. Med C, D og E foreslår C «99 til meg, 1 til E» — E vet at alternativet er null og stemmer ja. Med fire igjen kjøper B stemmen til D med én mynt (D får null hos C). A trenger to stemmer i tillegg til sin egen og kjøper de to som får null hos B — C og E — med én mynt hver: 98, 0, 1, 0, 1."
+    },
+    {
+      "level": 1,
+      "genre": "kalender- og tidslogikk",
+      "question": "Noen måneder har 31 dager, andre har 30. Hvor mange måneder har 28 dager?",
+      "answer": "Alle tolv.",
+      "explanation": "Spørsmålet er ikke hvilke måneder som har NØYAKTIG 28 dager. Hver eneste måned har minst 28 — også juli med sine 31."
+    },
+    {
+      "level": 1,
+      "genre": "kalender- og tidslogikk",
+      "question": "Ei klokke går ett minutt for fort per time. Den stilles riktig klokka 12.00. Hva viser den når riktig tid er 20.00 samme dag?",
+      "answer": "20.08.",
+      "explanation": "Fra 12.00 til 20.00 går det åtte timer, og klokka vinner ett minutt i hver av dem. Åtte minutter for tidlig gir 20.08."
+    },
+    {
+      "level": 1,
+      "genre": "kalender- og tidslogikk",
+      "question": "Bestefar er over 70 år gammel, men har bare opplevd 18 bursdager. Hvordan er det mulig?",
+      "answer": "Han er født 29. februar — dagen finnes bare i skuddår.",
+      "explanation": "Skuddårsdagen kommer bare hvert fjerde år, så bursdagene hans er få og eksklusive. 18 bursdager à fire års mellomrom passer med en alder på godt over 70."
+    },
+    {
+      "level": 2,
+      "genre": "kalender- og tidslogikk",
+      "question": "Hvor mange ganger i løpet av et døgn står time- og minuttviseren nøyaktig oppå hverandre?",
+      "answer": "22 ganger — ikke 24.",
+      "explanation": "Minuttviseren går tolv runder på tolv timer, timeviseren én — så minuttviseren tar igjen timeviseren 12 − 1 = 11 ganger per tolvtimersperiode. Det gir 22 møter i døgnet, med snaut 65 og et halvt minutt mellom hvert; klokka 12.00 er ett av dem."
+    },
+    {
+      "level": 2,
+      "genre": "kalender- og tidslogikk",
+      "question": "Du har to klokker: én har stoppet helt, og én går ett minutt feil per døgn. Hvilken viser riktig tid flest ganger?",
+      "answer": "Den som har stoppet.",
+      "explanation": "En stoppet klokke viser riktig tid to ganger i døgnet — hver gang riktig tid passerer viserne. Klokka som går ett minutt feil per døgn, må drive seg hele veien rundt tolvtimersskiva før den treffer igjen: 720 minutter à ett minutt per døgn, altså riktig omtrent én gang på to år."
+    },
+    {
+      "level": 2,
+      "genre": "kalender- og tidslogikk",
+      "question": "På en resepsjonsdisk vises datoen (01–31) med to terninger, ett siffer på hver. Hvilke sifre må stå på hver terning for at alle datoer skal kunne vises — når hver terning bare har seks sider?",
+      "answer": "Begge terningene må ha 0, 1 og 2; den ene har i tillegg 3, 4 og 5, den andre 6, 7 og 8 — og 6-eren snus opp ned når man trenger 9.",
+      "explanation": "Datoene 11 og 22 krever 1 og 2 på begge terningene, og alle datoer under 10 skrives med ledende null — så 0 må også på begge (én null på deling gir ikke nok plass til resten). Da gjenstår seks sifre til de seks ledige sidene — det går bare opp fordi 6 og 9 kan være samme side."
+    },
+    {
+      "level": 3,
+      "genre": "kalender- og tidslogikk",
+      "question": "Finnes det år helt uten fredag den 13.?",
+      "answer": "Nei — hvert eneste år har minst én fredag den 13. (og aldri flere enn tre).",
+      "explanation": "Hvilken ukedag den 13. faller på, avgjøres av månedens startdag, og månedenes forskyvninger i forhold til januar er faste: 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 i vanlige år og 0, 3, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6 i skuddår. Begge listene inneholder alle sju restene 0–6, så uansett hvilken ukedag året starter på, havner den 13. på en fredag i minst én måned. Samme liste viser at ingen rest forekommer mer enn tre ganger — derfor maks tre."
+    },
+    {
+      "level": 3,
+      "genre": "kalender- og tidslogikk",
+      "question": "Nøyaktig når mellom klokka 3 og 4 står time- og minuttviseren oppå hverandre?",
+      "answer": "16 og 4/11 minutter over tre — klokka 3.16.21,8.",
+      "explanation": "Klokka 3.00 ligger timeviseren 90 grader foran minuttviseren. Minuttviseren går 6 grader per minutt og timeviseren 0,5 — så minuttviseren vinner 5,5 grader per minutt. 90 delt på 5,5 gir 180/11 = 16 4/11 minutter, altså 16 minutter og snaut 22 sekunder over tre."
+    },
+    {
+      "level": 3,
+      "genre": "kalender- og tidslogikk",
+      "question": "Da restene av Magellans mannskap kom hjem i 1522 etter den første jordomseilingen, hadde de ført skipsloggen samvittighetsfullt hver eneste dag — men datoen deres lå likevel én dag bak kalenderen på land. Ingen hadde talt feil. Hvordan kunne det skje?",
+      "answer": "De seilte vestover, samme vei som sola — og «mistet» dermed et helt døgn underveis.",
+      "explanation": "Den som reiser vestover, jager etter sola, så hver dag om bord blir bittelitt lengre enn 24 timer — solen står opp litt senere for hver lengdegrad. Fordelt over én hel runde rundt jorda utgjør det nøyaktig ett soldøgn: mannskapet opplevde én soloppgang mindre enn de hjemme. I dag er det datolinjen i Stillehavet som retter opp regnskapet — den fantes ikke i 1522."
+    },
+    {
+      "level": 1,
+      "genre": "lateral tenkning",
+      "question": "En hane sitter på toppen av et spisst låvetak og legger et egg. Hvilken side av taket triller egget ned?",
+      "answer": "Ingen — haner legger ikke egg.",
+      "explanation": "Spørsmålet lokker deg til å regne på vind og takvinkel, men premisset er umulig: det er høna som legger egg."
+    },
+    {
+      "level": 1,
+      "genre": "lateral tenkning",
+      "question": "En mann går ut i høljende regnvær uten paraply, hette eller noe annet over hodet. Likevel blir ikke ett eneste hårstrå på hodet hans vått. Hvordan?",
+      "answer": "Han er skallet.",
+      "explanation": "Resten av ham blir gjennomvåt — men uten hår finnes det ingen hårstrå å gjøre våte. Gåten sier bare noe om hårstråene, ikke om mannen."
+    },
+    {
+      "level": 1,
+      "genre": "lateral tenkning",
+      "question": "En bussjåfør er på vei nedover en enveiskjørt gate — mot kjøreretningen. Han passerer rett foran en politibil, men politiet løfter ikke en finger. Hvorfor?",
+      "answer": "Han går til fots.",
+      "explanation": "Gåten sier at sjåføren er på vei nedover gata — ikke at han kjører buss akkurat da. Enveiskjøring gjelder kjøretøy, ikke fotgjengere."
+    },
+    {
+      "level": 2,
+      "genre": "lateral tenkning",
+      "question": "To gutter er født samme dag, samme år, av samme mor og samme far — men de er ikke tvillinger. Hvordan er det mulig?",
+      "answer": "De er to av tre trillinger.",
+      "explanation": "Alle tenker parvis, men ingenting i gåten sier at det bare er to barn i kullet. Med en tredje søsken født samme dag er de trillinger — ikke tvillinger."
+    },
+    {
+      "level": 2,
+      "genre": "lateral tenkning",
+      "question": "Dypt inne i en tett skog, milevis fra nærmeste vei, finner letemannskaper en kabin full av omkomne mennesker. Det finnes ingen stier eller spor rundt den. Hva har skjedd?",
+      "answer": "Det er kabinen til et fly som har styrtet.",
+      "explanation": "Ordet lokker deg til å se for deg en tømmerkoie. Flykabinen kom ovenfra — derfor finnes verken vei, stier eller spor inn til stedet."
+    },
+    {
+      "level": 2,
+      "genre": "lateral tenkning",
+      "question": "En mann dytter bilen sin bortover veien og stopper foran et hotell. I samme øyeblikk vet han at han er konkurs. Hvordan?",
+      "answer": "Han spiller Monopol — bilen er spillebrikken hans, og hotellet står på en tomt han ikke kan betale leie for.",
+      "explanation": "Alle detaljene stemmer i miniatyr: brikken «dyttes» rundt brettet, og lander den på en dyr tomt med hotell, er spilleren konkurs. Ingen ekte bil, intet ekte hotell."
+    },
+    {
+      "level": 3,
+      "genre": "lateral tenkning",
+      "question": "En mann på jobb slår av lyset, går hjem og legger seg. Neste morgen leser han avisen — og bryter fullstendig sammen av det han leser. Hva hadde skjedd?",
+      "answer": "Han er fyrvokter. Lyset han slukket, var selve fyrlykta — og i løpet av natten forliste et skip.",
+      "explanation": "Nøkkelen er at «lyset» ikke er en vanlig taklampe, men et liv-eller-død-signal for skipstrafikken. Avisen forteller om forliset, og han skjønner at hans egen håndsbevegelse var årsaken."
+    },
+    {
+      "level": 3,
+      "genre": "lateral tenkning",
+      "question": "Etter en stor skogbrann finner brannmannskapene en omkommet mann høyt oppe i et forkullet tre — iført full dykkerdrakt, maske og svømmeføtter. Nærmeste kyst er flere mil unna. Hvordan havnet han der?",
+      "answer": "Han dykket i havet da et brannslukningsfly skopet opp vann — og ham — og slapp lasten over skogbrannen.",
+      "explanation": "Ingen har gått opp i treet; mannen kom ovenfra, med vannet. Slukningsfly fyller tankene ved å skumme havoverflaten i stor fart, og det forklarer både drakten, avstanden til kysten og plasseringen i tretoppen."
+    },
+    {
+      "level": 3,
+      "genre": "lateral tenkning",
+      "question": "Hver dag i mange år krysser en mann grensen på sykkel med en stor sekk sand på bagasjebrettet. Tollerne er sikre på at han smugler, endevender sanden hver eneste gang — og finner aldri noe. Likevel blir mannen sakte, men sikkert rik. Hva smugler han?",
+      "answer": "Sykler.",
+      "explanation": "Smuglervaren er ikke i lasten — den er kjøretøyet selv. Sanden er lokkemat som holder blikket til tollerne borte fra det eneste som faktisk er nytt hver dag: sykkelen han triller over grensen og selger."
+    },
+    {
+      "level": 1,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "I et løp bestemmer du deg for å ta igjen og passere løperen som ligger på SISTEplass. Hvorfor er det umulig?",
+      "answer": "For å passere sistemann må du ligge bak ham — men da er det jo du som er sist, ikke han.",
+      "explanation": "Skal du passere noen, må du komme bakfra. Ligger noen bak sistemann, var «sistemann» aldri sist — plassen er per definisjon umulig å angripe bakfra."
+    },
+    {
+      "level": 1,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Kari er eldre enn Lise, og Lise er eldre enn Mona. Nina er eldre enn Lise, men yngre enn Kari. Hvem er nest eldst?",
+      "answer": "Nina.",
+      "explanation": "Rekkefølgen blir Kari > Nina > Lise > Mona. Nina skviser seg inn mellom Kari og Lise — og tar andreplassen."
+    },
+    {
+      "level": 1,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "I køen på postkontoret er Petra nummer 5 forfra og samtidig nummer 12 bakfra. Hvor mange står i køen?",
+      "answer": "16.",
+      "explanation": "Foran Petra står 4, bak henne står 11 — og så kommer Petra selv: 4 + 11 + 1 = 16. Feilen alle gjør, er å regne henne med to ganger og svare 17."
+    },
+    {
+      "level": 2,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Seks elever målte høyden sin. Jonas er høyere enn både Mari og Nils. Mari er høyere enn Oda. Nils er høyere enn Petra, men lavere enn Mari. Rakel er høyest av alle. Hvem er nummer tre ovenfra — og hvorfor kan vi være sikre, selv om vi ikke kjenner hele rekkefølgen?",
+      "answer": "Mari.",
+      "explanation": "Rakel er høyest og Jonas nest høyest — han slår alle unntatt Rakel, som vi vet står øverst. Mari er lavere enn disse to, men høyere enn Oda, Nils og dermed også Petra — altså nøyaktig tre personer under henne. Hvordan Oda, Nils og Petra ordner seg innbyrdes, spiller ingen rolle for tredjeplassen."
+    },
+    {
+      "level": 2,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "På et allmøte sier sjefen stolt: «Nesten alle i denne bedriften tjener over gjennomsnittslønnen hos oss!» Kan det faktisk stemme?",
+      "answer": "Ja — det holder at noen ganske få tjener veldig mye mindre enn resten.",
+      "explanation": "Gjennomsnittet dras kraftig ned av noen få svært lave lønninger, så flertallet kan fint ligge over. Eksempel: ni ansatte tjener 600 000 og én tjener 100 000 — snittet er 550 000, og ni av ti ligger over. Med medianen hadde trikset vært umulig."
+    },
+    {
+      "level": 2,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Fire søsken har ulik alder. (1) Sara er eldre enn nøyaktig to av de andre. (2) Trym er ikke yngst. (3) Une er eldre enn Sara. (4) Vetle er yngre enn Trym. Rangér søsknene fra eldst til yngst.",
+      "answer": "Une, Sara, Trym, Vetle.",
+      "explanation": "At Sara er eldre enn nøyaktig to, plasserer henne som nummer to av fire. Une, som er eldre enn Sara, må da være eldst. Trym og Vetle deler de to nederste plassene, og siden Vetle er yngre enn Trym, blir Trym nummer tre — som også stemmer med at Trym ikke er yngst."
+    },
+    {
+      "level": 3,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Anna, Berit og Clara løper 100-meter i helt jevn fart hele veien. Når Anna er i mål, har Berit 10 meter igjen. Når Berit løper mot Clara, har Clara 10 meter igjen når Berit er i mål. Så løper Anna mot Clara. Hvor langt foran er Anna i mål?",
+      "answer": "19 meter — ikke 20.",
+      "explanation": "Berit holder 90 % av Annas fart, og Clara 90 % av Berits — altså 81 % av Annas. Når Anna fullfører sine 100 meter, har Clara løpt 81. Forspranget er 100 − 81 = 19 meter; å legge sammen 10 + 10 overser at Claras «10 meter» måles i Berits saktere løp."
+    },
+    {
+      "level": 3,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "Du har fire pakker med ulik vekt og en skålvekt uten lodd. Én veiing forteller bare hvilken av to pakker som er tyngst. Hvor få veiinger trenger du i verste fall for å rangere alle fire fra lettest til tyngst?",
+      "answer": "5 veiinger.",
+      "explanation": "Fire pakker kan ordnes på 4! = 24 måter, og hver veiing har bare to utfall — fire veiinger skiller høyst 2⁴ = 16 tilfeller, altså for få. Fem holder: vei to par (2 veiinger), vei de to vinnerne (1) — da kjenner du en kjede på tre og har én pakke løs. Sett den løse inn i kjeden med binærsøk: én veiing mot midterste og én mot riktig nabo (2). I verste fall må også den siste relasjonen sjekkes — men et nøye valg av sammenlikninger holder totalen på fem."
+    },
+    {
+      "level": 3,
+      "genre": "rekkefølge og sammenlikning",
+      "question": "En avis rangerte fem spisesteder fra 1 (best) til 5. (1) Bistroen havnet rett over Kafeen. (2) Grillen havnet ikke sist. (3) Pizzeriaen havnet nøyaktig to plasser under Grillen. (4) Sushibaren havnet over Bistroen. Hvordan ble rangeringen?",
+      "answer": "1. Grillen, 2. Sushibaren, 3. Pizzeriaen, 4. Bistroen, 5. Kafeen.",
+      "explanation": "Grillen og Pizzeriaen ligger to plasser fra hverandre: mulighetene er 1–3, 2–4 og 3–5. Med Grillen på 2 blir de ledige plassene 1, 3 og 5, og Bistro–Kafé-paret får ikke to naboplasser; med Grillen på 3 måtte paret ta 1–2, men da havner Sushibaren under Bistroen. Altså Grillen på 1 og Pizzeriaen på 3 — paret tar 4–5, og Sushibaren får plass 2, trygt over Bistroen."
     }
   ]
 }
