@@ -1,0 +1,173 @@
+---
+// «Slik leser du forskningstall» — skjulbar, interaktiv forklaringsseksjon
+// øverst på forskningssiden. Innholdet bor i src/lib/statsGuide.js (rekursivt
+// tre: datatype → metode → eksempel); StatsGuideNode.astro rendrer det generisk.
+//
+// Alt SSR-rendres (ingen bundling); inline-scriptet under står for:
+//  - topptogglen (tilstand huskes i localStorage `lesguide-open`, default åpen)
+//  - accordion per node (aria-expanded + hidden) — flere grener kan stå åpne
+//  - dyplenking: åpen node speiles i URL-hash (#les-<id>); ved lasting åpnes
+//    noden + alle forfedre og det scrolles dit
+//  - tastaturnavigasjon (piltaster/Home/End mellom synlige noder)
+//  - søkefeltet: filtrerer noder på tittel/tagline/keywords, åpner treffstien
+import { STATS_GUIDE } from '../lib/statsGuide.js';
+import StatsGuideNode from './StatsGuideNode.astro';
+---
+
+<section class="card sg" id="lesguide" aria-label="Slik leser du forskningstall">
+  <button type="button" class="sg__toggle" aria-expanded="true" aria-controls="sg-body">
+    <span class="sg-chev sg-chev--open" aria-hidden="true">▸</span>
+    <span class="sg__toggle-title">Slik leser du forskningstall</span>
+    <span class="sg__toggle-sub">p-verdi · konfidensintervall · effektstørrelser</span>
+  </button>
+  <div class="sg__body" id="sg-body">
+    <p class="sg__intro">
+      Kort oppslagsverk for tallene i studiene under. Start med grunnbegrepene, eller gå rett
+      til datatypen studien bruker — hver metode kan utvides til formel og regneeksempel.
+    </p>
+    <div class="sg__search">
+      <input
+        type="search"
+        class="sg__search-input"
+        placeholder="Filtrer: f.eks. hazard, KI, odds …"
+        aria-label="Filtrer emnene i oppslagsverket"
+        autocomplete="off"
+      />
+    </div>
+    <ul class="sg-tree" role="presentation">
+      {STATS_GUIDE.map((n) => <StatsGuideNode node={n} depth={1} />)}
+    </ul>
+    <p class="sg__nohit" hidden>Ingen emner matcher søket.</p>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById('lesguide');
+    if (!root) return;
+    const KEY = 'lesguide-open';
+    const toggle = root.querySelector('.sg__toggle');
+    const body = document.getElementById('sg-body');
+    const chevTop = toggle.querySelector('.sg-chev');
+
+    const setOpen = (open, persist) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      chevTop.classList.toggle('sg-chev--open', open);
+      body.hidden = !open;
+      if (persist) {
+        try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+      }
+    };
+    toggle.addEventListener('click', () => setOpen(body.hidden, true));
+
+    // ── Accordion per node ────────────────────────────────────────────────
+    const allNodes = Array.from(root.querySelectorAll('.sg-node'));
+    const topNodes = Array.from(root.querySelectorAll('.sg-tree > .sg-node'));
+    const btnOf = (li) => li.querySelector(':scope > .sg-node__h > .sg-node__btn');
+    const panelOf = (li) => li.querySelector(':scope > .sg-node__panel');
+    const setNode = (li, open) => {
+      btnOf(li).setAttribute('aria-expanded', String(open));
+      btnOf(li).querySelector('.sg-chev').classList.toggle('sg-chev--open', open);
+      panelOf(li).hidden = !open;
+      li.classList.toggle('sg-node--open', open);
+    };
+
+    allNodes.forEach((li) => {
+      btnOf(li).addEventListener('click', () => {
+        const open = panelOf(li).hidden;
+        setNode(li, open);
+        // Speil åpen node i URL-en (delbar/dyplenkbar tilstand).
+        if (open) history.replaceState(null, '', '#' + li.id);
+        else if (location.hash === '#' + li.id)
+          history.replaceState(null, '', location.pathname + location.search);
+      });
+    });
+
+    // ── Tastaturnavigasjon (WAI-ARIA tree-mønster, forenklet) ─────────────
+    const visibleBtns = () =>
+      allNodes.map(btnOf).filter((b) => b.offsetParent !== null);
+    root.querySelector('.sg-tree').addEventListener('keydown', (e) => {
+      const btn = e.target.closest('.sg-node__btn');
+      if (!btn) return;
+      const li = btn.closest('.sg-node');
+      const list = visibleBtns();
+      const i = list.indexOf(btn);
+      switch (e.key) {
+        case 'ArrowDown':
+          list[i + 1]?.focus();
+          break;
+        case 'ArrowUp':
+          list[i - 1]?.focus();
+          break;
+        case 'ArrowRight':
+          if (panelOf(li).hidden) setNode(li, true);
+          else panelOf(li).querySelector('.sg-node__btn')?.focus();
+          break;
+        case 'ArrowLeft':
+          if (!panelOf(li).hidden) setNode(li, false);
+          else li.parentElement.closest('.sg-node') &&
+            btnOf(li.parentElement.closest('.sg-node')).focus();
+          break;
+        case 'Home':
+          list[0]?.focus();
+          break;
+        case 'End':
+          list[list.length - 1]?.focus();
+          break;
+        default:
+          return;
+      }
+      e.preventDefault();
+    });
+
+    // ── Starttilstand: hash vinner over lagret sammenslått-valg ──────────
+    let openedByHash = false;
+    if (location.hash.startsWith('#les-')) {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target && root.contains(target) && target.classList.contains('sg-node')) {
+        setOpen(true, false);
+        setNode(target, true);
+        let anc = target.parentElement.closest('.sg-node');
+        while (anc) {
+          setNode(anc, true);
+          anc = anc.parentElement.closest('.sg-node');
+        }
+        const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        requestAnimationFrame(() =>
+          target.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' })
+        );
+        openedByHash = true;
+      }
+    }
+    if (!openedByHash) {
+      try {
+        if (localStorage.getItem(KEY) === '0') setOpen(false, false);
+      } catch (e) {}
+    }
+
+    // ── Søk/filter: node vises hvis den selv eller en etterkommer matcher ─
+    const input = root.querySelector('.sg__search-input');
+    const nohit = root.querySelector('.sg__nohit');
+    const childrenOf = (li) =>
+      Array.from(panelOf(li).querySelectorAll(':scope > .sg-tree__list > .sg-node'));
+    const matchTree = (li, q) => {
+      const self = (li.dataset.search || '').includes(q);
+      let childHit = false;
+      for (const c of childrenOf(li)) if (matchTree(c, q)) childHit = true;
+      li.classList.toggle('sg-node--hide', !(self || childHit));
+      if (childHit) setNode(li, true); // åpne stien ned til treffet
+      return self || childHit;
+    };
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        allNodes.forEach((li) => li.classList.remove('sg-node--hide'));
+        nohit.hidden = true;
+        return;
+      }
+      let any = false;
+      for (const li of topNodes) if (matchTree(li, q)) any = true;
+      nohit.hidden = any;
+    });
+  })();
+</script>

@@ -368,6 +368,17 @@ bygges uten ekstra datainnhenting.
     og nyhetslenker. Ren HTML uten klient-JS.
   - `ResearchList.astro` — full forskningsvisning (forskning-sidene): studiekort gruppert
     etter kategori (`RESEARCH_CATEGORIES` i `briefings.js`), ukategoriserte under «Øvrig».
+  - `StatsGuide.astro` + `StatsGuideNode.astro` — «Slik leser du forskningstall»: skjulbart
+    oppslagsverk øverst på forskningsforsiden (p-verdi/KI/effektstørrelser). Innholdet er et
+    rekursivt tre i `src/lib/statsGuide.js` (datatype → metode → eksempel) som
+    `StatsGuideNode` rendrer generisk (`Astro.self`) — **ny metode/eksempel = ny node i
+    datafila, ingen UI-endring**. Formler er semantisk HTML (`<sub>`/`<sup>`, `role="math"`
+    + aria-label via `fm()`-hjelperen), bevisst ikke KaTeX (null klientavhengigheter).
+    Inline-script (ingen bundling) håndterer: topptoggle husket i `localStorage`
+    (`lesguide-open`, default åpen), accordion per node (flere kan stå åpne), dyplenking
+    `#les-<node-id>` (åpner forfedre + scroller dit; vinner over lagret lukket-tilstand),
+    piltast-/Home/End-navigasjon og søkefeltet (filtrerer på tittel/tagline/keywords,
+    åpner treffstien). Node-`id` må være unik i hele treet.
   - `WeatherCard.astro` — vær-widget/dispatcher: viser `WeatherPanel.astro` når `weather.daily`
     finnes (nye briefinger), ellers `WeatherPlayer.astro` (kun `hourly`) eller statisk stat-grid
     (eldste briefinger) — arkivet ser uendret ut bakover.

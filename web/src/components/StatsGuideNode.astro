@@ -1,0 +1,45 @@
+---
+// Én node i «Slik leser du forskningstall»-treet — rekursiv via Astro.self.
+// Ekte accordion-semantikk: overskrift med <button aria-expanded aria-controls>
+// + panel som skjules med `hidden`. All interaksjon (klikk, piltaster, hash,
+// søk) håndteres samlet av inline-scriptet i StatsGuide.astro.
+const { node, depth = 1 } = Astro.props;
+const Self = Astro.self;
+
+const nodeId = `les-${node.id}`;
+const panelId = `${nodeId}-panel`;
+// Overskriftsnivå følger dybden: h3 (datatype) → h4 (metode) → h5 (eksempel).
+const H = `h${Math.min(depth + 2, 6)}`;
+// Søkegrunnlag for filterfeltet — kun nodens egne felter (barna matcher selv).
+const search = [node.title, node.tagline, node.keywords].filter(Boolean).join(' ').toLowerCase();
+---
+
+<li class={`sg-node sg-node--d${depth}`} id={nodeId} data-search={search}>
+  <H class="sg-node__h">
+    <button type="button" class="sg-node__btn" aria-expanded="false" aria-controls={panelId}>
+      <span class="sg-chev" aria-hidden="true">▸</span>
+      {node.icon && <span class="sg-node__icon" aria-hidden="true">{node.icon}</span>}
+      <span class="sg-node__title">{node.title}</span>
+      {node.tagline && <span class="sg-node__tag">{node.tagline}</span>}
+    </button>
+  </H>
+  <div class="sg-node__panel" id={panelId} hidden>
+    {node.sections?.length ? (
+      <div class="sg-node__sections">
+        {node.sections.map((s) => (
+          <div class={`sg-sec${s.formula ? ' sg-sec--formula' : ''}`}>
+            <div class="sg-sec__label">{s.label}</div>
+            <div class="sg-sec__body" set:html={s.html} />
+          </div>
+        ))}
+      </div>
+    ) : null}
+    {node.children?.length ? (
+      <ul class="sg-tree__list" role="presentation">
+        {node.children.map((c) => (
+          <Self node={c} depth={depth + 1} />
+        ))}
+      </ul>
+    ) : null}
+  </div>
+</li>

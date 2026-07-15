@@ -2,6 +2,7 @@
 // forskning.modr.no — nyeste dag med forskningsbriefing.
 import Base from '../../layouts/Base.astro';
 import ResearchList from '../../components/ResearchList.astro';
+import StatsGuide from '../../components/StatsGuide.astro';
 import { listDates, getBriefing, formatDateNo } from '../../lib/briefings.js';
 
 const base = Astro.locals.fbase ?? '/forskning';
@@ -25,10 +26,14 @@ for (const d of dates) {
           <h1>Dagens forskning</h1>
           <div class="date">{formatDateNo(b.date)}</div>
         </div>
+        <StatsGuide />
         <ResearchList b={b} />
       </>
     ) : (
-      <p class="empty">Ingen forskningsbriefing generert ennå.</p>
+      <>
+        <StatsGuide />
+        <p class="empty">Ingen forskningsbriefing generert ennå.</p>
+      </>
     )
   }
 </Base>
