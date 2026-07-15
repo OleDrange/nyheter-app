@@ -235,6 +235,50 @@ export const STATS_GUIDE = [
         ],
       },
       {
+        id: 'smd',
+        title: 'Standardisert gjennomsnittsforskjell (SMD)',
+        keywords: 'smd standardized mean difference metaanalyse samlebegrep standardavvik',
+        sections: [
+          {
+            label: 'Hva',
+            html: "Samlebegrepet for gjennomsnittsforskjeller uttrykt i standardavvik — Cohen's d, Hedges' g og Glass' Δ er alle SMD-varianter. Når en metaanalyse rapporterer «SMD», er det som regel Hedges' g som er brukt per studie og deretter vektet sammen.",
+          },
+          {
+            label: 'Formel',
+            formula: true,
+            html: fm(
+              'SMD<sub>i</sub> = (M<sub>1</sub> − M<sub>2</sub>) / SD<sub>pooled</sub>&ensp;per studie<br>SMD = Σ(w<sub>i</sub> · SMD<sub>i</sub>) / Σw<sub>i</sub>&ensp;(samlet, vektet som WMD)',
+              'SMD for hver studie er lik M1 minus M2 delt på samlet standardavvik; den samlede SMD er summen av vekt i ganger SMD i, delt på summen av vektene'
+            ),
+          },
+          {
+            label: 'Hvorfor',
+            html: 'Brukes i metaanalyser når studiene måler samme utfall på <strong>ulike skalaer</strong> (f.eks. tre forskjellige søvnkvalitet-spørreskjemaer) — standardavvik blir fellesvalutaen som gjør dem sammenlignbare. Måler alle på samme skala, gir WMD mer lettleste tall i originalenheter.',
+          },
+          {
+            label: 'Tolkning',
+            html: 'Samme benchmarks som Cohen’s d: 0.2 = liten, 0.5 = moderat, 0.8 = stor. Grunnlinje 0.0. Prisen for standardiseringen: «0.45 standardavvik» må oversettes tilbake (ganges med et typisk SD) for å bli en klinisk størrelse.',
+          },
+        ],
+        children: [
+          {
+            id: 'smd-eksempel',
+            title: 'Eksempel med tolkning',
+            keywords: 'eksempel søvn metaanalyse',
+            sections: [
+              {
+                label: 'Eksempel',
+                html: `En metaanalyse av 6 studier med ulike søvnkvalitet-skalaer finner ${fm('SMD = 0.45', 'SMD er lik 0.45')}, 95&nbsp;% KI [0.21,&nbsp;0.69].`,
+              },
+              {
+                label: 'Slik leses tallene',
+                html: 'Moderat effekt: behandlingsgruppene ligger samlet ca. 0.45 standardavvik bedre an, uansett hvilken skala den enkelte studien brukte. KI krysser ikke grunnlinjen 0.0 → signifikant (p &lt; 0.05). For å konkretisere: bruker skalaen din SD ≈ 2 poeng, tilsvarer effekten ca. 0.9 poeng.',
+              },
+            ],
+          },
+        ],
+      },
+      {
         id: 'wmd',
         title: 'Vektet gjennomsnittsforskjell (WMD)',
         keywords: 'wmd md mean difference metaanalyse vektet gjennomsnitt originalenheter',
