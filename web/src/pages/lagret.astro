@@ -1,0 +1,228 @@
+---
+// Lagrede studier. Filtrering og søk skjer SERVER-SIDE via URL-parametre
+// (?q=&type=&kategori=&tag=&sort=). Tre grunner: det virker uten JS, URL-ene blir
+// delbare og bokmerkbare («mine lagrede kosthold-studier»), og det skalerer forbi
+// noen tusen oppføringer.
+import Base from '../layouts/Base.astro';
+import { readSaved, queryItems, tagCounts } from '../lib/saved.js';
+import { RESEARCH_CATEGORIES, formatDateNo } from '../lib/briefings.js';
+import { writingEnabled, isAuthed } from '../lib/auth.js';
+
+const url = Astro.url;
+const q = (url.searchParams.get('q') || '').trim();
+const category = url.searchParams.get('kategori') || '';
+const tag = url.searchParams.get('tag') || '';
+const sort = url.searchParams.get('sort') || 'nyest';
+
+const { items } = await readSaved();
+const results = queryItems(items, { q, category, tag, sort });
+const tags = tagCounts(items);
+const canEdit = writingEnabled() && isAuthed(Astro.cookies);
+
+const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label || 'Øvrig';
+const catEmoji = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.emoji || '🔬';
+
+// Bygger en URL der én parameter endres og resten beholdes — så filtre kan kombineres.
+const withParam = (key, value) => {
+  const p = new URLSearchParams(url.search);
+  if (value) p.set(key, value);
+  else p.delete(key);
+  const s = p.toString();
+  return s ? `/lagret?${s}` : '/lagret';
+};
+
+const usedCategories = RESEARCH_CATEGORIES.filter((c) => items.some((it) => it.category === c.id));
+const filtered = Boolean(q || category || tag);
+---
+
+<Base title="Lagrede studier">
+  <section class="saved-head">
+    <h1 class="page-title">Lagrede studier</h1>
+    <p class="muted">
+      {items.length === 0
+        ? 'Ingen lagrede studier ennå.'
+        : `${items.length} lagret${filtered ? ` · ${results.length} treff` : ''}`}
+    </p>
+  </section>
+
+  {items.length > 0 && (
+    <form class="saved-filters" method="get" action="/lagret">
+      <input
+        class="saved-search" type="search" name="q" value={q}
+        placeholder="Søk i tittel, innhold, notat og tagger…" aria-label="Søk"
+      />
+      <select class="saved-select" name="kategori" aria-label="Kategori">
+        <option value="">Alle kategorier</option>
+        {usedCategories.map((c) => (
+          <option value={c.id} selected={category === c.id}>{c.emoji} {c.label}</option>
+        ))}
+      </select>
+      <select class="saved-select" name="sort" aria-label="Sortering">
+        <option value="nyest" selected={sort === 'nyest'}>Nyest lagret</option>
+        <option value="eldst" selected={sort === 'eldst'}>Eldst lagret</option>
+        <option value="tittel" selected={sort === 'tittel'}>Tittel</option>
+      </select>
+      {tag && <input type="hidden" name="tag" value={tag} />}
+      <button class="btn" type="submit">Filtrer</button>
+      {filtered && <a class="btn btn--ghost" href="/lagret">Nullstill</a>}
+    </form>
+  )}
+
+  {tags.length > 0 && (
+    <div class="tagcloud">
+      {tags.map(([t, n]) => (
+        <a class:list={['tagchip', tag === t && 'tagchip--on']} href={withParam('tag', tag === t ? '' : t)}>
+          {t} <span class="tagchip__n">{n}</span>
+        </a>
+      ))}
+    </div>
+  )}
+
+  {results.length === 0 ? (
+    <div class="card empty">
+      {items.length === 0 ? (
+        <>
+          <p><strong>Du har ikke lagret noen studier ennå.</strong></p>
+          <p class="muted">
+            Gå til <a href="https://forskning.modr.no">forskning.modr.no</a> og trykk
+            ☆ <em>Lagre</em> på en studie du vil huske. Den dukker opp her, og du kan
+            skrive en notis om hvorfor du lagret den.
+          </p>
+        </>
+      ) : (
+        <p class="muted">Ingen treff. <a href="/lagret">Nullstill filtrene</a>.</p>
+      )}
+    </div>
+  ) : (
+    <div class="research-grid research-grid--wide">
+      {results.map((it) => (
+        <article class="card study" id={it.id}>
+          <div class="saved-meta">
+            <span class="badge">{catEmoji(it.category)} {catLabel(it.category)}</span>
+            <span class="muted saved-date">
+              Lagret {formatDateNo(it.savedAt.slice(0, 10), { day: 'numeric', month: 'short', year: 'numeric' })}
+            </span>
+          </div>
+          <h2 class="study__title">
+            {it.url ? <a href={it.url} target="_blank" rel="noopener">{it.title}</a> : it.title}
+          </h2>
+          {it.journal && <p class="muted saved-journal">{it.journal}</p>}
+
+          <div class="saved-note" data-note-for={it.id}>
+            {it.note ? <p class="saved-note__text">{it.note}</p> : null}
+            {(it.tags || []).length > 0 && (
+              <div class="saved-tags">
+                {it.tags.map((t) => <a class="tagchip tagchip--sm" href={withParam('tag', t)}>{t}</a>)}
+              </div>
+            )}
+            {canEdit && (
+              <button class="linkbtn" type="button" data-edit={it.id}>
+                {it.note || (it.tags || []).length ? 'Rediger notat' : '+ Legg til notat'}
+              </button>
+            )}
+          </div>
+
+          {(it.snapshot?.parts || []).length > 0 && (
+            <details class="saved-details">
+              <summary>Vis studien</summary>
+              <div class="study__parts">
+                {it.snapshot.parts.map((p) => (
+                  <div class="study__part">
+                    <div class="study__label">{p.label}</div>
+                    <div class="study__text" set:html={p.html} />
+                  </div>
+                ))}
+              </div>
+              {it.date && (
+                <p class="muted saved-origin">
+                  Fra briefingen <a href={`https://forskning.modr.no/b/${it.date}`}>{formatDateNo(it.date)}</a>
+                </p>
+              )}
+            </details>
+          )}
+
+          {canEdit && (
+            <div class="saved-actions">
+              <button class="linkbtn linkbtn--danger" type="button" data-remove={it.id}>Fjern</button>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  )}
+
+  {canEdit && (
+    <dialog class="pinauth" id="noteedit">
+      <form method="dialog" class="pinauth__form">
+        <h2 class="pinauth__title">Notat og tagger</h2>
+        <p class="pinauth__hint">Hvorfor lagret du denne? Om seks måneder er det dette som gir listen verdi.</p>
+        <textarea class="pinauth__input" id="note-text" rows="4" placeholder="Hvorfor lagret du denne?"></textarea>
+        <input class="pinauth__input" id="note-tags" list="taglist" placeholder="Tagger, komma­separert (f.eks. protein, styrke)" />
+        <datalist id="taglist">{tags.map(([t]) => <option value={t} />)}</datalist>
+        <div class="pinauth__actions">
+          <button value="cancel" class="btn btn--ghost" type="submit">Avbryt</button>
+          <button value="ok" class="btn" type="submit">Lagre</button>
+        </div>
+      </form>
+    </dialog>
+  )}
+</Base>
+
+<script is:inline>
+  (() => {
+    const send = (method, body) =>
+      fetch('/api/lagret', {
+        method,
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+      }).then((r) => r.json()).catch(() => ({ ok: false }));
+
+    // Redigering av notat/tagger
+    const dlg = document.getElementById('noteedit');
+    const text = document.getElementById('note-text');
+    const tagsInput = document.getElementById('note-tags');
+    let editing = null;
+
+    document.addEventListener('click', async (e) => {
+      const edit = e.target.closest('[data-edit]');
+      if (edit && dlg) {
+        editing = edit.dataset.edit;
+        const box = document.querySelector(`[data-note-for="${CSS.escape(editing)}"]`);
+        text.value = box?.querySelector('.saved-note__text')?.textContent?.trim() || '';
+        tagsInput.value = [...(box?.querySelectorAll('.saved-tags .tagchip') || [])]
+          .map((a) => a.textContent.trim()).join(', ');
+        dlg.showModal();
+        return;
+      }
+
+      const rm = e.target.closest('[data-remove]');
+      if (rm) {
+        const card = rm.closest('.study');
+        const res = await send('DELETE', { id: rm.dataset.remove });
+        if (!res.ok) return;
+        // Skjul først, slett endelig når angrefristen går ut — så «Angre» er ekte.
+        card.hidden = true;
+        const bar = document.createElement('div');
+        bar.className = 'card empty';
+        bar.innerHTML = '<p>Fjernet. <button class="linkbtn" type="button">Angre</button></p>';
+        card.after(bar);
+        const timer = setTimeout(() => bar.remove(), 8000);
+        bar.querySelector('button').addEventListener('click', async () => {
+          clearTimeout(timer);
+          const back = await send('POST', { type: 'study', date: res.item.date, url: res.item.url });
+          if (back.ok && (res.item.note || (res.item.tags || []).length)) {
+            await send('PATCH', { id: back.item.id, note: res.item.note, tags: res.item.tags });
+          }
+          location.reload();
+        });
+      }
+    });
+
+    dlg?.addEventListener('close', async () => {
+      if (dlg.returnValue !== 'ok' || !editing) return;
+      const res = await send('PATCH', { id: editing, note: text.value, tags: tagsInput.value });
+      editing = null;
+      if (res.ok) location.reload();
+    });
+  })();
+</script>

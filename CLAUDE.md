@@ -59,8 +59,12 @@ Rollback: `git revert <commit> && git push`, deretter rebuild + `up -d web`.
 - **Inspisere data:** `docker compose exec web ls -la /data/briefings` /
   `… cat /data/briefings/<dato>.json`.
 - **Logger:** generator → `/root/nyheter-cron.log`; web → `docker compose logs -f web`.
-- **Backup** (arkivet bor kun i volumet):
-  `docker run --rm -v nyheter-app_briefing-data:/d -v /root:/b alpine tar czf /b/nyheter-backup.tgz -C /d .`
+- **Backup** — **to volumer**, begge må med. `saved-data` er de eneste dataene i systemet
+  som **ikke kan regenereres** (lagrede studier med dine notater og tagger):
+  ```bash
+  docker run --rm -v nyheter-app_briefing-data:/d -v /root:/b alpine tar czf /b/nyheter-backup.tgz -C /d .
+  docker run --rm -v nyheter-app_saved-data:/d    -v /root:/b alpine tar czf /b/lagret-backup.tgz  -C /d .
+  ```
 - **Feilvarsling:** `healthcheck.py` (sist i `docker-entrypoint.sh`) sjekker at dagens JSON
   har `news_md`. Feil → POST til `ALERT_WEBHOOK_URL`; suksess → ping `HEARTBEAT_URL`
   (dead-man's-switch som fanger at cron aldri kjørte). Begge valgfrie (se `notify.py`).
@@ -364,6 +368,44 @@ bygges uten ekstra datainnhenting.
   ('' på subdomenet, '/forskning' ved sti-tilgang/dev). `Base.astro` tar
   `site="forskning"` + `base` for egen header/nav. Anker `#s<i>` per studie
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
+- **Ruter (felles for begge vertsnavn):** `/lagret` og `/api/*`. Disse skrives **ikke** om av
+  middleware (`isShared`) — de finnes kun på rot-nivå og spenner over begge sider.
+
+### Lagrede studier («pin»)
+
+Pin en studie fra forskningssidene; den huskes permanent og vises på `/lagret` med filter,
+søk, notat og tagger. Se `PLAN-LAGREDE-STUDIER.md` for full plan (leveranse 2: gåter/quiz,
+eksport, repetisjon).
+
+- **Eget volum, ikke arkivet.** `saved-data:/state` (rw) ved siden av `briefing-data:/data:ro`.
+  Nettappen er eneste prosess eksponert mot internett og skal **aldri** kunne skrive inn i
+  briefing-arkivet. `SAVED_DIR=/state` i container; default `state/` lokalt (gitignored).
+- **`web/src/lib/saved.js`** — lagring. Alle mutasjoner går gjennom **én seriell promise-kø**:
+  Node er én prosess, men samtidige POST-er kan ellers interleave read-modify-write og miste
+  en lagring. Skriving er atomisk (`.tmp` + `rename`), som `store_briefing()`.
+- **Fullt øyeblikksbilde, ikke referanse.** Briefinger er immutable, så det er ingenting å
+  synkronisere; et snapshot fjerner en feilklasse (manglende arkivfil, drift i
+  `splitResearch()`) for ~2 KB per studie. `date` + DOI beholdes som tilbakelenke.
+- **ID-en gir idempotens:** `study:<doi>` (globalt unik), `riddle:`/`quiz:<sha1(spørsmål)[0:12]>`
+  (innholdshash — de har ingen ID, og hashen overlever quizens repetisjonsmekanikk). Samme sak
+  lagret to ganger blir én oppføring.
+- **Innholdet utledes SERVER-SIDE** fra arkivet (`deriveStudy()` i `api/lagret.js`) — klienten
+  sender kun `{date, url}`. Ellers kunne enhver med kodeordet plantet vilkårlig HTML i lageret,
+  som senere rendres med `set:html`.
+- **`web/src/lib/auth.js`** — lesing er åpent for alle, kun skriving krever kodeord.
+  `SAVE_PASSPHRASE` sendes inn i compose som **enkeltvariabel**, bevisst ikke `env_file`
+  (som ville gitt web-containeren `ANTHROPIC_API_KEY` den ikke trenger). Cookien er
+  `<utløp>.<HMAC-SHA256(utløp, kodeord)>` — HttpOnly/Secure/SameSite=Lax, ett år, ingen
+  sesjonslagring. Bytter du kodeord, blir alle utstedte cookies ugyldige automatisk.
+  `crypto.timingSafeEqual` + rate-limiting (10 forsøk / 15 min / IP). **Uten `SAVE_PASSPHRASE`
+  svarer skriveendepunktene 503 og pin-knappene skjules** — funksjonen feiler synlig, ikke åpent.
+- **Filtrering og søk er server-side** via URL-parametre (`?q=&kategori=&tag=&sort=`): virker
+  uten JS, URL-ene blir delbare/bokmerkbare, og det skalerer forbi noen tusen oppføringer.
+- **Komponenter:** `SaveButton.astro` (ren markup; `saved` kommer fra serveren så stjernen er
+  fylt i første paint) + `SaveRuntime.astro` (én delegert klikk-lytter for hele siden,
+  kodeord-dialog ved 401, **angre-toast** ved avpinning — som sletter notat og tagger).
+  Tagger normaliseres til små bokstaver, ellers får man «protein»/«Protein»/«proteiner» som
+  tre filtre innen en måned.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
     enkeltdag. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →
@@ -453,6 +495,9 @@ bygges uten ekstra datainnhenting.
 - **Generator-container har CMD, ikke ENTRYPOINT** — `docker compose run generator <cmd>` kjører
   `<cmd>` i stedet for briefingen; uten `<cmd>` kjøres hele briefingen (Claude-kvote). Inspiser
   data via `docker compose exec web …`.
+- **To volumer, ikke ett.** `briefing-data` (generatoren skriver, web leser read-only) og
+  `saved-data` (kun web, rw). Backup-kommandoen må dekke **begge** — lagrede studier kan
+  ikke regenereres.
 - **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
   `quiz_seen.json`, `riddles_seen.json` og `learning_seen.json` MÅ ligge i `/data`
   (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup.

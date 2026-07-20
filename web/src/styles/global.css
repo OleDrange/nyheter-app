@@ -2047,3 +2047,203 @@ main {
     padding-left: 8px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Lagrede studier — pin-knapp, /lagret-siden, notat-dialog
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.study__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.25rem 0 0.5rem;
+}
+
+.pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.pin:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.pin:disabled { opacity: 0.6; cursor: progress; }
+.pin--on {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.pin__star { font-size: 0.95rem; line-height: 1; }
+
+/* Kodeord- og notat-dialog */
+.pinauth {
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  max-width: min(30rem, calc(100vw - 32px));
+  box-shadow: var(--shadow-lg);
+}
+.pinauth::backdrop { background: rgba(10, 14, 20, 0.5); }
+.pinauth__form { display: flex; flex-direction: column; gap: 0.7rem; padding: 1.25rem; }
+.pinauth__title { margin: 0; font-size: 1.05rem; }
+.pinauth__hint { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+.pinauth__input {
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 100%;
+}
+.pinauth__input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.pinauth__error { margin: 0; font-size: 0.85rem; color: var(--down); }
+.pinauth__actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+
+/* Toast med angre — avpinning sletter notat og tagger, så den må kunne reverseres */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+  max-width: calc(100vw - 32px);
+}
+.toast__undo {
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.btn {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.9rem;
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.btn--ghost { color: var(--text-muted); background: var(--surface-2); border-color: var(--border); }
+
+.linkbtn {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.linkbtn--danger { color: var(--down); }
+
+/* /lagret */
+.saved-head { margin-bottom: 1rem; }
+.page-title { margin: 0 0 0.2rem; font-size: 1.5rem; }
+
+.saved-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+.saved-search {
+  font: inherit;
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.saved-select {
+  font: inherit;
+  padding: 0.5rem 0.6rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.tagcloud { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.tagchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.tagchip:hover { color: var(--accent); border-color: var(--accent); }
+.tagchip--on { color: #fff; background: var(--accent); border-color: var(--accent); }
+.tagchip--sm { font-size: 0.75rem; padding: 0.12rem 0.5rem; }
+.tagchip__n { font-variant-numeric: tabular-nums; opacity: 0.65; }
+
+.saved-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.saved-date { font-size: 0.78rem; white-space: nowrap; }
+.saved-journal { font-size: 0.82rem; margin: -0.2rem 0 0.5rem; }
+
+.saved-note {
+  margin: 0.6rem 0;
+  padding: 0.6rem 0.75rem;
+  background: var(--accent-soft);
+  border-radius: 10px;
+}
+.saved-note__text { margin: 0 0 0.4rem; font-size: 0.9rem; white-space: pre-wrap; }
+.saved-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.4rem; }
+
+.saved-details > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.3rem 0;
+}
+.saved-origin { font-size: 0.8rem; margin-top: 0.6rem; }
+.saved-actions { margin-top: 0.6rem; display: flex; justify-content: flex-end; }
+
+.empty { text-align: center; padding: 1.75rem 1.25rem; }
+
+@media (max-width: 560px) {
+  .saved-filters { flex-direction: column; align-items: stretch; }
+  .saved-meta { flex-direction: column; align-items: flex-start; gap: 0.15rem; }
+}

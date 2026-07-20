@@ -4,9 +4,24 @@
 // kategori-etikett (gamle briefinger) samles under «Øvrig». Anker-id `s<i>`
 // (i = studiens posisjon i research_md) matcher lenkene fra nyhetssiden.
 import { splitResearch, RESEARCH_CATEGORIES } from '../lib/briefings.js';
+import { savedIdSet, buildId } from '../lib/saved.js';
+import { writingEnabled, isAuthed } from '../lib/auth.js';
+import SaveButton from './SaveButton.astro';
+import SaveRuntime from './SaveRuntime.astro';
 
 const { b } = Astro.props;
-const studies = splitResearch(b.research_md).map((st, i) => ({ ...st, anchor: `s${i}` }));
+
+// Lagrede ID-er hentes server-side, så pin-stjernen er fylt allerede i første paint.
+// Uten kodeord konfigurert på serveren skjules pinning helt (feiler synlig, ikke åpent).
+const canPin = writingEnabled();
+const saved = canPin ? await savedIdSet() : new Set();
+const authed = canPin && isAuthed(Astro.cookies);
+
+const studies = splitResearch(b.research_md).map((st, i) => ({
+  ...st,
+  anchor: `s${i}`,
+  savedId: st.url ? buildId('study', { url: st.url }) : null,
+}));
 
 const groups = RESEARCH_CATEGORIES.map((cat) => ({
   ...cat,
@@ -47,6 +62,11 @@ const partClass = (label) => {
               <h3 class="study__title">
                 {st.url ? <a href={st.url} target="_blank" rel="noopener">{st.title}</a> : st.title}
               </h3>
+              {canPin && st.url && (
+                <div class="study__actions">
+                  <SaveButton date={b.date} url={st.url} id={st.savedId} saved={saved.has(st.savedId)} />
+                </div>
+              )}
               {st.parts.length ? (
                 <div class="study__parts">
                   {st.parts.map((p) => (
@@ -71,3 +91,5 @@ const partClass = (label) => {
     <p class="muted">Ingen forskningsbriefing denne dagen.</p>
   )
 }
+
+{canPin && <SaveRuntime authed={authed} />}

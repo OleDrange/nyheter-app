@@ -6,12 +6,19 @@ services:
       dockerfile: web/Dockerfile
     restart: unless-stopped
     environment:
+      # KUN kodeordet fra .env — bevisst ikke `env_file`, som ville gitt den
+      # internettvendte containeren ANTHROPIC_API_KEY den ikke trenger.
+      SAVE_PASSPHRASE: ${SAVE_PASSPHRASE:-}
       TZ: Europe/Oslo
       HOST: 0.0.0.0          # plattformkrav — må binde 0.0.0.0 for å nås fra proxyen
       PORT: "8080"
       BRIEFING_DIR: /data/briefings
+      SAVED_DIR: /state
     volumes:
+      # Nettappen er eneste prosess eksponert mot internett og skal ALDRI kunne skrive
+      # inn i briefing-arkivet. Lagrede studier får derfor sitt eget volum.
       - briefing-data:/data:ro   # web leser kun
+      - saved-data:/state        # lagrede studier — web skriver
     networks:
       web:
         aliases:
@@ -36,3 +43,4 @@ networks:
 
 volumes:
   briefing-data:
+  saved-data:

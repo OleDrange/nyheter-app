@@ -8,7 +8,11 @@ export function onRequest(context, next) {
   const { pathname } = context.url;
   const isForskningHost = host === 'forskning.modr.no' || host.startsWith('forskning.');
 
-  if (isForskningHost && !pathname.startsWith('/forskning')) {
+  // Sider som er FELLES for begge vertsnavn skrives ikke om — de spenner over både
+  // nyheter og forskning, og finnes kun på rot-nivå.
+  const isShared = pathname === '/lagret' || pathname.startsWith('/api/');
+
+  if (isForskningHost && !isShared && !pathname.startsWith('/forskning')) {
     context.locals.fbase = '';
     return next(pathname === '/' ? '/forskning' : `/forskning${pathname}`);
   }

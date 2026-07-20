@@ -13,6 +13,7 @@ const isHome = isForskning
   ? path === '/forskning' || path === '/forskning/'
   : path === '/';
 const isArchive = isForskning ? path.startsWith('/forskning/arkiv') : path.startsWith('/arkiv');
+const isSaved = path.startsWith('/lagret');
 
 // Dagens dato i headeren — beregnes per forespørsel (SSR) i container-TZ (Europe/Oslo).
 const _today = new Intl.DateTimeFormat('nb-NO', {
@@ -58,12 +59,14 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
               <>
                 <a href={base || '/'} aria-current={isHome ? 'page' : undefined}>I dag</a>
                 <a href={`${base}/arkiv`} aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Lagret</a>
                 <a href="https://nyheter.modr.no">Nyheter</a>
               </>
             ) : (
               <>
                 <a href="/" aria-current={isHome ? 'page' : undefined}>I dag</a>
                 <a href="/arkiv" aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
+                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Lagret</a>
                 <a href="https://forskning.modr.no">Forskning</a>
               </>
             )}

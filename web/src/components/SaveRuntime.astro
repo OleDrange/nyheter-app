@@ -1,0 +1,146 @@
+---
+// Klientlogikk for pin-knappene: én delegert lytter for hele siden.
+// Inkluderes ÉN gang per side (ResearchList gjør det). Inline script, ingen bundling —
+// samme mønster som resten av appen.
+//
+// Håndterer: optimistisk toggling, kodeord-dialog ved 401, og angre-toast ved avpinning
+// (avpinning sletter notis og tagger, så det er en destruktiv handling).
+const { authed = false } = Astro.props;
+---
+
+<div class="savebar" hidden>
+  <dialog class="pinauth" id="pinauth">
+    <form method="dialog" class="pinauth__form">
+      <h2 class="pinauth__title">Kodeord for lagring</h2>
+      <p class="pinauth__hint">Lesing er åpent for alle. Kodeordet trengs kun for å lagre.</p>
+      <input class="pinauth__input" type="password" id="pinauth-input" autocomplete="current-password" placeholder="Kodeord" />
+      <p class="pinauth__error" id="pinauth-error" hidden></p>
+      <div class="pinauth__actions">
+        <button value="cancel" class="btn btn--ghost" type="submit">Avbryt</button>
+        <button value="ok" class="btn" type="submit" id="pinauth-ok">Lås opp</button>
+      </div>
+    </form>
+  </dialog>
+  <div class="toast" id="pintoast" hidden role="status" aria-live="polite">
+    <span class="toast__text" id="pintoast-text"></span>
+    <button class="toast__undo" id="pintoast-undo" type="button" hidden>Angre</button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ authed }}>
+  (() => {
+    let unlocked = authed;
+    const dialog = document.getElementById('pinauth');
+    const toast = document.getElementById('pintoast');
+    const toastText = document.getElementById('pintoast-text');
+    const undoBtn = document.getElementById('pintoast-undo');
+    let toastTimer;
+    let undoAction = null;
+
+    function showToast(msg, onUndo) {
+      clearTimeout(toastTimer);
+      toastText.textContent = msg;
+      undoAction = onUndo || null;
+      undoBtn.hidden = !onUndo;
+      toast.hidden = false;
+      toastTimer = setTimeout(() => { toast.hidden = true; undoAction = null; }, onUndo ? 8000 : 3000);
+    }
+
+    undoBtn?.addEventListener('click', async () => {
+      const fn = undoAction;
+      toast.hidden = true;
+      undoAction = null;
+      if (fn) await fn();
+    });
+
+    // Kodeord-dialog. Løser seg til true/false slik at kalleren kan gjenoppta handlingen.
+    function askPassphrase() {
+      if (!dialog) return Promise.resolve(false);
+      const input = document.getElementById('pinauth-input');
+      const err = document.getElementById('pinauth-error');
+      err.hidden = true;
+      input.value = '';
+      dialog.showModal();
+      input.focus();
+      return new Promise((resolve) => {
+        dialog.addEventListener('close', async function handler() {
+          dialog.removeEventListener('close', handler);
+          if (dialog.returnValue !== 'ok' || !input.value) return resolve(false);
+          const res = await fetch('/api/logg-inn', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ passphrase: input.value }),
+          }).then((r) => r.json()).catch(() => ({ ok: false, error: 'Nettverksfeil.' }));
+          if (res.ok) { unlocked = true; return resolve(true); }
+          err.textContent = res.error || 'Feil kodeord.';
+          err.hidden = false;
+          dialog.showModal();
+          input.focus();
+        });
+      });
+    }
+
+    function paint(btn, on) {
+      btn.classList.toggle('pin--on', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.title = on ? 'Fjern fra lagrede' : 'Lagre denne studien';
+      btn.querySelector('.pin__star').textContent = on ? '★' : '☆';
+      btn.querySelector('.pin__text').textContent = on ? 'Lagret' : 'Lagre';
+    }
+
+    async function send(method, body) {
+      return fetch('/api/lagret', {
+        method,
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+      }).then((r) => r.json().then((j) => ({ status: r.status, ...j })))
+        .catch(() => ({ ok: false, error: 'Nettverksfeil.' }));
+    }
+
+    async function toggle(btn) {
+      const wasOn = btn.classList.contains('pin--on');
+      const payload = wasOn
+        ? { id: btn.dataset.id }
+        : { type: 'study', date: btn.dataset.date, url: btn.dataset.url };
+
+      paint(btn, !wasOn); // optimistisk
+      btn.disabled = true;
+      const res = await send(wasOn ? 'DELETE' : 'POST', payload);
+      btn.disabled = false;
+
+      if (res.status === 401) {
+        paint(btn, wasOn); // rull tilbake før vi spør
+        if (await askPassphrase()) return toggle(btn);
+        return;
+      }
+      if (!res.ok) {
+        paint(btn, wasOn);
+        return showToast(res.error || 'Kunne ikke lagre.');
+      }
+
+      if (wasOn) {
+        // Avpinning sletter notis og tagger — derfor angre, ikke stille sletting.
+        btn.removeAttribute('data-id');
+        showToast('Fjernet fra lagrede.', async () => {
+          const back = await send('POST', { type: 'study', date: btn.dataset.date, url: btn.dataset.url });
+          if (back.ok) {
+            btn.dataset.id = back.item.id;
+            paint(btn, true);
+            // Notis og tagger fulgte med i slettingen — legg dem tilbake.
+            if (res.item.note || (res.item.tags || []).length) {
+              await send('PATCH', { id: back.item.id, note: res.item.note, tags: res.item.tags });
+            }
+          }
+        });
+      } else {
+        btn.dataset.id = res.item.id;
+        showToast('Lagret. Åpne «Lagret» for å skrive en notis.');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-pin]');
+      if (btn) { e.preventDefault(); toggle(btn); }
+    });
+  })();
+</script>
