@@ -267,22 +267,36 @@ Kryss-kategori-duplikater fjernes (første kategori vinner).
   `TITLE:"fiber"` matcher «Thulium **Fiber** Laser» (bruk `"dietary fiber"`), `TITLE:"stress"`
   matcher «oxidative stress», og `TITLE:"recovery"` matcher postoperativ restitusjon — de to
   siste må stå som fraser («psychological stress», «stress reduction» …).
-- **`LOOKBACK_DAYS = 365`, ikke 2.** Forskning har ingen nyhetssyklus, og et kort vindu gjør
+- **`LOOKBACK_DAYS = 180`, ikke 2.** Forskning har ingen nyhetssyklus, og et kort vindu gjør
   kvalitetsfiltrene *utilgjengelige*: Europe PMC tildeler MeSH/PUB_TYPE uker etter publisering,
   så en to dager gammel artikkel er ennå ikke merket som menneskestudie eller RCT (målt på
-  `exercise`: 2 dager → 0 treff med `MESH:"Humans"`, 30 dager → 24). Vinduet gir ~1 130 studier
-  (~3 nye i døgnet) — rikelig når vi viser 5 om dagen.
+  `exercise`: 2 dager → 0 treff med `MESH:"Humans"`, 30 dager → 24). Vinduet gir 494 studier
+  (~2,7 nye i døgnet). 365 dager gir 1 090 (~3,0/døgn) — nesten samme *tilsig*, bare et større
+  reservoar; halvårsvinduet er valgt bevisst så alt vi viser er publisert siste seks måneder.
+- **Hele poolen hentes, ikke bare de nyeste.** `_fetch_all_pages()` paginerer via Europe PMCs
+  `cursorMark` (`PAGE_SIZE = 100`, tak `MAX_FETCH_PER_CATEGORY = 600`). Tidligere hentet vi kun
+  de 100 nyest indekserte per kategori, som utelot ~80 % av vinduet fra scoringen uten å gi noe
+  igjen — «nyest først» betyr lite når vinduet uansett er 180 dager.
 
-**2. Lokal scoring (`_score_candidate`) — gratis grovsortering før Claude.** Rangerer de
-`RAW_POOL = 100` rå kandidatene per kategori og sender kun topp `CANDIDATE_POOL = 6`
-(→ maks 24) videre. Poeng for studiedesign (`pubTypeList`), utvalgsstørrelse (log10, dempet),
+**2. Lokal scoring (`_score_candidate`) — gratis grovsortering før Claude.** Rangerer alt som
+er hentet. Poeng for studiedesign (`pubTypeList`), utvalgsstørrelse (log10, dempet),
 tydelige effektmål (HR/RR/OR/CI/p — mangler de, trekkes det fra: da er det ingen «Resultat» å
 skrive) og harde utfall. **Trekk fra** for smale pasientgrupper (`_NARROW_POPULATION` — «patients
 with …» er det mest treffsikre signalet) og medikament-/apparat-/genetikkstudier (`_DRUG_TERMS`):
 en RCT på trening hos slagpasienter sier lite om hva en frisk leser bør gjøre. Under `MIN_SCORE`
-forkastes helt. Dette kuttet input fra ~32 000 til ~9 000 tokens/dag (~0,16 → ~0,05 $/dag).
+forkastes helt.
 
-**3. Claude (`MAX_ITEMS = 5`)** velger og forklarer. Format per studie:
+- **Scoringen kjører på FULLT abstract — kutt aldri før scoring.** `MAX_ABSTRACT_CHARS = 4000`
+  brukes kun når prompten bygges (`build_candidates_text`). Tidligere ble abstractet kuttet til
+  1200 tegn *før* scoringen, men Resultat-delen (HR/RR/CI/p, utvalgsstørrelse) står typisk etter
+  1200 tegn og 97 % av abstractene er lengre. Det fjernet nøyaktig de signalene scoringen gir
+  poeng for: 20. juli 2026 falt 52 kvalifiserte kandidater til **0**, og forskningsbriefingen
+  uteble helt. Besparelsen var ~1,5 øre/dag.
+- **Utvalg i to trinn:** `CANDIDATE_FLOOR_PER_CATEGORY = 4` garantert per kategori (bevarer
+  bredde — briefingen grupperes etter kategori), deretter fylles opp til `CANDIDATE_POOL = 40`
+  av de høyest scorede på tvers. ~23 000 input-tokens/dag ≈ 0,07 $ ≈ 0,7 kr.
+
+**3. Claude (`MAX_ITEMS = 7`)** velger og forklarer. Format per studie:
 `## [tittel](url)` + **Kategori** + **Metode** / **Resultat** / **Hva det betyr for deg** /
 **Forbehold** — 3–4 setninger på de tre første. Nettsiden parser etikettene;
 `splitResearch()` løfter Kategori ut som eget `category`-felt (`normalizeCategory()` godtar både
@@ -297,7 +311,7 @@ visningsnavn og slug). Heller færre enn svake.
   etter karantenen og betalte en ny bisect-runde med prober; refused-DOI-er lagres **også
   når kjøringen gir opp helt** (før exit). Sendt, men ikke valgt → karantene
   `UNPICKED_COOLDOWN_DAYS = 14` dager, så den ikke brenner input-tokens hver dag,
-  men får komme tilbake (poolen er liten). Uten dette ville et 365-dagers vindu servert de
+  men får komme tilbake (poolen er liten). Uten dette ville et bredt vindu servert de
   samme toppkandidatene daglig. Ligger i `BRIEFING_DATA_DIR` — **må persisteres** (volumet).
 - **Legacy:** kategorien `medisin` produseres ikke lenger, men finnes i arkiverte briefinger —
   derfor ligger den fortsatt sist i `RESEARCH_CATEGORIES` (`web/src/lib/briefings.js`) og i

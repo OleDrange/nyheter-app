@@ -58,13 +58,32 @@ MAX_TOKENS = 8192
 # Europe PMC tildeler MeSH-termer og publikasjonstyper uker etter publisering, så en artikkel
 # som er to dager gammel er ennå ikke merket som menneskestudie eller RCT. Målt på `exercise`:
 # 2 dager → 0 treff med MESH:"Humans"; 30 dager → 24; 180 dager → rikelig.
-# 365 dager gir ~1 130 studier i poolen (~3 nye i døgnet) — nok til å levere daglig i årevis.
-LOOKBACK_DAYS = 365
+# 180 dager gir 494 studier i poolen (~2,7 nye i døgnet). Tilsiget er nesten identisk med
+# 365 dager (3,0/døgn) — forskning publiseres jevnt — så halvårsvinduet koster nesten ingenting
+# løpende; det halverer bare reservoaret vi kan tømme i starten. Til gjengjeld er alt vi viser
+# publisert siste halvår.
+LOOKBACK_DAYS = 180
 
-MAX_ITEMS = 5              # maks studier i briefen (styres også i SYSTEM_PROMPT)
-RAW_POOL = 100             # rå kandidater hentet PER KATEGORI (før lokal scoring)
-CANDIDATE_POOL = 6         # kandidater PER KATEGORI som sendes til Claude (etter scoring)
-MAX_ABSTRACT_CHARS = 1200  # maks tegn fra hvert abstract som sendes til Claude
+MAX_ITEMS = 7              # maks studier i briefen (styres også i SYSTEM_PROMPT)
+
+# Henting: vi paginerer gjennom HELE poolen per kategori (cursorMark), ikke bare de nyeste
+# PAGE_SIZE. «Nyest først» ga oss ingenting når vinduet uansett er 180 dager — det utelukket
+# bare ~80 % av materialet fra scoringen. MAX_FETCH_PER_CATEGORY er en sikkerhetsventil hvis
+# en spørring plutselig eksploderer i treff (poolen er ~125 per kategori i dag).
+PAGE_SIZE = 100
+MAX_FETCH_PER_CATEGORY = 600
+
+# Kandidater til Claude. Først en garantert kvote per kategori (bevarer bredde — briefingen
+# grupperes etter kategori), deretter fylles resten opp av de beste på tvers av kategoriene.
+# 40 kandidater med fullt abstract ≈ 23 000 input-tokens ≈ 0,75 kr/dag.
+CANDIDATE_FLOOR_PER_CATEGORY = 4
+CANDIDATE_POOL = 40
+
+# Abstractet kuttes KUN i prompten til Claude, aldri før scoringen. Resultatdelen — der
+# HR/RR/CI/p og utvalgsstørrelse står — ligger typisk etter 1200 tegn, og 97 % av abstractene
+# er lengre enn det. Å score på et kuttet abstract fjernet nøyaktig de signalene
+# `_score_candidate` gir poeng for: målt på én dags pool falt 52 kandidater over terskel til 0.
+MAX_ABSTRACT_CHARS = 4000  # maks tegn fra hvert abstract som sendes til Claude
 
 # Robusthet mot tomt/mislykket Claude-svar (transient API-hikke gir noen ganger 0 tegn)
 CLAUDE_MAX_ATTEMPTS = 3    # antall forsøk hvis streamen kommer TOM (transient hikke)
@@ -87,7 +106,7 @@ CLAUDE_PROBE_MAX_TOKENS = 16    # små kall kun for å avgjøre refusal (ja/nei)
 #                                     input-tokens hver dag, men kan komme tilbake senere
 SEEN_FILE = "research_seen_dois.json"
 SEEN_RETENTION_DAYS = 400
-UNPICKED_COOLDOWN_DAYS = 14  # kort: poolen er liten (~1 100), gode studier skal få komme igjen
+UNPICKED_COOLDOWN_DAYS = 14  # kort: poolen er liten (~500), gode studier skal få komme igjen
 
 # Egen Notion-seksjon (adskilt fra nyhetsbriefens "Arkiv" / "Nyhetsbriefinger")
 ARCHIVE_TITLE = "Forskning Arkiv"
@@ -105,7 +124,7 @@ ANCHOR_TEXT = "Forskningsbriefinger"
 # ordet hvor som helst i artikkelen, og ett tilfeldig «exercise» i et abstract om endometriose
 # gjør studien til en «trenings»-studie. Målt: fritekst ga en pool full av kreft, cellegift og
 # antipsykotika; tittelbinding ga treff som faktisk HANDLER om temaet. Prisen er volum
-# (~1 130 studier i et 365-dagers vindu, ~3 nye i døgnet) — rikelig når vi viser 5 om dagen.
+# (494 studier i et 180-dagers vindu, ~2,7 nye i døgnet) — nok når vi viser opptil 7 om dagen.
 _PMC_SUFFIX = (
     ' AND MESH:"Humans"'
     ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
@@ -161,14 +180,14 @@ SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for én beste
 
 Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt — utvelgelsen din handler derfor om RELEVANS og TYDELIGHET, ikke om å luke bort dyrestudier.
 
-Velg de OPPTIL 5 mest verdifulle. Heller tre sterke enn fem der to er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
+Velg de OPPTIL 7 mest verdifulle. 7 er et TAK, ikke et mål — heller tre sterke enn sju der fire er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
 
 UTVALGSKRITERIER (prioritert rekkefølge):
 1. Handlingsrom — kan leseren faktisk gjøre noe med dette selv (trene annerledes, spise annerledes, sove annerledes)? Klinisk behandling han aldri vil ta stilling til, velges bort.
 2. Tydelige tall — studien må rapportere konkrete effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer). Studier som kun sier "signifikant bedring" uten tall, velges bort.
 3. Betydning for lang og frisk levetid — harde utfall (dødelighet, hjerte-kar, diabetes, muskelmasse, kognisjon, søvnkvalitet) foran surrogatmål.
 4. Robusthet — store metaanalyser og RCT-er med mange deltakere foran små studier.
-5. Variasjon — unngå fem studier om nesten det samme. Spre gjerne over kategoriene, men aldri på bekostning av kvalitet.
+5. Variasjon — unngå flere studier om nesten det samme. Spre gjerne over kategoriene, men aldri på bekostning av kvalitet.
 
 FORMAT — for hver valgte studie, nøyaktig denne strukturen:
 ## [Norsk tittel som bærer hovedfunnet](URL)
@@ -293,7 +312,7 @@ def _strip_html(text: str) -> str:
 #
 # Europe PMC-spørringen garanterer allerede menneskestudie + RCT/metaanalyse/oversikt.
 # Scoringen rangerer det som er igjen etter det leseren faktisk er ute etter: tydelige tall,
-# harde utfall, og noe han kan gjøre selv. Kun topp CANDIDATE_POOL per kategori sendes til
+# harde utfall, og noe han kan gjøre selv. Kun topp CANDIDATE_POOL totalt sendes til
 # Claude — det kutter input fra ~32 000 til ~9 000 tokens/dag og gjør at Claude bruker
 # kapasiteten sin på å FORKLARE i stedet for å lete.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -441,13 +460,50 @@ def _score_candidate(article: dict) -> tuple[float, str]:
     return score, ", ".join(why)
 
 
+def _fetch_all_pages(query: str) -> list[dict]:
+    """Paginer gjennom hele treffmengden for én spørring via Europe PMCs cursorMark.
+
+    Stopper når API-et gjentar cursoren (siste side) eller MAX_FETCH_PER_CATEGORY er nådd.
+    En feil på side 2+ kaster ikke bort sidene vi allerede har — vi returnerer det vi fikk."""
+    out: list[dict] = []
+    cursor = "*"
+    while len(out) < MAX_FETCH_PER_CATEGORY:
+        params = {
+            "query": query,
+            "resultType": "core",
+            "sort": "P_PDATE_D desc",
+            "pageSize": str(PAGE_SIZE),
+            "format": "json",
+            "cursorMark": cursor,
+        }
+        try:
+            resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=60)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception:
+            if out:
+                break  # myk feil: behold sidene vi rakk å hente
+            raise
+        results = data.get("resultList", {}).get("result", [])
+        out.extend(results)
+        next_cursor = data.get("nextCursorMark")
+        if not results or not next_cursor or next_cursor == cursor:
+            break
+        cursor = next_cursor
+    return out
+
+
 def fetch_research() -> list[dict]:
     """Hent og rangér kandidatstudier per kategori.
 
-    Per kategori: hent RAW_POOL nyest indekserte studier som matcher de harde filtrene,
-    fjern det leseren allerede har sett (og det som ligger i karantene), score lokalt, og
-    behold topp CANDIDATE_POOL. Duplikater på tvers av kategoriene beholdes kun én gang —
-    første kategori vinner."""
+    Per kategori: paginer gjennom HELE poolen som matcher de harde filtrene, fjern det
+    leseren allerede har sett (og det som ligger i karantene), og score lokalt på fullt
+    abstract. Duplikater på tvers av kategoriene beholdes kun én gang — første kategori
+    vinner.
+
+    Utvalget skjer så i to trinn, for å balansere bredde mot kvalitet: hver kategori får en
+    garantert kvote (CANDIDATE_FLOOR_PER_CATEGORY), og resten av plassene opp til
+    CANDIDATE_POOL fylles av de høyest scorede på tvers av kategoriene."""
     import time as _time
 
     today = datetime.now().date()
@@ -455,7 +511,7 @@ def fetch_research() -> list[dict]:
     date_filter = f" AND (FIRST_PDATE:[{start.isoformat()} TO {today.isoformat()}])"
 
     seen = _load_seen()
-    articles: list[dict] = []
+    by_category: dict[str, list[tuple[float, str, dict]]] = {}
     picked_ids: set[str] = set()
     skipped_seen = 0
     skipped_weak = 0
@@ -463,23 +519,14 @@ def fetch_research() -> list[dict]:
     for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES.items()):
         if ci:
             _time.sleep(1)  # høflig mot Europe PMC
-        params = {
-            "query": cat_query + date_filter,
-            "resultType": "core",
-            "sort": "P_PDATE_D desc",  # nyest indekserte først — poolen roterer av seg selv
-            "pageSize": str(RAW_POOL),
-            "format": "json",
-        }
         try:
-            resp = httpx.get(_API_URL, params=params, headers=_HEADERS, timeout=30)
-            resp.raise_for_status()
-            data = resp.json()
+            results = _fetch_all_pages(cat_query + date_filter)
         except Exception as exc:
             print(f"  ✗  Europe PMC ({category}): feil ved henting — {exc}")
             continue
 
         scored: list[tuple[float, str, dict]] = []
-        for r in data.get("resultList", {}).get("result", []):
+        for r in results:
             title = (r.get("title") or "").strip().rstrip(".")
             abstract = _strip_html(r.get("abstractText", ""))
             if not title or not abstract:
@@ -512,7 +559,8 @@ def fetch_research() -> list[dict]:
             article = {
                 "category": category,
                 "title": title,
-                "abstract": abstract[:MAX_ABSTRACT_CHARS],
+                # Fullt abstract — kuttes først i prompten (build_candidates_text).
+                "abstract": abstract,
                 "authors": (r.get("authorString") or "").strip(),
                 "journal": journal,
                 "date": r.get("firstPublicationDate", "—"),
@@ -527,18 +575,30 @@ def fetch_research() -> list[dict]:
             scored.append((score, why, article))
 
         scored.sort(key=lambda t: t[0], reverse=True)
-        top = scored[:CANDIDATE_POOL]
-        print(f"  ✓  {category}: {len(top)} kandidater (av {len(scored)} over terskel)")
-        for score, why, article in top:
-            print(f"       {score:5.1f}  {article['title'][:72]}")
-            print(f"              ({why})")
-            articles.append(article)
+        by_category[category] = scored
+        print(f"  ✓  {category}: {len(scored)} over terskel (av {len(results)} hentet)")
 
     if skipped_seen:
         print(f"  ({skipped_seen} allerede vist eller i karantene — hoppet over)")
     if skipped_weak:
         print(f"  ({skipped_weak} forkastet av lokal scoring — under terskel {MIN_SCORE})")
-    return articles
+
+    # Trinn 1: garantert kvote per kategori (bevarer bredde).
+    chosen: list[tuple[float, str, dict]] = []
+    for category, scored in by_category.items():
+        chosen.extend(scored[:CANDIDATE_FLOOR_PER_CATEGORY])
+
+    # Trinn 2: fyll opp med de beste på tvers av kategoriene.
+    taken = {id(t) for t in chosen}
+    rest = [t for scored in by_category.values() for t in scored if id(t) not in taken]
+    rest.sort(key=lambda t: t[0], reverse=True)
+    chosen.extend(rest[: max(0, CANDIDATE_POOL - len(chosen))])
+    chosen.sort(key=lambda t: t[0], reverse=True)
+
+    for score, why, article in chosen:
+        print(f"    {score:5.1f}  [{article['category']}] {article['title'][:66]}")
+        print(f"           ({why})")
+    return [article for _, _, article in chosen]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -554,7 +614,7 @@ def build_candidates_text(articles: list[dict]) -> str:
             f"[{i}] ({CATEGORY_LABELS.get(a.get('category'), a.get('category', '?'))}) {a['title']}\n"
             f"Design: {design} | Tidsskrift: {a['journal']} | Publisert: {a['date']}\n"
             f"URL: {a['url']}\n"
-            f"Sammendrag: {a['abstract']}\n"
+            f"Sammendrag: {a['abstract'][:MAX_ABSTRACT_CHARS]}\n"
             "---"
         )
     return "\n".join(lines)
