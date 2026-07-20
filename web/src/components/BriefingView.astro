@@ -7,6 +7,10 @@ import RiddleCard from './RiddleCard.astro';
 import LearningCard from './LearningCard.astro';
 import ReflectionCard from './ReflectionCard.astro';
 import BrannCard from './BrannCard.astro';
+import ReviewCard from './ReviewCard.astro';
+import SaveRuntime from './SaveRuntime.astro';
+import { savedIdSet, dueItem } from '../lib/saved.js';
+import { writingEnabled, isAuthed } from '../lib/auth.js';
 import {
   splitNewsSections,
   splitResearch,
@@ -22,6 +26,15 @@ const studies = splitResearch(b.research_md);
 const marketHistory = b.market ? await getMarketHistory({ endDate: b.date }) : {};
 
 const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
+
+// Lagring: ID-ene hentes server-side så pin-stjernen er fylt i første paint.
+// «Dagens repetisjon» vises kun på dagens briefing — ikke når man blar i arkivet,
+// der den ville vært et anakronistisk innslag.
+const canPin = writingEnabled();
+const saved = canPin ? await savedIdSet() : new Set();
+const authed = canPin && isAuthed(Astro.cookies);
+const isToday = b.date === new Date().toLocaleDateString('sv-SE');
+const due = canPin && isToday ? await dueItem() : null;
 ---
 
 {(b.weather || b.market) && (
@@ -53,17 +66,24 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
   }
 </section>
 
+{due && (
+  <section class="jump-target" id="repetisjon">
+    <h2 class="section-label">Repetisjon</h2>
+    <ReviewCard item={due} canEdit={authed} />
+  </section>
+)}
+
 {b.riddles?.length > 0 && (
   <section class="jump-target" id="gaater">
     <h2 class="section-label">Gåter</h2>
-    <RiddleCard riddles={b.riddles} date={b.date} />
+    <RiddleCard riddles={b.riddles} date={b.date} canPin={canPin} saved={saved} />
   </section>
 )}
 
 {b.quiz?.length > 0 && (
   <section class="jump-target" id="quiz">
     <h2 class="section-label">Quiz</h2>
-    <QuizCard quiz={b.quiz} />
+    <QuizCard quiz={b.quiz} date={b.date} canPin={canPin} saved={saved} />
   </section>
 )}
 
@@ -109,3 +129,5 @@ const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label;
     )
   }
 </section>
+
+{canPin && <SaveRuntime authed={authed} />}

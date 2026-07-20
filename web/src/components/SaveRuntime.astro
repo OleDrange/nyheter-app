@@ -1,10 +1,10 @@
 ---
 // Klientlogikk for pin-knappene: én delegert lytter for hele siden.
-// Inkluderes ÉN gang per side (ResearchList gjør det). Inline script, ingen bundling —
-// samme mønster som resten av appen.
+// Inkluderes ÉN gang per side (ResearchList på forskningssidene, BriefingView på
+// nyhetssidene). Inline script, ingen bundling — samme mønster som resten av appen.
 //
 // Håndterer: optimistisk toggling, kodeord-dialog ved 401, og angre-toast ved avpinning
-// (avpinning sletter notis og tagger, så det er en destruktiv handling).
+// (avpinning sletter notat og tagger, så det er en destruktiv handling).
 const { authed = false } = Astro.props;
 ---
 
@@ -29,7 +29,6 @@ const { authed = false } = Astro.props;
 
 <script is:inline define:vars={{ authed }}>
   (() => {
-    let unlocked = authed;
     const dialog = document.getElementById('pinauth');
     const toast = document.getElementById('pintoast');
     const toastText = document.getElementById('pintoast-text');
@@ -71,7 +70,7 @@ const { authed = false } = Astro.props;
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({ passphrase: input.value }),
           }).then((r) => r.json()).catch(() => ({ ok: false, error: 'Nettverksfeil.' }));
-          if (res.ok) { unlocked = true; return resolve(true); }
+          if (res.ok) return resolve(true);
           err.textContent = res.error || 'Feil kodeord.';
           err.hidden = false;
           dialog.showModal();
@@ -80,12 +79,22 @@ const { authed = false } = Astro.props;
       });
     }
 
+    const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet' };
+
     function paint(btn, on) {
       btn.classList.toggle('pin--on', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      btn.title = on ? 'Fjern fra lagrede' : 'Lagre denne studien';
+      btn.title = on ? 'Fjern fra lagrede' : `Lagre ${LABEL[btn.dataset.type] || 'denne'}`;
       btn.querySelector('.pin__star').textContent = on ? '★' : '☆';
       btn.querySelector('.pin__text').textContent = on ? 'Lagret' : 'Lagre';
+    }
+
+    // Studier nøkles på URL, gåter/quiz på indeks i dagsfila.
+    function savePayload(btn) {
+      const { type = 'study', date, url, index } = btn.dataset;
+      return type === 'study'
+        ? { type, date, url }
+        : { type, date, index: Number(index) };
     }
 
     async function send(method, body) {
@@ -99,9 +108,7 @@ const { authed = false } = Astro.props;
 
     async function toggle(btn) {
       const wasOn = btn.classList.contains('pin--on');
-      const payload = wasOn
-        ? { id: btn.dataset.id }
-        : { type: 'study', date: btn.dataset.date, url: btn.dataset.url };
+      const payload = wasOn ? { id: btn.dataset.id } : savePayload(btn);
 
       paint(btn, !wasOn); // optimistisk
       btn.disabled = true;
@@ -119,14 +126,14 @@ const { authed = false } = Astro.props;
       }
 
       if (wasOn) {
-        // Avpinning sletter notis og tagger — derfor angre, ikke stille sletting.
+        // Avpinning sletter notat og tagger — derfor angre, ikke stille sletting.
         btn.removeAttribute('data-id');
         showToast('Fjernet fra lagrede.', async () => {
-          const back = await send('POST', { type: 'study', date: btn.dataset.date, url: btn.dataset.url });
+          const back = await send('POST', savePayload(btn));
           if (back.ok) {
             btn.dataset.id = back.item.id;
             paint(btn, true);
-            // Notis og tagger fulgte med i slettingen — legg dem tilbake.
+            // Notat og tagger fulgte med i slettingen — legg dem tilbake.
             if (res.item.note || (res.item.tags || []).length) {
               await send('PATCH', { id: back.item.id, note: res.item.note, tags: res.item.tags });
             }
@@ -134,7 +141,7 @@ const { authed = false } = Astro.props;
         });
       } else {
         btn.dataset.id = res.item.id;
-        showToast('Lagret. Åpne «Lagret» for å skrive en notis.');
+        showToast('Lagret. Åpne «Lagret» for å skrive et notat.');
       }
     }
 

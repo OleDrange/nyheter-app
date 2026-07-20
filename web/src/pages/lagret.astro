@@ -4,23 +4,32 @@
 // delbare og bokmerkbare («mine lagrede kosthold-studier»), og det skalerer forbi
 // noen tusen oppføringer.
 import Base from '../layouts/Base.astro';
-import { readSaved, queryItems, tagCounts } from '../lib/saved.js';
+import { readSaved, queryItems, tagCounts, TYPE_LABELS, TYPE_EMOJI, isDue } from '../lib/saved.js';
 import { RESEARCH_CATEGORIES, formatDateNo } from '../lib/briefings.js';
 import { writingEnabled, isAuthed } from '../lib/auth.js';
 
 const url = Astro.url;
 const q = (url.searchParams.get('q') || '').trim();
 const category = url.searchParams.get('kategori') || '';
+const type = url.searchParams.get('type') || '';
 const tag = url.searchParams.get('tag') || '';
 const sort = url.searchParams.get('sort') || 'nyest';
 
 const { items } = await readSaved();
-const results = queryItems(items, { q, category, tag, sort });
+const results = queryItems(items, { q, type, category, tag, sort });
 const tags = tagCounts(items);
 const canEdit = writingEnabled() && isAuthed(Astro.cookies);
 
-const catLabel = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.label || 'Øvrig';
-const catEmoji = (id) => RESEARCH_CATEGORIES.find((c) => c.id === id)?.emoji || '🔬';
+// Studier har en kjent kategoriliste; gåter/quiz bærer sin egen etikett («Nivå 2»,
+// «Norsk samfunn»), så den vises rå.
+const catLabel = (it) =>
+  it.type === 'study'
+    ? RESEARCH_CATEGORIES.find((c) => c.id === it.category)?.label || 'Øvrig'
+    : it.category || TYPE_LABELS[it.type];
+const catEmoji = (it) =>
+  it.type === 'study'
+    ? RESEARCH_CATEGORIES.find((c) => c.id === it.category)?.emoji || '🔬'
+    : TYPE_EMOJI[it.type];
 
 // Bygger en URL der én parameter endres og resten beholdes — så filtre kan kombineres.
 const withParam = (key, value) => {
@@ -32,18 +41,35 @@ const withParam = (key, value) => {
 };
 
 const usedCategories = RESEARCH_CATEGORIES.filter((c) => items.some((it) => it.category === c.id));
-const filtered = Boolean(q || category || tag);
+const filtered = Boolean(q || category || tag || type);
+const counts = Object.fromEntries(
+  Object.keys(TYPE_LABELS).map((t) => [t, items.filter((it) => it.type === t).length]),
+);
+const exportQuery = url.search ? `${url.search}&` : '?';
 ---
 
-<Base title="Lagrede studier">
+<Base title="Lagret">
   <section class="saved-head">
-    <h1 class="page-title">Lagrede studier</h1>
+    <h1 class="page-title">Lagret</h1>
     <p class="muted">
       {items.length === 0
-        ? 'Ingen lagrede studier ennå.'
+        ? 'Ingenting lagret ennå.'
         : `${items.length} lagret${filtered ? ` · ${results.length} treff` : ''}`}
     </p>
   </section>
+
+  {items.length > 0 && (
+    <nav class="typetabs" aria-label="Type">
+      <a class:list={['typetab', !type && 'typetab--on']} href={withParam('type', '')}>
+        Alle <span class="tagchip__n">{items.length}</span>
+      </a>
+      {Object.entries(TYPE_LABELS).filter(([t]) => counts[t] > 0).map(([t, label]) => (
+        <a class:list={['typetab', type === t && 'typetab--on']} href={withParam('type', t)}>
+          {TYPE_EMOJI[t]} {label} <span class="tagchip__n">{counts[t]}</span>
+        </a>
+      ))}
+    </nav>
+  )}
 
   {items.length > 0 && (
     <form class="saved-filters" method="get" action="/lagret">
@@ -63,9 +89,18 @@ const filtered = Boolean(q || category || tag);
         <option value="tittel" selected={sort === 'tittel'}>Tittel</option>
       </select>
       {tag && <input type="hidden" name="tag" value={tag} />}
+      {type && <input type="hidden" name="type" value={type} />}
       <button class="btn" type="submit">Filtrer</button>
       {filtered && <a class="btn btn--ghost" href="/lagret">Nullstill</a>}
     </form>
+  )}
+
+  {results.length > 0 && (
+    <p class="muted exportbar">
+      Eksporter {filtered ? 'utvalget' : 'alt'}:
+      <a href={`/api/eksport${exportQuery}format=md`}>markdown</a> ·
+      <a href={`/api/eksport${exportQuery}format=json`}>JSON</a>
+    </p>
   )}
 
   {tags.length > 0 && (
@@ -82,11 +117,15 @@ const filtered = Boolean(q || category || tag);
     <div class="card empty">
       {items.length === 0 ? (
         <>
-          <p><strong>Du har ikke lagret noen studier ennå.</strong></p>
+          <p><strong>Du har ikke lagret noe ennå.</strong></p>
           <p class="muted">
-            Gå til <a href="https://forskning.modr.no">forskning.modr.no</a> og trykk
-            ☆ <em>Lagre</em> på en studie du vil huske. Den dukker opp her, og du kan
-            skrive en notis om hvorfor du lagret den.
+            Trykk ☆ <em>Lagre</em> på en studie på
+            <a href="https://forskning.modr.no">forskning.modr.no</a>, eller på en gåte
+            eller et quizspørsmål på <a href="https://nyheter.modr.no">nyheter.modr.no</a>.
+            Det dukker opp her, og du kan skrive et notat om hvorfor du lagret det.
+          </p>
+          <p class="muted">
+            Forfalte oppføringer løftes tilbake på forsiden som «Dagens repetisjon».
           </p>
         </>
       ) : (
@@ -98,8 +137,9 @@ const filtered = Boolean(q || category || tag);
       {results.map((it) => (
         <article class="card study" id={it.id}>
           <div class="saved-meta">
-            <span class="badge">{catEmoji(it.category)} {catLabel(it.category)}</span>
+            <span class="badge">{catEmoji(it)} {catLabel(it)}</span>
             <span class="muted saved-date">
+              {isDue(it) && <span class="due-dot" title="Forfalt til repetisjon">🔁</span>}
               Lagret {formatDateNo(it.savedAt.slice(0, 10), { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
           </div>
@@ -124,7 +164,7 @@ const filtered = Boolean(q || category || tag);
 
           {(it.snapshot?.parts || []).length > 0 && (
             <details class="saved-details">
-              <summary>Vis studien</summary>
+              <summary>{it.type === 'study' ? 'Vis studien' : 'Vis innholdet'}</summary>
               <div class="study__parts">
                 {it.snapshot.parts.map((p) => (
                   <div class="study__part">
@@ -135,7 +175,9 @@ const filtered = Boolean(q || category || tag);
               </div>
               {it.date && (
                 <p class="muted saved-origin">
-                  Fra briefingen <a href={`https://forskning.modr.no/b/${it.date}`}>{formatDateNo(it.date)}</a>
+                  Fra briefingen <a href={it.type === 'study'
+                    ? `https://forskning.modr.no/b/${it.date}`
+                    : `https://nyheter.modr.no/b/${it.date}`}>{formatDateNo(it.date)}</a>
                 </p>
               )}
             </details>

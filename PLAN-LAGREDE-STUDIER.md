@@ -1,6 +1,6 @@
 # Implementasjonsplan — lagrede studier («pin»)
 
-Status: **leveranse 1 ferdig og deployet**. Sist oppdatert 2026-07-20.
+Status: **leveranse 1 og 2 ferdig og deployet**. Sist oppdatert 2026-07-20.
 
 Mål: kunne pinne en studie (senere også gåter og quiz) fra nettsiden, slik at den huskes
 permanent og vises på en egen side med filter og søk.
@@ -138,12 +138,17 @@ allerede er lagret, så stjernen er fylt fra første paint (ingen blinking).
 - [x] `CLAUDE.md`: dokumentasjon + **backup-kommandoen må dekke `saved-data`**
 - [x] Verifisert live på forskning.modr.no og nyheter.modr.no
 
-## Leveranse 2 — senere
+## Leveranse 2 — ferdig
 
-- [ ] Gåter og quiz inn i samme modell (`RiddleCard`, `QuizCard`)
-- [ ] Eksport til markdown og JSON (gjør listen fri + ekstra backup)
-- [ ] «Dagens repetisjon»: løft én forfalt lagret studie tilbake på forsiden, etter samme
+- [x] Gåter og quiz inn i samme modell (`RiddleCard`, `QuizCard`)
+- [x] Eksport til markdown og JSON (gjør listen fri + ekstra backup)
+- [x] «Dagens repetisjon»: løft én forfalt lagret studie tilbake på forsiden, etter samme
       mekanikk som `_QUIZ_REVIEW_INTERVALS`. En lagret-liste ingen leser er en kirkegård.
+
+## Mulige videre steg
+
+- Lagring av nyhetspunkter (krever egen identitetsløsning — de har ingen stabil nøkkel)
+- Flere repetisjoner samtidig, eller egen repetisjonsside om listen vokser seg stor
 
 ## Risiko og fallgruver
 

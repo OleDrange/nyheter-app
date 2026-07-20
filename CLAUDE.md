@@ -371,11 +371,11 @@ bygges uten ekstra datainnhenting.
 - **Ruter (felles for begge vertsnavn):** `/lagret` og `/api/*`. Disse skrives **ikke** om av
   middleware (`isShared`) — de finnes kun på rot-nivå og spenner over begge sider.
 
-### Lagrede studier («pin»)
+### Lagret («pin»)
 
-Pin en studie fra forskningssidene; den huskes permanent og vises på `/lagret` med filter,
-søk, notat og tagger. Se `PLAN-LAGREDE-STUDIER.md` for full plan (leveranse 2: gåter/quiz,
-eksport, repetisjon).
+Pin en **studie** (forskningssidene), **gåte** eller **quizspørsmål** (nyhetssidene); den
+huskes permanent og vises på `/lagret` med type-faner, filter, søk, notat og tagger.
+Se `PLAN-LAGREDE-STUDIER.md` for planen.
 
 - **Eget volum, ikke arkivet.** `saved-data:/state` (rw) ved siden av `briefing-data:/data:ro`.
   Nettappen er eneste prosess eksponert mot internett og skal **aldri** kunne skrive inn i
@@ -389,9 +389,11 @@ eksport, repetisjon).
 - **ID-en gir idempotens:** `study:<doi>` (globalt unik), `riddle:`/`quiz:<sha1(spørsmål)[0:12]>`
   (innholdshash — de har ingen ID, og hashen overlever quizens repetisjonsmekanikk). Samme sak
   lagret to ganger blir én oppføring.
-- **Innholdet utledes SERVER-SIDE** fra arkivet (`deriveStudy()` i `api/lagret.js`) — klienten
-  sender kun `{date, url}`. Ellers kunne enhver med kodeordet plantet vilkårlig HTML i lageret,
-  som senere rendres med `set:html`.
+- **Innholdet utledes SERVER-SIDE** fra arkivet (`deriveStudy()` / `deriveIndexed()` i
+  `api/lagret.js`) — klienten sender kun `{date, url}` for studier og `{date, index}` for
+  gåter/quiz (indeksen er stabil fordi briefinger er immutable). Ellers kunne enhver med
+  kodeordet plantet vilkårlig HTML i lageret, som senere rendres med `set:html`. Gåte-/
+  quiz-tekst er ren tekst og escapes ved lagring.
 - **`web/src/lib/auth.js`** — lesing er åpent for alle, kun skriving krever kodeord.
   `SAVE_PASSPHRASE` sendes inn i compose som **enkeltvariabel**, bevisst ikke `env_file`
   (som ville gitt web-containeren `ANTHROPIC_API_KEY` den ikke trenger). Cookien er
@@ -406,6 +408,14 @@ eksport, repetisjon).
   kodeord-dialog ved 401, **angre-toast** ved avpinning — som sletter notat og tagger).
   Tagger normaliseres til små bokstaver, ellers får man «protein»/«Protein»/«proteiner» som
   tre filtre innen en måned.
+- **«Dagens repetisjon»** (`ReviewCard.astro`): løfter ÉN forfalt lagret oppføring tilbake på
+  nyhetsforsiden — kun på dagens briefing, ikke i arkivet. Samme utvidende intervall som
+  quizbanken: `REVIEW_INTERVALS = [7, 30, 90, 180]` dager, forfaller når alderen ≥
+  `intervals[reps]` (klemt). «Repetert»-knappen bumper `reps` og setter `lastReview`.
+  Kun én om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
+  Oppføringer lagret før feltene fantes leses som `reps = 0` (bakoverkompatibelt).
+- **Eksport:** `/api/eksport?format=md|json` respekterer gjeldende filtre, så det du ser på
+  `/lagret` er det du får ut. Gjør at listen ikke er et fengsel, og fungerer som ekstra backup.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
     enkeltdag. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →

@@ -3,7 +3,9 @@
 // Fasit + løsningsvei ligger i en <details> og er skjult til man trykker
 // «Vis fasit». «✏️ Tavle»-knappen åpner Whiteboard-overlayet (klient-JS der).
 import Whiteboard from './Whiteboard.astro';
-const { riddles, date = '' } = Astro.props;
+import SaveButton from './SaveButton.astro';
+import { buildId } from '../lib/saved.js';
+const { riddles, date = '', canPin = false, saved = new Set() } = Astro.props;
 
 // Gjenbruker quiz-badgens fargelogikk: 1–2 lett, 3 middels, 4–5 vanskelig.
 const levelClass = (lvl) =>
@@ -17,6 +19,13 @@ const levelClass = (lvl) =>
         <span class={`quiz-q__level ${levelClass(r.level ?? i + 1)}`}>
           Nivå {r.level ?? i + 1}
         </span>
+        {canPin && (
+          <SaveButton
+            type="riddle" date={date} index={i} compact
+            id={buildId('riddle', { question: r.question })}
+            saved={saved.has(buildId('riddle', { question: r.question }))}
+          />
+        )}
       </header>
       <p class="quiz-q__question">{r.question}</p>
       <div class="riddle__actions">

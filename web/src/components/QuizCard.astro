@@ -4,7 +4,9 @@
 // Antall spørsmål følger antall kategorier, så komponenten er antalluavhengig.
 // Fasit er skjult til brukeren trykker på et svaralternativ; riktig svar
 // markeres grønt, feil valg rødt. Ingen bundling — ren inline-script.
-const { quiz } = Astro.props;
+import SaveButton from './SaveButton.astro';
+import { buildId } from '../lib/saved.js';
+const { quiz, date = '', canPin = false, saved = new Set() } = Astro.props;
 
 const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
 ---
@@ -23,7 +25,16 @@ const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
             </span>
           )}
         </span>
-        {q.category && <span class="quiz-q__category">{q.category}</span>}
+        <span class="quiz-q__meta">
+          {q.category && <span class="quiz-q__category">{q.category}</span>}
+          {canPin && (
+            <SaveButton
+              type="quiz" date={date} index={i} compact
+              id={buildId('quiz', { question: q.question })}
+              saved={saved.has(buildId('quiz', { question: q.question }))}
+            />
+          )}
+        </span>
       </header>
       <p class="quiz-q__question">{q.question}</p>
       <div class="quiz-q__options" role="group" aria-label="Svaralternativer">

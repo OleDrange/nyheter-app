@@ -1,21 +1,29 @@
 ---
-// Pin-knapp for én studie. Ren markup — all logikk ligger i SaveRuntime.astro, som
-// fanger klikk via delegering (én lytter for hele siden).
+// Pin-knapp for én studie, gåte eller quizspørsmål. Ren markup — all logikk ligger i
+// SaveRuntime.astro, som fanger klikk via delegering (én lytter for hele siden).
+//
+// Studier identifiseres med `url` (DOI); gåter og quiz med `index` i dagsfila, siden de
+// ikke har noen URL. Serveren utleder innholdet fra arkivet uansett.
 //
 // `saved` kommer fra serveren, så stjernen er fylt allerede i første paint. Uten det
 // ville hvert kort blinket fra tom til fylt etter hydrering.
-const { date, url, id = null, saved = false } = Astro.props;
+const { type = 'study', date, url = null, index = null, id = null, saved = false, compact = false } = Astro.props;
+
+const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet' };
+const title = saved ? 'Fjern fra lagrede' : `Lagre ${LABEL[type] || 'denne'}`;
 ---
 
 <button
-  class:list={['pin', saved && 'pin--on']}
+  class:list={['pin', saved && 'pin--on', compact && 'pin--compact']}
   type="button"
   data-pin
+  data-type={type}
   data-date={date}
+  data-url={url || undefined}
+  data-index={index !== null ? String(index) : undefined}
   data-id={saved && id ? id : undefined}
-  data-url={url}
   aria-pressed={saved ? 'true' : 'false'}
-  title={saved ? 'Fjern fra lagrede' : 'Lagre denne studien'}
+  title={title}
 >
   <span class="pin__star" aria-hidden="true">{saved ? '★' : '☆'}</span>
   <span class="pin__text">{saved ? 'Lagret' : 'Lagre'}</span>

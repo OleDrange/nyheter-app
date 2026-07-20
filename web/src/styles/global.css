@@ -2247,3 +2247,69 @@ main {
   .saved-filters { flex-direction: column; align-items: stretch; }
   .saved-meta { flex-direction: column; align-items: flex-start; gap: 0.15rem; }
 }
+
+/* Lagret — type-faner, eksport, repetisjonskort (leveranse 2) */
+
+.typetabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+.typetab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.typetab:hover { color: var(--accent); border-color: var(--accent); }
+.typetab--on { color: #fff; background: var(--accent); border-color: var(--accent); }
+.typetab--on .tagchip__n { opacity: 0.8; }
+
+.exportbar { font-size: 0.82rem; margin: -0.35rem 0 0.9rem; }
+.exportbar a { color: var(--text-muted); }
+.exportbar a:hover { color: var(--accent); }
+
+.due-dot { margin-right: 0.25rem; }
+
+/* Kompakt pin i gåte-/quiz-headeren, der plassen er trangere */
+.pin--compact { padding: 0.15rem 0.45rem; font-size: 0.72rem; }
+.pin--compact .pin__text { display: none; }
+.pin--compact .pin__star { font-size: 0.9rem; }
+
+.quiz-q__meta { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+/* «Dagens repetisjon» */
+.review { border-left: 3px solid var(--accent); }
+.review__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+.review__badge { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
+.review__age { font-size: 0.78rem; }
+.review__title { margin: 0 0 0.4rem; font-size: 1.02rem; line-height: 1.35; }
+.review__note {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  background: var(--accent-soft);
+  border-radius: 10px;
+}
+.review__details > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.25rem 0;
+}
+.review__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}

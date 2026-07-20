@@ -17,8 +17,14 @@ const SAVED_FILE = path.join(SAVED_DIR, 'saved.json');
 
 const EMPTY = { version: 1, items: [] };
 
-/** Gyldige typer. `study` er leveranse 1; gåter/quiz kommer i leveranse 2. */
 export const TYPES = ['study', 'riddle', 'quiz'];
+
+export const TYPE_LABELS = { study: 'Studier', riddle: 'Gåter', quiz: 'Quiz' };
+export const TYPE_EMOJI = { study: '🔬', riddle: '🧩', quiz: '🧠' };
+
+// Spaced repetition — samme utvidende intervall som quizbanken (_QUIZ_REVIEW_INTERVALS).
+// En lagret-liste ingen leser er en kirkegård; dette er det som gjør den til et verktøy.
+export const REVIEW_INTERVALS = [7, 30, 90, 180]; // dager
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ID — idempotens
@@ -130,6 +136,10 @@ export function saveItem(input) {
       note: existing?.note ?? '',
       tags: existing?.tags ?? [],
       savedAt: existing?.savedAt || new Date().toISOString(),
+      // Repetisjonstilstand: `reps` = antall ganger repetert, `lastReview` = sist sett.
+      // Nullstilles aldri ved re-lagring — historikken din er verdt mer enn snapshotet.
+      reps: existing?.reps ?? 0,
+      lastReview: existing?.lastReview || existing?.savedAt || new Date().toISOString(),
     };
     item.searchText = buildSearchText(item);
     if (existing) Object.assign(existing, item);
@@ -155,6 +165,44 @@ export function patchItem(id, { note, tags }) {
     item.searchText = buildSearchText(item);
     return item;
   });
+}
+
+/** Marker som repetert: bumper `reps` og setter `lastReview` til nå. */
+export function reviewItem(id) {
+  return mutation((data) => {
+    const item = data.items.find((it) => it.id === id);
+    if (!item) return null;
+    item.reps = (item.reps || 0) + 1;
+    item.lastReview = new Date().toISOString();
+    return item;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Spaced repetition
+// ─────────────────────────────────────────────────────────────────────────────
+
+const daysSince = (iso) => (Date.now() - new Date(iso).getTime()) / 86400000;
+
+/** Er oppføringen forfalt til repetisjon? Intervallet utvides med antall repetisjoner. */
+export function isDue(item, now = Date.now()) {
+  const reps = item.reps || 0;
+  const interval = REVIEW_INTERVALS[Math.min(reps, REVIEW_INTERVALS.length - 1)];
+  const since = (now - new Date(item.lastReview || item.savedAt).getTime()) / 86400000;
+  return since >= interval;
+}
+
+/**
+ * Dagens repetisjon: den mest forfalte oppføringen, eller null.
+ * Kun ÉN om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
+ */
+export async function dueItem() {
+  const { items } = await readSaved();
+  const due = items.filter((it) => isDue(it));
+  if (!due.length) return null;
+  return due.sort(
+    (a, b) => daysSince(b.lastReview || b.savedAt) - daysSince(a.lastReview || a.savedAt),
+  )[0];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

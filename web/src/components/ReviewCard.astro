@@ -1,0 +1,78 @@
+---
+// «Dagens repetisjon» — løfter ÉN forfalt lagret oppføring tilbake på forsiden.
+//
+// Samme utvidende intervall som quizbanken (REVIEW_INTERVALS = [7, 30, 90, 180] dager):
+// et element repetert `reps` ganger forfaller når alderen ≥ intervals[reps]. Kun én om
+// gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
+//
+// Vises kun når noe faktisk er forfalt. Å markere som repetert er en skriving og krever
+// kodeord, som alt annet; uten kodeord er kortet en ren påminnelse.
+import { TYPE_EMOJI } from '../lib/saved.js';
+import { formatDateNo } from '../lib/briefings.js';
+
+const { item, canEdit = false } = Astro.props;
+
+const days = Math.floor((Date.now() - new Date(item.lastReview || item.savedAt).getTime()) / 86400000);
+const reps = item.reps || 0;
+---
+
+<article class="card review">
+  <div class="review__head">
+    <span class="review__badge">🔁 Dagens repetisjon</span>
+    <span class="muted review__age">
+      {reps === 0 ? 'Lagret' : `Sist repetert`} for {days} dager siden
+      {reps > 0 && ` · ${reps}. gang`}
+    </span>
+  </div>
+
+  <h3 class="review__title">
+    <span aria-hidden="true">{TYPE_EMOJI[item.type] || '🔬'}</span>
+    {item.url
+      ? <a href={item.url} target="_blank" rel="noopener">{item.title}</a>
+      : item.title}
+  </h3>
+
+  {item.note && <p class="review__note">{item.note}</p>}
+
+  <details class="review__details">
+    <summary>Vis innholdet</summary>
+    <div class="study__parts">
+      {(item.snapshot?.parts || []).map((p) => (
+        <div class="study__part">
+          <div class="study__label">{p.label}</div>
+          <div class="study__text" set:html={p.html} />
+        </div>
+      ))}
+    </div>
+    {item.date && (
+      <p class="muted saved-origin">
+        Lagret fra briefingen {formatDateNo(item.date)}
+      </p>
+    )}
+  </details>
+
+  <div class="review__actions">
+    {canEdit && (
+      <button class="btn btn--ghost" type="button" data-review={item.id}>
+        Repetert — vis igjen senere
+      </button>
+    )}
+    <a class="linkbtn" href="/lagret">Alle lagrede</a>
+  </div>
+</article>
+
+<script is:inline>
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-review]');
+    if (!btn) return;
+    btn.disabled = true;
+    const res = await fetch('/api/lagret', {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: btn.dataset.review, action: 'review' }),
+    }).then((r) => r.json()).catch(() => ({ ok: false }));
+    const card = btn.closest('.review');
+    if (res.ok) card.remove();
+    else btn.disabled = false;
+  });
+</script>
