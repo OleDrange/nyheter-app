@@ -2129,8 +2129,12 @@ main {
   border-radius: 999px;
   box-shadow: var(--shadow-lg);
   max-width: calc(100vw - 32px);
+  /* Toasten ligger fast nederst i 3–8 sekunder. Uten dette ville den blokkert klikk på
+     det som ligger under — angre-knappen trenger klikk, ikke boblen selv. */
+  pointer-events: none;
 }
 .toast__undo {
+  pointer-events: auto;
   font: inherit;
   font-weight: 600;
   color: var(--accent);

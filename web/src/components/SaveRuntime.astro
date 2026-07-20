@@ -8,7 +8,14 @@
 const { authed = false } = Astro.props;
 ---
 
-<div class="savebar" hidden>
+{/*
+  VIKTIG: <dialog> og toasten skal IKKE ligge i en `hidden` beholder.
+  showModal() gjør resten av dokumentet inert — også når dialogen selv ikke kan tegnes
+  fordi en forelder har display:none. Resultatet er en usynlig modal som gjør hele siden
+  uklikkbar. Dialogen er allerede display:none når den er lukket, og toasten styrer sin
+  egen `hidden`, så beholderen trenger ingen.
+*/}
+<div class="savebar">
   <dialog class="pinauth" id="pinauth">
     <form method="dialog" class="pinauth__form">
       <h2 class="pinauth__title">Kodeord for lagring</h2>
@@ -52,31 +59,57 @@ const { authed = false } = Astro.props;
       if (fn) await fn();
     });
 
-    // Kodeord-dialog. Løser seg til true/false slik at kalleren kan gjenoppta handlingen.
+    /** Vent på at dialogen lukkes. Egen funksjon så hvert forsøk får sin egen lytter. */
+    function awaitClose() {
+      return new Promise((resolve) => {
+        dialog.addEventListener('close', () => resolve(dialog.returnValue), { once: true });
+      });
+    }
+
+    /**
+     * Kodeord-dialog. Løser seg til true/false så kalleren kan gjenoppta handlingen.
+     *
+     * Skrevet som en løkke, ikke som en lytter som åpner dialogen på nytt: den varianten
+     * fjernet sin egen `close`-lytter før den kalte showModal() igjen, så et feil kodeord
+     * etterlot en modal dialog som aldri ble løst — og dermed en permanent uklikkbar side.
+     */
+    // Trykker man raskt på to stjerner, ville det andre kallet kjørt showModal() på en
+    // allerede åpen dialog — det kaster InvalidStateError. Samtidige kall deler derfor
+    // det samme løftet i stedet for å åpne dialogen på nytt.
+    let authInFlight = null;
+
     function askPassphrase() {
       if (!dialog) return Promise.resolve(false);
+      if (authInFlight) return authInFlight;
+      authInFlight = runAuthDialog().finally(() => { authInFlight = null; });
+      return authInFlight;
+    }
+
+    async function runAuthDialog() {
       const input = document.getElementById('pinauth-input');
       const err = document.getElementById('pinauth-error');
       err.hidden = true;
       input.value = '';
-      dialog.showModal();
-      input.focus();
-      return new Promise((resolve) => {
-        dialog.addEventListener('close', async function handler() {
-          dialog.removeEventListener('close', handler);
-          if (dialog.returnValue !== 'ok' || !input.value) return resolve(false);
-          const res = await fetch('/api/logg-inn', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ passphrase: input.value }),
-          }).then((r) => r.json()).catch(() => ({ ok: false, error: 'Nettverksfeil.' }));
-          if (res.ok) return resolve(true);
-          err.textContent = res.error || 'Feil kodeord.';
-          err.hidden = false;
-          dialog.showModal();
-          input.focus();
-        });
-      });
+
+      for (;;) {
+        dialog.showModal();
+        input.focus();
+        const result = await awaitClose();
+
+        if (result !== 'ok' || !input.value) return false; // avbrutt eller Esc
+
+        const res = await fetch('/api/logg-inn', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ passphrase: input.value }),
+        }).then((r) => r.json()).catch(() => ({ ok: false, error: 'Nettverksfeil.' }));
+
+        if (res.ok) return true;
+
+        err.textContent = res.error || 'Feil kodeord.';
+        err.hidden = false;
+        input.value = '';
+      }
     }
 
     const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet' };
