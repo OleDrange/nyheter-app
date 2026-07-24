@@ -423,8 +423,8 @@ bygges uten ekstra datainnhenting.
 
 ### Bibliotek (`/lagret`) og favoritter («pin»)
 
-`/lagret` er **biblioteket**: alle studier som noen gang er vist, søkbare — pluss
-favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagger, paginering
+`/lagret` er **biblioteket**: alle studier og alle boktips som noen gang er vist, søkbare
+— pluss favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagger, paginering
 (40 per side). Se `PLAN-LAGREDE-STUDIER.md` for den opprinnelige planen.
 
 - **To lag, ikke ett.** Biblioteket **utledes fra briefing-arkivet ved forespørsel**
@@ -439,9 +439,13 @@ favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagge
 - **Cachen** i `library.js` nøkles på `briefingStamp()` (antall dagsfiler + sum av mtime).
   Filnavn alene holder **ikke**: begge generatorene skriver inn i samme dagsfil, så dagens
   fil endres etter at den først er lest.
+- **Indeksert:** `research_md` (studier) og `learning.books` (boktips). Bokas nøkkel er
+  `book:<sha1(tittel + forfatter)>` — **uten år**, ellers ville en ny utgave blitt en ny
+  oppføring. `journal`-feltet bærer «Forfatter · År», så forfatteren er søkbar.
 - **Gåter/quiz indekseres ikke i sin helhet** (banken er hundrevis av spørsmål) — de er med
-  kun når de er favorittmerket. Pin-knappen deres trenger indeks i dagsfila; den slås opp
-  med `resolveIndex()` for de radene som faktisk vises.
+  kun når de er favorittmerket. **Podkast-rådene er ikke pinnbare**: de er knyttet til én
+  episode, ikke til noe du skal finne igjen. Pin-knappen for gåter/quiz/bøker trenger
+  indeks i dagsfila; den slås opp med `resolveIndex()` for de radene som faktisk vises.
 - **Eget volum, ikke arkivet.** `saved-data:/state` (rw) ved siden av `briefing-data:/data:ro`.
   Nettappen er eneste prosess eksponert mot internett og skal **aldri** kunne skrive inn i
   briefing-arkivet. `SAVED_DIR=/state` i container; default `state/` lokalt (gitignored).
@@ -492,7 +496,9 @@ favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagge
     nyhetssiden): 0,5 s scroll-animasjon; lenker uten mål på siden skjules av
     inline-skriptet, så raden forsvinner helt på f.eks. arkivsiden.
   - `LearningCard.astro` — «Dagens inspirasjon»: podcast-råd (🎧) og boktips (📚) fra
-    `learning`-feltet, to kort i `cards-grid`. Ren HTML uten klient-JS.
+    `learning`-feltet, to kort i `cards-grid`. Boktipsene har favoritt-stjerne
+    (`SaveButton`, type `book`); podkast-rådene har ikke. Ingen egen klient-JS —
+    stjernen bruker `SaveRuntime` som `BriefingView` allerede inkluderer.
   - `ReflectionCard.astro` — «Til ettertanke»: 1–2 åpne refleksjonsspørsmål fra
     `reflection`-feltet (📰 fra nyhetene / 🎧 fra inspirasjonen), accent-tonet kort. Ren HTML.
   - `BrannCard.astro` — SK Brann-blokk fra `brann`-feltet: tabellplassering, neste kamp

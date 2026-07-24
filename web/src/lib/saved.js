@@ -17,10 +17,10 @@ const SAVED_FILE = path.join(SAVED_DIR, 'saved.json');
 
 const EMPTY = { version: 1, items: [] };
 
-export const TYPES = ['study', 'riddle', 'quiz'];
+export const TYPES = ['study', 'riddle', 'quiz', 'book'];
 
-export const TYPE_LABELS = { study: 'Studier', riddle: 'Gåter', quiz: 'Quiz' };
-export const TYPE_EMOJI = { study: '🔬', riddle: '🧩', quiz: '🧠' };
+export const TYPE_LABELS = { study: 'Studier', riddle: 'Gåter', quiz: 'Quiz', book: 'Bøker' };
+export const TYPE_EMOJI = { study: '🔬', riddle: '🧩', quiz: '🧠', book: '📚' };
 
 // Spaced repetition — samme utvidende intervall som quizbanken (_QUIZ_REVIEW_INTERVALS).
 // En lagret-liste ingen leser er en kirkegård; dette er det som gjør den til et verktøy.
@@ -37,12 +37,27 @@ const sha12 = (s) => crypto.createHash('sha1').update(s, 'utf8').digest('hex').s
  * Studier nøkles på DOI (globalt unik); gåter og quiz har ingen ID og nøkles på en
  * innholdshash av spørsmålsteksten — den overlever også quizens repetisjonsmekanikk.
  */
-export function buildId(type, { url, question, title } = {}) {
+export function buildId(type, { url, question, title, author } = {}) {
   if (type === 'study') {
     const doi = String(url || '').match(/10\.\d{4,9}\/\S+/);
     return `study:${doi ? doi[0].toLowerCase() : sha12(String(url || title || ''))}`;
   }
+  // Bøker har ingen ID og ingen URL: tittel + forfatter er nøkkelen. Forfatteren er med
+  // fordi titler går igjen på tvers av bøker; året er det ikke, siden utgave/opptrykk
+  // ellers ville gitt to oppføringer for samme bok.
+  if (type === 'book') {
+    return `book:${sha12(`${String(title || '')} ${String(author || '')}`.trim().toLowerCase())}`;
+  }
   return `${type}:${sha12(String(question || title || '').trim().toLowerCase())}`;
+}
+
+/**
+ * Innholdet i biblioteket er ren tekst fra arkivet, men rendres med `set:html` på
+ * /lagret — så det escapes ved indeksering/lagring, ett sted.
+ */
+export function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 /** Tagger normaliseres, ellers får vi «protein», «Protein» og «proteiner» som tre filtre. */

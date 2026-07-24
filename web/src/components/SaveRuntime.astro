@@ -112,17 +112,16 @@ const { authed = false } = Astro.props;
       }
     }
 
-    const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet' };
+    const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet', book: 'boktipset' };
 
     function paint(btn, on) {
       btn.classList.toggle('pin--on', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      btn.title = on ? 'Fjern fra lagrede' : `Lagre ${LABEL[btn.dataset.type] || 'denne'}`;
+      btn.title = on ? 'Fjern favorittmerkingen' : `Favorittmerk ${LABEL[btn.dataset.type] || 'denne'}`;
       btn.querySelector('.pin__star').textContent = on ? '★' : '☆';
-      btn.querySelector('.pin__text').textContent = on ? 'Lagret' : 'Lagre';
     }
 
-    // Studier nøkles på URL, gåter/quiz på indeks i dagsfila.
+    // Studier nøkles på URL, gåter/quiz/bøker på indeks i dagsfila.
     function savePayload(btn) {
       const { type = 'study', date, url, index } = btn.dataset;
       return type === 'study'
@@ -161,7 +160,7 @@ const { authed = false } = Astro.props;
       if (wasOn) {
         // Avpinning sletter notat og tagger — derfor angre, ikke stille sletting.
         btn.removeAttribute('data-id');
-        showToast('Fjernet fra lagrede.', async () => {
+        showToast('Favorittmerkingen er fjernet.', async () => {
           const back = await send('POST', savePayload(btn));
           if (back.ok) {
             btn.dataset.id = back.item.id;
@@ -174,7 +173,7 @@ const { authed = false } = Astro.props;
         });
       } else {
         btn.dataset.id = res.item.id;
-        showToast('Lagret. Åpne «Lagret» for å skrive et notat.');
+        showToast('Favorittmerket. Åpne «Bibliotek» for å skrive et notat.');
       }
     }
 

@@ -9,34 +9,40 @@
 //     er altså ikke lenger «husk denne i det hele tatt», men «denne er viktig for meg» —
 //     et filter over biblioteket, ikke inngangsbilletten til det.
 //
-// Gåter og quiz indekseres IKKE i sin helhet (banken er hundrevis av spørsmål og hører
-// hjemme i dagens briefing, ikke i et oppslagsverk) — de finnes her kun når de er
-// favorittmerket. Skulle det endres, er det bare å indeksere `b.riddles`/`b.quiz` under.
+// Indeksert: forskningsstudier og boktips. IKKE gåter og quiz i sin helhet (banken er
+// hundrevis av spørsmål og hører hjemme i dagens briefing, ikke i et oppslagsverk) — de
+// finnes her kun når de er favorittmerket. Skulle det endres, er det bare å indeksere
+// `b.riddles`/`b.quiz` i `buildIndex()` under.
 
 import { listDates, getBriefing, splitResearch, briefingStamp } from './briefings.js';
-import { buildId, buildSearchText, readSaved } from './saved.js';
+import { buildId, buildSearchText, escapeHtml, readSaved } from './saved.js';
 
-// 27 dagsfiler i dag, ~5 studier hver. Å parse alt per forespørsel er billig, men det
-// skjer flere ganger per sidevisning — så vi cacher til arkivet faktisk endrer seg.
+// 27 dagsfiler i dag, ~5 studier + ~2 boktips hver. Å parse alt per forespørsel er billig,
+// men det skjer flere ganger per sidevisning — så vi cacher til arkivet faktisk endrer seg.
 let cache = { stamp: null, items: [] };
 
-/** Alle studier som har vært vist, nyeste briefing først. */
-export async function libraryStudies() {
+/** Alt som har vært vist av studier og boktips, nyeste briefing først. */
+export async function libraryEntries() {
   const stamp = await briefingStamp();
   if (cache.stamp === stamp) return cache.items;
 
   const byId = new Map();
+  const add = (item) => {
+    if (byId.has(item.id)) return; // første (nyeste) visning vinner
+    item.searchText = buildSearchText(item);
+    byId.set(item.id, item);
+  };
+
   for (const date of await listDates()) {
     const b = await getBriefing(date);
-    if (!b?.research_md) continue;
+    if (!b) continue;
+
     const meta = b.research_items || [];
-    for (const st of splitResearch(b.research_md)) {
+    for (const st of b.research_md ? splitResearch(b.research_md) : []) {
       if (!st.url) continue;
-      const id = buildId('study', { url: st.url });
-      if (byId.has(id)) continue; // køen viser aldri samme DOI to ganger, men vær robust
       const m = meta.find((it) => it.url === st.url);
-      const item = {
-        id,
+      add({
+        id: buildId('study', { url: st.url }),
         type: 'study',
         date,
         url: st.url,
@@ -44,9 +50,26 @@ export async function libraryStudies() {
         category: st.category || m?.category || null,
         journal: m?.journal || null,
         snapshot: { parts: st.parts },
-      };
-      item.searchText = buildSearchText(item);
-      byId.set(id, item);
+      });
+    }
+
+    // Boktips: én bok = én oppføring. `why`-teksten er begrunnelsen Claude ga den dagen,
+    // og er det eneste søkbare innholdet — derfor er den snapshotets eneste del.
+    for (const bk of b.learning?.books || []) {
+      if (!bk?.title) continue;
+      add({
+        id: buildId('book', bk),
+        type: 'book',
+        date,
+        url: null,
+        title: bk.title,
+        author: bk.author || null,
+        category: null,
+        journal: [bk.author, bk.year].filter(Boolean).join(' · ') || null,
+        snapshot: bk.why
+          ? { parts: [{ label: 'Hvorfor', text: bk.why, html: escapeHtml(bk.why) }] }
+          : { parts: [] },
+      });
     }
   }
 
@@ -61,10 +84,10 @@ export async function libraryStudies() {
  * ingenting brukeren har merket kan bli usynlig.
  */
 export async function libraryItems() {
-  const [studies, { items: saved }] = await Promise.all([libraryStudies(), readSaved()]);
+  const [entries, { items: saved }] = await Promise.all([libraryEntries(), readSaved()]);
   const rest = new Map(saved.map((it) => [it.id, it]));
 
-  const out = studies.map((st) => {
+  const out = entries.map((st) => {
     const fav = rest.get(st.id);
     if (!fav) return { ...st, favorite: false, note: '', tags: [] };
     rest.delete(st.id);
@@ -77,22 +100,27 @@ export async function libraryItems() {
 }
 
 /**
- * Posisjonen en favorittmerket gåte/quiz har i dagsfila. Pin-knappen identifiserer dem
- * med indeks (de har ingen URL), og biblioteket bærer bare teksten — så den slås opp her.
- * Null hvis dagsfila er borte; da rendres knappen uten indeks og kan kun avmerkes.
+ * Posisjonen en gåte, et quizspørsmål eller et boktips har i dagsfila. Pin-knappen
+ * identifiserer dem med indeks (de har ingen URL), og biblioteket bærer bare teksten —
+ * så den slås opp her. Null hvis dagsfila er borte; da rendres knappen uten indeks og
+ * kan kun avmerkes.
  */
 export async function resolveIndex(item) {
   if (item.type === 'study' || !item.date) return null;
   const b = await getBriefing(item.date);
-  const src = item.type === 'riddle' ? b?.riddles : b?.quiz;
+  const src = item.type === 'riddle' ? b?.riddles
+    : item.type === 'quiz' ? b?.quiz
+    : b?.learning?.books;
   if (!Array.isArray(src)) return null;
-  const i = src.findIndex((q) => q.question === item.title);
+  const i = item.type === 'book'
+    ? src.findIndex((bk) => bk.title === item.title)
+    : src.findIndex((q) => q.question === item.title);
   return i === -1 ? null : i;
 }
 
 /** Tellinger til fanene: totalt, favoritter, og per type. */
 export function libraryCounts(items) {
-  const counts = { total: items.length, favorite: 0, study: 0, riddle: 0, quiz: 0 };
+  const counts = { total: items.length, favorite: 0, study: 0, riddle: 0, quiz: 0, book: 0 };
   for (const it of items) {
     if (it.favorite) counts.favorite += 1;
     if (counts[it.type] !== undefined) counts[it.type] += 1;

@@ -90,7 +90,7 @@ const due = canPin && isToday ? await dueItem() : null;
 {(b.learning?.podcasts?.length > 0 || b.learning?.books?.length > 0) && (
   <section class="jump-target" id="inspirasjon">
     <h2 class="section-label">Inspirasjon</h2>
-    <LearningCard learning={b.learning} />
+    <LearningCard learning={b.learning} date={b.date} canPin={canPin} saved={saved} />
   </section>
 )}
 

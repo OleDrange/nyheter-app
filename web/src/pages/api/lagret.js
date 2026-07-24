@@ -3,10 +3,10 @@
 //   DELETE { id }                                                   → fjern, returnerer
 //                                                                     oppføringen så
 //                                                                     klienten kan angre
-//   POST   { type:'riddle'|'quiz', date, index }                    → upsert (idempotent)
+//   POST   { type:'riddle'|'quiz'|'book', date, index }             → upsert (idempotent)
 //   PATCH  { id, note?, tags? }                                     → notis/tagger
 //   PATCH  { id, action:'review' }                                  → marker som repetert
-import { saveItem, removeItem, patchItem, reviewItem } from '../../lib/saved.js';
+import { saveItem, removeItem, patchItem, reviewItem, escapeHtml } from '../../lib/saved.js';
 import { isAuthed, writingEnabled } from '../../lib/auth.js';
 import { getBriefing, splitResearch } from '../../lib/briefings.js';
 
@@ -64,9 +64,27 @@ async function deriveStudy(date, url) {
  */
 async function deriveIndexed(type, date, index) {
   const b = await getBriefing(date);
-  const src = type === 'riddle' ? b?.riddles : b?.quiz;
+  const src = type === 'riddle' ? b?.riddles
+    : type === 'quiz' ? b?.quiz
+    : b?.learning?.books;
   const q = Array.isArray(src) ? src[index] : null;
   if (!q) return null;
+
+  // Boktips har tittel + forfatter i stedet for spørsmål/svar; ID-en bygges av dem.
+  if (type === 'book') {
+    return {
+      type,
+      date,
+      url: null,
+      title: q.title,
+      author: q.author || null,
+      category: null,
+      journal: [q.author, q.year].filter(Boolean).join(' · ') || null,
+      snapshot: q.why
+        ? { parts: [{ label: 'Hvorfor', text: q.why, html: escapeHtml(q.why) }] }
+        : { parts: [] },
+    };
+  }
 
   const parts = type === 'riddle'
     ? [
@@ -93,13 +111,6 @@ async function deriveIndexed(type, date, index) {
   };
 }
 
-// Innholdet kommer fra arkivet, ikke fra klienten, men det er ren tekst som skal
-// vises via `set:html` på /lagret — så det escapes her, én gang, ved lagring.
-function escapeHtml(s) {
-  return String(s || '').replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
 export async function POST({ request, cookies }) {
   const { body, error } = await guard(request, cookies);
   if (error) return error;
@@ -110,7 +121,7 @@ export async function POST({ request, cookies }) {
   if (type === 'study') {
     if (!body.date || !body.url) return json({ ok: false, error: 'Mangler dato eller URL.' }, 400);
     derived = await deriveStudy(body.date, body.url);
-  } else if (type === 'riddle' || type === 'quiz') {
+  } else if (type === 'riddle' || type === 'quiz' || type === 'book') {
     const index = Number(body.index);
     if (!body.date || !Number.isInteger(index)) {
       return json({ ok: false, error: 'Mangler dato eller indeks.' }, 400);

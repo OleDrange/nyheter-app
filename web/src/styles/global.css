@@ -1458,6 +1458,14 @@ main {
 .learn-item__src a:hover {
   color: var(--accent);
 }
+/* Tittel + favorittstjerne på samme linje; stjernen skyves ut til høyre. */
+.learn-item__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.learn-item__head .pin { flex: none; }
 .learn-item__book {
   margin: 0 0 4px;
   font-size: 0.95rem;
