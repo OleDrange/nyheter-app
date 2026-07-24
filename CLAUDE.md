@@ -290,6 +290,15 @@ with …» er det mest treffsikre signalet) og medikament-/apparat-/genetikkstud
 en RCT på trening hos slagpasienter sier lite om hva en frisk leser bør gjøre. Under `MIN_SCORE`
 forkastes helt.
 
+- **`MIN_SCORE = 1.5` og `MAX_ITEMS = 5` henger sammen med at vinduet er lite — ikke skru dem
+  opp hver for seg.** Vinduet tar inn ~2,6 nye studier i døgnet, mens viste studier blokkeres
+  i 400 dager. Konsumerer vi mer enn tilsiget, spises toppen av poolen og briefingen dør
+  stille: 23.–24. juli 2026 ga **null** studier to dager på rad — høyeste score blant 249
+  ferske kandidater var 2,9 mot daværende terskel 3,0, mens 6–12-månedersbåndet (som vinduet
+  ikke dekker) hadde toppscore 13,5. Symptomet er «0 over terskel» i alle fire kategorier
+  samtidig, med normal `hitCount`; da er det tomt vindu, ikke hentefeil. Varig fiks hvis det
+  gjentar seg: utvid `LOOKBACK_DAYS` (365 dager ga 272 kandidater over 3,0), ikke senk
+  terskelen videre.
 - **Scoringen kjører på FULLT abstract — kutt aldri før scoring.** `MAX_ABSTRACT_CHARS = 4000`
   brukes kun når prompten bygges (`build_candidates_text`). Tidligere ble abstractet kuttet til
   1200 tegn *før* scoringen, men Resultat-delen (HR/RR/CI/p, utvalgsstørrelse) står typisk etter
@@ -300,7 +309,7 @@ forkastes helt.
   bredde — briefingen grupperes etter kategori), deretter fylles opp til `CANDIDATE_POOL = 40`
   av de høyest scorede på tvers. ~23 000 input-tokens/dag ≈ 0,07 $ ≈ 0,7 kr.
 
-**3. Claude (`MAX_ITEMS = 7`)** velger og forklarer. Format per studie:
+**3. Claude (`MAX_ITEMS = 5`)** velger og forklarer. Format per studie:
 `## [tittel](url)` + **Kategori** + **Metode** / **Resultat** / **Hva det betyr for deg** /
 **Forbehold** — 3–4 setninger på de tre første. Nettsiden parser etikettene;
 `splitResearch()` løfter Kategori ut som eget `category`-felt (`normalizeCategory()` godtar både

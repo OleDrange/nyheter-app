@@ -64,7 +64,9 @@ MAX_TOKENS = 8192
 # publisert siste halvår.
 LOOKBACK_DAYS = 180
 
-MAX_ITEMS = 7              # maks studier i briefen (styres også i SYSTEM_PROMPT)
+# 5, ikke 7: vinduet tar inn ~2,6 nye studier i døgnet, så alt over det tømmer reservoaret.
+# 7/dag drenerte halvårsvinduet på tre dager (23.–24. juli 2026 ga null studier).
+MAX_ITEMS = 5              # maks studier i briefen (styres også i SYSTEM_PROMPT)
 
 # Henting: vi paginerer gjennom HELE poolen per kategori (cursorMark), ikke bare de nyeste
 # PAGE_SIZE. «Nyest først» ga oss ingenting når vinduet uansett er 180 dager — det utelukket
@@ -124,7 +126,8 @@ ANCHOR_TEXT = "Forskningsbriefinger"
 # ordet hvor som helst i artikkelen, og ett tilfeldig «exercise» i et abstract om endometriose
 # gjør studien til en «trenings»-studie. Målt: fritekst ga en pool full av kreft, cellegift og
 # antipsykotika; tittelbinding ga treff som faktisk HANDLER om temaet. Prisen er volum
-# (494 studier i et 180-dagers vindu, ~2,7 nye i døgnet) — nok når vi viser opptil 7 om dagen.
+# (473 studier i et 180-dagers vindu, ~2,6 nye i døgnet) — knapt nok når vi viser opptil 5 om
+# dagen; se MAX_ITEMS og MIN_SCORE for hvorfor tallet er stramt.
 _PMC_SUFFIX = (
     ' AND MESH:"Humans"'
     ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
@@ -180,7 +183,7 @@ SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for én beste
 
 Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt — utvelgelsen din handler derfor om RELEVANS og TYDELIGHET, ikke om å luke bort dyrestudier.
 
-Velg de OPPTIL 7 mest verdifulle. 7 er et TAK, ikke et mål — heller tre sterke enn sju der fire er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
+Velg de OPPTIL 5 mest verdifulle. 5 er et TAK, ikke et mål — heller tre sterke enn fem der to er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
 
 UTVALGSKRITERIER (prioritert rekkefølge):
 1. Handlingsrom — kan leseren faktisk gjøre noe med dette selv (trene annerledes, spise annerledes, sove annerledes)? Klinisk behandling han aldri vil ta stilling til, velges bort.
@@ -317,7 +320,11 @@ def _strip_html(text: str) -> str:
 # kapasiteten sin på å FORKLARE i stedet for å lete.
 # ─────────────────────────────────────────────────────────────────────────────
 
-MIN_SCORE = 3.0  # kandidater under dette forkastes helt — heller færre enn svake
+# Terskelen må stå i forhold til hvor mye av vinduet som allerede er konsumert. Med 180-dagers
+# vindu og 400-dagers blokkering av viste studier er toppen av poolen spist etter noen uker:
+# 24. juli 2026 var høyeste score blant 249 ferske kandidater 2,9 — under 3,0, så briefingen
+# uteble to dager på rad. 1,5 gir ~44 kandidater å velge blant i samme situasjon.
+MIN_SCORE = 1.5  # kandidater under dette forkastes helt — heller færre enn svake
 
 # Studiedesign (matches mot pubTypeList)
 _DESIGN_POINTS = [
