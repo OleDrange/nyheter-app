@@ -1,6 +1,14 @@
 # Plan: prioritert forskningskø i stedet for karantene
 
-Status: **forslag, ikke implementert.** Skrevet 24. juli 2026.
+Status: **implementert 24. juli 2026.** Se «Forskningsbriefing» i CLAUDE.md for hvordan det
+faktisk endte. Avvik fra planen under implementasjon:
+
+- `fetch_research()` ble til `refill_queue(queue, seen, today)` (skriver i kø, returnerer antall
+  innsatte) og `summarize_research_with_claude()` til `write_up_with_claude()` + `write_up_batch()`.
+- De tre åpne spørsmålene ble avgjort som planen anbefalte: batch 10, **mykt** kategoritak,
+  ingen rescoring ved gjeninnsetting.
+- `--dry-run` publiserer ikke og tømmer ikke køen (planen sa bare «hopper over Claude»), så den
+  er trygg å kjøre mot produksjonsdata.
 
 ## Bakgrunn — hvorfor
 

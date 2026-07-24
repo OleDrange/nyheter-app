@@ -256,7 +256,51 @@ Myk feil per del; feltet utelates kun hvis alt feiler.
 ### Forskningsbriefing (`research_briefing.py`)
 
 Målgruppe: **longevity** — menneskestudier med tydelige tall som leseren kan handle på selv.
-Utvalget skjer i **tre trinn** (spørring → lokal scoring → Claude), ikke hos Claude alene.
+
+**Systemet er købasert, ikke dagsbasert.** Studier vi har vurdert men ikke vist, ligger i en
+varig kø sortert synkende på score (`research_queue.json`). En kjøring er fem steg, der de tre
+midterste hoppes over når de ikke trengs:
+
+1. Last kø + `seen`.
+2. **Prun** (`_prune_queue`): fjern for gamle (`QUEUE_MAX_AGE_DAYS = 400` på publiseringsdato)
+   og alt som allerede er vist.
+3. **Påfyll** (`refill_queue`) — *kun hvis under `QUEUE_REFILL_BELOW = 60` i kø.* Spørring →
+   lokal scoring → innsetting.
+4. **Claude skriver omtaler** (`write_up_batch`) — *kun hvis under `WRITEUP_REFILL_BELOW = 10`
+   ferdigskrevne.* `WRITEUP_BATCH_SIZE = 10` per kall.
+5. **Publisér** (`pop_for_today`) — **aldri et API-kall**, ren sammensetting av lagret tekst.
+
+`--dry-run` kjører alt unntatt steg 4, og publiserer ikke. Gratis, og eneste trygge måte å
+teste hentingen på.
+
+#### Køen (`research_queue.json`) — **må persisteres**
+
+`{ version, updated, entries: [...] }`, `entries` sortert synkende på `score`. Status per
+oppføring: `scored` (venter på tekst) → `ready` (har `writeup`, abstract slettet) eller
+`rejected` (gravstein — Claude vraket den, eller refusal; blir liggende så den ikke settes inn
+igjen). Køen er sin egen dedup: en DOI som allerede står der, settes aldri inn på nytt.
+
+- **Ikke gjeninnfør karantene.** Fram til 24. juli 2026 fantes `UNPICKED_COOLDOWN_DAYS = 14`:
+  studier sendt til Claude uten å bli valgt ble blokkert i 14 dager. Den fantes bare fordi
+  Claudes vurdering ikke ble lagret. Med 40 kandidater/dag × 14 dager låste den ute opptil ~475
+  studier samtidig — mer enn hele vinduet (473) — og systematisk de **høyest scorede**, siden
+  poolen alltid var toppen av scoringen. Målt: 199 av 473 i karantene, 160 av dem over terskel
+  (toppscore 12,6), mens de ferske toppet på 2,9. Forskningsbriefingen uteble 23. og 24. juli.
+- **Claude velger ikke lenger, den skriver.** Den lokale scoringen bestemmer både hva som
+  kommer i kø og rekkefølgen. Claude får kun studiene den skal skrive om — input falt fra
+  ~23 000 tokens (40 kandidater, 35 kastet) til ~6 000 per kall, og hver studie koster tokens
+  nøyaktig én gang, noensinne. Kvalitetskontrollen beholdes ved at Claude kan vrake en studie
+  med `## SKIP [n] — begrunnelse`; den settes da til `rejected`.
+- **Omtalene lagres per studie i Claudes vanlige format** (`## [tittel](url)` + etikettene), og
+  settes sammen med `_STUDY_SEPARATOR` ved publisering. Det er derfor lagret tekst er trygt:
+  `splitResearch()` splitter på nettopp den overskriften, så en omtale skrevet for tre dager
+  siden parses identisk med en skrevet i dag. **Endrer du FORMAT-delen av `SYSTEM_PROMPT`,
+  blir køens eksisterende omtaler stående i det gamle formatet** — begge må da parses.
+- **Blokker mappes på URL, ikke rekkefølge** (`_parse_writeups`). Kan et svar ikke knyttes til
+  noen studie, lagres **ingenting** — feil tekst under riktig tittel er verre enn en tapt dag.
+- Hopper Claude stille over en studie `WRITEUP_MAX_PASSES = 2` ganger, settes den `rejected`.
+- **Uttak** (`pop_for_today`): `MAX_ITEMS = 5` per dag, `MAX_PER_CATEGORY = 2` som **mykt** tak
+  — har køen ikke nok kategorier, fylles dagen opp likevel. En skjev dag er bedre enn en tom.
 
 **1. Europe PMC-spørring — her håndheves kvalitetskravene.** `search`-REST (ingen nøkkel),
 `resultType=core` (fulle abstracts). `_PMC_SUFFIX` krever `SRC:MED` (fagfellevurdert),
@@ -290,42 +334,39 @@ with …» er det mest treffsikre signalet) og medikament-/apparat-/genetikkstud
 en RCT på trening hos slagpasienter sier lite om hva en frisk leser bør gjøre. Under `MIN_SCORE`
 forkastes helt.
 
-- **`MIN_SCORE = 1.5` og `MAX_ITEMS = 5` henger sammen med at vinduet er lite — ikke skru dem
-  opp hver for seg.** Vinduet tar inn ~2,6 nye studier i døgnet, mens viste studier blokkeres
-  i 400 dager. Konsumerer vi mer enn tilsiget, spises toppen av poolen og briefingen dør
-  stille: 23.–24. juli 2026 ga **null** studier to dager på rad — høyeste score blant 249
-  ferske kandidater var 2,9 mot daværende terskel 3,0, mens 6–12-månedersbåndet (som vinduet
-  ikke dekker) hadde toppscore 13,5. Symptomet er «0 over terskel» i alle fire kategorier
-  samtidig, med normal `hitCount`; da er det tomt vindu, ikke hentefeil. Varig fiks hvis det
-  gjentar seg: utvid `LOOKBACK_DAYS` (365 dager ga 272 kandidater over 3,0), ikke senk
-  terskelen videre.
+- **`MIN_SCORE = 3.0` — studier under terskelen settes aldri i kø.** Køen skal ikke fylles av
+  materiale som må siles ut igjen ved hvert uttak.
+- **Tilsiget er den harde grensen, og køen skjuler den ikke — den gjør den synlig.** Vinduet
+  tar inn ~2,6 nye studier i døgnet mens vi viser inntil 5, så køen tømmes over tid uansett;
+  forskjellen fra før er at det da blir *færre studier per dag*, ikke null. Symptomet å se
+  etter er at «ferdigskrevne igjen i kø» faller mot 0 flere dager på rad. Riktig fiks er å
+  utvide `LOOKBACK_DAYS` (365 dager ga 272 kandidater over 3,0 ved måling) eller senke
+  `MAX_ITEMS` — **ikke** å senke terskelen.
 - **Scoringen kjører på FULLT abstract — kutt aldri før scoring.** `MAX_ABSTRACT_CHARS = 4000`
   brukes kun når prompten bygges (`build_candidates_text`). Tidligere ble abstractet kuttet til
   1200 tegn *før* scoringen, men Resultat-delen (HR/RR/CI/p, utvalgsstørrelse) står typisk etter
   1200 tegn og 97 % av abstractene er lengre. Det fjernet nøyaktig de signalene scoringen gir
   poeng for: 20. juli 2026 falt 52 kvalifiserte kandidater til **0**, og forskningsbriefingen
   uteble helt. Besparelsen var ~1,5 øre/dag.
-- **Utvalg i to trinn:** `CANDIDATE_FLOOR_PER_CATEGORY = 4` garantert per kategori (bevarer
-  bredde — briefingen grupperes etter kategori), deretter fylles opp til `CANDIDATE_POOL = 40`
-  av de høyest scorede på tvers. ~23 000 input-tokens/dag ≈ 0,07 $ ≈ 0,7 kr.
 
-**3. Claude (`MAX_ITEMS = 5`)** velger og forklarer. Format per studie:
+**3. Claude skriver omtalene.** Format per studie:
 `## [tittel](url)` + **Kategori** + **Metode** / **Resultat** / **Hva det betyr for deg** /
 **Forbehold** — 3–4 setninger på de tre første. Nettsiden parser etikettene;
 `splitResearch()` løfter Kategori ut som eget `category`-felt (`normalizeCategory()` godtar både
 visningsnavn og slug). Heller færre enn svake.
 
 - `research_items` i JSON-en har også `category` (kandidatens kilde-kategori).
-- **Dedup — tre nivåer** i `research_seen_dois.json` (`{doi: {last, picked, refused}}`;
-  gammelt format = ren datostreng leses som `picked: true`). Valgt av Claude → blokkert
+- **Dedup — to nivåer, begge varige,** i `research_seen_dois.json`
+  (`{doi: {last, picked, refused}}`; gammelt format = ren datostreng leses som `picked: true`).
+  Vist i en briefing → blokkert
   `SEEN_RETENTION_DAYS = 400` dager (leseren skal **aldri** se samme studie to ganger).
   **Avvist av sikkerhetsklassifikatoren** (refusal) → `refused: true`, blokkert like lenge
-  som picked — en refusal er deterministisk, og uten flagget kom samme abstract tilbake
-  etter karantenen og betalte en ny bisect-runde med prober; refused-DOI-er lagres **også
-  når kjøringen gir opp helt** (før exit). Sendt, men ikke valgt → karantene
-  `UNPICKED_COOLDOWN_DAYS = 14` dager, så den ikke brenner input-tokens hver dag,
-  men får komme tilbake (poolen er liten). Uten dette ville et bredt vindu servert de
-  samme toppkandidatene daglig. Ligger i `BRIEFING_DATA_DIR` — **må persisteres** (volumet).
+  som picked — en refusal er deterministisk, og uten flagget kom samme abstract tilbake og
+  betalte en ny bisect-runde med prober; refused-DOI-er lagres **også når kjøringen gir opp
+  helt** (før exit). Studier vi har vurdert men ikke vist, står i **køen**, ikke her.
+  Ligger i `BRIEFING_DATA_DIR` — **må persisteres** (volumet).
+  Oppføringer som verken er `picked` eller `refused` blokkerer ingenting: det er restene av
+  den gamle karantenen, og de døde ut av seg selv da `_is_blocked()` ble forenklet.
 - **Legacy:** kategorien `medisin` produseres ikke lenger, men finnes i arkiverte briefinger —
   derfor ligger den fortsatt sist i `RESEARCH_CATEGORIES` (`web/src/lib/briefings.js`) og i
   `CATEGORY_LABELS`. Tomme grupper skjules av `ResearchList.astro`.
@@ -518,8 +559,10 @@ Se `PLAN-LAGREDE-STUDIER.md` for planen.
   `saved-data` (kun web, rw). Backup-kommandoen må dekke **begge** — lagrede studier kan
   ikke regenereres.
 - **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
-  `quiz_seen.json`, `riddles_seen.json` og `learning_seen.json` MÅ ligge i `/data`
-  (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup.
+  `research_queue.json`, `quiz_seen.json`, `riddles_seen.json` og `learning_seen.json` MÅ ligge
+  i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup. Mister du
+  `research_queue.json`, bygges den opp igjen ved neste kjøring — men de ferdigskrevne
+  Claude-omtalene i den er betalt for og må skrives på nytt.
 - **Tidssone:** cron-tidspunkt = verts-TZ (`CRON_TZ` virker ikke på Debian); innholdets
   dato/værvinduer = container-TZ. Begge skal være `Europe/Oslo`.
 - **`docker-entrypoint.sh` må ha LF** (sikret av `.gitattributes`).

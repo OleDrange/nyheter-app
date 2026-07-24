@@ -50,7 +50,7 @@ from news_briefing import (
 # ─────────────────────────────────────────────────────────────────────────────
 
 MODEL = "claude-sonnet-4-6"
-MAX_TOKENS = 8192
+MAX_TOKENS = 16000  # 10 studieomtaler i ett svar (~700 tokens hver + overhead)
 
 # Vindu på publiseringsdato. Forskning har ingen nyhetssyklus — en metaanalyse fra april er
 # like relevant som en fra i går — så vi jakter ikke på det ferskeste, men på det BESTE vi
@@ -66,7 +66,13 @@ LOOKBACK_DAYS = 180
 
 # 5, ikke 7: vinduet tar inn ~2,6 nye studier i døgnet, så alt over det tømmer reservoaret.
 # 7/dag drenerte halvårsvinduet på tre dager (23.–24. juli 2026 ga null studier).
-MAX_ITEMS = 5              # maks studier i briefen (styres også i SYSTEM_PROMPT)
+MAX_ITEMS = 5              # maks studier i briefen (tas fra køen, ikke valgt av Claude)
+
+# Maks studier fra samme kategori i én dagsbriefing. Køen er sortert på score alene, så uten
+# taket kan fem kosthold-studier havne på samme dag og nettsiden vise én eneste gruppe.
+# Taket er MYKT: har køen ikke nok kategorier, fylles dagen opp likevel — en skjev dag er
+# bedre enn en tom.
+MAX_PER_CATEGORY = 2
 
 # Henting: vi paginerer gjennom HELE poolen per kategori (cursorMark), ikke bare de nyeste
 # PAGE_SIZE. «Nyest først» ga oss ingenting når vinduet uansett er 180 dager — det utelukket
@@ -75,11 +81,28 @@ MAX_ITEMS = 5              # maks studier i briefen (styres også i SYSTEM_PROMP
 PAGE_SIZE = 100
 MAX_FETCH_PER_CATEGORY = 600
 
-# Kandidater til Claude. Først en garantert kvote per kategori (bevarer bredde — briefingen
-# grupperes etter kategori), deretter fylles resten opp av de beste på tvers av kategoriene.
-# 40 kandidater med fullt abstract ≈ 23 000 input-tokens ≈ 0,75 kr/dag.
-CANDIDATE_FLOOR_PER_CATEGORY = 4
-CANDIDATE_POOL = 40
+# ── Køen (research_queue.json) ──────────────────────────────────────────────
+# Studier vi har vurdert lokalt, men ennå ikke vist, ligger i en VARIG kø sortert synkende på
+# score. Nye studier settes inn på plassen scoren tilsier. Køen er ubegrenset i lengde.
+#
+# Dette erstatter den gamle karantenen (UNPICKED_COOLDOWN_DAYS = 14). Den fantes fordi vi tok
+# hele beslutningen på nytt hver dag og kastet Claudes vurdering av alt vi ikke viste — eneste
+# måte å slippe å betale for de samme studiene i morgen var å nekte å se på dem. Lappen spiste
+# sitt eget grunnlag: 40 kandidater/dag × 14 dager = opptil ~475 studier låst ute samtidig,
+# mer enn hele 180-dagersvinduet (473), og systematisk de HØYEST scorede. Målt 24. juli 2026:
+# 199 av 473 satt i karantene, 160 av dem over terskel (toppscore 12,6), mens de ferske toppet
+# på 2,9 — forskningsbriefingen uteble to dager på rad.
+QUEUE_FILE = "research_queue.json"
+QUEUE_REFILL_BELOW = 60    # under så mange «scored» i kø: hent nytt fra Europe PMC
+QUEUE_MAX_AGE_DAYS = 400   # prun oppføringer eldre enn dette (på studiens publiseringsdato)
+
+# Claude skriver omtaler i BATCH, ikke én dagsbriefing om gangen. Utvelgelsen gjøres av den
+# lokale scoringen, så Claude får kun de studiene den faktisk skal skrive om — input falt fra
+# ~23 000 tokens (40 kandidater å velge blant, 35 av dem kastet) til ~6 000. Teksten lagres per
+# studie i køen, så hver studie koster tokens nøyaktig én gang, noensinne.
+WRITEUP_REFILL_BELOW = 10  # under så mange «ready» i kø: kall Claude
+WRITEUP_BATCH_SIZE = 10    # antall omtaler per Claude-kall (MAX_TOKENS må følge med)
+WRITEUP_MAX_PASSES = 2     # hopper Claude over samme studie så mange ganger → rejected
 
 # Abstractet kuttes KUN i prompten til Claude, aldri før scoringen. Resultatdelen — der
 # HR/RR/CI/p og utvalgsstørrelse står — ligger typisk etter 1200 tegn, og 97 % av abstractene
@@ -98,17 +121,14 @@ CLAUDE_RETRY_DELAY = 5     # sekunder mellom forsøk
 CLAUDE_REFUSAL_MAX_ROUNDS = 4   # maks antall isoler-og-fjern-runder før vi gir opp
 CLAUDE_PROBE_MAX_TOKENS = 16    # små kall kun for å avgjøre refusal (ja/nei)
 
-# Dedup mot gjentakelser på tvers av dager. Tre nivåer, fordi et 180-dagers vindu ellers ville
-# servert de samme toppkandidatene dag etter dag:
-#   • valgt av Claude (picked)      → aldri vist igjen (SEEN_RETENTION_DAYS)
+# Dedup mot gjentakelser på tvers av dager. TO nivåer — begge varige:
+#   • vist i en briefing (picked)   → aldri vist igjen (SEEN_RETENTION_DAYS)
 #   • avvist av sikkerhetsklassifikatoren (refused) → blokkert like lenge som picked. En
-#     refusal er deterministisk, så å sende abstractet igjen etter karantenen ville bare
-#     utløst en ny (dyr) isoler-og-fjern-runde. Lagres OGSÅ når kjøringen gir opp helt.
-#   • sendt, men ikke valgt         → karantene (UNPICKED_COOLDOWN_DAYS), så den ikke brenner
-#                                     input-tokens hver dag, men kan komme tilbake senere
+#     refusal er deterministisk, så å sende abstractet inn igjen ville bare utløst en ny
+#     (dyr) isoler-og-fjern-runde. Lagres OGSÅ når kjøringen gir opp helt.
+# Studier vi har vurdert men ikke vist, ligger i KØEN (se QUEUE_FILE) — ikke i en sperreliste.
 SEEN_FILE = "research_seen_dois.json"
 SEEN_RETENTION_DAYS = 400
-UNPICKED_COOLDOWN_DAYS = 14  # kort: poolen er liten (~500), gode studier skal få komme igjen
 
 # Egen Notion-seksjon (adskilt fra nyhetsbriefens "Arkiv" / "Nyhetsbriefinger")
 ARCHIVE_TITLE = "Forskning Arkiv"
@@ -181,18 +201,19 @@ _HEADERS = {"User-Agent": "research-briefing/1.0 (personal script)"}
 
 SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for én bestemt leser: en oppegående lekperson som er opptatt av LONGEVITY — å leve lenge og friskt — og som vil vite hva han selv kan gjøre. Han bryr seg om trening, kosthold, søvn og stress, og han vil ha studier med tydelige tall han kan stole på.
 
-Du får en liste med kandidatstudier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt — utvelgelsen din handler derfor om RELEVANS og TYDELIGHET, ikke om å luke bort dyrestudier.
+Du får en liste med studier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt, og alle er forhåndsrangert som relevante.
 
-Velg de OPPTIL 5 mest verdifulle. 5 er et TAK, ikke et mål — heller tre sterke enn fem der to er tynne. Hvis ingen er gode nok, skriv kun: "Ingen vesentlige nye studier i dag."
+Skriv en omtale av HVER studie i listen, i den rekkefølgen de står. Du skal ikke velge mellom dem — utvalget er gjort.
 
-UTVALGSKRITERIER (prioritert rekkefølge):
-1. Handlingsrom — kan leseren faktisk gjøre noe med dette selv (trene annerledes, spise annerledes, sove annerledes)? Klinisk behandling han aldri vil ta stilling til, velges bort.
-2. Tydelige tall — studien må rapportere konkrete effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer). Studier som kun sier "signifikant bedring" uten tall, velges bort.
-3. Betydning for lang og frisk levetid — harde utfall (dødelighet, hjerte-kar, diabetes, muskelmasse, kognisjon, søvnkvalitet) foran surrogatmål.
-4. Robusthet — store metaanalyser og RCT-er med mange deltakere foran små studier.
-5. Variasjon — unngå flere studier om nesten det samme. Spre gjerne over kategoriene, men aldri på bekostning av kvalitet.
+VRAKING: er en studie likevel ubrukelig for denne leseren, skal du IKKE skrive en omtale av den. Skriv i stedet nøyaktig denne linjen, på egen linje:
+## SKIP [n] — kort begrunnelse
+der [n] er studiens nummer i listen. Vrak kun når ett av disse er oppfylt:
+1. Ingen konkrete tall — sammendraget sier bare "signifikant bedring" uten effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer).
+2. Ingen handlingsrom — dette er klinisk behandling leseren aldri selv vil ta stilling til.
+3. Studien er så svak eller så smal at et råd bygget på den ville villede.
+Vraking skal være unntaket. Er du i tvil, skriv omtalen.
 
-FORMAT — for hver valgte studie, nøyaktig denne strukturen:
+FORMAT — for hver studie du skriver om, nøyaktig denne strukturen:
 ## [Norsk tittel som bærer hovedfunnet](URL)
 **Kategori:** Longevity | Trening | Kosthold | Søvn og stress (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
 **Metode:** Hva slags studie er dette (RCT, metaanalyse av N studier, systematisk oversikt), hvor mange deltakere, hvem var de (alder, kjønn, helsetilstand), hvor lenge varte det, og hva gikk intervensjonen eller eksponeringen konkret ut på? Forklar designet slik at leseren skjønner hvorfor det gir grunn til å tro på resultatet. 3–4 setninger.
@@ -208,6 +229,10 @@ REGLER:
 - Vær konkret og tallbasert. Ingen fyllord ("det er verdt å merke seg", "i tillegg", "interessant nok").
 - Ikke overdriv funn utover det sammendraget støtter. Ikke dikt opp tall som ikke står i sammendraget.
 - Ingen innledning eller oppsummering — start rett på første ## studie."""
+
+# Skillet mellom studier i den lagrede markdownen. Claude produserer det selv i dag; når vi
+# setter sammen en briefing av lagrede omtaler, føyer vi det inn mellom blokkene.
+_STUDY_SEPARATOR = "\n\n---\n\n"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -247,36 +272,36 @@ def _load_seen() -> dict:
 
 
 def _is_blocked(seen: dict, doi: str, today: date | None = None) -> bool:
-    """Skal denne DOI-en holdes utenfor dagens kandidatpool?
+    """Skal denne DOI-en holdes utenfor køen?
 
-    Valgt tidligere → blokkert helt ut SEEN_RETENTION_DAYS (leseren skal aldri se samme
-    studie to ganger). Avvist av sikkerhetsklassifikatoren → blokkert like lenge (en
-    refusal er deterministisk; å prøve igjen koster bare en ny bisect-runde). Sendt til
-    Claude uten å bli valgt → blokkert i UNPICKED_COOLDOWN_DAYS, så den slutter å brenne
-    input-tokens hver dag, men kan komme tilbake senere."""
+    Kun to grunner, begge varige: studien er allerede VIST leseren (picked — han skal aldri
+    se den to ganger), eller den ble avvist av sikkerhetsklassifikatoren (refused — en
+    refusal er deterministisk, så nytt forsøk koster bare en ny bisect-runde).
+
+    Merk at oppføringer som verken er picked eller refused ikke blokkerer i det hele tatt.
+    Det er de gamle karanteneoppføringene fra UNPICKED_COOLDOWN_DAYS-tiden; de slutter å
+    blokkere av seg selv, uten migreringsskript."""
     entry = seen.get(doi)
     if not entry:
         return False
-    long_block = entry["picked"] or entry.get("refused")
-    days = SEEN_RETENTION_DAYS if long_block else UNPICKED_COOLDOWN_DAYS
-    cutoff = ((today or datetime.now().date()) - timedelta(days=days)).isoformat()
+    if not (entry["picked"] or entry.get("refused")):
+        return False
+    cutoff = ((today or datetime.now().date()) - timedelta(days=SEEN_RETENTION_DAYS)).isoformat()
     return entry["last"] >= cutoff
 
 
 def _save_seen(
     seen: dict,
-    sent_dois: list[str],
     picked_dois: list[str],
     refused_dois: list[str] | None = None,
 ) -> None:
-    """Merk dagens kandidater som sett. `sent_dois` er alle som ble sendt til Claude,
-    `picked_dois` de som faktisk havnet i briefingen, `refused_dois` de som ble fjernet
-    fordi de trigget sikkerhetsklassifikatoren. picked/refused er klebrige — en DOI som
-    først var sendt-og-forkastet og senere blir valgt (eller avvist), oppgraderes."""
+    """Merk studier som varig blokkert. `picked_dois` er de som ble VIST i en briefing,
+    `refused_dois` de som trigget sikkerhetsklassifikatoren. Begge flaggene er klebrige —
+    en DOI som først ble avvist og senere vises (eller omvendt), beholder begge."""
     today = datetime.now().date().isoformat()
     picked = set(picked_dois)
     refused = set(refused_dois or [])
-    for doi in sent_dois:
+    for doi in picked | refused:
         if not doi:
             continue
         prev = seen.get(doi, {})
@@ -287,15 +312,137 @@ def _save_seen(
         }
 
     # Prun oppføringer som ikke lenger kan blokkere noe (ISO-datoer sammenlignes som tekst).
-    keep_from = (
-        datetime.now().date() - timedelta(days=max(SEEN_RETENTION_DAYS, UNPICKED_COOLDOWN_DAYS))
-    ).isoformat()
+    keep_from = (datetime.now().date() - timedelta(days=SEEN_RETENTION_DAYS)).isoformat()
     seen = {doi: e for doi, e in seen.items() if e["last"] >= keep_from}
     try:
         with open(_seen_path(), "w", encoding="utf-8") as f:
             json.dump(seen, f, ensure_ascii=False, indent=2)
     except OSError as exc:
         print(f"  ⚠  Kunne ikke skrive {SEEN_FILE}: {exc}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Køen (research_queue.json)
+#
+# Én varig liste, sortert synkende på score, ubegrenset i lengde. Hver oppføring har en
+# status:
+#   • "scored"   — vurdert lokalt, venter på at Claude skal skrive omtalen
+#   • "ready"    — har ferdig `writeup`, klar til publisering (abstract er slettet)
+#   • "rejected" — Claude vraket den, eller den trigget sikkerhetsklassifikatoren.
+#                  Blir liggende som gravstein så den ikke settes inn igjen ved neste henting.
+#
+# Køen er sin egen dedup: en DOI som allerede står der, settes aldri inn på nytt.
+# MÅ persisteres — ligger i BRIEFING_DATA_DIR (volumet), sammen med research_seen_dois.json.
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def _queue_path() -> str:
+    base = os.environ.get("BRIEFING_DATA_DIR") or os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base, QUEUE_FILE)
+
+
+def _load_queue() -> list[dict]:
+    """Les køen. Manglende eller korrupt fil → tom kø (systemet bygger seg opp igjen ved
+    neste henting; det eneste som går tapt er Claude-tekster vi allerede har betalt for)."""
+    try:
+        with open(_queue_path(), encoding="utf-8") as f:
+            raw = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+    entries = (raw or {}).get("entries") or []
+    return [e for e in entries if isinstance(e, dict) and e.get("doi")]
+
+
+def _save_queue(queue: list[dict]) -> None:
+    """Skriv køen sortert synkende på score. Atomisk (.tmp + os.replace), som
+    store_briefing() — en halvskrevet kø ville kostet både tekster og rekkefølge."""
+    queue.sort(key=lambda e: e.get("score", 0.0), reverse=True)
+    payload = {
+        "version": 1,
+        "updated": datetime.now().date().isoformat(),
+        "entries": queue,
+    }
+    path = _queue_path()
+    tmp = path + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+    except OSError as exc:
+        print(f"  ⚠  Kunne ikke skrive {QUEUE_FILE}: {exc}")
+
+
+def _queue_counts(queue: list[dict]) -> dict[str, int]:
+    counts = {"scored": 0, "ready": 0, "rejected": 0}
+    for e in queue:
+        counts[e.get("status", "scored")] = counts.get(e.get("status", "scored"), 0) + 1
+    return counts
+
+
+def _prune_queue(queue: list[dict], seen: dict, today: date) -> list[dict]:
+    """Fjern oppføringer som ikke lenger hører hjemme i køen.
+
+    To grunner: studien er for gammel (QUEUE_MAX_AGE_DAYS på publiseringsdato — en studie skal
+    ikke ligge og eldes i køen i det uendelige), eller den er allerede vist leseren. Det siste
+    er et sikkerhetsnett: køen og seen skal ikke kunne komme i utakt og gi dobbeltvisning."""
+    cutoff = (today - timedelta(days=QUEUE_MAX_AGE_DAYS)).isoformat()
+    kept, dropped_old, dropped_seen = [], 0, 0
+    for e in queue:
+        pub = (e.get("date") or "")[:10]
+        if pub and pub < cutoff:
+            dropped_old += 1
+            continue
+        if e.get("doi") and _is_blocked(seen, e["doi"], today):
+            dropped_seen += 1
+            continue
+        kept.append(e)
+    if dropped_old or dropped_seen:
+        print(f"  ⓘ  prunet kø: {dropped_old} for gamle, {dropped_seen} allerede vist")
+    return kept
+
+
+def _insert_scored(queue: list[dict], article: dict, score: float, why: str) -> bool:
+    """Sett en nyscoret studie inn i køen. Returnerer False hvis DOI-en allerede står der.
+
+    Sorteringen gjøres i _save_queue(), så plasseringen «etter hvor god studien er» faller
+    ut av seg selv — listen er noen hundre lang, så en full sortering er gratis."""
+    doi = article.get("doi") or ""
+    key = doi or article.get("url") or article.get("title")
+    for e in queue:
+        if (e.get("doi") or e.get("url") or e.get("title")) == key:
+            return False
+    queue.append({
+        "doi": doi,
+        "url": article["url"],
+        "title": article["title"],
+        "journal": article["journal"],
+        "date": article["date"],
+        "category": article["category"],
+        "pub_types": article.get("pub_types") or [],
+        "abstract": article["abstract"],
+        "score": round(score, 2),
+        "score_why": why,
+        "queued_at": datetime.now().date().isoformat(),
+        "status": "scored",
+        "passes": 0,
+        "writeup": None,
+        "writeup_at": None,
+    })
+    return True
+
+
+def _entry_to_article(entry: dict) -> dict:
+    """Køoppføring → artikkel-dict slik resten av koden (prompt, refusal-bisect) forventer."""
+    return {
+        "category": entry.get("category"),
+        "title": entry.get("title", ""),
+        "abstract": entry.get("abstract") or "",
+        "journal": entry.get("journal", "—"),
+        "date": entry.get("date", "—"),
+        "doi": entry.get("doi", ""),
+        "url": entry.get("url", ""),
+        "pub_types": entry.get("pub_types") or [],
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -315,16 +462,15 @@ def _strip_html(text: str) -> str:
 #
 # Europe PMC-spørringen garanterer allerede menneskestudie + RCT/metaanalyse/oversikt.
 # Scoringen rangerer det som er igjen etter det leseren faktisk er ute etter: tydelige tall,
-# harde utfall, og noe han kan gjøre selv. Kun topp CANDIDATE_POOL totalt sendes til
-# Claude — det kutter input fra ~32 000 til ~9 000 tokens/dag og gjør at Claude bruker
-# kapasiteten sin på å FORKLARE i stedet for å lete.
+# harde utfall, og noe han kan gjøre selv. Scoringen bestemmer BÅDE hva som kommer i kø og
+# rekkefølgen i den — Claude velger ikke lenger, den skriver. Det er derfor input falt fra
+# ~23 000 tokens (40 kandidater å velge blant, 35 av dem kastet) til ~6 000 per kall.
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Terskelen må stå i forhold til hvor mye av vinduet som allerede er konsumert. Med 180-dagers
-# vindu og 400-dagers blokkering av viste studier er toppen av poolen spist etter noen uker:
-# 24. juli 2026 var høyeste score blant 249 ferske kandidater 2,9 — under 3,0, så briefingen
-# uteble to dager på rad. 1,5 gir ~44 kandidater å velge blant i samme situasjon.
-MIN_SCORE = 1.5  # kandidater under dette forkastes helt — heller færre enn svake
+# Terskelen var midlertidig senket til 1,5 mens karantenen låste ute de gode studiene. Med
+# køen fanges de opp i stedet for å blokkeres, så kvalitetskravet kan stå: studier under
+# terskelen settes aldri i kø — heller færre enn svake.
+MIN_SCORE = 3.0
 
 # Studiedesign (matches mot pubTypeList)
 _DESIGN_POINTS = [
@@ -500,28 +646,27 @@ def _fetch_all_pages(query: str) -> list[dict]:
     return out
 
 
-def fetch_research() -> list[dict]:
-    """Hent og rangér kandidatstudier per kategori.
+def refill_queue(queue: list[dict], seen: dict, today: date) -> int:
+    """Hent nye studier fra Europe PMC og sett dem inn i køen. Returnerer antall innsatte.
 
     Per kategori: paginer gjennom HELE poolen som matcher de harde filtrene, fjern det
-    leseren allerede har sett (og det som ligger i karantene), og score lokalt på fullt
-    abstract. Duplikater på tvers av kategoriene beholdes kun én gang — første kategori
-    vinner.
+    leseren allerede har sett, og score lokalt på fullt abstract. Alt som når MIN_SCORE
+    settes inn i køen på plassen scoren tilsier — det er ingen dagskvote lenger, for køen
+    er ikke et dagsutvalg. Kategoribalansen ivaretas ved UTTAK (_pop_for_today), som er
+    riktig sted: der vet vi hva som faktisk skal vises.
 
-    Utvalget skjer så i to trinn, for å balansere bredde mot kvalitet: hver kategori får en
-    garantert kvote (CANDIDATE_FLOOR_PER_CATEGORY), og resten av plassene opp til
-    CANDIDATE_POOL fylles av de høyest scorede på tvers av kategoriene."""
+    Duplikater beholdes kun én gang — både på tvers av kategorispørringene og mot det som
+    allerede står i køen."""
     import time as _time
 
-    today = datetime.now().date()
     start = today - timedelta(days=LOOKBACK_DAYS)
     date_filter = f" AND (FIRST_PDATE:[{start.isoformat()} TO {today.isoformat()}])"
 
-    seen = _load_seen()
-    by_category: dict[str, list[tuple[float, str, dict]]] = {}
-    picked_ids: set[str] = set()
+    seen_ids: set[str] = set()
     skipped_seen = 0
     skipped_weak = 0
+    skipped_dupe = 0
+    inserted = 0
 
     for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES.items()):
         if ci:
@@ -532,7 +677,7 @@ def fetch_research() -> list[dict]:
             print(f"  ✗  Europe PMC ({category}): feil ved henting — {exc}")
             continue
 
-        scored: list[tuple[float, str, dict]] = []
+        cat_inserted = 0
         for r in results:
             title = (r.get("title") or "").strip().rstrip(".")
             abstract = _strip_html(r.get("abstractText", ""))
@@ -547,9 +692,9 @@ def fetch_research() -> list[dict]:
             src = r.get("source", "")
             pid = r.get("id", "")
             uid = doi or f"{src}/{pid}"
-            if uid in picked_ids:
+            if uid in seen_ids:
                 continue  # samme studie traff en tidligere kategorispørring
-            picked_ids.add(uid)
+            seen_ids.add(uid)
 
             journal = (
                 (r.get("journalInfo") or {}).get("journal", {}).get("title")
@@ -579,33 +724,21 @@ def fetch_research() -> list[dict]:
             if score < MIN_SCORE:
                 skipped_weak += 1
                 continue
-            scored.append((score, why, article))
+            if _insert_scored(queue, article, score, why):
+                cat_inserted += 1
+            else:
+                skipped_dupe += 1
 
-        scored.sort(key=lambda t: t[0], reverse=True)
-        by_category[category] = scored
-        print(f"  ✓  {category}: {len(scored)} over terskel (av {len(results)} hentet)")
+        inserted += cat_inserted
+        print(f"  ✓  {category}: {cat_inserted} nye i kø (av {len(results)} hentet)")
 
     if skipped_seen:
-        print(f"  ({skipped_seen} allerede vist eller i karantene — hoppet over)")
+        print(f"  ({skipped_seen} allerede vist tidligere — hoppet over)")
+    if skipped_dupe:
+        print(f"  ({skipped_dupe} sto allerede i køen)")
     if skipped_weak:
         print(f"  ({skipped_weak} forkastet av lokal scoring — under terskel {MIN_SCORE})")
-
-    # Trinn 1: garantert kvote per kategori (bevarer bredde).
-    chosen: list[tuple[float, str, dict]] = []
-    for category, scored in by_category.items():
-        chosen.extend(scored[:CANDIDATE_FLOOR_PER_CATEGORY])
-
-    # Trinn 2: fyll opp med de beste på tvers av kategoriene.
-    taken = {id(t) for t in chosen}
-    rest = [t for scored in by_category.values() for t in scored if id(t) not in taken]
-    rest.sort(key=lambda t: t[0], reverse=True)
-    chosen.extend(rest[: max(0, CANDIDATE_POOL - len(chosen))])
-    chosen.sort(key=lambda t: t[0], reverse=True)
-
-    for score, why, article in chosen:
-        print(f"    {score:5.1f}  [{article['category']}] {article['title'][:66]}")
-        print(f"           ({why})")
-    return [article for _, _, article in chosen]
+    return inserted
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -631,9 +764,9 @@ def _build_user_content(articles: list[dict]) -> str:
     today_str = datetime.now().strftime("%A %d. %B %Y")
     return (
         f"Dato: {today_str}\n\n"
-        f"{len(articles)} kandidatstudier, forhåndsfiltrert til menneskestudier "
-        f"(RCT / metaanalyse / systematisk oversikt) fra de siste {LOOKBACK_DAYS} dagene. "
-        f"Velg opptil {MAX_ITEMS} av dem:\n\n"
+        f"{len(articles)} studier, forhåndsfiltrert til menneskestudier "
+        f"(RCT / metaanalyse / systematisk oversikt) fra de siste {LOOKBACK_DAYS} dagene og "
+        f"rangert lokalt på relevans. Skriv en omtale av hver av dem:\n\n"
         f"{build_candidates_text(articles)}"
     )
 
@@ -708,16 +841,55 @@ def _find_refusing_articles(
     return bisect(articles)
 
 
-def summarize_research_with_claude(articles: list[dict]) -> tuple[str, list[str]]:
-    """Returnerer (briefing, refused_dois). `refused_dois` er DOI-ene til abstracts som
-    ble fjernet fordi de trigget sikkerhetsklassifikatoren — kalleren skal persistere dem
-    (refused-flagget) uansett om briefingen lyktes, så de aldri sendes inn igjen."""
+_SKIP_RE = re.compile(r"^##\s*SKIP\b\s*\[?(\d+)\]?", re.IGNORECASE)
+
+
+def _parse_writeups(text: str, articles: list[dict]) -> tuple[dict[str, str], set[str]]:
+    """Del Claudes svar i én blokk per studie. Returnerer ({url: omtale}, {url som ble vraket}).
+
+    Blokkene mappes på URL, ikke på rekkefølge: prompten krever at URL-en gjengis uendret, og
+    en feilmapping ville gitt leseren feil lenke under riktig tittel. Blokker som ikke kan
+    knyttes til en studie, forkastes stille — vi lagrer aldri tekst vi ikke vet hva er.
+
+    Formatet er identisk med det Claude produserer i dag (`## [tittel](url)` + de merkede
+    avsnittene), fordi nettsidens splitResearch() parser nettopp den overskriften. Derfor kan
+    en omtale skrevet for tre dager siden settes sammen med en skrevet i dag."""
+    blocks: dict[str, str] = {}
+    skipped: set[str] = set()
+    by_url = {a["url"]: a for a in articles if a.get("url")}
+
+    for raw in re.split(r"\n(?=##\s)", text.strip()):
+        block = raw.strip().strip("-").strip()
+        if not block.startswith("##"):
+            continue
+
+        m = _SKIP_RE.match(block)
+        if m:
+            idx = int(m.group(1)) - 1  # prompten nummererer fra 1
+            if 0 <= idx < len(articles):
+                skipped.add(articles[idx]["url"])
+            continue
+
+        for url, _a in by_url.items():
+            if url and url in block:
+                blocks[url] = block
+                break
+    return blocks, skipped
+
+
+def write_up_with_claude(articles: list[dict]) -> tuple[str, list[str]]:
+    """Be Claude skrive en omtale av HVER studie i `articles` (ingen utvelgelse — den er
+    allerede gjort av den lokale scoringen).
+
+    Returnerer (rå markdown, refused_dois). `refused_dois` er DOI-ene til abstracts som ble
+    fjernet fordi de trigget sikkerhetsklassifikatoren — kalleren skal persistere dem
+    (refused-flagget) uansett om kallet lyktes, så de aldri sendes inn igjen."""
     client = anthropic.Anthropic()  # leser ANTHROPIC_API_KEY automatisk fra env
 
     pool = list(articles)
     refused_dois: list[str] = []
 
-    print("\nVelger og oppsummerer forskning med Claude (streamer svar)...\n")
+    print(f"\nSkriver omtaler av {len(pool)} studier med Claude (streamer svar)...\n")
     print("─" * 70)
 
     # To feilmoduser håndteres ulikt:
@@ -725,8 +897,8 @@ def summarize_research_with_claude(articles: list[dict]) -> tuple[str, list[str]
     #  • stop_reason == "refusal" → sikkerhetsklassifikatoren stoppet batchen;
     #    deterministisk, så retry er nytteløst. Isolér og fjern problemabstract(er),
     #    kjør så på nytt med det rensede settet.
-    # Et ekte «ingen gode studier»-svar er teksten "Ingen vesentlige nye studier
-    # i dag.", ikke en tom streng, så blank tekst er alltid en feil.
+    # Claude vraker enkeltstudier med «## SKIP», aldri ved å svare tomt, så blank tekst er
+    # alltid en feil.
     transient_attempts = 0
     refusal_rounds = 0
     while True:
@@ -765,6 +937,102 @@ def summarize_research_with_claude(articles: list[dict]) -> tuple[str, list[str]
         print(f"⚠  Tomt svar fra Claude — nytt forsøk om {CLAUDE_RETRY_DELAY} s "
               f"({transient_attempts}/{CLAUDE_MAX_ATTEMPTS})...")
         time.sleep(CLAUDE_RETRY_DELAY)
+
+
+def write_up_batch(queue: list[dict]) -> list[str]:
+    """Få Claude til å skrive omtaler av de høyest scorede studiene som mangler tekst, og
+    lagre dem I KØEN. Returnerer refused_dois (kalleren persisterer dem).
+
+    Dette er eneste sted i systemet som bruker Claude-tokens. Alt som skrives her, lagres —
+    en studie koster tokens nøyaktig én gang, noensinne."""
+    batch_entries = [e for e in queue if e.get("status") == "scored"][:WRITEUP_BATCH_SIZE]
+    if not batch_entries:
+        print("  ⚠  Ingen studier i kø å skrive om.")
+        return []
+
+    articles = [_entry_to_article(e) for e in batch_entries]
+    text, refused_dois = write_up_with_claude(articles)
+    print("─" * 70)
+
+    refused = set(refused_dois)
+    for e in batch_entries:
+        if e.get("doi") and e["doi"] in refused:
+            e["status"] = "rejected"
+            e["reject_reason"] = "refusal"
+            e.pop("abstract", None)
+
+    if not text.strip():
+        print("✗  Tomt svar fra Claude — ingen omtaler lagret.")
+        return refused_dois
+
+    blocks, skipped = _parse_writeups(text, articles)
+    if not blocks and not skipped:
+        # Svaret kunne ikke mappes til noen studie. Å lagre noe her ville knyttet feil tekst
+        # til feil studie, så vi lagrer ingenting og lar batchen prøve igjen i morgen.
+        print("✗  Klarte ikke å knytte svaret til noen studie — ingenting lagret.")
+        return refused_dois
+
+    today = datetime.now().date().isoformat()
+    wrote = vraket = 0
+    for e in batch_entries:
+        if e.get("status") == "rejected":
+            continue
+        url = e.get("url")
+        if url in blocks:
+            e["status"] = "ready"
+            e["writeup"] = blocks[url]
+            e["writeup_at"] = today
+            e.pop("abstract", None)  # teksten er skrevet — abstractet trengs ikke mer
+            wrote += 1
+        elif url in skipped:
+            e["status"] = "rejected"
+            e["reject_reason"] = "vraket av Claude"
+            e.pop("abstract", None)
+            vraket += 1
+        else:
+            # Verken omtalt eller eksplisitt vraket — Claude hoppet stille over den.
+            # Én gang kan være et lengdekutt; skjer det gjentatte ganger, er studien
+            # ubrukelig og skal ikke sendes inn igjen i det uendelige.
+            e["passes"] = e.get("passes", 0) + 1
+            if e["passes"] >= WRITEUP_MAX_PASSES:
+                e["status"] = "rejected"
+                e["reject_reason"] = f"hoppet over {e['passes']} ganger"
+                e.pop("abstract", None)
+
+    print(f"  ✓  {wrote} omtaler lagret i køen"
+          + (f", {vraket} vraket av Claude" if vraket else ""))
+    return refused_dois
+
+
+def pop_for_today(queue: list[dict]) -> list[dict]:
+    """Plukk dagens studier fra køen — de høyest scorede med ferdig tekst.
+
+    Kategoritaket er MYKT: vi tar først opptil MAX_PER_CATEGORY per kategori, og fyller
+    deretter opp med de nest beste uansett kategori hvis dagen ikke ble full. Uten taket kan
+    fem kosthold-studier havne på samme dag (køen er sortert på score alene) og nettsiden
+    vise én eneste gruppe; med et HARDT tak ville en ensidig kø gitt unødig korte dager."""
+    ready = [e for e in queue if e.get("status") == "ready" and e.get("writeup")]
+    picked: list[dict] = []
+    per_cat: dict[str, int] = {}
+
+    for e in ready:
+        if len(picked) >= MAX_ITEMS:
+            break
+        cat = e.get("category") or "?"
+        if per_cat.get(cat, 0) >= MAX_PER_CATEGORY:
+            continue
+        picked.append(e)
+        per_cat[cat] = per_cat.get(cat, 0) + 1
+
+    if len(picked) < MAX_ITEMS:  # mykt tak: fyll opp med det som er igjen
+        chosen = {id(e) for e in picked}
+        for e in ready:
+            if len(picked) >= MAX_ITEMS:
+                break
+            if id(e) not in chosen:
+                picked.append(e)
+
+    return picked
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -854,11 +1122,17 @@ def main() -> None:
         action="store_true",
         help="Lagre briefingen som markdown-fil (forskningsbrief_YYYY-MM-DD.md)",
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Fyll og prun køen uten å kalle Claude (koster ingenting). "
+             "Publiserer fra det som allerede ligger ferdigskrevet i køen.",
+    )
     args = parser.parse_args()
 
     _load_dotenv()
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
+    if not os.environ.get("ANTHROPIC_API_KEY") and not args.dry_run:
         print("Feil: ANTHROPIC_API_KEY er ikke satt.")
         sys.exit(1)
 
@@ -869,52 +1143,82 @@ def main() -> None:
     print(f"  Forskningsbriefing  —  {today_human}")
     print(f"{'─'*70}\n")
 
-    print(
-        f"Henter forskning fra Europe PMC — menneskestudier (RCT/metaanalyse/oversikt), "
-        f"siste {LOOKBACK_DAYS} dager..."
-    )
-    articles = fetch_research()
+    today = datetime.now().date()
+    seen = _load_seen()
 
-    if not articles:
-        print("\nIngen nye studier funnet (eller alle allerede dekket). Avslutter.")
-        sys.exit(0)
+    # ── 1–2. Last og prun køen ───────────────────────────────────────────────
+    queue = _prune_queue(_load_queue(), seen, today)
+    counts = _queue_counts(queue)
+    print(f"Kø: {counts['ready']} ferdigskrevne, {counts['scored']} venter på tekst, "
+          f"{counts['rejected']} vraket.")
 
-    print(f"\n  {len(articles)} kandidatstudier sendes til Claude.")
+    # ── 3. Påfylling fra Europe PMC — kun når køen er kort nok ───────────────
+    if counts["scored"] >= QUEUE_REFILL_BELOW:
+        print(f"  ⓘ  {counts['scored']} studier i kø (≥ {QUEUE_REFILL_BELOW}) — "
+              "hopper over henting.")
+    else:
+        print(
+            f"\nHenter forskning fra Europe PMC — menneskestudier "
+            f"(RCT/metaanalyse/oversikt), siste {LOOKBACK_DAYS} dager..."
+        )
+        refill_queue(queue, seen, today)
+        _save_queue(queue)
+        counts = _queue_counts(queue)
+        print(f"  → kø: {counts['ready']} ferdige, {counts['scored']} venter på tekst")
 
-    briefing, refused_dois = summarize_research_with_claude(articles)
-
-    print("─" * 70)
-
-    # Guard: et tomt svar (etter alle retry-forsøk) skal ALDRI lagres — det ville
-    # overskrevet dagsfilen med en blank research_md og feilaktig se ut som en
-    # stille dag. Avslutt uten å skrive; feltet utelates da for dagen (myk feil,
-    # jf. øvrige seksjoner), og dedup-cachen røres ikke så studiene kan velges i morgen.
-    # Unntak: abstracts som trigget sikkerhetsklassifikatoren persisteres LIKEVEL med
-    # refused-flagget — en refusal er deterministisk, og uten dette ville nøyaktig samme
-    # pool kommet tilbake i morgen og betalt hele isoler-og-fjern-runden på nytt.
-    if not briefing.strip():
+    # ── 4. Claude-omtaler i batch — kun når lageret av ferdige tekster er lavt ─
+    refused_dois: list[str] = []
+    if args.dry_run:
+        print("\n  ⓘ  --dry-run: hopper over Claude-kallet.")
+    elif counts["ready"] >= WRITEUP_REFILL_BELOW:
+        print(f"\n  ⓘ  {counts['ready']} ferdigskrevne studier i kø "
+              f"(≥ {WRITEUP_REFILL_BELOW}) — hopper over Claude-kallet. Gratis dag.")
+    elif counts["scored"] == 0:
+        print("\n  ⚠  Ingen studier i kø å skrive om.")
+    else:
+        refused_dois = write_up_batch(queue)
+        _save_queue(queue)
+        # Refused lagres UANSETT hvordan resten gikk — en refusal er deterministisk, og
+        # uten flagget ville nøyaktig samme abstract kommet tilbake og betalt hele
+        # isoler-og-fjern-runden på nytt.
         if refused_dois:
-            _save_seen(_load_seen(), refused_dois, [], refused_dois)
+            _save_seen(seen, [], refused_dois)
             print(f"  ⓘ  {len(refused_dois)} avvist(e) abstract(s) merket refused — "
                   "sendes aldri inn igjen.")
-        print("\n✗  Tomt svar fra Claude etter alle forsøk — lagrer IKKE tom "
-              "forskningsbriefing. Feltet utelates for i dag.")
+
+    # ── 5. Publisering — aldri et API-kall ───────────────────────────────────
+    picked_entries = pop_for_today(queue)
+    if not picked_entries:
+        # Myk feil, som øvrige seksjoner: feltet utelates for dagen. Vi skriver ALDRI en
+        # tom research_md — det ville overskrevet dagsfilen og sett ut som en stille dag.
+        print("\n✗  Ingen ferdigskrevne studier i køen — forskningsfeltet utelates i dag.")
         sys.exit(1)
 
-    # Marker dagens kandidater som sett. Valgte studier (URL-en dukker opp i briefingen)
-    # blokkeres for godt; avviste (refusal) blokkeres like lenge; de øvrige som ble sendt
-    # til Claude, får karantene — ellers ville de samme toppkandidatene blitt sendt inn
-    # på nytt hver eneste dag.
-    picked = [a["doi"] for a in articles if a["doi"] and a["url"] and a["url"] in briefing]
-    sent = [a["doi"] for a in articles if a["doi"]]
-    _save_seen(_load_seen(), sent, picked, refused_dois)
+    briefing = _STUDY_SEPARATOR.join(e["writeup"] for e in picked_entries)
+
+    print(f"\nDagens briefing — {len(picked_entries)} studier fra køen:")
+    for e in picked_entries:
+        print(f"    {e.get('score', 0):5.1f}  [{e.get('category')}] {e['title'][:66]}")
+
+    if args.dry_run:
+        print("\n  ⓘ  --dry-run: publiserer ikke, og køen tømmes ikke.")
+        sys.exit(0)
+
+    # Vist = blokkert for godt. Oppføringene fjernes samtidig fra køen.
+    _save_seen(seen, [e["doi"] for e in picked_entries if e.get("doi")], [])
+    published = {id(e) for e in picked_entries}
+    queue = [e for e in queue if id(e) not in published]
+    _save_queue(queue)
+
+    left = _queue_counts(queue)
+    print(f"  → {left['ready']} ferdigskrevne igjen i kø "
+          f"({left['ready'] // MAX_ITEMS} dager), {left['scored']} venter på tekst")
 
     # Lagre forskningsbriefingen til datalageret (merges inn i samme dagsfil som nyhetsbriefen)
     research_items = [
-        {"title": a["title"], "url": a["url"], "journal": a["journal"],
-         "date": a["date"], "category": a["category"]}
-        for a in articles
-        if a["url"] and a["url"] in briefing
+        {"title": e["title"], "url": e["url"], "journal": e.get("journal", "—"),
+         "date": e.get("date", "—"), "category": e.get("category")}
+        for e in picked_entries
     ]
     store_briefing(today_str, research_md=briefing, research_items=research_items)
 
