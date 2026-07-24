@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { marked } from 'marked';
@@ -30,6 +30,22 @@ export async function listDates() {
       .reverse();
   } catch {
     return [];
+  }
+}
+
+/**
+ * Signatur over hele arkivet — endrer seg når en dagsfil legges til ELLER skrives om.
+ * Brukes som cache-nøkkel av biblioteket (`library.js`). Filnavn alene holder ikke:
+ * begge generatorene skriver inn i samme dagsfil, så dagens fil endres etter at den
+ * først er lest.
+ */
+export async function briefingStamp() {
+  try {
+    const files = (await readdir(DIR)).filter((f) => f.endsWith('.json')).sort();
+    const stats = await Promise.all(files.map((f) => stat(path.join(DIR, f))));
+    return `${files.length}:${stats.reduce((sum, s) => sum + s.mtimeMs, 0)}`;
+  } catch {
+    return 'none';
   }
 }
 

@@ -59,7 +59,7 @@ export function normalizeTags(tags) {
 }
 
 /** Fritekst-indeks: tittel + all brødtekst + notis + tagger. Bygges ved lagring. */
-function buildSearchText(item) {
+export function buildSearchText(item) {
   const parts = (item.snapshot?.parts || []).map((p) => `${p.label} ${p.text || ''}`);
   return [item.title, item.journal, item.category, ...parts, item.note, ...(item.tags || [])]
     .filter(Boolean)
@@ -215,8 +215,9 @@ export async function savedIdSet() {
   return new Set(items.map((it) => it.id));
 }
 
-export function queryItems(items, { q, type, category, tag, sort } = {}) {
+export function queryItems(items, { q, type, category, tag, sort, favorite } = {}) {
   let out = items;
+  if (favorite) out = out.filter((it) => it.favorite);
   if (type) out = out.filter((it) => it.type === type);
   if (category) out = out.filter((it) => it.category === category);
   if (tag) out = out.filter((it) => (it.tags || []).includes(tag));
@@ -228,10 +229,16 @@ export function queryItems(items, { q, type, category, tag, sort } = {}) {
       return words.every((w) => hay.includes(w));
     });
   }
+  // Sorteringsnøkkel: hvilken briefing oppføringen kom fra. Det er den datoen som gjelder
+  // for hele biblioteket — `savedAt` finnes bare på favoritter, og ville sortert alt
+  // annet vilkårlig. «lagret» sorterer eksplisitt på merketidspunktet i stedet.
+  const key = (it) => it.date || String(it.savedAt || '').slice(0, 10);
   const sorted = [...out];
-  if (sort === 'eldst') sorted.sort((a, b) => (a.savedAt < b.savedAt ? -1 : 1));
+  if (sort === 'eldst') sorted.sort((a, b) => (key(a) < key(b) ? -1 : 1));
   else if (sort === 'tittel') sorted.sort((a, b) => a.title.localeCompare(b.title, 'nb'));
-  else sorted.sort((a, b) => (a.savedAt > b.savedAt ? -1 : 1)); // nyest først
+  else if (sort === 'lagret') {
+    sorted.sort((a, b) => String(b.savedAt || '').localeCompare(String(a.savedAt || '')));
+  } else sorted.sort((a, b) => (key(a) > key(b) ? -1 : 1)); // nyest først
   return sorted;
 }
 

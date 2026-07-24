@@ -5,7 +5,8 @@
 //
 // To formål: (1) listen skal ikke være et fengsel — dataene dine skal kunne tas med ut;
 // (2) en gratis ekstra backup ved siden av volum-backupen.
-import { readSaved, queryItems, TYPE_LABELS } from '../../lib/saved.js';
+import { queryItems, TYPE_LABELS } from '../../lib/saved.js';
+import { libraryItems } from '../../lib/library.js';
 import { RESEARCH_CATEGORIES, formatDateNo } from '../../lib/briefings.js';
 
 export const prerender = false;
@@ -15,7 +16,7 @@ const catLabel = (id) =>
 
 function toMarkdown(items) {
   const today = new Date().toLocaleDateString('sv-SE');
-  const lines = [`# Lagrede oppføringer`, '', `Eksportert ${formatDateNo(today)} · ${items.length} stk.`, ''];
+  const lines = [`# Bibliotek`, '', `Eksportert ${formatDateNo(today)} · ${items.length} stk.`, ''];
 
   for (const type of Object.keys(TYPE_LABELS)) {
     const group = items.filter((it) => it.type === type);
@@ -23,12 +24,12 @@ function toMarkdown(items) {
     lines.push(`## ${TYPE_LABELS[type]}`, '');
 
     for (const it of group) {
-      lines.push(it.url ? `### [${it.title}](${it.url})` : `### ${it.title}`);
+      lines.push(`### ${it.favorite ? '★ ' : ''}${it.url ? `[${it.title}](${it.url})` : it.title}`);
       const meta = [
         it.category && catLabel(it.category),
         it.journal,
         it.date && `fra briefingen ${it.date}`,
-        `lagret ${String(it.savedAt).slice(0, 10)}`,
+        it.savedAt && `favorittmerket ${String(it.savedAt).slice(0, 10)}`,
       ].filter(Boolean);
       lines.push(`*${meta.join(' · ')}*`, '');
       if (it.note) lines.push(`> ${it.note.replace(/\n/g, '\n> ')}`, '');
@@ -46,13 +47,14 @@ export async function GET({ url }) {
   const p = url.searchParams;
   const format = p.get('format') === 'json' ? 'json' : 'md';
 
-  const { items } = await readSaved();
+  const items = await libraryItems();
   const results = queryItems(items, {
     q: (p.get('q') || '').trim(),
     type: p.get('type') || '',
     category: p.get('kategori') || '',
     tag: p.get('tag') || '',
     sort: p.get('sort') || 'nyest',
+    favorite: p.get('favoritt') === '1',
   });
 
   const stamp = new Date().toLocaleDateString('sv-SE');

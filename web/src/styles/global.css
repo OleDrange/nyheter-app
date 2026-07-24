@@ -2170,9 +2170,22 @@ main {
 }
 .linkbtn--danger { color: var(--down); }
 
-/* /lagret */
+/* /lagret — biblioteket */
 .saved-head { margin-bottom: 1rem; }
 .page-title { margin: 0 0 0.2rem; font-size: 1.5rem; }
+.saved-lede { max-width: 62ch; font-size: 0.85rem; margin: 0.35rem 0 0; }
+
+/* Favoritter skal kunne skimtes i en lang liste uten å lese stjernen. */
+.study--fav { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.85rem;
+}
 
 .saved-filters {
   display: flex;

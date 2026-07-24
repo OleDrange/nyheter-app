@@ -421,12 +421,27 @@ bygges uten ekstra datainnhenting.
 - **Ruter (felles for begge vertsnavn):** `/lagret` og `/api/*`. Disse skrives **ikke** om av
   middleware (`isShared`) — de finnes kun på rot-nivå og spenner over begge sider.
 
-### Lagret («pin»)
+### Bibliotek (`/lagret`) og favoritter («pin»)
 
-Pin en **studie** (forskningssidene), **gåte** eller **quizspørsmål** (nyhetssidene); den
-huskes permanent og vises på `/lagret` med type-faner, filter, søk, notat og tagger.
-Se `PLAN-LAGREDE-STUDIER.md` for planen.
+`/lagret` er **biblioteket**: alle studier som noen gang er vist, søkbare — pluss
+favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagger, paginering
+(40 per side). Se `PLAN-LAGREDE-STUDIER.md` for den opprinnelige planen.
 
+- **To lag, ikke ett.** Biblioteket **utledes fra briefing-arkivet ved forespørsel**
+  (`web/src/lib/library.js`) — ingenting kopieres inn i lageret. Briefinger er immutable, så
+  arkivet er fasiten; biblioteket kan ikke komme i utakt og fylles av seg selv hver dag uten
+  at web trenger skrivetilgang til `/data`. `saved.json` inneholder **kun favorittene**
+  (merking + notat + tagger + repetisjonstilstand).
+- **Stjernen er en favorittmarkering, ikke inngangsbilletten.** Fram til 24. juli 2026 var
+  det motsatt: en studie du ikke pinnet, fantes ikke noe sted å søke i. Nå er ★ et *filter*
+  (`?favoritt=1`) over alt vi har vist. Kun favoritter får notat, tagger og
+  «Dagens repetisjon» — en repetisjonskø over 200+ studier hadde vært støy.
+- **Cachen** i `library.js` nøkles på `briefingStamp()` (antall dagsfiler + sum av mtime).
+  Filnavn alene holder **ikke**: begge generatorene skriver inn i samme dagsfil, så dagens
+  fil endres etter at den først er lest.
+- **Gåter/quiz indekseres ikke i sin helhet** (banken er hundrevis av spørsmål) — de er med
+  kun når de er favorittmerket. Pin-knappen deres trenger indeks i dagsfila; den slås opp
+  med `resolveIndex()` for de radene som faktisk vises.
 - **Eget volum, ikke arkivet.** `saved-data:/state` (rw) ved siden av `briefing-data:/data:ro`.
   Nettappen er eneste prosess eksponert mot internett og skal **aldri** kunne skrive inn i
   briefing-arkivet. `SAVED_DIR=/state` i container; default `state/` lokalt (gitignored).
@@ -451,7 +466,8 @@ Se `PLAN-LAGREDE-STUDIER.md` for planen.
   sesjonslagring. Bytter du kodeord, blir alle utstedte cookies ugyldige automatisk.
   `crypto.timingSafeEqual` + rate-limiting (10 forsøk / 15 min / IP). **Uten `SAVE_PASSPHRASE`
   svarer skriveendepunktene 503 og pin-knappene skjules** — funksjonen feiler synlig, ikke åpent.
-- **Filtrering og søk er server-side** via URL-parametre (`?q=&kategori=&tag=&sort=`): virker
+- **Filtrering og søk er server-side** via URL-parametre
+  (`?q=&type=&kategori=&tag=&sort=&favoritt=&side=`): virker
   uten JS, URL-ene blir delbare/bokmerkbare, og det skalerer forbi noen tusen oppføringer.
 - **Komponenter:** `SaveButton.astro` (ren markup; `saved` kommer fra serveren så stjernen er
   fylt i første paint) + `SaveRuntime.astro` (én delegert klikk-lytter for hele siden,

@@ -59,14 +59,14 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
               <>
                 <a href={base || '/'} aria-current={isHome ? 'page' : undefined}>I dag</a>
                 <a href={`${base}/arkiv`} aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
-                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Lagret</a>
+                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Bibliotek</a>
                 <a href="https://nyheter.modr.no">Nyheter</a>
               </>
             ) : (
               <>
                 <a href="/" aria-current={isHome ? 'page' : undefined}>I dag</a>
                 <a href="/arkiv" aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
-                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Lagret</a>
+                <a href="/lagret" aria-current={isSaved ? 'page' : undefined}>Bibliotek</a>
                 <a href="https://forskning.modr.no">Forskning</a>
               </>
             )}
