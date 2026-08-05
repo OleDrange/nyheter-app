@@ -9,7 +9,8 @@ import ReflectionCard from './ReflectionCard.astro';
 import BrannCard from './BrannCard.astro';
 import ReviewCard from './ReviewCard.astro';
 import SaveRuntime from './SaveRuntime.astro';
-import { savedIdSet, dueItem } from '../lib/saved.js';
+import { savedIdSet } from '../lib/saved.js';
+import { dailyReview } from '../lib/library.js';
 import { writingEnabled, isAuthed } from '../lib/auth.js';
 import {
   splitNewsSections,
@@ -34,7 +35,8 @@ const canPin = writingEnabled();
 const saved = canPin ? await savedIdSet() : new Set();
 const authed = canPin && isAuthed(Astro.cookies);
 const isToday = b.date === new Date().toLocaleDateString('sv-SE');
-const due = canPin && isToday ? await dueItem() : null;
+// Repetisjonen leser kun arkivet, så den vises uavhengig av om skriving er skrudd på.
+const due = isToday ? await dailyReview(b.date) : null;
 ---
 
 {(b.weather || b.market) && (

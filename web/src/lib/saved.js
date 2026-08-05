@@ -197,8 +197,6 @@ export function reviewItem(id) {
 // Spaced repetition
 // ─────────────────────────────────────────────────────────────────────────────
 
-const daysSince = (iso) => (Date.now() - new Date(iso).getTime()) / 86400000;
-
 /** Er oppføringen forfalt til repetisjon? Intervallet utvides med antall repetisjoner. */
 export function isDue(item, now = Date.now()) {
   const reps = item.reps || 0;
@@ -207,18 +205,9 @@ export function isDue(item, now = Date.now()) {
   return since >= interval;
 }
 
-/**
- * Dagens repetisjon: den mest forfalte oppføringen, eller null.
- * Kun ÉN om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
- */
-export async function dueItem() {
-  const { items } = await readSaved();
-  const due = items.filter((it) => isDue(it));
-  if (!due.length) return null;
-  return due.sort(
-    (a, b) => daysSince(b.lastReview || b.savedAt) - daysSince(a.lastReview || a.savedAt),
-  )[0];
-}
+// Selve utvelgelsen av dagens repetisjon ligger i `library.js` (`dailyReview()`): den
+// trekker fra HELE arkivet, ikke bare favorittene her. `isDue()` brukes derfra til å gi
+// favoritter forrang når de er forfalt.
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Spørring (siden filtrerer server-side via URL-parametre)

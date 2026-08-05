@@ -1,27 +1,32 @@
 ---
-// «Dagens repetisjon» — løfter ÉN forfalt lagret oppføring tilbake på forsiden.
+// «Dagens repetisjon» — løfter ÉN tidligere vist oppføring tilbake på forsiden.
 //
-// Samme utvidende intervall som quizbanken (REVIEW_INTERVALS = [7, 30, 90, 180] dager):
-// et element repetert `reps` ganger forfaller når alderen ≥ intervals[reps]. Kun én om
-// gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
+// Utvelgelsen skjer i `dailyReview()` (library.js): hele arkivet er poolen — studier,
+// boktips, gåter og quiz — og valget er deterministisk per dato. Favoritter får forrang
+// annenhver dag med samme utvidende intervall som quizbanken
+// (REVIEW_INTERVALS = [7, 30, 90, 180] dager).
 //
-// Vises kun når noe faktisk er forfalt. Å markere som repetert er en skriving og krever
-// kodeord, som alt annet; uten kodeord er kortet en ren påminnelse.
+// Kun én om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
+// «Repetert»-knappen skriver `reps`/`lastReview` og gjelder derfor bare favoritter;
+// for alt annet er kortet en ren påminnelse.
 import { TYPE_EMOJI } from '../lib/saved.js';
 import { formatDateNo } from '../lib/briefings.js';
 
 const { item, canEdit = false } = Astro.props;
 
-const days = Math.floor((Date.now() - new Date(item.lastReview || item.savedAt).getTime()) / 86400000);
 const reps = item.reps || 0;
+const days = item.favorite
+  ? Math.floor((Date.now() - new Date(item.lastReview || item.savedAt).getTime()) / 86400000)
+  : null;
 ---
 
 <article class="card review">
   <div class="review__head">
     <span class="review__badge">🔁 Dagens repetisjon</span>
     <span class="muted review__age">
-      {reps === 0 ? 'Lagret' : `Sist repetert`} for {days} dager siden
-      {reps > 0 && ` · ${reps}. gang`}
+      {item.favorite
+        ? <>★ {reps === 0 ? 'Lagret' : 'Sist repetert'} for {days} dager siden{reps > 0 && ` · ${reps}. gang`}</>
+        : <>Fra briefingen {formatDateNo(item.date)}</>}
     </span>
   </div>
 
@@ -35,7 +40,7 @@ const reps = item.reps || 0;
   {item.note && <p class="review__note">{item.note}</p>}
 
   <details class="review__details">
-    <summary>Vis innholdet</summary>
+    <summary>{item.type === 'riddle' || item.type === 'quiz' ? 'Vis fasit' : 'Vis innholdet'}</summary>
     <div class="study__parts">
       {(item.snapshot?.parts || []).map((p) => (
         <div class="study__part">
@@ -44,7 +49,7 @@ const reps = item.reps || 0;
         </div>
       ))}
     </div>
-    {item.date && (
+    {item.date && item.favorite && (
       <p class="muted saved-origin">
         Lagret fra briefingen {formatDateNo(item.date)}
       </p>
@@ -52,7 +57,7 @@ const reps = item.reps || 0;
   </details>
 
   <div class="review__actions">
-    {canEdit && (
+    {canEdit && item.favorite && (
       <button class="btn btn--ghost" type="button" data-review={item.id}>
         Repetert — vis igjen senere
       </button>

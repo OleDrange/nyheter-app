@@ -478,12 +478,25 @@ bygges uten ekstra datainnhenting.
   kodeord-dialog ved 401, **angre-toast** ved avpinning — som sletter notat og tagger).
   Tagger normaliseres til små bokstaver, ellers får man «protein»/«Protein»/«proteiner» som
   tre filtre innen en måned.
-- **«Dagens repetisjon»** (`ReviewCard.astro`): løfter ÉN forfalt lagret oppføring tilbake på
-  nyhetsforsiden — kun på dagens briefing, ikke i arkivet. Samme utvidende intervall som
-  quizbanken: `REVIEW_INTERVALS = [7, 30, 90, 180]` dager, forfaller når alderen ≥
-  `intervals[reps]` (klemt). «Repetert»-knappen bumper `reps` og setter `lastReview`.
+- **«Dagens repetisjon»** (`dailyReview()` i `library.js` + `ReviewCard.astro`): løfter ÉN
+  tidligere vist oppføring tilbake på nyhetsforsiden — kun på dagens briefing, ikke i arkivet.
   Kun én om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
-  Oppføringer lagret før feltene fantes leses som `reps = 0` (bakoverkompatibelt).
+  - **Poolen er hele arkivet** (`reviewPool()` = biblioteket + `archiveDrills()`, som
+    indekserer `riddles`/`quiz` fra dagsfilene): studier, boktips, gåter og quiz, ~550
+    oppføringer. Gåter/quiz er med **her**, men fortsatt ikke i biblioteket på `/lagret`.
+    Alt yngre enn `REVIEW_MIN_AGE_DAYS = 7` holdes utenfor — du leste det nettopp.
+  - **Valget er deterministisk per dato** (FNV-1a-hash av `<dagnummer>:<id>`, høyeste
+    vinner): samme dag gir samme kort ved hver SSR-render, ny dag gir nytt kort, og ingen
+    ny state-fil å persistere eller ta backup av.
+  - **Favoritter får hver tredje dag** (`ord % 3`), rotert seg imellom, med det utvidende
+    intervallet fra quizbanken: `REVIEW_INTERVALS = [7, 30, 90, 180]` dager, forfaller når
+    alderen ≥ `intervals[reps]` (klemt). «Repetert»-knappen bumper `reps`/`lastReview` og
+    vises kun for favoritter (den er en skriving). Oppføringer lagret før feltene fantes
+    leses som `reps = 0` (bakoverkompatibelt).
+  - **Ikke gå tilbake til «mest forfalt vinner» over kun `saved.json`.** Fram til 5. august
+    2026 gjorde `dueItem()` det, og siden `reps` bare bumpes når man trykker «Repetert», var
+    tilstanden absorberende: den eldste favoritten (én gåte fra 20. juli) ble vist hver
+    eneste dag, og poolen var 5 favoritter i stedet for ~550 viste oppføringer.
 - **Eksport:** `/api/eksport?format=md|json` respekterer gjeldende filtre, så det du ser på
   `/lagret` er det du får ut. Gjør at listen ikke er et fengsel, og fungerer som ekstra backup.
 - **Komponenter:**

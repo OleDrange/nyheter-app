@@ -9,13 +9,16 @@
 //     er altså ikke lenger «husk denne i det hele tatt», men «denne er viktig for meg» —
 //     et filter over biblioteket, ikke inngangsbilletten til det.
 //
-// Indeksert: forskningsstudier og boktips. IKKE gåter og quiz i sin helhet (banken er
-// hundrevis av spørsmål og hører hjemme i dagens briefing, ikke i et oppslagsverk) — de
-// finnes her kun når de er favorittmerket. Skulle det endres, er det bare å indeksere
-// `b.riddles`/`b.quiz` i `buildIndex()` under.
+// Indeksert i BIBLIOTEKET (/lagret): forskningsstudier og boktips. IKKE gåter og quiz i
+// sin helhet (banken er hundrevis av spørsmål og hører hjemme i dagens briefing, ikke i et
+// oppslagsverk) — de finnes der kun når de er favorittmerket.
+//
+// REPETISJONSPOOLEN er noe annet og bredere: den dekker alt vi noen gang har vist,
+// inkludert gåter og quiz (`reviewPool()` under). Repetisjon skal ikke være begrenset til
+// det du har rukket å pinne.
 
 import { listDates, getBriefing, splitResearch, briefingStamp } from './briefings.js';
-import { buildId, buildSearchText, escapeHtml, readSaved } from './saved.js';
+import { buildId, buildSearchText, escapeHtml, readSaved, isDue } from './saved.js';
 
 // 27 dagsfiler i dag, ~5 studier + ~2 boktips hver. Å parse alt per forespørsel er billig,
 // men det skjer flere ganger per sidevisning — så vi cacher til arkivet faktisk endrer seg.
@@ -116,6 +119,138 @@ export async function resolveIndex(item) {
     ? src.findIndex((bk) => bk.title === item.title)
     : src.findIndex((q) => q.question === item.title);
   return i === -1 ? null : i;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// «Dagens repetisjon»
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// Poolen er ALT arkivet har vist — studier, boktips, gåter og quizspørsmål. Fram til
+// 5. august 2026 leste kortet kun `saved.json`, og valgte den mest forfalte oppføringen.
+// Begge deler var feil: poolen var 5 favoritter i stedet for ~570 viste oppføringer, og
+// «mest forfalt vinner» er en absorberende tilstand — `reps` bumpes bare når man trykker
+// «Repetert», så den eldste favoritten (en gåte fra 20. juli) vant hver eneste dag.
+//
+// Valget er nå DETERMINISTISK PER DATO: samme dag gir samme oppføring ved hver
+// forespørsel (SSR rendrer på nytt hele dagen), men ny dag gir ny oppføring — uten noen
+// state-fil å persistere eller ta backup av.
+
+const REVIEW_MIN_AGE_DAYS = 7; // du leste det nettopp — det er ikke repetisjon
+
+/** Dagnummer for en YYYY-MM-DD-dato (UTC-midnatt, uavhengig av vertsstidssone). */
+const dayOrdinal = (date) => Math.floor(Date.parse(`${date}T00:00:00Z`) / 86400000);
+
+/** FNV-1a — stabil «tilfeldig» rekkefølge uten avhengigheter. */
+function hash32(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+let extrasCache = { stamp: null, items: [] };
+
+/**
+ * Gåtene og quizspørsmålene arkivet har vist. Egen funksjon (og egen cache) fordi de
+ * bevisst IKKE skal inn i biblioteket på /lagret — der ville de druknet oppslagsverket.
+ */
+async function archiveDrills() {
+  const stamp = await briefingStamp();
+  if (extrasCache.stamp === stamp) return extrasCache.items;
+
+  const byId = new Map();
+  const add = (item) => {
+    if (byId.has(item.id)) return; // første (nyeste) visning vinner
+    item.searchText = buildSearchText(item);
+    byId.set(item.id, item);
+  };
+  const part = (label, text) => ({ label, text, html: escapeHtml(text) });
+
+  for (const date of await listDates()) {
+    const b = await getBriefing(date);
+    if (!b) continue;
+
+    for (const rd of b.riddles || []) {
+      if (!rd?.question) continue;
+      add({
+        id: buildId('riddle', rd),
+        type: 'riddle',
+        date,
+        url: null,
+        title: rd.question,
+        category: null,
+        journal: rd.level ? `Nivå ${rd.level}` : null,
+        snapshot: {
+          parts: [
+            part('Fasit', rd.answer),
+            ...(rd.explanation ? [part('Løsningsvei', rd.explanation)] : []),
+          ],
+        },
+      });
+    }
+
+    for (const q of b.quiz || []) {
+      if (!q?.question) continue;
+      add({
+        id: buildId('quiz', q),
+        type: 'quiz',
+        date,
+        url: null,
+        title: q.question,
+        category: null,
+        journal: q.category || null,
+        snapshot: { parts: [part('Fasit', q.answer)] },
+      });
+    }
+  }
+
+  extrasCache = { stamp, items: [...byId.values()] };
+  return extrasCache.items;
+}
+
+/** Alt som kan komme tilbake som repetisjon: bibliotek + gåter/quiz fra arkivet. */
+export async function reviewPool() {
+  const [entries, drills] = await Promise.all([libraryEntries(), archiveDrills()]);
+  return [...entries, ...drills];
+}
+
+/**
+ * Dagens repetisjon for briefingdatoen `today` (YYYY-MM-DD), eller null.
+ *
+ * Favoritter beholder ekte spaced repetition — men får hver tredje dag, og roterer seg
+ * imellom. Uten et slikt tak ville én evig forfalt favoritt (ingen er forpliktet til å
+ * trykke «Repetert») okkupert plassen for alltid, som er nøyaktig feilen dette erstatter;
+ * og med en håndfull favoritter mot ~550 viste oppføringer skal hovedvekten ligge i
+ * arkivet.
+ */
+export async function dailyReview(today) {
+  const [pool, { items: saved }] = await Promise.all([reviewPool(), readSaved()]);
+  const ord = dayOrdinal(today);
+  const favById = new Map(saved.map((it) => [it.id, it]));
+  const merge = (it) => {
+    const fav = favById.get(it.id);
+    return fav ? { ...it, ...fav, favorite: true } : { ...it, favorite: false };
+  };
+
+  const favDue = saved.filter((it) => isDue(it, Date.parse(`${today}T12:00:00Z`)));
+  if (favDue.length && ord % 3 === 0) {
+    const anchor = (it) => Date.parse(it.lastReview || it.savedAt);
+    favDue.sort((a, b) => anchor(a) - anchor(b)); // mest forfalt først
+    const chosen = favDue[Math.floor(ord / 3) % favDue.length];
+    // Favoritten bærer sitt eget snapshot, men arkivet er fasiten når den finnes der.
+    return merge(pool.find((it) => it.id === chosen.id) || chosen);
+  }
+
+  const cutoff = ord - REVIEW_MIN_AGE_DAYS;
+  let best = null;
+  for (const it of pool) {
+    if (!it.date || dayOrdinal(it.date) > cutoff) continue;
+    const key = hash32(`${ord}:${it.id}`);
+    if (!best || key > best.key) best = { key, it };
+  }
+  return best ? merge(best.it) : null;
 }
 
 /** Tellinger til fanene: totalt, favoritter, og per type. */
