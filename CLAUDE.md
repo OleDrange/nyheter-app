@@ -423,8 +423,8 @@ bygges uten ekstra datainnhenting.
 
 ### Bibliotek (`/lagret`) og favoritter («pin»)
 
-`/lagret` er **biblioteket**: alle studier og alle boktips som noen gang er vist, søkbare
-— pluss favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagger, paginering
+`/lagret` er **biblioteket**: alle nyhetspunkter, alle studier og alle boktips som noen gang
+er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner, filter, søk, notat, tagger, paginering
 (40 per side). Se `PLAN-LAGREDE-STUDIER.md` for den opprinnelige planen.
 
 - **To lag, ikke ett.** Biblioteket **utledes fra briefing-arkivet ved forespørsel**
@@ -439,9 +439,25 @@ bygges uten ekstra datainnhenting.
 - **Cachen** i `library.js` nøkles på `briefingStamp()` (antall dagsfiler + sum av mtime).
   Filnavn alene holder **ikke**: begge generatorene skriver inn i samme dagsfil, så dagens
   fil endres etter at den først er lest.
-- **Indeksert:** `research_md` (studier) og `learning.books` (boktips). Bokas nøkkel er
+- **Indeksert:** `news_md` (nyhetspunkter), `research_md` (studier) og `learning.books`
+  (boktips). Bokas nøkkel er
   `book:<sha1(tittel + forfatter)>` — **uten år**, ellers ville en ny utgave blitt en ny
   oppføring. `journal`-feltet bærer «Forfatter · År», så forfatteren er søkbar.
+- **Nyhetspunkter er egen type (`news`, 📰).** Enheten er ETT punkt i en seksjon, ikke hele
+  seksjonen — det er den enheten leseren forholder seg til. `splitNewsSections()` returnerer
+  derfor `points: [{ index, section, title, url, text, html, pinnable }]`, der `index` er
+  **global for hele briefingen** (samme identifikasjon som gåter/quiz: `{date, index}`), og
+  `newsPoints()` er den flate lista. Overskriften er lenketeksten når punktet åpner med en
+  lenke; ellers første setning (kuttet på 160 tegn). Ligger lenken lenger inne i punktet
+  (vanlig i eldre briefinger), brukes den likevel som kilde-URL. Punkter under 40 tegn er
+  plassholdere («Ingen viktige hendelser.») → `pinnable: false`, ingen stjerne, ikke i
+  biblioteket. ~19 punkter/dag gjør `news` til den klart største typen (466 mot 265 studier
+  ved innføringen 5. august 2026) — type-fanen er derfor den viktigste filtreringen.
+- **Nyheter er IKKE med i repetisjonspoolen** (`reviewPool()` filtrerer dem bort), selv om de
+  står i biblioteket: en tre uker gammel nyhet er ikke noe å repetere, og med sitt volum ville
+  de utgjort flertallet av poolen og fortrengt studiene og boktipsene kortet er til for. Har
+  du favorittmerket et nyhetspunkt, kommer det likevel tilbake — favoritter går gjennom
+  `saved.json` i `dailyReview()`, ikke gjennom poolen.
 - **Gåter/quiz indekseres ikke i sin helhet** (banken er hundrevis av spørsmål) — de er med
   kun når de er favorittmerket. **Podkast-rådene er ikke pinnbare**: de er knyttet til én
   episode, ikke til noe du skal finne igjen. Pin-knappen for gåter/quiz/bøker trenger
@@ -455,12 +471,14 @@ bygges uten ekstra datainnhenting.
 - **Fullt øyeblikksbilde, ikke referanse.** Briefinger er immutable, så det er ingenting å
   synkronisere; et snapshot fjerner en feilklasse (manglende arkivfil, drift i
   `splitResearch()`) for ~2 KB per studie. `date` + DOI beholdes som tilbakelenke.
-- **ID-en gir idempotens:** `study:<doi>` (globalt unik), `riddle:`/`quiz:<sha1(spørsmål)[0:12]>`
+- **ID-en gir idempotens:** `study:<doi>` (globalt unik), `news:<sha1(kilde-URL)[0:12]>` (samme
+  sak dekket to dager på rad blir én oppføring; punkter uten lenke hasher tittelen),
+  `riddle:`/`quiz:<sha1(spørsmål)[0:12]>`
   (innholdshash — de har ingen ID, og hashen overlever quizens repetisjonsmekanikk). Samme sak
   lagret to ganger blir én oppføring.
-- **Innholdet utledes SERVER-SIDE** fra arkivet (`deriveStudy()` / `deriveIndexed()` i
-  `api/lagret.js`) — klienten sender kun `{date, url}` for studier og `{date, index}` for
-  gåter/quiz (indeksen er stabil fordi briefinger er immutable). Ellers kunne enhver med
+- **Innholdet utledes SERVER-SIDE** fra arkivet (`deriveStudy()` / `deriveNews()` /
+  `deriveIndexed()` i `api/lagret.js`) — klienten sender kun `{date, url}` for studier og
+  `{date, index}` for nyheter/gåter/quiz/bøker (indeksen er stabil fordi briefinger er immutable). Ellers kunne enhver med
   kodeordet plantet vilkårlig HTML i lageret, som senere rendres med `set:html`. Gåte-/
   quiz-tekst er ren tekst og escapes ved lagring.
 - **`web/src/lib/auth.js`** — lesing er åpent for alle, kun skriving krever kodeord.
@@ -481,9 +499,9 @@ bygges uten ekstra datainnhenting.
 - **«Dagens repetisjon»** (`dailyReview()` i `library.js` + `ReviewCard.astro`): løfter ÉN
   tidligere vist oppføring tilbake på nyhetsforsiden — kun på dagens briefing, ikke i arkivet.
   Kun én om gangen — en liste med ti «husk denne» blir ignorert, én blir lest.
-  - **Poolen er hele arkivet** (`reviewPool()` = biblioteket + `archiveDrills()`, som
-    indekserer `riddles`/`quiz` fra dagsfilene): studier, boktips, gåter og quiz, ~550
-    oppføringer. Gåter/quiz er med **her**, men fortsatt ikke i biblioteket på `/lagret`.
+  - **Poolen er hele arkivet** (`reviewPool()` = biblioteket uten nyhetspunkter +
+    `archiveDrills()`, som indekserer `riddles`/`quiz` fra dagsfilene): studier, boktips,
+    gåter og quiz, ~550 oppføringer. Gåter/quiz er med **her**, men fortsatt ikke i biblioteket på `/lagret`.
     Alt yngre enn `REVIEW_MIN_AGE_DAYS = 7` holdes utenfor — du leste det nettopp.
   - **Valget er deterministisk per dato** (FNV-1a-hash av `<dagnummer>:<id>`, høyeste
     vinner): samme dag gir samme kort ved hver SSR-render, ny dag gir nytt kort, og ingen
@@ -501,7 +519,8 @@ bygges uten ekstra datainnhenting.
   `/lagret` er det du får ut. Gjør at listen ikke er et fengsel, og fungerer som ekstra backup.
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
-    enkeltdag. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →
+    enkeltdag. Nyhetsseksjonene rendres punkt for punkt (`s.points`) med favoritt-stjerne per
+    punkt — ikke som én `set:html`-blokk; seksjoner uten punktliste faller tilbake til det. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →
     Til ettertanke → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
     `BrannCard` rendres inne i Bergen og Vestland-kortet (tittelmatch `/bergen/i`).
     Seksjonene har anker-id-er (`#vaer-marked`, `#nyheter`, `#gaater`, `#quiz`, `#inspirasjon`,
@@ -566,8 +585,9 @@ bygges uten ekstra datainnhenting.
     `quiz-q__level`-badgene.
   - `ThemePicker.astro` — temavelger i headeren.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
-  `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html }]` (per
-  «## »-seksjon; håndterer flagg-emoji som 🇳🇴), `splitResearch(research_md)` →
+  `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html, points }]`
+  (per «## »-seksjon; håndterer flagg-emoji som 🇳🇴; `points` = seksjonens enkeltpunkter,
+  se biblioteket) og `newsPoints(news_md)` (samme punkter flatet ut), `splitResearch(research_md)` →
   `[{ title, url, category, parts, html }]` (`parts` = de merkede avsnittene Metode/Resultat/
   Hva det betyr for deg/Forbehold — og Hva som ble gjort/Relevans i arkiverte briefinger;
   `category` løftes ut av **Kategori**-etiketten via `normalizeCategory()`; `html` er fallback),
