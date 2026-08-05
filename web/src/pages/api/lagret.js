@@ -3,12 +3,12 @@
 //   DELETE { id }                                                   → fjern, returnerer
 //                                                                     oppføringen så
 //                                                                     klienten kan angre
-//   POST   { type:'riddle'|'quiz'|'book', date, index }             → upsert (idempotent)
+//   POST   { type:'news'|'riddle'|'quiz'|'book', date, index }      → upsert (idempotent)
 //   PATCH  { id, note?, tags? }                                     → notis/tagger
 //   PATCH  { id, action:'review' }                                  → marker som repetert
 import { saveItem, removeItem, patchItem, reviewItem, escapeHtml } from '../../lib/saved.js';
 import { isAuthed, writingEnabled } from '../../lib/auth.js';
-import { getBriefing, splitResearch } from '../../lib/briefings.js';
+import { getBriefing, splitResearch, newsPoints } from '../../lib/briefings.js';
 
 export const prerender = false;
 
@@ -53,6 +53,27 @@ async function deriveStudy(date, url) {
     category: study.category || item?.category || null,
     journal: item?.journal || null,
     snapshot: { parts: study.parts },
+  };
+}
+
+/**
+ * Ett nyhetspunkt. Identifiseres med sin globale posisjon i `news_md` (stabil fordi
+ * briefinger er immutable); ID-en bygges av kildelenken i saveItem(). Punktteksten er
+ * markdown fra Claude, så den rendres som HTML — men den kommer fra arkivet, ikke fra
+ * klienten, som er hele poenget med å utlede server-side.
+ */
+async function deriveNews(date, index) {
+  const b = await getBriefing(date);
+  const p = b?.news_md ? newsPoints(b.news_md)[index] : null;
+  if (!p?.pinnable) return null;
+  return {
+    type: 'news',
+    date,
+    url: p.url,
+    title: p.title,
+    category: null,
+    journal: p.section || null,
+    snapshot: { parts: [{ label: 'Punktet', text: p.text, html: p.html }] },
   };
 }
 
@@ -121,12 +142,14 @@ export async function POST({ request, cookies }) {
   if (type === 'study') {
     if (!body.date || !body.url) return json({ ok: false, error: 'Mangler dato eller URL.' }, 400);
     derived = await deriveStudy(body.date, body.url);
-  } else if (type === 'riddle' || type === 'quiz' || type === 'book') {
+  } else if (type === 'news' || type === 'riddle' || type === 'quiz' || type === 'book') {
     const index = Number(body.index);
     if (!body.date || !Number.isInteger(index)) {
       return json({ ok: false, error: 'Mangler dato eller indeks.' }, 400);
     }
-    derived = await deriveIndexed(type, body.date, index);
+    derived = type === 'news'
+      ? await deriveNews(body.date, index)
+      : await deriveIndexed(type, body.date, index);
   } else {
     return json({ ok: false, error: 'Ukjent type.' }, 400);
   }

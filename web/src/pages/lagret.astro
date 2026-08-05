@@ -1,6 +1,6 @@
 ---
-// Biblioteket: ALT vi har vist av forskning, søkbart — pluss favorittmerkede gåter og
-// quizspørsmål. Stjernen er en favorittmarkering (et filter), ikke inngangsbilletten:
+// Biblioteket: ALT vi har vist av nyheter, forskning og boktips, søkbart — pluss
+// favorittmerkede gåter og quizspørsmål. Stjernen er en favorittmarkering (et filter), ikke inngangsbilletten:
 // en studie du ikke merket, er fortsatt søkbar her.
 //
 // Filtrering og søk skjer SERVER-SIDE via URL-parametre
@@ -80,9 +80,9 @@ const exportQuery = url.search ? `${url.search}&` : '?';
         : `${items.length} oppføringer · ${counts.favorite} favoritt${counts.favorite === 1 ? '' : 'er'}${filtered ? ` · ${results.length} treff` : ''}`}
     </p>
     <p class="muted saved-lede">
-      Alt som har vært vist av forskning og boktips ligger her og er søkbart — også det du
-      ikke merket. ★ er favorittmerking: den kan du filtrere på, og kun favoritter får
-      notat, tagger og «Dagens repetisjon».
+      Alt som har vært vist av nyheter, forskning og boktips ligger her og er søkbart —
+      også det du ikke merket. ★ er favorittmerking: den kan du filtrere på, og kun
+      favoritter får notat, tagger og «Dagens repetisjon».
     </p>
   </section>
 
@@ -152,7 +152,8 @@ const exportQuery = url.search ? `${url.search}&` : '?';
         <>
           <p><strong>Biblioteket er tomt.</strong></p>
           <p class="muted">
-            Det fylles av seg selv: hver studie som vises på
+            Det fylles av seg selv: hvert nyhetspunkt på
+            <a href="https://nyheter.modr.no">nyheter.modr.no</a>, hver studie på
             <a href="https://forskning.modr.no">forskning.modr.no</a> og hvert boktips fra
             «Dagens inspirasjon» havner her og blir søkbart. Trykk ☆ for å favorittmerke —
             da kan du skrive et notat, tagge den, og få den tilbake som «Dagens repetisjon».

@@ -1,15 +1,16 @@
 ---
-// Favoritt-knapp for én studie, gåte, quizspørsmål eller boktips. Ren markup — all logikk ligger i
+// Favoritt-knapp for ett nyhetspunkt, én studie, gåte, quizspørsmål eller boktips. Ren
+// markup — all logikk ligger i
 // SaveRuntime.astro, som fanger klikk via delegering (én lytter for hele siden).
 //
-// Studier identifiseres med `url` (DOI); gåter, quiz og boktips med `index` i dagsfila,
-// siden de ikke har noen URL. Serveren utleder innholdet fra arkivet uansett.
+// Studier identifiseres med `url` (DOI); nyhetspunkter, gåter, quiz og boktips med sin
+// `index` i dagsfila. Serveren utleder innholdet fra arkivet uansett.
 //
 // `saved` kommer fra serveren, så stjernen er fylt allerede i første paint. Uten det
 // ville hvert kort blinket fra tom til fylt etter hydrering.
 const { type = 'study', date, url = null, index = null, id = null, saved = false, compact = false } = Astro.props;
 
-const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet', book: 'boktipset' };
+const LABEL = { study: 'studien', news: 'nyheten', riddle: 'gåten', quiz: 'spørsmålet', book: 'boktipset' };
 const title = saved ? 'Fjern favorittmerkingen' : `Favorittmerk ${LABEL[type] || 'denne'}`;
 ---
 

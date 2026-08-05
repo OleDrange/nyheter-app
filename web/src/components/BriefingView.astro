@@ -8,8 +8,9 @@ import LearningCard from './LearningCard.astro';
 import ReflectionCard from './ReflectionCard.astro';
 import BrannCard from './BrannCard.astro';
 import ReviewCard from './ReviewCard.astro';
+import SaveButton from './SaveButton.astro';
 import SaveRuntime from './SaveRuntime.astro';
-import { savedIdSet } from '../lib/saved.js';
+import { savedIdSet, buildId } from '../lib/saved.js';
 import { dailyReview } from '../lib/library.js';
 import { writingEnabled, isAuthed } from '../lib/auth.js';
 import {
@@ -57,7 +58,26 @@ const due = isToday ? await dailyReview(b.date) : null;
               {s.emoji && <span class="section-card__emoji" aria-hidden="true">{s.emoji}</span>}
               <h3 class="section-card__title">{s.title}</h3>
             </header>
-            <div class="prose" set:html={s.html} />
+            {s.points.length ? (
+              <ul class="prose news-points">
+                {s.points.map((p) => (
+                  <li class="news-point">
+                    <span class="news-point__text" set:html={p.html} />
+                    {canPin && p.pinnable && (
+                      <SaveButton
+                        type="news" date={b.date} index={p.index} compact
+                        id={buildId('news', p)}
+                        saved={saved.has(buildId('news', p))}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              /* Seksjoner uten punktliste (skjer om Claude skriver løpende tekst) rendres
+                 som før — da finnes det ingen punktenhet å favorittmerke. */
+              <div class="prose" set:html={s.html} />
+            )}
             {b.brann && /bergen/i.test(s.title) && <BrannCard brann={b.brann} />}
           </article>
         ))}

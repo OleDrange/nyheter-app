@@ -1048,6 +1048,32 @@ main {
 .prose li a:hover {
   color: var(--accent);
 }
+
+/* Nyhetspunkt med favoritt-stjerne. Stjernen er dempet til punktet berøres — 19 punkter
+   med full stjerne ville tatt over kortet — men en merket stjerne vises alltid. */
+.news-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.news-point__text {
+  flex: 1;
+  min-width: 0;
+}
+.news-point .pin {
+  flex: none;
+  margin-top: 1px;
+  opacity: 0.3;
+  transition: opacity 0.15s, color 0.15s, background 0.15s, border-color 0.15s;
+}
+.news-point:hover .pin,
+.news-point .pin:focus-visible,
+.news-point .pin--on {
+  opacity: 1;
+}
+@media (hover: none) {
+  .news-point .pin { opacity: 0.6; }
+}
 .prose p {
   margin: 0 0 10px;
   font-size: 0.95rem;

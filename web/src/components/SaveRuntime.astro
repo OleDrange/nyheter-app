@@ -112,7 +112,7 @@ const { authed = false } = Astro.props;
       }
     }
 
-    const LABEL = { study: 'studien', riddle: 'gåten', quiz: 'spørsmålet', book: 'boktipset' };
+    const LABEL = { study: 'studien', news: 'nyheten', riddle: 'gåten', quiz: 'spørsmålet', book: 'boktipset' };
 
     function paint(btn, on) {
       btn.classList.toggle('pin--on', on);
@@ -121,7 +121,7 @@ const { authed = false } = Astro.props;
       btn.querySelector('.pin__star').textContent = on ? '★' : '☆';
     }
 
-    // Studier nøkles på URL, gåter/quiz/bøker på indeks i dagsfila.
+    // Studier nøkles på URL, nyheter/gåter/quiz/bøker på indeks i dagsfila.
     function savePayload(btn) {
       const { type = 'study', date, url, index } = btn.dataset;
       return type === 'study'

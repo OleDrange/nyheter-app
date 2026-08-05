@@ -114,13 +114,66 @@ export async function getMarketHistory({ limit = 8, endDate = null } = {}) {
 const HEADING_EMOJI =
   /^((?:\p{Extended_Pictographic}|\p{Regional_Indicator})[\p{Extended_Pictographic}\p{Regional_Indicator}️‍]*)\s+(.*)$/u;
 
+// Ett punkt starter med «•», «-» eller «*»; etterfølgende linjer hører til samme punkt.
+const BULLET_RE = /^\s*[•\-*]\s+/;
+
+/** Markdown → ren tekst (lenketekst beholdes, utheving fjernes) — til søk og ID. */
+function plainText(md) {
+  return String(md || '')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Kortere enn dette er ikke en nyhet, men en plassholder («Ingen viktige hendelser.»).
+const MIN_POINT_CHARS = 40;
+
+// Overskriften i et punkt er lenketeksten, og den kan bli et helt avsnitt. Kort den ned
+// på ordgrense til bibliotek- og repetisjonskortene; hele teksten ligger i snapshotet.
+const TITLE_MAX = 160;
+
+function shortTitle(s) {
+  const t = String(s || '').trim();
+  if (t.length <= TITLE_MAX) return t;
+  const cut = t.slice(0, TITLE_MAX);
+  return `${cut.slice(0, cut.lastIndexOf(' ')) || cut}…`;
+}
+
+/** Del en seksjonskropp i enkeltpunkter (rå markdown per punkt). */
+function splitBullets(body) {
+  const out = [];
+  let cur = null;
+  for (const line of String(body || '').split('\n')) {
+    if (BULLET_RE.test(line)) {
+      if (cur) out.push(cur);
+      cur = line.replace(BULLET_RE, '').trim();
+    } else if (cur && line.trim()) {
+      cur = `${cur} ${line.trim()}`;
+    } else if (cur) {
+      out.push(cur);
+      cur = null;
+    }
+  }
+  if (cur) out.push(cur);
+  return out.filter(Boolean);
+}
+
 /**
  * Del nyhetsbriefingen (`news_md`) i de syv «## »-seksjonene slik at hver kan
- * vises som eget kort. Returnerer [{ emoji, title, html }].
+ * vises som eget kort. Returnerer [{ emoji, title, html, points }].
+ *
+ * `points` er seksjonens enkeltpunkter — den enheten leseren faktisk forholder seg til,
+ * og derfor det som kan favorittmerkes og havner i biblioteket. Hvert punkt har en
+ * `index` som er GLOBAL for hele briefingen (ikke per seksjon), slik at pin-knappen kan
+ * identifisere punktet med `{ date, index }` på samme måte som gåter og quiz. Punktet
+ * åpner nesten alltid med en markdown-lenke: lenketeksten er overskriften og URL-en
+ * kilden. `html` på seksjonen beholdes som fallback for punktløse seksjoner.
  */
 export function splitNewsSections(md) {
   const text = String(md || '').trim();
   if (!text) return [];
+  let n = 0;
   return text
     .split(/^##\s+/m)
     .map((s) => s.trim())
@@ -130,12 +183,35 @@ export function splitNewsSections(md) {
       const heading = (nl === -1 ? part : part.slice(0, nl)).trim();
       const body = nl === -1 ? '' : part.slice(nl + 1).trim();
       const m = heading.match(HEADING_EMOJI);
-      return {
-        emoji: m ? m[1] : '',
-        title: m ? m[2] : heading,
-        html: renderMarkdown(body),
-      };
+      const section = m ? m[2] : heading;
+
+      const points = splitBullets(body).map((raw) => {
+        // Punktet åpner som regel med lenken, og da ER lenketeksten overskriften. Ligger
+        // lenken lenger inn i setningen (vanlig i eldre briefinger), brukes den likevel
+        // som kilde-URL, men første setning som overskrift.
+        const lead = raw.match(/^\s*\[([^\]]+)\]\(([^)\s]+)\)/);
+        const any = lead || raw.match(/\[[^\]]+\]\(([^)\s]+)\)/);
+        const plain = plainText(raw);
+        return {
+          index: n++,
+          section,
+          title: shortTitle(lead ? lead[1] : plain.split(/(?<=[.!?])\s/)[0] || plain),
+          url: lead ? lead[2] : any ? any[1] : null,
+          text: plain,
+          html: marked.parseInline(raw),
+          // Tomme seksjoner skrives som «Ingen viktige hendelser.» — en plassholder, ikke
+          // en nyhet. Den skal verken kunne favorittmerkes eller havne i biblioteket.
+          pinnable: plain.length >= MIN_POINT_CHARS,
+        };
+      });
+
+      return { emoji: m ? m[1] : '', title: section, html: renderMarkdown(body), points };
     });
+}
+
+/** Alle nyhetspunkter i en briefing, flatet ut (rekkefølgen bærer `index`). */
+export function newsPoints(md) {
+  return splitNewsSections(md).flatMap((s) => s.points);
 }
 
 // Merkede deler i en studie: «**Hva som ble gjort:** …» fram til neste «**…:**».

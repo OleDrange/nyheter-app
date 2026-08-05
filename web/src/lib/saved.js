@@ -1,4 +1,4 @@
-// Lagrede («pinnede») studier, gåter og quizspørsmål.
+// Lagrede («pinnede») studier, nyhetspunkter, gåter, quizspørsmål og boktips.
 //
 // Bor på et EGET volum (`SAVED_DIR`, /state i prod) — ikke på briefing-volumet, som
 // nettappen bevisst monterer read-only. Nettappen er eneste prosess eksponert mot
@@ -17,10 +17,12 @@ const SAVED_FILE = path.join(SAVED_DIR, 'saved.json');
 
 const EMPTY = { version: 1, items: [] };
 
-export const TYPES = ['study', 'riddle', 'quiz', 'book'];
+export const TYPES = ['study', 'news', 'riddle', 'quiz', 'book'];
 
-export const TYPE_LABELS = { study: 'Studier', riddle: 'Gåter', quiz: 'Quiz', book: 'Bøker' };
-export const TYPE_EMOJI = { study: '🔬', riddle: '🧩', quiz: '🧠', book: '📚' };
+export const TYPE_LABELS = {
+  study: 'Studier', news: 'Nyheter', riddle: 'Gåter', quiz: 'Quiz', book: 'Bøker',
+};
+export const TYPE_EMOJI = { study: '🔬', news: '📰', riddle: '🧩', quiz: '🧠', book: '📚' };
 
 // Spaced repetition — samme utvidende intervall som quizbanken (_QUIZ_REVIEW_INTERVALS).
 // En lagret-liste ingen leser er en kirkegård; dette er det som gjør den til et verktøy.
@@ -41,6 +43,13 @@ export function buildId(type, { url, question, title, author } = {}) {
   if (type === 'study') {
     const doi = String(url || '').match(/10\.\d{4,9}\/\S+/);
     return `study:${doi ? doi[0].toLowerCase() : sha12(String(url || title || ''))}`;
+  }
+  // Nyhetspunkter nøkles på kildelenken: samme sak dekket to dager på rad (generatoren
+  // tillater det ved vesentlig ny utvikling) skal bli én oppføring, og URL-en er det
+  // eneste stabile ved den — punktteksten omskrives. Punkter uten lenke faller tilbake
+  // til en innholdshash av teksten.
+  if (type === 'news') {
+    return `news:${sha12(String(url || question || title || '').trim().toLowerCase())}`;
   }
   // Bøker har ingen ID og ingen URL: tittel + forfatter er nøkkelen. Forfatteren er med
   // fordi titler går igjen på tvers av bøker; året er det ikke, siden utgave/opptrykk

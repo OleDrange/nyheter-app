@@ -1,4 +1,4 @@
-// Biblioteket — ALT vi noen gang har vist av forskning, søkbart.
+// Biblioteket — ALT vi noen gang har vist av nyheter og forskning, søkbart.
 //
 // Todelt modell, bevisst:
 //   • BIBLIOTEKET utledes fra briefing-arkivet ved forespørsel. Ingenting kopieres inn i
@@ -9,7 +9,7 @@
 //     er altså ikke lenger «husk denne i det hele tatt», men «denne er viktig for meg» —
 //     et filter over biblioteket, ikke inngangsbilletten til det.
 //
-// Indeksert i BIBLIOTEKET (/lagret): forskningsstudier og boktips. IKKE gåter og quiz i
+// Indeksert i BIBLIOTEKET (/lagret): nyhetspunkter, forskningsstudier og boktips. IKKE gåter og quiz i
 // sin helhet (banken er hundrevis av spørsmål og hører hjemme i dagens briefing, ikke i et
 // oppslagsverk) — de finnes der kun når de er favorittmerket.
 //
@@ -17,14 +17,14 @@
 // inkludert gåter og quiz (`reviewPool()` under). Repetisjon skal ikke være begrenset til
 // det du har rukket å pinne.
 
-import { listDates, getBriefing, splitResearch, briefingStamp } from './briefings.js';
+import { listDates, getBriefing, splitResearch, newsPoints, briefingStamp } from './briefings.js';
 import { buildId, buildSearchText, escapeHtml, readSaved, isDue } from './saved.js';
 
 // 27 dagsfiler i dag, ~5 studier + ~2 boktips hver. Å parse alt per forespørsel er billig,
 // men det skjer flere ganger per sidevisning — så vi cacher til arkivet faktisk endrer seg.
 let cache = { stamp: null, items: [] };
 
-/** Alt som har vært vist av studier og boktips, nyeste briefing først. */
+/** Alt som har vært vist av nyheter, studier og boktips, nyeste briefing først. */
 export async function libraryEntries() {
   const stamp = await briefingStamp();
   if (cache.stamp === stamp) return cache.items;
@@ -53,6 +53,24 @@ export async function libraryEntries() {
         category: st.category || m?.category || null,
         journal: m?.journal || null,
         snapshot: { parts: st.parts },
+      });
+    }
+
+    // Nyhetspunkter: ett punkt = én oppføring, på linje med en studie. Alt vi har vist
+    // er søkbart uten at du måtte pinne det i går — «hva var det NRK skrev om Ekofisk?»
+    // er nøyaktig det biblioteket er til for. Nyheter er den største typen (~19/dag mot
+    // ~5 studier), derfor er type-fanen på /lagret den viktigste filtreringen.
+    for (const p of b.news_md ? newsPoints(b.news_md) : []) {
+      if (!p.pinnable) continue;
+      add({
+        id: buildId('news', p),
+        type: 'news',
+        date,
+        url: p.url,
+        title: p.title,
+        category: null,
+        journal: p.section || null,
+        snapshot: { parts: [{ label: 'Punktet', text: p.text, html: p.html }] },
       });
     }
 
@@ -103,7 +121,7 @@ export async function libraryItems() {
 }
 
 /**
- * Posisjonen en gåte, et quizspørsmål eller et boktips har i dagsfila. Pin-knappen
+ * Posisjonen et nyhetspunkt, en gåte, et quizspørsmål eller et boktips har i dagsfila. Pin-knappen
  * identifiserer dem med indeks (de har ingen URL), og biblioteket bærer bare teksten —
  * så den slås opp her. Null hvis dagsfila er borte; da rendres knappen uten indeks og
  * kan kun avmerkes.
@@ -111,6 +129,12 @@ export async function libraryItems() {
 export async function resolveIndex(item) {
   if (item.type === 'study' || !item.date) return null;
   const b = await getBriefing(item.date);
+  if (item.type === 'news') {
+    const pts = b?.news_md ? newsPoints(b.news_md) : [];
+    // Lenken er nøkkelen (som i buildId); tittelen er fallback for punkter uten lenke.
+    const i = pts.findIndex((p) => (item.url ? p.url === item.url : p.title === item.title));
+    return i === -1 ? null : i;
+  }
   const src = item.type === 'riddle' ? b?.riddles
     : item.type === 'quiz' ? b?.quiz
     : b?.learning?.books;
@@ -210,10 +234,18 @@ async function archiveDrills() {
   return extrasCache.items;
 }
 
-/** Alt som kan komme tilbake som repetisjon: bibliotek + gåter/quiz fra arkivet. */
+/**
+ * Alt som kan komme tilbake som repetisjon: bibliotek + gåter/quiz fra arkivet.
+ *
+ * Nyhetspunkter holdes UTE, selv om de er i biblioteket: en tre uker gammel nyhet er
+ * ikke noe å repetere, og med ~19 punkter i døgnet ville de utgjort flertallet av poolen
+ * og fortrengt studiene og boktipsene kortet er til for. Har du favorittmerket et
+ * nyhetspunkt, sier du det motsatte — og favoritter går uansett gjennom `saved.json`
+ * i `dailyReview()`, ikke gjennom denne poolen.
+ */
 export async function reviewPool() {
   const [entries, drills] = await Promise.all([libraryEntries(), archiveDrills()]);
-  return [...entries, ...drills];
+  return [...entries.filter((it) => it.type !== 'news'), ...drills];
 }
 
 /**
@@ -255,7 +287,7 @@ export async function dailyReview(today) {
 
 /** Tellinger til fanene: totalt, favoritter, og per type. */
 export function libraryCounts(items) {
-  const counts = { total: items.length, favorite: 0, study: 0, riddle: 0, quiz: 0, book: 0 };
+  const counts = { total: items.length, favorite: 0, study: 0, news: 0, riddle: 0, quiz: 0, book: 0 };
   for (const it of items) {
     if (it.favorite) counts.favorite += 1;
     if (counts[it.type] !== undefined) counts[it.type] += 1;
