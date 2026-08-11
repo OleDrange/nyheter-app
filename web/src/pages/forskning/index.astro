@@ -3,7 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import ResearchList from '../../components/ResearchList.astro';
 import StatsGuide from '../../components/StatsGuide.astro';
-import { listDates, getBriefing, formatDateNo } from '../../lib/briefings.js';
+import { listDates, getBriefing, formatDateNo, researchNeighbors } from '../../lib/briefings.js';
 
 const base = Astro.locals.fbase ?? '/forskning';
 
@@ -16,15 +16,26 @@ for (const d of dates) {
     break;
   }
 }
+
+// Kun bakover herfra — dette ER nyeste dag med studier.
+const prev = b ? (await researchNeighbors(b.date)).prev : null;
 ---
 
 <Base title={b ? b.date : 'i dag'} site="forskning" base={base}>
   {
     b ? (
       <>
-        <div class="page-head">
-          <h1>Dagens forskning</h1>
-          <div class="date">{formatDateNo(b.date)}</div>
+        <div class="page-head page-head--nav">
+          <div>
+            <h1>Dagens forskning</h1>
+            <div class="date">{formatDateNo(b.date)}</div>
+          </div>
+          <nav class="daynav" aria-label="Bytt dag">
+            {prev && (
+              <a href={`${base}/b/${prev}`}>← {formatDateNo(prev, { day: 'numeric', month: 'short' })}</a>
+            )}
+            <a href={`${base}/arkiv`}>Arkiv</a>
+          </nav>
         </div>
         <StatsGuide />
         <ResearchList b={b} />

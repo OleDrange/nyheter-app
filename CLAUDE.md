@@ -400,7 +400,16 @@ visningsnavn og slug). Heller færre enn svake.
   den gamle karantenen, og de døde ut av seg selv da `_is_blocked()` ble forenklet.
 - **Legacy:** kategorien `medisin` produseres ikke lenger, men finnes i arkiverte briefinger —
   derfor ligger den fortsatt sist i `RESEARCH_CATEGORIES` (`web/src/lib/briefings.js`) og i
-  `CATEGORY_LABELS`. Tomme grupper skjules av `ResearchList.astro`.
+  `CATEGORY_LABELS`. Kategorien vises som badge/pill i `ResearchList.astro`.
+- **Claude dropper av og til lenken i overskriften** (`## tittel](url)` uten innledende `[`,
+  eller helt uten URL — målt: 2 av 5 studier 8. august 2026). `splitResearch()` tåler den
+  manglende `[`, men uten URL i det hele tatt hadde studien verken kilde, favoritt-knapp
+  eller plass i biblioteket. `studiesForDay(b)` (`web/src/lib/briefings.js`) kobler derfor
+  `research_items` på studiene: først på URL, deretter **posisjonsfallback** når antallet
+  stemmer og plassen ikke er tatt av et URL-treff — `research_items` bygges fra
+  `picked_entries` i samme rekkefølge som markdownen settes sammen, så posisjon er trygg.
+  Den er felles kilde for `ResearchList.astro`, `deriveStudy()` (`api/lagret.js`) og
+  `libraryEntries()` (`library.js`), så en studie som vises også kan pinnes og finnes igjen.
 - Gjenbruker hjelpefunksjoner fra `news_briefing.py` (bl.a. `store_briefing`).
 
 ## Datalager — JSON-kontrakten
@@ -569,8 +578,21 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
   - `BrannCard.astro` — SK Brann-blokk fra `brann`-feltet: tabellplassering, neste kamp
     (norsk dato/klokkeslett via Intl, følger container-TZ), siste resultat (farget utfall)
     og nyhetslenker. Ren HTML uten klient-JS.
-  - `ResearchList.astro` — full forskningsvisning (forskning-sidene): studiekort gruppert
-    etter kategori (`RESEARCH_CATEGORIES` i `briefings.js`), ukategoriserte under «Øvrig».
+  - `ResearchList.astro` — full forskningsvisning (forskning-sidene): **panorama-kort**, ett
+    per studie i full bredde. Fra 1000px deles kortet i en venstreskinne (kategori-badge,
+    tittel, tidsskrift · publiseringsdato, doi, ★) og avsnittene i to spalter — Metode/Resultat
+    over Betydning/Forbehold. Under 1000px stables alt (mobilvisningen er uendret).
+    **Ikke gå tilbake til én grid per kategori** (`.research-grid--wide`, `minmax(420px, 1fr)`
+    → 3 kolonner på 1400px): dagene har 5 studier fordelt på 3–4 kategorier, altså 1–2 kort
+    per grid, så hver rad hadde permanente hull — og på dager med én studie fylte siden en
+    tredjedel av skjermen. Grupperingen ligger nå i **sorteringen** (`RESEARCH_CATEGORIES`),
+    kategori-badgen på kortet og pill-raden `.cat-pills` øverst (fordeling + hopp-nav, vises
+    kun ved 2+ kategorier). Anker-id `s<i>` settes **før** sorteringen (i = posisjon i
+    `research_md`), ellers brekker lenkene fra nyhetssiden. «Resultat» har egen, nøytral
+    fremheving (tallene StatsGuide finnes for); «Hva det betyr for deg» beholder accent-fargen.
+    Kilde-metadata og URL kommer fra `studiesForDay()`, ikke `splitResearch()` alene.
+    Forsiden og dagsiden har dagnavigasjon (`.daynav`, `researchNeighbors()` hopper over
+    dager uten studier). `.research-grid--wide` brukes fortsatt av `/lagret`.
   - `StatsGuide.astro` + `StatsGuideNode.astro` — «Slik leser du forskningstall»: skjulbart
     oppslagsverk øverst på forskningsforsiden (p-verdi/KI/effektstørrelser). Innholdet er et
     rekursivt tre i `src/lib/statsGuide.js` (datatype → metode → eksempel) som
@@ -624,6 +646,8 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
   `[{ title, url, category, parts, html }]` (`parts` = de merkede avsnittene Metode/Resultat/
   Hva det betyr for deg/Forbehold — og Hva som ble gjort/Relevans i arkiverte briefinger;
   `category` løftes ut av **Kategori**-etiketten via `normalizeCategory()`; `html` er fallback),
+  `studiesForDay(b)` (splitResearch + kilde-metadata fra `research_items` + `anchor`; se
+  forskningsseksjonen), `researchNeighbors(date)` (forrige/neste dag med studier),
   `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
 - **Temaer:** 5 stk via `[data-theme]` på `<html>`, lagres i `localStorage` (`theme`), settes
   før paint av `is:inline`-skript i `<head>`. **Nytt tema = (1) `[data-theme="<id>"]`-blokk i

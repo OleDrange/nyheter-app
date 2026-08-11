@@ -8,7 +8,7 @@
 //   PATCH  { id, action:'review' }                                  → marker som repetert
 import { saveItem, removeItem, patchItem, reviewItem, escapeHtml } from '../../lib/saved.js';
 import { isAuthed, writingEnabled } from '../../lib/auth.js';
-import { getBriefing, splitResearch, newsPoints } from '../../lib/briefings.js';
+import { getBriefing, studiesForDay, newsPoints } from '../../lib/briefings.js';
 
 export const prerender = false;
 
@@ -42,16 +42,17 @@ async function guard(request, cookies) {
 async function deriveStudy(date, url) {
   const b = await getBriefing(date);
   if (!b?.research_md) return null;
-  const study = splitResearch(b.research_md).find((st) => st.url === url);
+  // studiesForDay() (ikke splitResearch alene) — den kobler på kilde-metadata og
+  // gir studier der Claude droppet lenken i overskriften sin URL tilbake.
+  const study = studiesForDay(b).find((st) => st.url === url);
   if (!study) return null;
-  const item = (b.research_items || []).find((it) => it.url === url);
   return {
     type: 'study',
     date,
     url,
     title: study.title,
-    category: study.category || item?.category || null,
-    journal: item?.journal || null,
+    category: study.category,
+    journal: study.journal,
     snapshot: { parts: study.parts },
   };
 }

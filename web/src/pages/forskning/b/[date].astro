@@ -2,7 +2,7 @@
 // forskning.modr.no/b/<dato> — forskningsbriefingen for én dag.
 import Base from '../../../layouts/Base.astro';
 import ResearchList from '../../../components/ResearchList.astro';
-import { getBriefing, formatDateNo } from '../../../lib/briefings.js';
+import { getBriefing, formatDateNo, researchNeighbors } from '../../../lib/briefings.js';
 
 const base = Astro.locals.fbase ?? '/forskning';
 
@@ -12,13 +12,30 @@ const b = await getBriefing(date);
 if (!b) {
   return new Response('Ikke funnet', { status: 404 });
 }
+
+// Hopp direkte mellom dager med studier — uten omvei via arkivet.
+const { prev, next } = await researchNeighbors(date);
 ---
 
 <Base title={b.date} site="forskning" base={base}>
   <p class="back"><a href={`${base}/arkiv`}>← Tilbake til arkiv</a></p>
-  <div class="page-head">
-    <h1>Forskning</h1>
-    <div class="date">{formatDateNo(b.date)}</div>
+  <div class="page-head page-head--nav">
+    <div>
+      <h1>Forskning</h1>
+      <div class="date">{formatDateNo(b.date)}</div>
+    </div>
+    <nav class="daynav" aria-label="Bytt dag">
+      {prev ? (
+        <a href={`${base}/b/${prev}`}>← {formatDateNo(prev, { day: 'numeric', month: 'short' })}</a>
+      ) : (
+        <span class="daynav__off">← Eldste</span>
+      )}
+      {next ? (
+        <a href={`${base}/b/${next}`}>{formatDateNo(next, { day: 'numeric', month: 'short' })} →</a>
+      ) : (
+        <a href={base || '/'}>I dag →</a>
+      )}
+    </nav>
   </div>
   <ResearchList b={b} />
 </Base>

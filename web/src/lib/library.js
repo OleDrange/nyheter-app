@@ -17,7 +17,7 @@
 // inkludert gåter og quiz (`reviewPool()` under). Repetisjon skal ikke være begrenset til
 // det du har rukket å pinne.
 
-import { listDates, getBriefing, splitResearch, newsPoints, briefingStamp } from './briefings.js';
+import { listDates, getBriefing, studiesForDay, newsPoints, briefingStamp } from './briefings.js';
 import { buildId, buildSearchText, escapeHtml, readSaved, isDue } from './saved.js';
 
 // 27 dagsfiler i dag, ~5 studier + ~2 boktips hver. Å parse alt per forespørsel er billig,
@@ -40,18 +40,18 @@ export async function libraryEntries() {
     const b = await getBriefing(date);
     if (!b) continue;
 
-    const meta = b.research_items || [];
-    for (const st of b.research_md ? splitResearch(b.research_md) : []) {
+    // studiesForDay() kobler på tidsskrift/kategori og redder URL-en for studier
+    // der Claude droppet lenken i overskriften — uten den falt de ut av biblioteket.
+    for (const st of studiesForDay(b)) {
       if (!st.url) continue;
-      const m = meta.find((it) => it.url === st.url);
       add({
         id: buildId('study', { url: st.url }),
         type: 'study',
         date,
         url: st.url,
         title: st.title,
-        category: st.category || m?.category || null,
-        journal: m?.journal || null,
+        category: st.category,
+        journal: st.journal,
         snapshot: { parts: st.parts },
       });
     }

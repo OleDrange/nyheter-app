@@ -1,9 +1,26 @@
 ---
 // Full forskningsvisning for én dag — brukes av forskning.modr.no-sidene.
-// Studiene grupperes etter kategori (Medisin/Trening/Kosthold); studier uten
-// kategori-etikett (gamle briefinger) samles under «Øvrig». Anker-id `s<i>`
-// (i = studiens posisjon i research_md) matcher lenkene fra nyhetssiden.
-import { splitResearch, RESEARCH_CATEGORIES } from '../lib/briefings.js';
+//
+// Layout: ett «panorama»-kort per studie i FULL bredde, med intern to-kolonners
+// oppdeling på brede skjermer (venstre skinne = tittel/kategori/kilde/★, høyre =
+// de merkede avsnittene i to spalter). Fram til 11. august 2026 lå studiene i én
+// grid PER kategori (`minmax(420px, 1fr)` → 3 kolonner på 1400px). Med 5 studier
+// fordelt på 3–4 kategorier ble det alltid 1–2 kort per grid, altså permanente
+// hull i hver rad — og på dager med én studie fylte siden en tredjedel av skjermen.
+// Panorama-kortet bruker bredden uansett om dagen har 1 eller 5 studier, uten å
+// strekke en tekstlinje over hele 1400px.
+//
+// Kategorien er nå en badge på kortet + en pill-rad øverst (som også fungerer som
+// hopp-nav), ikke fire seksjonsoverskrifter over nesten-tomme grids. Rekkefølgen
+// følger fortsatt RESEARCH_CATEGORIES, så gruppering leses fortsatt i flyten.
+//
+// Anker-id `s<i>` (i = studiens posisjon i research_md) matcher lenkene fra
+// nyhetssiden og MÅ derfor settes før sortering.
+import {
+  studiesForDay,
+  RESEARCH_CATEGORIES,
+  formatDateNo,
+} from '../lib/briefings.js';
 import { savedIdSet, buildId } from '../lib/saved.js';
 import { writingEnabled, isAuthed } from '../lib/auth.js';
 import SaveButton from './SaveButton.astro';
@@ -17,18 +34,53 @@ const canPin = writingEnabled();
 const saved = canPin ? await savedIdSet() : new Set();
 const authed = canPin && isAuthed(Astro.cookies);
 
-const studies = splitResearch(b.research_md).map((st, i) => ({
-  ...st,
-  anchor: `s${i}`,
-  savedId: st.url ? buildId('study', { url: st.url }) : null,
-}));
+// «2026-03-10» → «10. mars 2026»; «2026-03» → «mars 2026»; «2026» → «2026».
+const formatPubDate = (d) => {
+  const s = String(d || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return formatDateNo(s, { day: 'numeric', month: 'long', year: 'numeric' });
+  if (/^\d{4}-\d{2}$/.test(s)) return formatDateNo(`${s}-01`, { month: 'long', year: 'numeric' });
+  if (/^\d{4}$/.test(s)) return s;
+  return s || null;
+};
 
-const groups = RESEARCH_CATEGORIES.map((cat) => ({
-  ...cat,
-  studies: studies.filter((st) => st.category === cat.id),
-}));
-const rest = studies.filter((st) => !RESEARCH_CATEGORIES.some((c) => c.id === st.category));
-if (rest.length) groups.push({ id: 'annet', label: 'Øvrig', emoji: '🔬', studies: rest });
+const doiOf = (url) => (String(url || '').match(/10\.\d{4,9}\/\S+/) || [null])[0];
+
+const CAT_BY_ID = new Map(RESEARCH_CATEGORIES.map((c) => [c.id, c]));
+const CAT_ORDER = new Map(RESEARCH_CATEGORIES.map((c, i) => [c.id, i]));
+
+// `studiesForDay()` kobler på tidsskrift/dato/kategori fra research_items (og
+// redder URL-en for studier der Claude droppet lenken i overskriften).
+const studies = studiesForDay(b).map((st) => {
+  const cat = CAT_BY_ID.get(st.category) || null;
+  return {
+    ...st,
+    savedId: st.url ? buildId('study', { url: st.url }) : null,
+    cat,
+    pubDate: formatPubDate(st.pubDate),
+    doi: doiOf(st.url),
+    // Ukjent/manglende kategori (arkiverte briefinger) sorteres bakerst.
+    order: CAT_ORDER.has(st.category) ? CAT_ORDER.get(st.category) : RESEARCH_CATEGORIES.length,
+  };
+});
+
+const ordered = [...studies].sort((a, b2) => a.order - b2.order);
+
+// Pill-rad: én per kategori som faktisk er representert i dag, med antall.
+// Lenker til dagens første studie i kategorien.
+const pills = [];
+for (const st of ordered) {
+  const id = st.cat?.id || 'annet';
+  const hit = pills.find((p) => p.id === id);
+  if (hit) hit.count += 1;
+  else
+    pills.push({
+      id,
+      label: st.cat?.label || 'Øvrig',
+      emoji: st.cat?.emoji || '🔬',
+      count: 1,
+      anchor: st.anchor,
+    });
+}
 
 // Etikettene fra generatorens SYSTEM_PROMPT. «Hva som ble gjort» og «Relevans» er det gamle
 // formatet — beholdes så arkiverte briefinger fortsatt rendrer med ikon.
@@ -41,52 +93,82 @@ const PART_ICON = {
   Forbehold: '⚠️',
 };
 
-// Konklusjonen — det leseren skal ta med seg — fremheves; forbeholdene dempes.
+// Konklusjonen — det leseren skal ta med seg — fremheves; tallene får sin egen,
+// rolige fremheving (det er dem StatsGuide finnes for); forbeholdene dempes.
 const KEY_PARTS = ['Hva det betyr for deg', 'Relevans'];
 
 const partClass = (label) => {
   if (KEY_PARTS.includes(label)) return 'study__part study__part--key';
+  if (label === 'Resultat') return 'study__part study__part--result';
   if (label === 'Forbehold') return 'study__part study__part--caveat';
   return 'study__part';
 };
 ---
 
 {
-  studies.length ? (
-    groups.filter((g) => g.studies.length).map((g) => (
-      <section>
-        <h2 class="section-label">{`${g.emoji} ${g.label} · ${g.studies.length}`}</h2>
-        <div class="research-grid research-grid--wide">
-          {g.studies.map((st) => (
-            <article class="card study" id={st.anchor}>
+  ordered.length ? (
+    <>
+      {pills.length > 1 && (
+        <nav class="cat-pills" aria-label="Dagens kategorier">
+          {pills.map((p) => (
+            <a class="cat-pill" href={`#${p.anchor}`}>
+              <span aria-hidden="true">{p.emoji}</span>
+              {p.label}
+              <span class="cat-pill__count">{p.count}</span>
+            </a>
+          ))}
+        </nav>
+      )}
+
+      <div class="research-list">
+        {ordered.map((st) => (
+          <article class="card study study--panorama" id={st.anchor}>
+            <div class="study__head">
+              <span class="study__cat">
+                <span aria-hidden="true">{st.cat?.emoji || '🔬'}</span>
+                {st.cat?.label || 'Øvrig'}
+              </span>
               <h3 class="study__title">
                 {st.url ? <a href={st.url} target="_blank" rel="noopener">{st.title}</a> : st.title}
               </h3>
-              {canPin && st.url && (
-                <div class="study__actions">
+              {(st.journal || st.pubDate) && (
+                <div class="study__source">
+                  {st.journal && <span class="study__journal">{st.journal}</span>}
+                  {st.journal && st.pubDate && <span aria-hidden="true"> · </span>}
+                  {st.pubDate && <span>{st.pubDate}</span>}
+                </div>
+              )}
+              <div class="study__foot">
+                {st.doi && (
+                  <a class="study__doi" href={st.url} target="_blank" rel="noopener">
+                    doi:{st.doi}
+                  </a>
+                )}
+                {canPin && st.url && (
                   <SaveButton date={b.date} url={st.url} id={st.savedId} saved={saved.has(st.savedId)} />
-                </div>
-              )}
-              {st.parts.length ? (
-                <div class="study__parts">
-                  {st.parts.map((p) => (
-                    <div class={partClass(p.label)}>
-                      <div class="study__label">
-                        <span class="study__label-icon" aria-hidden="true">{PART_ICON[p.label] || '•'}</span>
-                        {p.label}
-                      </div>
-                      <div class="study__text" set:html={p.html} />
+                )}
+              </div>
+            </div>
+
+            {st.parts.length ? (
+              <div class="study__parts">
+                {st.parts.map((p) => (
+                  <div class={partClass(p.label)}>
+                    <div class="study__label">
+                      <span class="study__label-icon" aria-hidden="true">{PART_ICON[p.label] || '•'}</span>
+                      {p.label}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div class="prose" set:html={st.html} />
-              )}
-            </article>
-          ))}
-        </div>
-      </section>
-    ))
+                    <div class="study__text" set:html={p.html} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div class="prose" set:html={st.html} />
+            )}
+          </article>
+        ))}
+      </div>
+    </>
   ) : (
     <p class="muted">Ingen forskningsbriefing denne dagen.</p>
   )

@@ -323,6 +323,37 @@ main {
   margin: 0 0 14px;
   font-size: 0.92rem;
 }
+/* Sidetittel med dagnavigasjon til høyre (forskningssidene). */
+.page-head--nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+.daynav {
+  display: flex;
+  gap: 6px;
+}
+.daynav a,
+.daynav__off {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.daynav a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.daynav__off {
+  opacity: 0.45;
+}
 
 /* ── Toppgrid: vær + marked ─────────────────────────────────────────────── */
 .top-grid {
@@ -1089,7 +1120,8 @@ main {
   display: grid;
   gap: 16px;
 }
-/* Forskningssiden: to kolonner på brede skjermer (20 studier/dag) */
+/* Legacy: flerkolonners studiegrid. Forskningssiden bruker nå .research-list
+   (panorama-kort i full bredde) — se ResearchList.astro for hvorfor. */
 .research-grid--wide {
   grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
 }
@@ -1097,6 +1129,47 @@ main {
   .research-grid--wide {
     grid-template-columns: 1fr;
   }
+}
+
+/* Kategori-pills over dagens studier: fordeling + hopp-nav i ett. */
+.cat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.cat-pill:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.cat-pill__count {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-faint);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* Dagens studier: ett kort per studie, alltid full bredde. */
+.research-list {
+  display: grid;
+  gap: 18px;
 }
 .study {
   padding: 18px 22px;
@@ -1119,11 +1192,85 @@ main {
   color: var(--accent);
 }
 
+/* ── Panorama-kort (forskningssiden) ────────────────────────────────────────
+   Full bredde per studie. Fra 1000px deles kortet i en smal venstreskinne
+   (kategori/tittel/kilde/★) og avsnittene i to spalter, så bredden brukes
+   uansett om dagen har 1 eller 5 studier — uten å strekke en tekstlinje over
+   hele sidebredden. Under 1000px stables alt (mobilvisningen er uendret). */
+.study--panorama {
+  padding: 20px 24px 22px;
+}
+.study--panorama .study__title {
+  margin-bottom: 8px;
+}
+.study__cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.study__source {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+.study__journal {
+  font-style: italic;
+}
+.study__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.study__doi {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  overflow-wrap: anywhere;
+}
+.study__doi:hover {
+  color: var(--accent);
+}
+
+@media (min-width: 1000px) {
+  .study--panorama {
+    display: grid;
+    grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+    gap: 10px 30px;
+    align-items: start;
+  }
+  /* Skinnen skiller seg fra avsnittene med en hårfin linje, ikke en boks. */
+  .study--panorama .study__head {
+    border-right: 1px solid var(--border);
+    padding-right: 26px;
+    align-self: stretch;
+  }
+  .study--panorama .study__parts {
+    margin-top: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 26px;
+  }
+  .study--panorama .prose {
+    margin-top: 0;
+  }
+}
+
 /* Separerte avsnitt (Hva som ble gjort / Resultat / Relevans) */
 .study__parts {
   display: grid;
   gap: 14px;
   margin-top: 12px;
+  align-items: start;
 }
 .study__part {
   padding-left: 13px;
@@ -1134,6 +1281,20 @@ main {
   background: var(--accent-soft);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: 10px 13px;
+}
+/* Resultat: tallene (HR/KI/p) er det StatsGuide finnes for — de fortjener egen
+   vekt, men en rolig en, så de ikke konkurrerer med konklusjonen om fargen. */
+.study__part--result {
+  border-left-color: var(--text-faint);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 10px 13px;
+}
+.study__part--result .study__label {
+  color: var(--text-muted);
+}
+.study__part--result .study__text {
+  color: var(--text);
 }
 /* Forbehold: til stede, men skal ikke konkurrere med funnet om oppmerksomheten. */
 .study__part--caveat {

@@ -71,6 +71,67 @@ export function weekdayNo(dateStr) {
   return formatDateNo(dateStr, { weekday: 'long' });
 }
 
+const _normUrl = (u) => String(u || '').trim().toLowerCase().replace(/\/+$/, '');
+
+/**
+ * Dagens studier med kilde-metadata påkoblet: `splitResearch()` + tidsskrift,
+ * publiseringsdato og kategori fra `research_items`, samt `anchor` (`s<i>`).
+ *
+ * Koblingen skjer på URL (DOI-en er unik). **Posisjonsfallback:** Claude dropper av
+ * og til lenken helt i overskriften (målt: 2 av 5 studier 8. august 2026), og da har
+ * studien ingen URL — den ble usynlig i biblioteket og umulig å favorittmerke.
+ * `research_items` bygges fra `picked_entries` i samme rekkefølge som markdownen
+ * settes sammen, så posisjon er en trygg kobling når antallet stemmer og plassen
+ * ikke allerede er tatt av et URL-treff.
+ */
+export function studiesForDay(b) {
+  const items = (b?.research_items || []).filter(Boolean);
+  const byUrl = new Map(items.filter((it) => it.url).map((it) => [_normUrl(it.url), it]));
+
+  const out = splitResearch(b?.research_md).map((st, i) => ({
+    ...st,
+    anchor: `s${i}`,
+    item: st.url ? byUrl.get(_normUrl(st.url)) || null : null,
+  }));
+
+  if (out.length === items.length) {
+    const claimed = new Set(out.map((o) => o.item).filter(Boolean));
+    out.forEach((o, i) => {
+      if (o.item || claimed.has(items[i])) return;
+      o.item = items[i];
+      o.url = o.url || items[i].url || null;
+    });
+  }
+
+  return out.map(({ item, ...st }) => ({
+    ...st,
+    category: st.category || item?.category || null,
+    journal: item?.journal && item.journal !== '—' ? item.journal : null,
+    pubDate: item?.date && item.date !== '—' ? item.date : null,
+  }));
+}
+
+/**
+ * Nærmeste dag før/etter `date` som faktisk har en forskningsbriefing.
+ * Brukes til «forrige/neste dag»-navigasjonen på forskningssidene — dager uten
+ * studier (køen kan gå tom) skal hoppes over, ellers lander leseren på en blank side.
+ * Leser kun dagsfiler til den finner et treff i hver retning (som regel én).
+ */
+export async function researchNeighbors(date) {
+  const dates = await listDates(); // nyeste først
+  const i = dates.indexOf(date);
+  if (i === -1) return { prev: null, next: null };
+  const seek = async (from, step) => {
+    for (let j = from; j >= 0 && j < dates.length; j += step) {
+      const b = await getBriefing(dates[j]);
+      if (b?.research_md?.trim()) return dates[j];
+    }
+    return null;
+  };
+  // Lista er nyeste først: eldre dag = høyere indeks.
+  return { prev: await seek(i + 1, 1), next: await seek(i - 1, -1) };
+}
+
 // Forskningssiden bor på eget subdomene (samme app, host-rutet i middleware.js).
 export const FORSKNING_URL = 'https://forskning.modr.no';
 
