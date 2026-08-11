@@ -88,17 +88,10 @@ const due = isToday ? await dailyReview(b.date) : null;
   }
 </section>
 
-{due && (
-  <section class="jump-target" id="repetisjon">
-    <h2 class="section-label">Repetisjon</h2>
-    <ReviewCard item={due} canEdit={authed} />
-  </section>
-)}
-
-{b.riddles?.length > 0 && (
-  <section class="jump-target" id="gaater">
-    <h2 class="section-label">Gåter</h2>
-    <RiddleCard riddles={b.riddles} date={b.date} canPin={canPin} saved={saved} />
+{(b.learning?.podcasts?.length > 0 || b.learning?.books?.length > 0) && (
+  <section class="jump-target" id="inspirasjon">
+    <h2 class="section-label">Inspirasjon</h2>
+    <LearningCard learning={b.learning} date={b.date} canPin={canPin} saved={saved} />
   </section>
 )}
 
@@ -109,10 +102,17 @@ const due = isToday ? await dailyReview(b.date) : null;
   </section>
 )}
 
-{(b.learning?.podcasts?.length > 0 || b.learning?.books?.length > 0) && (
-  <section class="jump-target" id="inspirasjon">
-    <h2 class="section-label">Inspirasjon</h2>
-    <LearningCard learning={b.learning} date={b.date} canPin={canPin} saved={saved} />
+{b.riddles?.length > 0 && (
+  <section class="jump-target" id="gaater">
+    <h2 class="section-label">Gåter</h2>
+    <RiddleCard riddles={b.riddles} date={b.date} canPin={canPin} saved={saved} />
+  </section>
+)}
+
+{due && (
+  <section class="jump-target" id="repetisjon">
+    <h2 class="section-label">Repetisjon</h2>
+    <ReviewCard item={due} canEdit={authed} />
   </section>
 )}
 

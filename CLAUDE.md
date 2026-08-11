@@ -551,8 +551,10 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
 - **Komponenter:**
   - `BriefingView.astro` — deler topp-grid + gåter/quiz + nyhetskort mellom forside og
     enkeltdag. Nyhetsseksjonene rendres punkt for punkt (`s.points`) med favoritt-stjerne per
-    punkt — ikke som én `set:html`-blokk; seksjoner uten punktliste faller tilbake til det. Rekkefølge: vær/marked → nyheter → Gåter → Quiz → Inspirasjon →
-    Til ettertanke → forskning (kun tittelliste med kategori-badge, lenker til `FORSKNING_URL`).
+    punkt — ikke som én `set:html`-blokk; seksjoner uten punktliste faller tilbake til det. Rekkefølge: vær/marked → nyheter → Inspirasjon → Quiz → Gåter →
+    Repetisjon → Til ettertanke → forskning (kun tittelliste med kategori-badge, lenker til
+    `FORSKNING_URL`). **Rekkefølgen ligger kun her** (og speiles i `.jumpnav` i `Base.astro`) —
+    endrer du den, må hopp-raden endres i samme slengen, ellers hopper leseren i utakt med siden.
     `BrannCard` rendres inne i Bergen og Vestland-kortet (tittelmatch `/bergen/i`).
     Seksjonene har anker-id-er (`#vaer-marked`, `#nyheter`, `#gaater`, `#quiz`, `#inspirasjon`,
     `#refleksjon`) som headerens hopp-rad bruker (`.jumpnav` i `Base.astro`, kun
