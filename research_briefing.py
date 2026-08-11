@@ -58,10 +58,11 @@ MAX_TOKENS = 16000  # 10 studieomtaler i ett svar (~700 tokens hver + overhead)
 # Europe PMC tildeler MeSH-termer og publikasjonstyper uker etter publisering, så en artikkel
 # som er to dager gammel er ennå ikke merket som menneskestudie eller RCT. Målt på `exercise`:
 # 2 dager → 0 treff med MESH:"Humans"; 30 dager → 24; 180 dager → rikelig.
-# 180 dager gir 494 studier i poolen (~2,7 nye i døgnet). Tilsiget er nesten identisk med
-# 365 dager (3,0/døgn) — forskning publiseres jevnt — så halvårsvinduet koster nesten ingenting
-# løpende; det halverer bare reservoaret vi kan tømme i starten. Til gjengjeld er alt vi viser
-# publisert siste halvår.
+# 180 dager gir 5 226 studier i poolen (~29 nye i døgnet, målt 11. august 2026 etter at
+# menneskefilteret ble fikset — se _PMC_SUFFIX). Tilsiget er nesten identisk med 365 dager
+# (33,5/døgn) — forskning publiseres jevnt — så halvårsvinduet koster nesten ingenting løpende;
+# det halverer bare reservoaret vi kan tømme i starten. Til gjengjeld er alt vi viser publisert
+# siste halvår.
 LOOKBACK_DAYS = 180
 
 # 5, ikke 7: vinduet tar inn ~2,6 nye studier i døgnet, så alt over det tømmer reservoaret.
@@ -138,18 +139,35 @@ ANCHOR_TEXT = "Forskningsbriefinger"
 # Syntaks: Europe PMC query language.
 #
 # _PMC_SUFFIX er der utvalgskriteriene FAKTISK håndheves (før het det bare i systemprompten):
-#   SRC:MED     — kun fagfellevurdert (MEDLINE/PubMed)
-#   MESH:Humans — menneskestudier, ikke mus/cellekultur
-#   PUB_TYPE    — kun RCT, metaanalyse eller systematisk oversikt
+#   SRC:MED   — kun fagfellevurdert (MEDLINE/PubMed)
+#   KW:Humans — menneskestudier, ikke mus/cellekultur
+#   PUB_TYPE  — kun RCT, metaanalyse eller systematisk oversikt
 #
 # Emneordene er bundet til TITTELEN (`TITLE:"…"`), ikke fritekst. Uten det matcher Europe PMC
 # ordet hvor som helst i artikkelen, og ett tilfeldig «exercise» i et abstract om endometriose
 # gjør studien til en «trenings»-studie. Målt: fritekst ga en pool full av kreft, cellegift og
-# antipsykotika; tittelbinding ga treff som faktisk HANDLER om temaet. Prisen er volum
-# (473 studier i et 180-dagers vindu, ~2,6 nye i døgnet) — knapt nok når vi viser opptil 5 om
-# dagen; se MAX_ITEMS og MIN_SCORE for hvorfor tallet er stramt.
+# antipsykotika; tittelbinding ga treff som faktisk HANDLER om temaet.
+#
+# ── Menneskefilteret må være `KW:`, ALDRI `MESH:`. ──────────────────────────────────────────
+# Fram til 11. august 2026 sto det `MESH:"Humans"`, og det feltet er dødt i Europe PMC: det
+# matcher en forsvinnende og vilkårlig delmengde, selv om studiene har «Humans» i
+# `meshHeadingList`. Målt på TITLE:"exercise" AND SRC:MED:
+#
+#     PUB_TYPE:"Randomized Controlled Trial"                    → 385 treff
+#     PUB_TYPE:"Randomized Controlled Trial" AND MESH:"Humans"  →   1 treff
+#
+# Over ti år: 8 304 RCT-er, hvorav MESH-varianten slapp gjennom 13 (0,16 %). Metaanalyser kom
+# gjennom med ~14 %, så filteret fjernet i praksis HELE RCT-tilfanget og lot oss stå igjen med
+# oversiktsartikler. `MESH:"Animals"` gir 0 og `MESH:"Adult"` gir 1 — feltet virker ikke i det
+# hele tatt. Konsekvensen var at 180-dagersvinduet skrumpet til 398 studier (~2,2/døgn) mens vi
+# viser opptil 5 om dagen: køen blødde ut over ti dager og forskningsbriefingen uteble 10.
+# august 2026.
+#
+# `KW:"Humans"` treffer MeSH-termene og diskriminerer riktig (TITLE:"exercise" → 38 % beholdt,
+# TITLE:"rats" → 5 %, TITLE:"mice" → 14 %). Samme vindu og samme PUB_TYPE-krav gir da 5 226
+# studier (~29/døgn) — 13× poolen, og god margin over MAX_ITEMS selv etter MIN_SCORE.
 _PMC_SUFFIX = (
-    ' AND MESH:"Humans"'
+    ' AND KW:"Humans"'
     ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
     ' OR PUB_TYPE:"Systematic Review")'
     " AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y"

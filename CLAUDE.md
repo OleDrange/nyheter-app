@@ -304,9 +304,19 @@ igjen). Køen er sin egen dedup: en DOI som allerede står der, settes aldri inn
 
 **1. Europe PMC-spørring — her håndheves kvalitetskravene.** `search`-REST (ingen nøkkel),
 `resultType=core` (fulle abstracts). `_PMC_SUFFIX` krever `SRC:MED` (fagfellevurdert),
-`MESH:"Humans"` (ingen mus/celler) og `PUB_TYPE` = RCT / metaanalyse / systematisk oversikt.
+`KW:"Humans"` (ingen mus/celler) og `PUB_TYPE` = RCT / metaanalyse / systematisk oversikt.
 Fire kategorier i `CATEGORY_QUERIES`: **longevity / trening / kosthold / sovn_stress**.
 Kryss-kategori-duplikater fjernes (første kategori vinner).
+
+- **Menneskefilteret må være `KW:"Humans"` — `MESH:` er dødt i Europe PMC og skal ALDRI
+  brukes.** Fram til 11. august 2026 sto det `MESH:"Humans"`, som matcher en forsvinnende og
+  vilkårlig delmengde selv om studiene har «Humans» i `meshHeadingList`. Målt på
+  `TITLE:"exercise" AND SRC:MED`: RCT alene → **385** treff, RCT + `MESH:"Humans"` → **1**.
+  Over ti år slapp 13 av 8 304 RCT-er gjennom (0,16 %), mot ~14 % av metaanalysene — filteret
+  fjernet altså i praksis **hele RCT-tilfanget** og etterlot oss med oversiktsartikler.
+  (`MESH:"Animals"` → 0, `MESH:"Adult"` → 1: feltet virker ikke i det hele tatt.) `KW:` treffer
+  MeSH-termene og diskriminerer riktig: `TITLE:"exercise"` beholder 38 %, `TITLE:"rats"` 5 %,
+  `TITLE:"mice"` 14 %. Fiksen tok 180-dagerspoolen fra 398 til **5 226** studier (13×).
 
 - **Emneordene er bundet til tittelen** (`TITLE:"exercise"`), ikke fritekst. Uten det matcher
   Europe PMC ordet hvor som helst i artikkelen, og poolen fylles av kreft, cellegift og
@@ -318,13 +328,17 @@ Kryss-kategori-duplikater fjernes (første kategori vinner).
 - **`LOOKBACK_DAYS = 180`, ikke 2.** Forskning har ingen nyhetssyklus, og et kort vindu gjør
   kvalitetsfiltrene *utilgjengelige*: Europe PMC tildeler MeSH/PUB_TYPE uker etter publisering,
   så en to dager gammel artikkel er ennå ikke merket som menneskestudie eller RCT (målt på
-  `exercise`: 2 dager → 0 treff med `MESH:"Humans"`, 30 dager → 24). Vinduet gir 494 studier
-  (~2,7 nye i døgnet). 365 dager gir 1 090 (~3,0/døgn) — nesten samme *tilsig*, bare et større
-  reservoar; halvårsvinduet er valgt bevisst så alt vi viser er publisert siste seks måneder.
+  `exercise`: 2 dager → 0 treff, 30 dager → 24). Vinduet gir **5 226** studier (~29 nye i
+  døgnet, målt 11. august 2026 etter `KW:`-fiksen over). 365 dager gir 12 241 (~33,5/døgn) —
+  nesten samme *tilsig*, bare et større reservoar; halvårsvinduet er valgt bevisst så alt vi
+  viser er publisert siste seks måneder.
 - **Hele poolen hentes, ikke bare de nyeste.** `_fetch_all_pages()` paginerer via Europe PMCs
-  `cursorMark` (`PAGE_SIZE = 100`, tak `MAX_FETCH_PER_CATEGORY = 600`). Tidligere hentet vi kun
-  de 100 nyest indekserte per kategori, som utelot ~80 % av vinduet fra scoringen uten å gi noe
-  igjen — «nyest først» betyr lite når vinduet uansett er 180 dager.
+  `cursorMark` (`PAGE_SIZE = 100`, tak `MAX_FETCH_PER_CATEGORY = 600`, sortert
+  `P_PDATE_D desc`). Tidligere hentet vi kun de 100 nyest indekserte per kategori, som utelot
+  ~80 % av vinduet fra scoringen. **Etter `KW:`-fiksen er 600-taket bindende igjen** (poolen er
+  916–1 591 per kategori), så vi ser de 600 nyeste per kategori — rikelig til å fylle køen,
+  siden påfyll uansett bare kjører når køen er under `QUEUE_REFILL_BELOW`. Hev taket hvis du
+  vil score hele vinduet.
 
 **2. Lokal scoring (`_score_candidate`) — gratis grovsortering før Claude.** Rangerer alt som
 er hentet. Poeng for studiedesign (`pubTypeList`), utvalgsstørrelse (log10, dempet),
@@ -336,12 +350,17 @@ forkastes helt.
 
 - **`MIN_SCORE = 3.0` — studier under terskelen settes aldri i kø.** Køen skal ikke fylles av
   materiale som må siles ut igjen ved hvert uttak.
-- **Tilsiget er den harde grensen, og køen skjuler den ikke — den gjør den synlig.** Vinduet
-  tar inn ~2,6 nye studier i døgnet mens vi viser inntil 5, så køen tømmes over tid uansett;
-  forskjellen fra før er at det da blir *færre studier per dag*, ikke null. Symptomet å se
-  etter er at «ferdigskrevne igjen i kø» faller mot 0 flere dager på rad. Riktig fiks er å
-  utvide `LOOKBACK_DAYS` (365 dager ga 272 kandidater over 3,0 ved måling) eller senke
-  `MAX_ITEMS` — **ikke** å senke terskelen.
+- **Tilsiget er den harde grensen, og køen skjuler den ikke — den gjør den synlig.** Symptomet
+  å se etter er at «ferdigskrevne igjen i kø» faller mot 0 flere dager på rad. Skjer det, er
+  riktig fiks å utvide `LOOKBACK_DAYS`, heve `MAX_FETCH_PER_CATEGORY` eller senke `MAX_ITEMS`
+  — **ikke** å senke terskelen.
+  - **Sjekk alltid spørringen først.** Da køen blødde tom 1.–11. august 2026 (92 → 0 «venter
+    på tekst» på ti dager; ingen forskningsbriefing 10. august, 1 studie 11.) så det ut som
+    naturlig uttørking av reservoaret — tilsiget var ~2,2/døgn mot 5 viste. Det var det ikke:
+    `MESH:"Humans"` holdt 92 % av materialet ute (se over). Køen var tom, ingenting var
+    frosset (`research_seen_dois.json`: 297 `picked`, 0 `refused`; køen: 64 `rejected`) — men
+    årsaken lå i spørringen, ikke i kapasiteten. Mål `hitCount` per kategori før du justerer
+    knappene.
 - **Scoringen kjører på FULLT abstract — kutt aldri før scoring.** `MAX_ABSTRACT_CHARS = 4000`
   brukes kun når prompten bygges (`build_candidates_text`). Tidligere ble abstractet kuttet til
   1200 tegn *før* scoringen, men Resultat-delen (HR/RR/CI/p, utvalgsstørrelse) står typisk etter
