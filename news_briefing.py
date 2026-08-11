@@ -156,8 +156,15 @@ FORKLAR UNDERVEIS:
 - Fagbegreper, forkortelser og mindre kjente selskaper/institusjoner forklares kort inne i punktet (2–6 ord): «styringsrenten (Norges Banks utlånsrente)», «brikkeprodusenten TSMC», «EMA (EUs legemiddelmyndighet)».
 - Allment kjente navn (Apple, Google, NATO, Norges Bank) trenger ingen forklaring.
 
+SELEKSJON — VIKTIGSTE REGEL:
+Prioriter saker som markerer et RETNINGSSKIFTE, ikke enkelthendelser i en pågående sak.
+Spør for hver kandidat: «Endrer denne saken retningen på noe?» Nei → kutt den.
+- Ta med: vendepunkt i en trend, ny politikk/regulering som endrer spillereglene, tall som bryter med forventningen, første gang noe skjer, en aktør som skifter strategi.
+- Kutt: statusoppdateringer i en sak som allerede går sin gang, nok en hendelse i en løpende konflikt, milepæler uten ny informasjon, saker som bekrefter det man allerede visste.
+Dette går foran seksjonenes egne kriterier: en tom seksjon er bedre enn et punkt uten retningsskifte.
+
 FORMAT:
-- Syv seksjoner med ## heading og • kulepunkter — ingenting annet.
+- Fem seksjoner med ## heading og • kulepunkter — ingenting annet.
 - Maks 3 punkter per seksjon, med unntak der lavere maks er angitt. Heller færre enn å fylle opp med svake nyheter.
 - Én, maks to setninger per punkt. Subjekt + verb + tall/konsekvens. Setning to brukes kun til å forklare et begrep eller hvorfor saken betyr noe.
 - Alltid inline-lenke i nyhetspunkter: [tittel](url)
@@ -179,30 +186,24 @@ Kilder: ScienceDaily Helse, STAT News — og helserelaterte artikler fra øvrige
 Ta med: nye behandlingsmetoder med klinisk evidens, legemiddelgodkjenninger (FDA/EMA), forskningsgjennombrudd med direkte pasientkonsekvens, folkehelsevarsler.
 Kutt: kostholdstips, treningsråd, enkeltcase-studier uten generell relevans.
 
-## 🔬 Forskning og vitenskap
-Kilder: ScienceDaily, Scientific American, MIT Technology Review — og vitenskapsnyheter fra øvrige kilder.
-Ta med: store vitenskapelige gjennombrudd (fysikk, kjemi, biologi, romfart), klima- og energiforskning med konkrete tall eller milepæler, ny teknologi med bred samfunnskonsekvens.
-Kutt: inkrementelle fremskritt, akademiske artikler uten praktisk konsekvens.
-
-## 🤖 AI, teknologi og startups
-Kilder: VentureBeat AI, MIT Technology Review — og teknologinyheter fra øvrige kilder.
-Ta med: nye AI-modeller/versjoner (GPT, Claude, Gemini osv.), AI-regulering, store nyheter fra Apple/Google/Meta/Microsoft, produktlanseringer med markedseffekt.
-Startups og VC: maks 1 punkt — kun finansieringsrunder over 100 MUSD eller strategisk viktige oppkjøp.
-Kutt: produktanmeldelser, hype uten konkret nyhet.
+## 🔬 Vitenskap og teknologi
+Kilder: ScienceDaily, Scientific American, MIT Technology Review, VentureBeat AI — og vitenskaps-/teknologinyheter fra øvrige kilder.
+FORDELING: minst 2 av 3 punkter skal være vitenskap. AI og teknologi får MAKS 1 punkt — det må da være dagens klart viktigste tech-sak.
+Vitenskap — ta med: store vitenskapelige gjennombrudd (fysikk, kjemi, biologi, romfart), klima- og energiforskning med konkrete tall eller milepæler, funn som endrer en etablert forståelse.
+AI/teknologi — ta med (maks 1): nye AI-modeller/versjoner (GPT, Claude, Gemini osv.), AI-regulering, strategiskifter hos Apple/Google/Meta/Microsoft/Nvidia, finansieringsrunder over 100 MUSD eller strategisk viktige oppkjøp.
+Kutt: inkrementelle fremskritt, akademiske artikler uten praktisk konsekvens, produktanmeldelser, produktlanseringer uten strategisk betydning, hype uten konkret nyhet.
 
 ## 🌍 Internasjonalt
 Ta med KUN det viktigste: krig/konflikt med geopolitisk spillover, store naturkatastrofer, valg/regjeringsskifte i G20.
 Maks 1 punkt.
 
-## 🇳🇴 Norsk økonomi
-Ta med: Norges Bank, statsbudsjett, norske selskaper med markedseffekt, oljesektor, kronekurs med årsak.
-Kutt: innenrikspolitikk uten økonomisk utfall, eiendomsmarkedet.
-
-## 📈 Marked og makro
+## 📈 Økonomi og marked
 Markedsdata (priser og prosentendringer) vises allerede i et eget snapshot øverst — IKKE gjenta prisene.
-Ta med: rentevedtak, inflasjon, handelskrig, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
+FORDELING: minst 2 av 3 punkter skal være internasjonalt makro. Norsk økonomi får MAKS 1 punkt.
+Internasjonalt — ta med: rentevedtak (Fed, ECB), inflasjonstall, handelskrig og tollvedtak, HVORFOR markedet beveget seg, kvartalstall som beveger markedet.
+Norsk (maks 1) — ta med: Norges Bank, statsbudsjett, oljesektor, kronekurs med årsak, norske selskaper med markedseffekt.
 Krypto: maks 1 punkt — kun ved bevegelse over 10 % eller regulatorisk hendelse av betydning.
-Kutt: dagsbevegelser uten nyhet bak.
+Kutt: dagsbevegelser uten nyhet bak, innenrikspolitikk uten økonomisk utfall, eiendomsmarkedet.
 
 ## 🏙️ Bergen og Vestland
 Ta med KUN direkte hverdagskonsekvens:
@@ -213,7 +214,7 @@ Ta med KUN direkte hverdagskonsekvens:
 ✓ Helseadvarsler / sykehuskapasitet
 ✓ Store arbeidsplassnyheter (nedleggelse / nyetablering)
 
-TOTALBUDSJETT: Maks 550 ord for alle syv seksjoner samlet."""
+TOTALBUDSJETT: Maks 450 ord for alle fem seksjoner samlet."""
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Værvarsling Bergen (Yr / MET Norway API)

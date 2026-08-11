@@ -122,19 +122,31 @@ URLene `nrk.no/nyheter/rss.xml`, `e24.no/rss.xml`, `dn.no/rss.xml`.
 `SYSTEM_PROMPT` styrer output: Bloomberg-stil (tall og fakta, ingen fyllord), men skrevet
 for en **smart allmennleser** — fagbegreper/forkortelser/ukjente selskaper forklares kort
 inne i punktet (maks to setninger per punkt; setning to kun til forklaring/konsekvens).
-Maks 550 ord, 7 «## »-seksjoner (emojiene brukes av nettsidens parsing):
+Maks 450 ord, 5 «## »-seksjoner (emojiene brukes av nettsidens parsing):
 
-| Seksjon | Maks punkter |
-|---|---|
-| 🏥 Helse og medisin | 3 |
-| 🔬 Forskning og vitenskap | 3 |
-| 🤖 AI, teknologi og startups | 3 (startups: 1) |
-| 🌍 Internasjonalt | 1 |
-| 🇳🇴 Norsk økonomi | 3 |
-| 📈 Marked og makro | 3 (krypto: 1) |
-| 🏙️ Bergen og Vestland | 3 (kun direkte hverdagskonsekvens) |
+| Seksjon | Maks punkter | Intern fordeling |
+|---|---|---|
+| 🏥 Helse og medisin | 3 | klinisk evidens (behandlinger, FDA/EMA, folkehelsevarsler) |
+| 🔬 Vitenskap og teknologi | 3 | **min. 2 vitenskap, maks 1 AI/tech** |
+| 🌍 Internasjonalt | 1 | — |
+| 📈 Økonomi og marked | 3 | **min. 2 internasjonalt makro, maks 1 norsk**; krypto maks 1 |
+| 🏙️ Bergen og Vestland | 3 | kun direkte hverdagskonsekvens |
 
 Innenrikspolitikk uten markedseffekt og eiendomsmarkedet kuttes alltid.
+
+**Øverste seleksjonsregel (går foran seksjonskriteriene): retningsskifte, ikke hendelse.**
+En sak må endre retningen på noe — vendepunkt i en trend, ny regulering som endrer
+spillereglene, tall som bryter med forventningen, første gang noe skjer, strategiskifte hos
+en aktør. Statusoppdateringer i en sak som allerede går sin gang kuttes, uansett hvor stor
+saken er. Tom seksjon er bedre enn et punkt uten retningsskifte.
+
+**Seksjonene ble slått sammen 11. august 2026** (7 → 5, tak 17 → 13 punkter): «Forskning og
+vitenskap» + «AI, teknologi og startups» → 🔬 Vitenskap og teknologi, og «Norsk økonomi» +
+«Marked og makro» → 📈 Økonomi og marked. Sammenslåingen er **ren promptendring** — nettsidens
+parsing (`splitNewsSections()`) splitter generisk på «## » og plukker ledende emoji, så
+arkiverte briefinger beholder sine gamle sju seksjoner og rendres uendret. Fordelingskravene
+inne i de sammenslåtte seksjonene er poenget med dem: uten «maks 1 AI/tech» ville AI-nyheter
+(det er alltid flest av dem) fortrengt vitenskapen helt.
 
 ### Vær (Bergen + Oslo + Alicante)
 
