@@ -199,4 +199,15 @@ export function verdictCounts(kb) {
   }));
 }
 
+/** Markdown-fri variant av en syntesetekst, til korte teasere på kort og i lister.
+ *  `measured` er skrevet med **fet** på nøkkeltall, som er riktig i det fullstendige
+ *  oppslaget og støy i en to-linjers teaser. */
+export function plain(text, max = 220) {
+  const s = String(text || '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/[*_`]/g, '')
+    .trim();
+  return s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s;
+}
+
 export const TILSKUDD_URL = 'https://forskning.modr.no/tilskudd';

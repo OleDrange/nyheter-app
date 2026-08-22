@@ -21,6 +21,9 @@ if (!topic) return Astro.redirect(base, 302);
 
 const studies = topicStudies(kb, topic);
 const summaryHtml = topic.summary ? renderMarkdown(topic.summary) : null;
+// `measured` er skrevet av Claude og inneholder **fet** på nøkkeltall, som resten av
+// syntesen. Uten rendring vises stjernene rått midt i sidens viktigste avsnitt.
+const measuredHtml = topic.measured ? renderMarkdown(topic.measured) : null;
 const kindLabel = (kb.kind_labels || {})[topic.kind] || topic.kind;
 const floor = topic.evidence_floor;
 ---
@@ -51,8 +54,8 @@ const floor = topic.evidence_floor;
     </div>
     <div class="sclaim__col sclaim__col--measured">
       <div class="sclaim__label">Dette er faktisk målt</div>
-      {topic.measured
-        ? <p>{topic.measured}</p>
+      {measuredHtml
+        ? <div set:html={measuredHtml} />
         : <p class="sclaim__empty">
             Ingen kontrollerte menneskestudier å måle påstanden mot ennå.
           </p>}

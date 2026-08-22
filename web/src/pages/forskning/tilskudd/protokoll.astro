@@ -5,7 +5,7 @@
 // skal INN i et medisinskap, så den er gruppert på dom («verdt å ta» før «kan vurderes»)
 // og ikke på evidensstyrke. Interaksjonene står under, fordi de gjelder på tvers.
 import Base from '../../../layouts/Base.astro';
-import { getKb, doseGroups, interactionList, skipList } from '../../../lib/supplements.js';
+import { getKb, doseGroups, interactionList, skipList, plain } from '../../../lib/supplements.js';
 
 const fbase = Astro.locals.fbase ?? '/forskning';
 const base = `${fbase}/tilskudd`;
@@ -60,7 +60,7 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
       <ul class="tcrit-list">
         {skip.map((t) => (
           <li class={`tcrit__row tcrit__row--${t.verdict}`}>
-            <span class="tcrit__text">{t.measured || t.blurb}</span>
+            <span class="tcrit__text">{plain(t.measured, 300) || t.blurb}</span>
             <span class="tcrit__from">
               <a href={`${base}/stoff/${t.slug}`}>{t.name}</a>
               <span class={`tv tv--${t.verdict} tv--sm`}>

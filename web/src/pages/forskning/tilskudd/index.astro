@@ -8,7 +8,7 @@
 import Base from '../../../layouts/Base.astro';
 import SupplementVerdict from '../../../components/SupplementVerdict.astro';
 import {
-  getKb, topicsByKind, verdictCounts, doseGroups, skipList, allStudies,
+  getKb, topicsByKind, verdictCounts, doseGroups, skipList, allStudies, plain,
 } from '../../../lib/supplements.js';
 
 const fbase = Astro.locals.fbase ?? '/forskning';
@@ -43,7 +43,9 @@ const hasTopics = topics.length > 0;
         <div class="tsum__stats">
           <div class="tstat"><b>{kb.study_count || 0}</b><span>studier</span></div>
           <div class="tstat"><b>{written}/{topics.length}</b><span>stoffer konkludert</span></div>
-          {doseCount > 0 && <div class="tstat"><b>{doseCount}</b><span>doseringer</span></div>}
+          {doseCount > 0 && (
+            <div class="tstat"><b>{doseCount}</b><span>doseringer i protokollen</span></div>
+          )}
           {floors > 0 && <div class="tstat"><b>{floors}</b><span>uten evidens</span></div>}
           {kb.updated && <div class="tstat"><b>{kb.updated}</b><span>sist oppdatert</span></div>}
         </div>
@@ -81,7 +83,7 @@ const hasTopics = topics.length > 0;
                     size="sm"
                   />
                 </div>
-                <p class="ttopic__blurb">{t.measured || t.blurb}</p>
+                <p class="ttopic__blurb">{plain(t.measured) || t.blurb}</p>
               </a>
             ))}
           </div>

@@ -945,13 +945,25 @@ def _parse_topics_line(block: str) -> list[str]:
 
 
 def _parse_writeups(text: str, articles: list[dict]) -> tuple[dict[str, str], set[str]]:
-    """Del Claudes svar i én blokk per studie, mappet på URL — ikke på rekkefølge. En
-    feilmapping ville gitt feil tekst under riktig tittel, som er verre enn en tapt dag,
-    så en blokk vi ikke kan knytte til en studie forkastes stille."""
-    blocks: dict[str, str] = {}
+    """Del Claudes svar i én blokk per studie og knytt hver blokk til sin studie.
+
+    URL er primærnøkkelen: en feilmapping gir feil tekst under riktig tittel, som er
+    verre enn en tapt dag.
+
+    POSISJONSFALLBACK. Claude dropper av og til lenken i overskriften helt — den skriver
+    `## Mysepulver gir litt mer benstyrke …` uten `[…](url)`. Under seedingen 22. august
+    2026 skjedde det for HELE runde 3, og siden ingen blokk kunne knyttes til noen studie,
+    ble åtte ferdigskrevne omtaler kastet og runden betalt for ingenting. Samme feilmodus
+    er dokumentert for research_briefing.py, der `studiesForDay()` løser den i nettlaget.
+
+    Fallbacken er trygg fordi den er dobbelt begrenset: den brukes bare når antallet
+    blokker (omtaler + SKIP) stemmer nøyaktig med antallet studier vi sendte inn — da
+    følger rekkefølgen prompten — og bare på plasser ingen URL allerede har krevd."""
     skipped: set[str] = set()
     by_url = {a["url"]: a for a in articles if a.get("url")}
 
+    # 1) Del opp i rekkefølge, og hold på både URL-treff og posisjon.
+    items: list[tuple[str, str | None]] = []   # (blokktekst, url eller None); SKIP = ("", url)
     for raw in re.split(r"\n(?=##\s)", text.strip()):
         block = raw.strip().strip("-").strip()
         if not block.startswith("##"):
@@ -959,13 +971,27 @@ def _parse_writeups(text: str, articles: list[dict]) -> tuple[dict[str, str], se
         m = _SKIP_RE.match(block)
         if m:
             idx = int(m.group(1)) - 1
-            if 0 <= idx < len(articles):
-                skipped.add(articles[idx]["url"])
+            url = articles[idx]["url"] if 0 <= idx < len(articles) else None
+            if url:
+                skipped.add(url)
+            items.append(("", url))
             continue
-        for url in by_url:
-            if url and url in block:
-                blocks[url] = block
-                break
+        hit = next((u for u in by_url if u and u in block), None)
+        items.append((block, hit))
+
+    blocks: dict[str, str] = {url: block for block, url in items if block and url}
+
+    # 2) Posisjonsfallback — kun ved eksakt antallsmatch, og kun på ledige plasser.
+    if len(items) == len(articles):
+        claimed = set(blocks) | skipped
+        for i, (block, url) in enumerate(items):
+            if not block or url:
+                continue          # SKIP-linje, eller allerede mappet på URL
+            target = articles[i]["url"]
+            if target and target not in claimed:
+                blocks[target] = block
+                claimed.add(target)
+
     return blocks, skipped
 
 
