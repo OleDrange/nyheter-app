@@ -46,17 +46,26 @@ Rollback: `git revert <commit> && git push`, deretter rebuild + `up -d web`.
     monterer `briefing-data:/data` (rw), `env_file: .env`. Dockerfile bruker **CMD**, ikke
     ENTRYPOINT — `docker compose run generator <cmd>` overstyrer hele jobben. Bruk
     `docker compose exec web …` for inspeksjon av data, aldri `run generator`.
-- **Cron** (root sin crontab):
+- **Cron** (root sin crontab) — én linje for alle generatorene:
   ```cron
   0 5 * * * cd /root/nyheter-app && /usr/bin/docker compose run --rm generator >> /root/nyheter-cron.log 2>&1
   ```
+  Kommandoen er tom, så CMD kjører — `docker-entrypoint.sh`, som tar nyheter → forskning →
+  tekstil → healthcheck etter hverandre med myk feil mellom hvert steg. **En ny generator
+  legges til DER, ikke som en ny crontab-linje** (to samtidige `docker compose run` mot
+  samme volum er unødvendig risiko). Rekkefølgen er bevisst: nyhetsbriefingen er det
+  leseren venter på kl. 05, og tekstil går sist fordi den akkumulerer og ikke har noen
+  dagsfrist.
   Tidspunktet styres av **verts**-TZ (`Europe/Oslo` via `timedatectl`; `systemctl restart cron`
   etter endring). **`CRON_TZ` virker ikke** på Debians cron — ikke legg den i crontab.
   Container-TZ (`TZ=Europe/Oslo` i Dockerfile + compose) styrer innholdets dato/værvinduer.
 - **Proxy:** Caddy i `~/modr-proxy`. `nyheter.modr.no { encode gzip; reverse_proxy nyheter-web:8080 }`;
-  `nyheter.modr.online` og `n.modr.no` 301-redirecter dit. **forskning.modr.no** skal ha
-  identisk blokk (samme container — appen ruter på host); krever DNS A-post →
-  serverens IP før Caddy kan hente sertifikat. Caddy har `admin off` → reload med
+  `nyheter.modr.online` og `n.modr.no` 301-redirecter dit. **forskning.modr.no** og
+  **tekstil.modr.no** har identiske proxy-blokker (samme container — appen ruter på host);
+  `t.modr.no` 301-redirecter til tekstil. **Korte alias må være redirect, ikke proxy:** en
+  `reverse_proxy`-blokk på `t.modr.no` ville sendt Host-headeren `t.modr.no` inn i appen,
+  som ikke matcher noe prefiks i `middleware.js` — og leseren hadde fått nyhetssiden. Nytt
+  subdomene krever DNS A-post → serverens IP før Caddy kan hente sertifikat. Caddy har `admin off` → reload med
   `docker compose restart caddy` (validér først:
   `docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile`).
 - **Inspisere data:** `docker compose exec web ls -la /data/briefings` /
