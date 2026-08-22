@@ -9,10 +9,13 @@ repoet: `/root/nyheter-app`, remote `git@github.com:OleDrange/nyheter-app.git`, 
 - **Generator** (Python, cron 05:00 hver dag):
   - `news_briefing.py` — nyhetsbriefing fra RSS + Bergen-vær + markedssnapshot.
   - `research_briefing.py` — maks 5 fagfellevurderte menneskestudier (longevity) fra Europe PMC.
+  - `textile_briefing.py` — tekstil-kunnskapsbasen (fiber/kjemi/kvalitet), **ikke** dagsbasert.
 - **Nettside** (`web/`, Astro 5 SSR på Node) — leser JSON ved hver forespørsel og viser
   dagens briefing + arkiv. Nytt *innhold* vises uten rebuild; *kodeendringer* krever rebuild.
-  Samme app serverer også **https://forskning.modr.no** (host-rutet i `web/src/middleware.js`)
-  med full forskningsbriefing; nyhetssiden viser kun titler som lenker dit.
+  Samme app serverer **tre** nettsteder, host-rutet i `web/src/middleware.js`:
+  **https://nyheter.modr.no**, **https://forskning.modr.no** (full forskningsbriefing;
+  nyhetssiden viser kun titler som lenker dit) og **https://tekstil.modr.no**
+  (kunnskapsbase om tekstil — se egen seksjon).
 
 ## Utviklingsflyt (standard)
 
@@ -412,6 +415,112 @@ visningsnavn og slug). Heller færre enn svake.
   `libraryEntries()` (`library.js`), så en studie som vises også kan pinnes og finnes igjen.
 - Gjenbruker hjelpefunksjoner fra `news_briefing.py` (bl.a. `store_briefing`).
 
+### Tekstil-kunnskapsbasen (`textile_briefing.py` + `textile_topics.py`)
+
+Målgruppe: **innkjøp til en klesbutikk** som skal selge plagg som er bedre for kroppen og
+varer lenger. Se `PLAN-TEKSTIL.md` for bakgrunnen og hva som gjenstår.
+
+**Systemet er akkumulerende, ikke dagsbasert.** Der forskningsbriefingen publiserer en dag
+og er ferdig med studien, rulles hver studie her INN i 1–3 **emner** som blir stående og
+vokser. En kjøring er seks steg, der de tunge hoppes over når de ikke trengs:
+
+1. Last kunnskapsbase, kø og dedup-cache. 2. Prun køen. 3. **Påfyll** (kun under
+`QUEUE_REFILL_BELOW = 40`). 4. **Claude skriver omtaler** (kun under
+`WRITEUP_REFILL_BELOW = 8`, `WRITEUP_BATCH_SIZE = 8`). 5. **Rull inn i KB**
+(`MAX_ROLLIN_PER_RUN = 5`) — aldri et API-kall. 6. **Syntetiser emner**
+(`MAX_SYNTH_PER_RUN = 3`).
+
+`--dry-run` kjører alt unntatt 4–6. Gratis, og eneste trygge måte å teste spørringene på.
+`--seed` er engangsknappen (6 omtalerunder, 60 innrullinger, 20 synteser) som gjør basen
+brukbar fra dag én i stedet for om tre måneder — den koster vesentlig mer enn en vanlig dag.
+
+**`textile_topics.py` er registeret og eneste sannhet.** ~34 emner i fire grupper
+(`fiber` / `behandling` / `kvalitet` / `miljo`), hvert med `slug`, `name`, `blurb` og
+`terms` (engelske søkeord for lokal emnetildeling). Nettsiden har **ingen egen emneliste** —
+den leser gruppenavn, dommer og styrkenivåer ut av KB-en, så et nytt emne her dukker opp på
+tekstil.modr.no ved neste generatorkjøring, uten kodeendring i `web/`. **`slug` endres
+ALDRI** etter publisering: den er identiteten til all evidens som er rullet inn under emnet.
+Fjerner du et emne fra registeret, slettes ingenting — det merkes `retired` og vises under
+«Utgåtte emner».
+
+#### To kilder, fordi ett fagfelt ikke dekker spørsmålet
+
+- **Europe PMC** (`PMC_QUERIES`, 4 kategorier) — hud, allergi, toksikologi.
+- **OpenAlex** (`OPENALEX_QUERIES`, 4 kategorier) — tekstilteknikk, holdbarhet, LCA. Åpent
+  API, ingen nøkkel, `mailto` for polite pool. Abstracts kommer som **invertert indeks**
+  (ord → posisjoner) og settes sammen igjen i `_oa_abstract()`.
+
+**Ikke fjern OpenAlex.** Slitestyrke, fargeekthet, levetid og LCA publiseres i tidsskrifter
+som ikke er indeksert i MEDLINE; med bare PMC står to av de fire temaene permanent tomme.
+Begge kildene normaliseres til samme artikkel-dict og går gjennom samme kø, scoring og prompt.
+
+**RCT-kravet fra `research_briefing.py` gjelder IKKE her, og det er bevisst.**
+Tekstilallergi dokumenteres gjennom patch-test-serier, kohorter og eksponeringsmålinger —
+det finnes knapt randomiserte forsøk på om en polyestergenser gir eksem. Krever man RCT,
+står emnene tomme. Kvalitetskravet er flyttet til den lokale scoringen og til
+`**Forbehold:**`-avsnittet, som skal si hva designet ikke kan vise.
+
+**`LOOKBACK_DAYS = 730`** — tekstilkjemi har ingen nyhetssyklus i det hele tatt. Vinduet er
+satt så «status» i et emne hviler på noe skrevet nylig nok til å reflektere gjeldende
+REACH-restriksjoner, ikke fordi feltet beveger seg fort.
+
+#### Lokal scoring — to støytyper som MÅ straffes
+
+Kildene er brede med vilje (vi kan ikke spørre per emne: «formaldehyde AND textile» gir 6
+treff på to år), så utvalget skjer i `_score_candidate`. To lister bærer mest:
+
+- **`_LAB_NOISE`** — materialforskning som aldri handler om noe man kan gå med: EMI-skjerming,
+  superkondensatorer, sensorer, sårbandasjer, elektrospinning, og **ren syntese**
+  («Solvent-Free Synthesis of a Phosphorus-Based Flame Retardant» lå på 7.-plass i køen før
+  «synthesis of»/«preparation of» ble lagt til). −5,0 på tittelen, −1,0 i abstractet.
+- **`_OFF_TARGET`** — miljøstudier om hvor forurensningen HAVNER (innsjø, sediment, fisk,
+  drikkevann). Faglig gode, men de svarer på et annet spørsmål: vi skal velge et plagg, ikke
+  kartlegge en innsjø. «Global patterns of lake microplastic pollution» kom på 2. plass
+  fordi den treffer emnet `mikrofiberutslipp` og er full av tall. −4,0 på tittelen.
+
+Emnetildeling (`assign_topics`) er inngangsbilletten: treff i **tittelen** gir primæremne,
+treff kun i sammendraget sekundært. Uten et eneste primæremne trekkes 2,5 — det er nesten
+alltid en artikkel som nevner et tekstilord i forbifarten. Målt 22. august 2026:
+506 i kø, 1 714 forkastet av scoringen.
+
+#### Kostnaden vokser med basen, ikke med tilsiget
+
+Henting og scoring er gratis; omtaler koster tokens nøyaktig én gang per studie, noensinne.
+**Syntesen** er den eneste posten som skalerer med hvor stor basen blir, og bremses av to
+ting: et emne står ikke for tur før det har fått `SYNTH_PENDING_MIN = 2` nye studier (et
+emne uten sammendrag i det hele tatt trenger bare `SYNTH_FIRST_MIN = 1`), og inputen kappes
+til de `SYNTH_MAX_STUDIES = 14` nyeste omtalene. Uten begge ville et emne med 40 studier
+under seg kostet 40 omtaler i input hver gang én ny kom inn.
+
+Syntesen svarer med **ett JSON-objekt** (`summary`, `verdict`, `confidence`, `criteria`,
+`questions`) som `_parse_synth()` plukker ut med en balansert-klamme-skanner og validerer
+mot registeret. Kan svaret ikke tolkes, står emnet **uendret** — et halvt oppdatert oppslag
+er verre enn et gammelt. KB-en lagres etter hvert emne, så en feil på emne 3 ikke koster de
+to første.
+
+#### Dommen og kravene
+
+Hvert emne ender på en `verdict`: `unngaa` / `dokumenter` / `foretrekk` / `noeytral` /
+`ukjent`. Prompten sier eksplisitt at `ukjent` skal brukes når evidensen er tynn — et ærlig
+«vi vet ikke» er mer verdt enn en anbefaling som ikke bærer. `criteria` (0–4 per emne) er
+setninger som skal kunne stå ordrett i en kravspesifikasjon, med `strength` per krav;
+`questions` (0–3) er spørsmål å stille en leverandør. Begge samles på tvers av emner på
+`/tekstil/krav`.
+
+#### Filer på volumet — MÅ persisteres
+
+- `textile_kb.json` — **kunnskapsbasen. Mister du den, er ALT tapt:** den er summen av hver
+  omtale og hver syntese systemet noen gang har skrevet, og kan ikke regenereres uten å
+  betale for alt på nytt. Skal med i backup (samme volum som `briefing-data`).
+- `textile_queue.json` — kø. Går den tapt, bygges den opp igjen, men Claude-omtalene i den
+  er betalt for.
+- `textile_seen.json` — `{id: {last, rolled, refused}}`. Samme to-nivå-logikk som
+  `research_seen_dois.json`: innrullet → aldri hentet igjen; refusal → blokkert like lenge
+  (deterministisk, og uten flagget betaler man hele isoler-og-fjern-runden på nytt).
+
+Studien lagres **én gang** i `kb["studies"]`; emnene refererer til den med id. En studie som
+treffer tre emner finnes fortsatt bare ett sted.
+
 ## Datalager — JSON-kontrakten
 
 `store_briefing()` (i `news_briefing.py`) skriver/merger til
@@ -458,8 +567,14 @@ bygges uten ekstra datainnhenting.
   ('' på subdomenet, '/forskning' ved sti-tilgang/dev). `Base.astro` tar
   `site="forskning"` + `base` for egen header/nav. Anker `#s<i>` per studie
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
-- **Ruter (felles for begge vertsnavn):** `/lagret` og `/api/*`. Disse skrives **ikke** om av
-  middleware (`isShared`) — de finnes kun på rot-nivå og spenner over begge sider.
+- **Ruter (tekstil):** `/tekstil` (oversikt), `/tekstil/emne/<slug>` (ett oppslag),
+  `/tekstil/krav` (samlet kravspesifikasjon), `/tekstil/studier` (alle studier, server-side
+  søk/filter via `?q=&emne=`). Host `tekstil.*` rutes internt hit, `locals.tbase` er
+  lenkeprefikset. `Base.astro` tar `site="tekstil"` — den headeren har **ikke** dato eller
+  hopp-rad (oppslagsverk, ikke dagsbriefing).
+- **Ruter (felles for alle vertsnavn):** `/lagret` og `/api/*`. Disse skrives **ikke** om av
+  middleware (`isShared`) — de finnes kun på rot-nivå og spenner over sidene.
+- `middleware.js` er datadrevet (`SITES`-lista): et nytt subdomene = én linje der.
 
 ### Bibliotek (`/lagret`) og favoritter («pin»)
 
@@ -638,6 +753,10 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
   - `RiddleCard.astro` — «Dagens gåter»: 3 logikkgåter fra `riddles`-feltet. Fasit +
     løsningsvei i `<details>` («Vis fasit»), ren HTML uten klient-JS. Gjenbruker
     `quiz-q__level`-badgene.
+  - `TextileVerdict.astro` / `TextileStudy.astro` — dom-merket og studiekortet på
+    tekstilsidene. Studiekortet splitter omtalen på de merkede etikettene (Metode / Funn /
+    Hva det betyr for innkjøp / Forbehold) — «Hva det betyr for innkjøp» får accent-farge og
+    full bredde, de tre andre går i to spalter over 1000px.
   - `ThemePicker.astro` — temavelger i headeren.
 - **`src/lib/briefings.js`:** `listDates()`, `getBriefing(date)`, `renderMarkdown()` (marked),
   `getMarketHistory()`, `splitNewsSections(news_md)` → `[{ emoji, title, html, points }]`
@@ -649,6 +768,11 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
   `studiesForDay(b)` (splitResearch + kilde-metadata fra `research_items` + `anchor`; se
   forskningsseksjonen), `researchNeighbors(date)` (forrige/neste dag med studier),
   `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
+- **`src/lib/textile.js`:** `getKb()` (cache nøklet på mtime+størrelse — filen skrives
+  atomisk, men mtime alene fanger ikke to skrivinger samme sekund), `topicsByKind()`,
+  `getTopic()`, `topicStudies()`, `allStudies()`, `criteriaGroups()`, `supplierQuestions()`,
+  `verdictCounts()`. Mangler `textile_kb.json` (før første kjøring), returnerer alt tomt —
+  ingen kaster. Sti fra `TEXTILE_KB` (satt til `/data/textile_kb.json` i prod-Dockerfile).
 - **Temaer:** 5 stk via `[data-theme]` på `<html>`, lagres i `localStorage` (`theme`), settes
   før paint av `is:inline`-skript i `<head>`. **Nytt tema = (1) `[data-theme="<id>"]`-blokk i
   `src/styles/global.css`, (2) én linje i `src/lib/themes.js`** — resten bygges fra registeret.
@@ -670,8 +794,12 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
 - **To volumer, ikke ett.** `briefing-data` (generatoren skriver, web leser read-only) og
   `saved-data` (kun web, rw). Backup-kommandoen må dekke **begge** — lagrede studier kan
   ikke regenereres.
+- **`textile_kb.json` kan ikke regenereres.** Køen bygges opp igjen av seg selv, men
+  kunnskapsbasen er summen av alt Claude noen gang har skrevet i dette systemet. Den ligger
+  på `briefing-data`, så den er dekket av backup-kommandoen — men vit hva du sletter.
 - **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
-  `research_queue.json`, `quiz_seen.json`, `riddles_seen.json` og `learning_seen.json` MÅ ligge
+  `research_queue.json`, `quiz_seen.json`, `riddles_seen.json`, `learning_seen.json`,
+  `textile_kb.json`, `textile_queue.json` og `textile_seen.json` MÅ ligge
   i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup. Mister du
   `research_queue.json`, bygges den opp igjen ved neste kjøring — men de ferdigskrevne
   Claude-omtalene i den er betalt for og må skrives på nytt.

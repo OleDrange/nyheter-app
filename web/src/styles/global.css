@@ -2525,3 +2525,314 @@ main {
   gap: 0.75rem;
   margin-top: 0.7rem;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Tekstil-kunnskapsbasen (tekstil.modr.no)
+
+   Egen blokk fordi sidene har en annen form enn de to andre nettstedene: ingen
+   dagsnavigasjon, ingen kort-grid av widgets — et oppslagsverk med emnekort,
+   dommer og en kravliste. Fargespråket er gjenbrukt (--down = utelukkes,
+   --up = foretrekkes), så tema-byttet virker uten egne regler per tema.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Dommen som farget merke */
+.tv {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.28em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.tv--sm { font-size: 0.74rem; padding: 0.2em 0.6em; }
+.tv__dot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.tv__conf {
+  font-weight: 400;
+  opacity: 0.75;
+  border-left: 1px solid currentColor;
+  padding-left: 0.5em;
+  margin-left: 0.15em;
+}
+.tv--unngaa { color: var(--down); background: var(--down-bg); border-color: transparent; }
+.tv--foretrekk { color: var(--up); background: var(--up-bg); border-color: transparent; }
+.tv--dokumenter { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.tv--noeytral { color: var(--text-muted); }
+.tv--ukjent { color: var(--text-faint); }
+
+/* Oppsummeringskortet på forsiden */
+.tsum { display: grid; gap: 1rem; }
+.tsum__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+}
+.tstat { display: grid; gap: 0.15rem; }
+.tstat b { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+.tstat span { font-size: 0.8rem; color: var(--text-muted); }
+.tsum__verdicts { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tsum__cta {
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.tsum__cta:hover { text-decoration: underline; }
+
+/* Emnegrupper og emnekort */
+.tgroup { margin-top: 2rem; }
+.tgroup__head {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.tgroup__n {
+  font-size: 0.8rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05em 0.55em;
+}
+.tgroup__head--unngaa { color: var(--down); }
+.tgroup__head--foretrekk { color: var(--up); }
+.tgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.85rem;
+}
+.ttopic {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.ttopic:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+.ttopic__top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.ttopic__top h3 { margin: 0; font-size: 1.05rem; font-weight: 650; line-height: 1.3; }
+.ttopic__blurb { margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+.ttopic__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+.ttopic__pending { font-style: italic; }
+
+/* Emneside: syntesen */
+.tsummary { line-height: 1.65; }
+.tsummary > :first-child { margin-top: 0; }
+.tsummary > :last-child { margin-bottom: 0; }
+.tsummary p { margin: 0 0 0.85rem; }
+.tverdict-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.35rem;
+}
+.tverdict-row__count { font-size: 0.85rem; color: var(--text-faint); }
+
+/* Krav */
+.tcrit h2,
+.tquestions h2 { font-size: 1rem; margin: 0 0 0.75rem; }
+.tcrit ul,
+.tquestions ul,
+.tcrit-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.tquestions ul { gap: 0.6rem; }
+.tquestions li {
+  padding-left: 1.1rem;
+  position: relative;
+  line-height: 1.55;
+}
+.tquestions li::before {
+  content: '?';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+.tcrit__row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border-left: 3px solid var(--border-strong);
+  line-height: 1.55;
+}
+.tcrit-list .tcrit__row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  box-shadow: var(--shadow);
+  justify-content: space-between;
+}
+.tcrit__row--unngaa { border-left-color: var(--down); }
+.tcrit__row--foretrekk { border-left-color: var(--up); }
+.tcrit__row--dokumenter { border-left-color: var(--accent); }
+.tcrit__text { flex: 1 1 340px; }
+.tcrit__from {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.tcrit__from a { color: var(--text-muted); }
+.tlevel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.tlevel--unngaa { color: var(--down); }
+.tlevel--foretrekk { color: var(--up); }
+.tlevel--dokumenter { color: var(--accent); }
+.tstrength {
+  font-size: 0.72rem;
+  padding: 0.1em 0.5em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.tstrength--sterk { color: var(--text); border-color: var(--border-strong); font-weight: 600; }
+
+.tqgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.85rem; }
+.tqcard h3 { margin: 0 0 0.6rem; font-size: 1rem; }
+.tqcard h3 a { color: inherit; text-decoration: none; }
+.tqcard h3 a:hover { color: var(--accent); }
+
+/* Studier */
+.tstudies { display: grid; gap: 0.85rem; }
+.tstudies__anchor { scroll-margin-top: 6rem; }
+.tstudy {
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.tstudy__title { margin: 0 0 0.35rem; font-size: 1.08rem; line-height: 1.35; font-weight: 650; }
+.tstudy__title a { color: inherit; text-decoration: none; }
+.tstudy__title a:hover { color: var(--accent); text-decoration: underline; }
+.tstudy__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-bottom: 0.6rem;
+}
+.tstudy__doi { font-family: var(--mono); font-size: 0.72rem; }
+.tstudy__topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+.ttag {
+  font-size: 0.74rem;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.ttag:hover { border-color: var(--accent); color: var(--accent); }
+.tstudy__parts { display: grid; gap: 0.7rem; }
+.tstudy__body { line-height: 1.6; }
+.tpart__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin-bottom: 0.15rem;
+}
+.tpart__text { line-height: 1.6; }
+.tpart__text > :first-child { margin-top: 0; }
+.tpart__text > :last-child { margin-bottom: 0; }
+.tpart--key {
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+}
+.tpart--key .tpart__label { color: var(--accent); }
+
+/* På brede skjermer leses de fire avsnittene bedre i to spalter enn som én lang
+   kolonne over 1400px — samme grep som panorama-kortet på forskningssiden. */
+@media (min-width: 1000px) {
+  .tstudy__parts { grid-template-columns: 1fr 1fr; gap: 0.7rem 1.5rem; }
+  .tpart--key { grid-column: 1 / -1; }
+}
+
+/* Filterrad */
+.tfilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.tfilter input,
+.tfilter select {
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+}
+.tfilter input { flex: 1 1 240px; min-width: 0; }
+.tfilter button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tfilter__clear { font-size: 0.85rem; color: var(--text-muted); }
+
+.tlatest { list-style: none; margin: 0 0 0.85rem; padding: 0; display: grid; gap: 0.55rem; }
+.tlatest li { display: grid; gap: 0.15rem; }
+.tlatest a { font-weight: 550; }
+.tlatest__meta { font-size: 0.78rem; color: var(--text-faint); }

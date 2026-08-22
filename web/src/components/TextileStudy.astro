@@ -1,0 +1,46 @@
+---
+// Én studie i kunnskapsbasen: tittel med kilde-lenke, metadata, og de fire merkede
+// avsnittene. «Hva det betyr for innkjøp» får accent-farge — det er avsnittet leseren
+// er her for; de tre andre er grunnlaget under det.
+const { study, showTopics = false, topicNames = {} } = Astro.props;
+const fmt = (d) => {
+  const s = String(d || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return s || null;
+  return new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
+    .format(new Date(`${s}T12:00:00`));
+};
+const KEY = 'Hva det betyr for innkjøp';
+---
+<article class="tstudy">
+  <h3 class="tstudy__title">
+    {study.url ? <a href={study.url} target="_blank" rel="noopener">{study.title}</a> : study.title}
+  </h3>
+  <div class="tstudy__meta">
+    <span>{study.journal}</span>
+    {fmt(study.date) && <><span aria-hidden="true">·</span><span>{fmt(study.date)}</span></>}
+    <span aria-hidden="true">·</span>
+    <span class="tstudy__src">{study.source === 'pmc' ? 'Europe PMC' : 'OpenAlex'}</span>
+    {study.doi && <><span aria-hidden="true">·</span><span class="tstudy__doi">{study.doi}</span></>}
+  </div>
+  {showTopics && study.topics?.length > 0 && (
+    <div class="tstudy__topics">
+      {study.topics.map((slug) => (
+        <a class="ttag" href={`${Astro.locals.tbase ?? '/tekstil'}/emne/${slug}`}>
+          {topicNames[slug] || slug}
+        </a>
+      ))}
+    </div>
+  )}
+  {study.html ? (
+    <div class="tstudy__body" set:html={study.html} />
+  ) : (
+    <div class="tstudy__parts">
+      {study.parts.map((p) => (
+        <div class={`tpart${p.label === KEY ? ' tpart--key' : ''}`}>
+          <div class="tpart__label">{p.label}</div>
+          <div class="tpart__text" set:html={p.html} />
+        </div>
+      ))}
+    </div>
+  )}
+</article>

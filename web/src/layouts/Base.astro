@@ -3,10 +3,12 @@ import '../styles/global.css';
 import ThemePicker from '../components/ThemePicker.astro';
 
 // Fanetittel: «modr - <site> - <dato/seksjon>». Sidene sender bare datodelen.
-// `site="forskning"` gir forskningssidens header/nav; `base` er lenkeprefikset
-// for interne forskning-lenker ('' på forskning.modr.no, '/forskning' ellers).
+// `site` velger header/nav: 'nyheter' (standard), 'forskning' eller 'tekstil'.
+// `base` er lenkeprefikset for interne lenker på det aktuelle nettstedet
+// ('' på eget subdomene, '/forskning' / '/tekstil' ellers — se middleware.js).
 const { title, site = 'nyheter', base = '' } = Astro.props;
 const isForskning = site === 'forskning';
+const isTekstil = site === 'tekstil';
 const fullTitle = title ? `modr - ${site} - ${title}` : `modr - ${site}`;
 const path = Astro.url.pathname;
 const isHome = isForskning
@@ -14,6 +16,14 @@ const isHome = isForskning
   : path === '/';
 const isArchive = isForskning ? path.startsWith('/forskning/arkiv') : path.startsWith('/arkiv');
 const isSaved = path.startsWith('/lagret');
+
+// Tekstilsidens nav er ikke datostyrt som de to andre — den navigerer i et oppslagsverk.
+const tPath = path.replace(/^\/tekstil/, '') || '/';
+const tNav = [
+  { href: base || '/', label: 'Oversikt', on: tPath === '/' },
+  { href: `${base}/krav`, label: 'Kravspesifikasjon', on: tPath.startsWith('/krav') },
+  { href: `${base}/studier`, label: 'Alle studier', on: tPath.startsWith('/studier') },
+];
 
 // Dagens dato i headeren — beregnes per forespørsel (SSR) i container-TZ (Europe/Oslo).
 const _today = new Intl.DateTimeFormat('nb-NO', {
@@ -47,15 +57,30 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
     <header class="site-header">
       <div class="site-header__inner">
         <div class="brand">
-          <a href={isForskning ? base || '/' : '/'}>
-            <span class="brand__mark">{isForskning ? '🔬 Forskning' : '📰 Nyhetsbriefing'}</span>
+          <a href={isForskning || isTekstil ? base || '/' : '/'}>
+            <span class="brand__mark">
+              {isTekstil ? '🧵 Tekstil' : isForskning ? '🔬 Forskning' : '📰 Nyhetsbriefing'}
+            </span>
           </a>
-          <span class="brand__sub">{isForskning ? 'medisin · trening · kosthold' : 'Bergen · daglig'}</span>
-          <span class="brand__date">{todayNo}</span>
+          <span class="brand__sub">
+            {isTekstil
+              ? 'fiber · kjemi · kvalitet'
+              : isForskning
+                ? 'medisin · trening · kosthold'
+                : 'Bergen · daglig'}
+          </span>
+          {!isTekstil && <span class="brand__date">{todayNo}</span>}
         </div>
         <div class="header-actions">
           <nav class="nav">
-            {isForskning ? (
+            {isTekstil ? (
+              <>
+                {tNav.map((n) => (
+                  <a href={n.href} aria-current={n.on ? 'page' : undefined}>{n.label}</a>
+                ))}
+                <a href="https://nyheter.modr.no">Nyheter</a>
+              </>
+            ) : isForskning ? (
               <>
                 <a href={base || '/'} aria-current={isHome ? 'page' : undefined}>I dag</a>
                 <a href={`${base}/arkiv`} aria-current={isArchive ? 'page' : undefined}>Arkiv</a>
@@ -74,7 +99,7 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
           <ThemePicker />
         </div>
       </div>
-      {!isForskning && (
+      {!isForskning && !isTekstil && (
         <nav class="jumpnav" aria-label="Hopp til seksjon" hidden>
           <div class="jumpnav__inner">
             <a href="#vaer-marked">Vær og marked</a>
@@ -129,7 +154,9 @@ const todayNo = _today.charAt(0).toUpperCase() + _today.slice(1);
     </main>
 
     <footer class="site-footer">
-      Daglig nyhets- og forskningsbriefing · oppsummert med Claude
+      {isTekstil
+        ? 'Kunnskapsbase om tekstil, hud og kvalitet · bygget av Claude fra Europe PMC og OpenAlex'
+        : 'Daglig nyhets- og forskningsbriefing · oppsummert med Claude'}
     </footer>
   </body>
 </html>

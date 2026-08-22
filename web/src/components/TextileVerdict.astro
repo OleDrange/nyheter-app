@@ -1,0 +1,10 @@
+---
+// Dommen på et emne, som farget merke. Fire nivåer + «for tynt grunnlag», med samme
+// fargespråk som resten av appen (--down = utelukkes, --up = foretrekkes).
+const { verdict, label, confidence = null, size = 'md' } = Astro.props;
+---
+<span class={`tv tv--${verdict} tv--${size}`}>
+  <span class="tv__dot" aria-hidden="true"></span>
+  {label}
+  {confidence && <span class="tv__conf">{confidence} evidens</span>}
+</span>

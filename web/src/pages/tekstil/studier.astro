@@ -1,0 +1,70 @@
+---
+// Alle studiene i basen, nyest innrullet først, med emnemerker. Fritekstsøk og
+// emnefilter er server-side via URL-parametre (?q=&emne=), som på /lagret: virker uten
+// JS, og URL-en blir delbar.
+import Base from '../../layouts/Base.astro';
+import TextileStudy from '../../components/TextileStudy.astro';
+import { getKb, allStudies } from '../../lib/textile.js';
+
+const base = Astro.locals.tbase ?? '/tekstil';
+const kb = await getKb();
+const params = Astro.url.searchParams;
+const q = (params.get('q') || '').trim();
+const emne = params.get('emne') || '';
+
+const topicNames = Object.fromEntries(
+  Object.values(kb.topics || {}).map((t) => [t.slug, t.name]),
+);
+
+let studies = allStudies(kb);
+if (emne) studies = studies.filter((s) => (s.topics || []).includes(emne));
+if (q) {
+  const needle = q.toLowerCase();
+  studies = studies.filter((s) =>
+    `${s.title} ${s.writeup} ${s.journal}`.toLowerCase().includes(needle),
+  );
+}
+
+// Emnefilteret viser kun emner som faktisk har studier — en tom filterknapp er støy.
+const filterTopics = Object.values(kb.topics || {})
+  .filter((t) => t.studies.length)
+  .sort((a, b) => b.studies.length - a.studies.length);
+---
+
+<Base title="alle studier" site="tekstil" base={base}>
+  <div class="page-head">
+    <a class="back" href={base || '/'}>← Oversikt</a>
+    <h1>Alle studier</h1>
+    <div class="date">
+      {studies.length} av {kb.study_count || 0} studier
+      {emne && ` under «${topicNames[emne] || emne}»`}
+      {q && ` som matcher «${q}»`}
+    </div>
+  </div>
+
+  <form class="tfilter" method="get" action={`${base}/studier`}>
+    <input type="search" name="q" value={q} placeholder="Søk i studier…" aria-label="Søk" />
+    <select name="emne" aria-label="Emne">
+      <option value="">Alle emner</option>
+      {filterTopics.map((t) => (
+        <option value={t.slug} selected={t.slug === emne}>
+          {t.name} ({t.studies.length})
+        </option>
+      ))}
+    </select>
+    <button type="submit">Filtrer</button>
+    {(q || emne) && <a class="tfilter__clear" href={`${base}/studier`}>Nullstill</a>}
+  </form>
+
+  {studies.length === 0 ? (
+    <p class="empty">Ingen studier matcher.</p>
+  ) : (
+    <div class="tstudies">
+      {studies.map((s) => (
+        <div id={`s-${s.id}`} class="tstudies__anchor">
+          <TextileStudy study={s} showTopics={true} topicNames={topicNames} />
+        </div>
+      ))}
+    </div>
+  )}
+</Base>

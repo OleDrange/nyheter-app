@@ -1,0 +1,64 @@
+---
+// Kravspesifikasjonen: alle kravene fra alle emnene, samlet på ett sted og gruppert
+// «mest inngripende først». Dette er dokumentet som faktisk skal ut til en leverandør,
+// og hvert krav bærer lenke tilbake til emnet evidensen står under.
+import Base from '../../layouts/Base.astro';
+import { getKb, criteriaGroups, supplierQuestions } from '../../lib/textile.js';
+
+const base = Astro.locals.tbase ?? '/tekstil';
+const kb = await getKb();
+const groups = criteriaGroups(kb);
+const questions = supplierQuestions(kb);
+const total = groups.reduce((n, g) => n + g.rows.length, 0);
+---
+
+<Base title="kravspesifikasjon" site="tekstil" base={base}>
+  <div class="page-head">
+    <a class="back" href={base || '/'}>← Oversikt</a>
+    <h1>Kravspesifikasjon</h1>
+    <div class="date">
+      {total} krav utledet av forskningen i kunnskapsbasen. Hvert krav lenker til emnet
+      det kommer fra, så evidensen bak kan etterprøves.
+    </div>
+  </div>
+
+  {total === 0 ? (
+    <p class="empty">
+      Ingen krav er utledet ennå — de kommer når emnene har fått nok evidens til at
+      generatoren kan konkludere.
+    </p>
+  ) : (
+    groups.map((g) => (
+      <section class="tgroup">
+        <h2 class={`tgroup__head tgroup__head--${g.level}`}>
+          {g.label} <span class="tgroup__n">{g.rows.length}</span>
+        </h2>
+        <ul class="tcrit-list">
+          {g.rows.map((r) => (
+            <li class={`tcrit__row tcrit__row--${r.level}`}>
+              <span class="tcrit__text">{r.text}</span>
+              <span class="tcrit__from">
+                <a href={`${base}/emne/${r.topic.slug}`}>{r.topic.name}</a>
+                <span class={`tstrength tstrength--${r.strength}`}>{r.strength}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
+
+  {questions.length > 0 && (
+    <section class="tgroup">
+      <h2 class="tgroup__head">Spørsmål og testrapporter å be om</h2>
+      <div class="tqgrid">
+        {questions.map((t) => (
+          <div class="card tqcard">
+            <h3><a href={`${base}/emne/${t.slug}`}>{t.name}</a></h3>
+            <ul>{t.questions.map((q) => <li>{q}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+</Base>

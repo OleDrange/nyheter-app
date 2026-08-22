@@ -1,0 +1,99 @@
+---
+// tekstil.modr.no — oversikten. Ikke en strøm av nyheter, men inngangen til et
+// oppslagsverk: hvor mange emner som er konkludert, hva som er utelukket, og alle
+// emnene gruppert etter fiber / behandling / kvalitet / miljø.
+import Base from '../../layouts/Base.astro';
+import TextileVerdict from '../../components/TextileVerdict.astro';
+import { getKb, topicsByKind, verdictCounts, criteriaGroups, allStudies } from '../../lib/textile.js';
+
+const base = Astro.locals.tbase ?? '/tekstil';
+const kb = await getKb();
+const groups = topicsByKind(kb);
+const verdicts = verdictCounts(kb).filter((v) => v.count > 0);
+const criteria = criteriaGroups(kb);
+const critCount = criteria.reduce((n, g) => n + g.rows.length, 0);
+const latest = allStudies(kb).slice(0, 5);
+const written = Object.values(kb.topics || {}).filter((t) => !t.retired && t.summary).length;
+const total = Object.values(kb.topics || {}).filter((t) => !t.retired).length;
+const hasContent = (kb.study_count || 0) > 0;
+---
+
+<Base title="oversikt" site="tekstil" base={base}>
+  <div class="page-head">
+    <h1>Tekstil, hud og kvalitet</h1>
+    <div class="date">
+      Hva forskningen sier om stoffene, kjemikaliene og prosessene bak et plagg — og hva
+      det betyr for hva vi kjøper inn.
+    </div>
+  </div>
+
+  {!hasContent ? (
+    <p class="empty">Kunnskapsbasen er tom ennå. Første generatorkjøring fyller den.</p>
+  ) : (
+    <>
+      <section class="card tsum">
+        <div class="tsum__stats">
+          <div class="tstat"><b>{kb.study_count}</b><span>studier</span></div>
+          <div class="tstat"><b>{written}/{total}</b><span>emner konkludert</span></div>
+          <div class="tstat"><b>{critCount}</b><span>innkjøpskrav</span></div>
+          {kb.updated && <div class="tstat"><b>{kb.updated}</b><span>sist oppdatert</span></div>}
+        </div>
+        {verdicts.length > 0 && (
+          <div class="tsum__verdicts">
+            {verdicts.map((v) => (
+              <TextileVerdict verdict={v.id} label={`${v.label}: ${v.count}`} size="sm" />
+            ))}
+          </div>
+        )}
+        {critCount > 0 && (
+          <a class="tsum__cta" href={`${base}/krav`}>
+            Se hele kravspesifikasjonen ({critCount} krav) →
+          </a>
+        )}
+      </section>
+
+      {groups.map((g) => (
+        <section class="tgroup">
+          <h2 class="tgroup__head">{g.label}</h2>
+          <div class="tgrid">
+            {g.topics.map((t) => (
+              <a class="ttopic" href={`${base}/emne/${t.slug}`}>
+                <div class="ttopic__top">
+                  <h3>{t.name}</h3>
+                  <TextileVerdict
+                    verdict={t.verdict}
+                    label={(kb.verdicts || {})[t.verdict] || t.verdict}
+                    size="sm"
+                  />
+                </div>
+                <p class="ttopic__blurb">{t.blurb}</p>
+                <div class="ttopic__foot">
+                  <span>{t.studies.length} {t.studies.length === 1 ? 'studie' : 'studier'}</span>
+                  {(t.criteria || []).length > 0 && (
+                    <span>{t.criteria.length} krav</span>
+                  )}
+                  {!t.summary && <span class="ttopic__pending">ikke skrevet ennå</span>}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {latest.length > 0 && (
+        <section class="tgroup">
+          <h2 class="tgroup__head">Sist innrullet</h2>
+          <ul class="tlatest">
+            {latest.map((s) => (
+              <li>
+                <a href={`${base}/studier#s-${encodeURIComponent(s.id)}`}>{s.title}</a>
+                <span class="tlatest__meta">{s.journal} · {s.added}</span>
+              </li>
+            ))}
+          </ul>
+          <a class="tsum__cta" href={`${base}/studier`}>Alle {kb.study_count} studier →</a>
+        </section>
+      )}
+    </>
+  )}
+</Base>

@@ -1,0 +1,79 @@
+---
+// Ett oppslag: Claudes syntese av all evidens under emnet, kravene som følger av den,
+// spørsmålene å stille en leverandør, og deretter hver enkelt studie.
+import Base from '../../../layouts/Base.astro';
+import TextileVerdict from '../../../components/TextileVerdict.astro';
+import TextileStudy from '../../../components/TextileStudy.astro';
+import { getKb, getTopic, topicStudies } from '../../../lib/textile.js';
+import { renderMarkdown } from '../../../lib/briefings.js';
+
+const base = Astro.locals.tbase ?? '/tekstil';
+const { slug } = Astro.params;
+const kb = await getKb();
+const topic = getTopic(kb, slug);
+if (!topic) return Astro.redirect(base || '/', 302);
+
+const studies = topicStudies(kb, topic);
+const summaryHtml = topic.summary ? renderMarkdown(topic.summary) : null;
+const LEVELS = { unngaa: 'Utelukkes', dokumenter: 'Krever dokumentasjon', foretrekk: 'Foretrekkes' };
+const kindLabel = (kb.kind_labels || {})[topic.kind] || topic.kind;
+---
+
+<Base title={topic.name} site="tekstil" base={base}>
+  <div class="page-head">
+    <a class="back" href={base || '/'}>← {kindLabel}</a>
+    <h1>{topic.name}</h1>
+    <div class="tverdict-row">
+      <TextileVerdict
+        verdict={topic.verdict}
+        label={(kb.verdicts || {})[topic.verdict] || topic.verdict}
+        confidence={topic.summary ? topic.confidence : null}
+      />
+      <span class="tverdict-row__count">
+        {studies.length} {studies.length === 1 ? 'studie' : 'studier'}
+        {topic.synth_at && ` · oppslaget skrevet ${topic.synth_at}`}
+      </span>
+    </div>
+    <div class="date">{topic.blurb}</div>
+  </div>
+
+  {summaryHtml ? (
+    <section class="card tsummary" set:html={summaryHtml} />
+  ) : (
+    <p class="empty">
+      Emnet har {studies.length} {studies.length === 1 ? 'studie' : 'studier'}, men
+      oppslaget er ikke skrevet ennå. Studiene står under.
+    </p>
+  )}
+
+  {(topic.criteria || []).length > 0 && (
+    <section class="card tcrit">
+      <h2>Konsekvens for innkjøp</h2>
+      <ul>
+        {topic.criteria.map((c) => (
+          <li class={`tcrit__row tcrit__row--${c.level}`}>
+            <span class={`tlevel tlevel--${c.level}`}>{LEVELS[c.level] || c.level}</span>
+            <span class="tcrit__text">{c.text}</span>
+            <span class={`tstrength tstrength--${c.strength}`}>{c.strength}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {(topic.questions || []).length > 0 && (
+    <section class="card tquestions">
+      <h2>Spør leverandøren</h2>
+      <ul>{topic.questions.map((q) => <li>{q}</li>)}</ul>
+    </section>
+  )}
+
+  {studies.length > 0 && (
+    <section class="tgroup">
+      <h2 class="tgroup__head">Evidensen ({studies.length})</h2>
+      <div class="tstudies">
+        {studies.map((s) => <TextileStudy study={s} />)}
+      </div>
+    </section>
+  )}
+</Base>
