@@ -100,11 +100,10 @@ igjen — og påfyllet skjer automatisk under `QUEUE_REFILL_BELOW = 40`.
 
 ## Gjenstår
 
-- [ ] **DNS A-post `tekstil.modr.no` → 204.168.245.60.** Caddy-blokka ligger klar og
-      validerer, men er ikke lastet inn — uten DNS får den ikke sertifikat. Etter posten:
-      `cd ~/modr-proxy && docker compose restart caddy`. Fram til da nås siden på
-      `nyheter.modr.no/tekstil`.
-- [ ] **Cron.** Ikke lagt inn ennå — kjøres manuelt til basen har satt seg.
+- [x] **DNS + Caddy.** `tekstil.modr.no` og `t.modr.no` (301 → tekstil) er live med
+      sertifikat fra 22. august 2026. Siden nås fortsatt også på `nyheter.modr.no/tekstil`.
+- [x] **Cron.** Kjører 05:00 daglig som siste steg i `docker-entrypoint.sh`, etter nyheter
+      og forskning.
 - [ ] **Regulering som egen kilde.** REACH-restriksjonslista og RAPEX/Safety Gate
       (tekstiltilbakekallinger) var en del av det opprinnelige valget, men er ikke bygget:
       begge er hentbare, men verken kø eller scoring passer på dem — en restriksjon er
