@@ -13,7 +13,8 @@ ENV TZ=Europe/Oslo \
     HOST=0.0.0.0 \
     PORT=8080 \
     BRIEFING_DIR=/data/briefings \
-    TEXTILE_KB=/data/textile_kb.json
+    TEXTILE_KB=/data/textile_kb.json \
+    SUPPLEMENT_KB=/data/supplement_kb.json
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules

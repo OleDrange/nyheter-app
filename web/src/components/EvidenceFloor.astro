@@ -1,0 +1,42 @@
+---
+// Bevis-gulvet: det oppslaget et stoff HAR når det ikke finnes forskning å oppsummere.
+//
+// Dette er ikke en feilmelding om manglende innhold — det er svaret. Avstanden mellom
+// «hvor mye som er publisert om stoffet» og «hvor mange kontrollerte menneskestudier
+// som finnes» er den mest handlingsrelevante opplysningen vi kan gi om et gråmarkeds-
+// peptid, og den er nettopp fraværende overalt ellers.
+const { floor, name } = Astro.props;
+if (!floor) return null;
+const { published = 0, qualifying = 0, window_days: win = 730, checked } = floor;
+const years = Math.round((win / 365) * 10) / 10;
+---
+<section class="sfloor">
+  <div class="sfloor__head">Bevis-gulv</div>
+  <div class="sfloor__nums">
+    <div class="sfloor__num">
+      <b>{published.toLocaleString('nb-NO')}</b>
+      <span>publikasjoner om {name} totalt</span>
+    </div>
+    <div class={`sfloor__num${qualifying === 0 ? ' sfloor__num--zero' : ''}`}>
+      <b>{qualifying.toLocaleString('nb-NO')}</b>
+      <span>kontrollerte menneskestudier siste {years} år</span>
+    </div>
+  </div>
+  <p class="sfloor__text">
+    {qualifying === 0 ? (
+      <>
+        Det finnes <strong>ingen</strong> randomiserte forsøk, metaanalyser eller
+        systematiske oversikter på mennesker om {name} i Europe PMC. Alt som sirkulerer
+        er dyrestudier, laboratoriearbeid og brukerrapporter. Fraværet er selve svaret:
+        vi vet ikke om stoffet virker, og vi vet ikke om det er trygt.
+      </>
+    ) : (
+      <>
+        Bare {qualifying} av {published.toLocaleString('nb-NO')} publikasjoner om {name} er
+        en kontrollert menneskestudie fra de siste {years} årene. Grunnlaget er for tynt
+        til å konkludere — oppslaget skrives når det finnes nok å oppsummere.
+      </>
+    )}
+  </p>
+  {checked && <div class="sfloor__foot">Målt mot Europe PMC {checked}</div>}
+</section>

@@ -1,0 +1,89 @@
+---
+// Protokollen: alle doseringene fra alle stoffene, samlet på ett sted.
+//
+// Tekstilsidens motstykke er kravspesifikasjonen, som skal UT til en leverandør. Denne
+// skal INN i et medisinskap, så den er gruppert på dom («verdt å ta» før «kan vurderes»)
+// og ikke på evidensstyrke. Interaksjonene står under, fordi de gjelder på tvers.
+import Base from '../../../layouts/Base.astro';
+import { getKb, doseGroups, interactionList, skipList } from '../../../lib/supplements.js';
+
+const fbase = Astro.locals.fbase ?? '/forskning';
+const base = `${fbase}/tilskudd`;
+const kb = await getKb();
+const groups = doseGroups(kb);
+const interactions = interactionList(kb);
+const skip = skipList(kb);
+const total = groups.reduce((n, g) => n + g.rows.length, 0);
+---
+
+<Base title="protokoll" site="forskning" base={fbase}>
+  <div class="page-head">
+    <a class="back" href={base}>← Oversikt</a>
+    <h1>Protokoll</h1>
+    <div class="date">
+      {total} doseringer slik de faktisk er brukt i studiene — ikke slik de står på
+      boksen. Hver rad lenker til stoffet, så evidensen bak kan etterprøves.
+    </div>
+  </div>
+
+  {total === 0 ? (
+    <p class="empty">
+      Ingen doseringer er utledet ennå — de kommer når stoffene har fått nok evidens til
+      at generatoren kan konkludere.
+    </p>
+  ) : (
+    groups.map((g) => (
+      <section class="tgroup">
+        <h2 class={`tgroup__head tgroup__head--${g.verdict}`}>
+          {g.label} <span class="tgroup__n">{g.rows.length}</span>
+        </h2>
+        <ul class="tcrit-list">
+          {g.rows.map((r) => (
+            <li class={`tcrit__row tcrit__row--${r.verdict}`}>
+              <span class="tcrit__text">{r.text}</span>
+              <span class="tcrit__from">
+                <a href={`${base}/stoff/${r.topic.slug}`}>{r.topic.name}</a>
+                <span class={`tstrength tstrength--${r.strength}`}>{r.strength}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
+
+  {skip.length > 0 && (
+    <section class="tgroup">
+      <h2 class="tgroup__head tgroup__head--skip">
+        Ikke ta disse <span class="tgroup__n">{skip.length}</span>
+      </h2>
+      <ul class="tcrit-list">
+        {skip.map((t) => (
+          <li class={`tcrit__row tcrit__row--${t.verdict}`}>
+            <span class="tcrit__text">{t.measured || t.blurb}</span>
+            <span class="tcrit__from">
+              <a href={`${base}/stoff/${t.slug}`}>{t.name}</a>
+              <span class={`tv tv--${t.verdict} tv--sm`}>
+                {(kb.verdicts || {})[t.verdict] || t.verdict}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {interactions.length > 0 && (
+    <section class="tgroup">
+      <h2 class="tgroup__head">Interaksjoner og øvre grenser</h2>
+      <div class="tqgrid">
+        {interactions.map((t) => (
+          <div class="card tqcard">
+            <h3><a href={`${base}/stoff/${t.slug}`}>{t.name}</a></h3>
+            <ul>{t.interactions.map((i) => <li>{i}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+</Base>

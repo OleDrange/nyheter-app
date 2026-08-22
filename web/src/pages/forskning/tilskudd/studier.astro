@@ -1,0 +1,71 @@
+---
+// Alle studiene i tilskuddsbasen, nyest innrullet først, med stoffmerker. Fritekstsøk og
+// stoffilter er server-side via URL-parametre (?q=&stoff=), som på /lagret og
+// /tekstil/studier: virker uten JS, og URL-en blir delbar.
+import Base from '../../../layouts/Base.astro';
+import SupplementStudy from '../../../components/SupplementStudy.astro';
+import { getKb, allStudies } from '../../../lib/supplements.js';
+
+const fbase = Astro.locals.fbase ?? '/forskning';
+const base = `${fbase}/tilskudd`;
+const kb = await getKb();
+const params = Astro.url.searchParams;
+const q = (params.get('q') || '').trim();
+const stoff = params.get('stoff') || '';
+
+const topicNames = Object.fromEntries(
+  Object.values(kb.topics || {}).map((t) => [t.slug, t.name]),
+);
+
+let studies = allStudies(kb);
+if (stoff) studies = studies.filter((s) => (s.topics || []).includes(stoff));
+if (q) {
+  const needle = q.toLowerCase();
+  studies = studies.filter((s) =>
+    `${s.title} ${s.writeup} ${s.journal}`.toLowerCase().includes(needle),
+  );
+}
+
+// Filteret viser kun stoffer som faktisk har studier — en tom filterknapp er støy.
+const filterTopics = Object.values(kb.topics || {})
+  .filter((t) => t.studies.length)
+  .sort((a, b) => b.studies.length - a.studies.length);
+---
+
+<Base title="tilskuddsstudier" site="forskning" base={fbase}>
+  <div class="page-head">
+    <a class="back" href={base}>← Oversikt</a>
+    <h1>Alle tilskuddsstudier</h1>
+    <div class="date">
+      {studies.length} av {kb.study_count || 0} studier
+      {stoff && ` om ${topicNames[stoff] || stoff}`}
+      {q && ` som matcher «${q}»`}
+    </div>
+  </div>
+
+  <form class="tfilter" method="get" action={`${base}/studier`}>
+    <input type="search" name="q" value={q} placeholder="Søk i studier…" aria-label="Søk" />
+    <select name="stoff" aria-label="Stoff">
+      <option value="">Alle stoffer</option>
+      {filterTopics.map((t) => (
+        <option value={t.slug} selected={t.slug === stoff}>
+          {t.name} ({t.studies.length})
+        </option>
+      ))}
+    </select>
+    <button type="submit">Filtrer</button>
+    {(q || stoff) && <a class="tfilter__clear" href={`${base}/studier`}>Nullstill</a>}
+  </form>
+
+  {studies.length === 0 ? (
+    <p class="empty">Ingen studier matcher.</p>
+  ) : (
+    <div class="tstudies">
+      {studies.map((s) => (
+        <div id={`s-${s.id}`} class="tstudies__anchor">
+          <SupplementStudy study={s} showTopics={true} topicNames={topicNames} base={fbase} />
+        </div>
+      ))}
+    </div>
+  )}
+</Base>

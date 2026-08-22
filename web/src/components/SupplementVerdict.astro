@@ -1,0 +1,11 @@
+---
+// Dommen på et stoff, som farget merke. Egen akse fra tekstilens (ta/vurder/dropp/
+// risiko/ukjent), men samme markup og samme `.tv`-klasser — kun modifikatorene og
+// fargene er nye, i global.css.
+const { verdict, label, confidence = null, size = 'md' } = Astro.props;
+---
+<span class={`tv tv--${verdict} tv--${size}`}>
+  <span class="tv__dot" aria-hidden="true"></span>
+  {label}
+  {confidence && <span class="tv__conf">{confidence} evidens</span>}
+</span>

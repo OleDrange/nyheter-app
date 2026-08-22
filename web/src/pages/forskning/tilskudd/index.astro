@@ -1,0 +1,140 @@
+---
+// forskning.modr.no/tilskudd — oversikten.
+//
+// Rekkefølgen på siden følger formålet: verktøyet skal gjøre leseren i stand til å si
+// NEI raskt. Derfor kommer «ikke-lista» (dokumentert uten effekt + frarådes) FØR den
+// fullstendige stofflista — det er den korteste veien til nytte, og den er det ingen
+// kosttilskuddsside vil vise deg.
+import Base from '../../../layouts/Base.astro';
+import SupplementVerdict from '../../../components/SupplementVerdict.astro';
+import {
+  getKb, topicsByKind, verdictCounts, doseGroups, skipList, allStudies,
+} from '../../../lib/supplements.js';
+
+const fbase = Astro.locals.fbase ?? '/forskning';
+const base = `${fbase}/tilskudd`;
+const kb = await getKb();
+const groups = topicsByKind(kb);
+const verdicts = verdictCounts(kb).filter((v) => v.count > 0);
+const doses = doseGroups(kb);
+const doseCount = doses.reduce((n, g) => n + g.rows.length, 0);
+const skip = skipList(kb);
+const latest = allStudies(kb).slice(0, 5);
+const topics = Object.values(kb.topics || {}).filter((t) => !t.retired);
+const written = topics.filter((t) => t.summary).length;
+const floors = topics.filter((t) => (t.evidence_floor || {}).checked).length;
+const hasTopics = topics.length > 0;
+---
+
+<Base title="tilskudd" site="forskning" base={fbase}>
+  <div class="page-head">
+    <h1>Kosttilskudd</h1>
+    <div class="date">
+      Hva forskningen faktisk har målt om hvert stoff — satt opp mot hva det markedsføres
+      som. Bygget for å kunne si nei raskt.
+    </div>
+  </div>
+
+  {!hasTopics ? (
+    <p class="empty">Kunnskapsbasen er tom ennå. Første generatorkjøring fyller den.</p>
+  ) : (
+    <>
+      <section class="card tsum">
+        <div class="tsum__stats">
+          <div class="tstat"><b>{kb.study_count || 0}</b><span>studier</span></div>
+          <div class="tstat"><b>{written}/{topics.length}</b><span>stoffer konkludert</span></div>
+          {doseCount > 0 && <div class="tstat"><b>{doseCount}</b><span>doseringer</span></div>}
+          {floors > 0 && <div class="tstat"><b>{floors}</b><span>uten evidens</span></div>}
+          {kb.updated && <div class="tstat"><b>{kb.updated}</b><span>sist oppdatert</span></div>}
+        </div>
+        {verdicts.length > 0 && (
+          <div class="tsum__verdicts">
+            {verdicts.map((v) => (
+              <SupplementVerdict verdict={v.id} label={`${v.label}: ${v.count}`} size="sm" />
+            ))}
+          </div>
+        )}
+        {doseCount > 0 && (
+          <a class="tsum__cta" href={`${base}/protokoll`}>
+            Se hele protokollen ({doseCount} doseringer) →
+          </a>
+        )}
+      </section>
+
+      {skip.length > 0 && (
+        <section class="tgroup">
+          <h2 class="tgroup__head tgroup__head--skip">
+            Ikke bry deg <span class="tgroup__n">{skip.length}</span>
+          </h2>
+          <p class="sgroup__lead">
+            Stoffer som enten er godt undersøkt uten at effekten er der, eller som
+            frarådes. Dette er den mest nyttige lista på siden.
+          </p>
+          <div class="tgrid">
+            {skip.map((t) => (
+              <a class={`ttopic ttopic--${t.verdict}`} href={`${base}/stoff/${t.slug}`}>
+                <div class="ttopic__top">
+                  <h3>{t.name}</h3>
+                  <SupplementVerdict
+                    verdict={t.verdict}
+                    label={(kb.verdicts || {})[t.verdict] || t.verdict}
+                    size="sm"
+                  />
+                </div>
+                <p class="ttopic__blurb">{t.measured || t.blurb}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {groups.map((g) => (
+        <section class="tgroup">
+          <h2 class="tgroup__head">{g.label}</h2>
+          <div class="tgrid">
+            {g.topics.map((t) => (
+              <a class="ttopic" href={`${base}/stoff/${t.slug}`}>
+                <div class="ttopic__top">
+                  <h3>{t.name}</h3>
+                  <SupplementVerdict
+                    verdict={t.verdict}
+                    label={(kb.verdicts || {})[t.verdict] || t.verdict}
+                    size="sm"
+                  />
+                </div>
+                <p class="ttopic__blurb">{t.blurb}</p>
+                <div class="ttopic__foot">
+                  <span>
+                    {t.studies.length} {t.studies.length === 1 ? 'studie' : 'studier'}
+                  </span>
+                  {(t.dose || []).length > 0 && <span>{t.dose.length} dosering</span>}
+                  {(t.evidence_floor || {}).qualifying === 0 && (
+                    <span class="ttopic__floor">ingen kontrollerte studier</span>
+                  )}
+                  {!t.summary && t.studies.length > 0 && (
+                    <span class="ttopic__pending">ikke skrevet ennå</span>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {latest.length > 0 && (
+        <section class="tgroup">
+          <h2 class="tgroup__head">Sist innrullet</h2>
+          <ul class="tlatest">
+            {latest.map((s) => (
+              <li>
+                <a href={`${base}/studier#s-${encodeURIComponent(s.id)}`}>{s.title}</a>
+                <span class="tlatest__meta">{s.journal} · {s.added}</span>
+              </li>
+            ))}
+          </ul>
+          <a class="tsum__cta" href={`${base}/studier`}>Alle {kb.study_count} studier →</a>
+        </section>
+      )}
+    </>
+  )}
+</Base>

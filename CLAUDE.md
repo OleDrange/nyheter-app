@@ -9,6 +9,8 @@ repoet: `/root/nyheter-app`, remote `git@github.com:OleDrange/nyheter-app.git`, 
 - **Generator** (Python, cron 05:00 hver dag):
   - `news_briefing.py` — nyhetsbriefing fra RSS + Bergen-vær + markedssnapshot.
   - `research_briefing.py` — maks 5 fagfellevurderte menneskestudier (longevity) fra Europe PMC.
+  - `supplement_briefing.py` — tilskudds-kunnskapsbasen (vitaminer/peptider), **ikke**
+    dagsbasert. Bor under forskningssiden: `forskning.modr.no/tilskudd`.
   - `textile_briefing.py` — tekstil-kunnskapsbasen (fiber/kjemi/kvalitet), **ikke** dagsbasert.
 - **Nettside** (`web/`, Astro 5 SSR på Node) — leser JSON ved hver forespørsel og viser
   dagens briefing + arkiv. Nytt *innhold* vises uten rebuild; *kodeendringer* krever rebuild.
@@ -51,11 +53,11 @@ Rollback: `git revert <commit> && git push`, deretter rebuild + `up -d web`.
   0 5 * * * cd /root/nyheter-app && /usr/bin/docker compose run --rm generator >> /root/nyheter-cron.log 2>&1
   ```
   Kommandoen er tom, så CMD kjører — `docker-entrypoint.sh`, som tar nyheter → forskning →
-  tekstil → healthcheck etter hverandre med myk feil mellom hvert steg. **En ny generator
-  legges til DER, ikke som en ny crontab-linje** (to samtidige `docker compose run` mot
+  tilskudd → tekstil → healthcheck etter hverandre med myk feil mellom hvert steg. **En ny
+  generator legges til DER, ikke som en ny crontab-linje** (to samtidige `docker compose run` mot
   samme volum er unødvendig risiko). Rekkefølgen er bevisst: nyhetsbriefingen er det
-  leseren venter på kl. 05, og tekstil går sist fordi den akkumulerer og ikke har noen
-  dagsfrist.
+  leseren venter på kl. 05, og de to kunnskapsbasene (tilskudd, tekstil) går sist fordi de
+  akkumulerer og ikke har noen dagsfrist.
   Tidspunktet styres av **verts**-TZ (`Europe/Oslo` via `timedatectl`; `systemctl restart cron`
   etter endring). **`CRON_TZ` virker ikke** på Debians cron — ikke legg den i crontab.
   Container-TZ (`TZ=Europe/Oslo` i Dockerfile + compose) styrer innholdets dato/værvinduer.
@@ -530,6 +532,118 @@ setninger som skal kunne stå ordrett i en kravspesifikasjon, med `strength` per
 Studien lagres **én gang** i `kb["studies"]`; emnene refererer til den med id. En studie som
 treffer tre emner finnes fortsatt bare ett sted.
 
+### Tilskudds-kunnskapsbasen (`supplement_briefing.py` + `supplement_topics.py`)
+
+Målgruppe: **samme leser som forskningsbriefingen** — longevity, og hva han selv kan gjøre.
+Bor på **https://forskning.modr.no/tilskudd**, ikke på eget subdomene: samme leser og samme
+spørsmål som resten av forskningen, så en fjerde side ville splittet lesingen uten å gi noe.
+
+**Formålet er å kunne si NEI raskt**, og det er skrevet inn i begge systempromptene. De
+fleste tilskudd gjør ingenting målbart for en frisk person; verdien ligger i å slippe å
+prøve dem, og i å vite hvilke få som har tall bak seg, i hvilken dose, for hvem.
+Tilskuddslitteraturen er systematisk skjevfordelt mot positive funn (små utvalg,
+industrifinansiering), så uten den eksplisitte instruksen vil Claude skrive positivt om alt.
+
+Arkitekturen er **akkumulerende**, som tekstil: kø → omtaler → innrulling → syntese. En
+kjøring er syv steg, der de tunge hoppes over: 1. last, 2. prun, 3. påfyll (kun under
+`QUEUE_REFILL_BELOW = 40`), 4. **mål bevis-gulv** (gratis), 5. omtaler (kun under
+`WRITEUP_REFILL_BELOW = 8`, `WRITEUP_BATCH_SIZE = 8`), 6. innrulling
+(`MAX_ROLLIN_PER_RUN = 5`), 7. syntese (`MAX_SYNTH_PER_RUN = 3`). `--dry-run` kjører alt
+unntatt 5–7 og er gratis. `--seed` er engangsknappen (8 omtalerunder, 80 innrullinger, 25
+synteser). `--floor` måler bevis-gulvet på nytt uansett alder.
+
+#### Tre ting skiller den fra tekstil-generatoren
+
+**1. RCT-kravet GJELDER her.** Tekstil dropper det fordi randomiserte forsøk på plagg knapt
+finnes; tilskudd er det motsatte — feltet er fullt av RCT-er og metaanalyser, og samtidig
+fullt av små sponsede studier. `_PMC_SUFFIX` er derfor identisk med `research_briefing.py`
+(`KW:"Humans"` + RCT/metaanalyse/systematisk oversikt + `SRC:MED`). **Ikke senk det** — da
+fylles basen med nøyaktig det materialet som driver hypen, og verktøyet som skulle beskytte
+mot overselging blir leverandøren av den. Målt 22. august 2026 gir filteret **2 448**
+kvalifiserende studier på 730 dager fordelt på registerets stoffer.
+
+**2. Én spørring PER STOFF, ikke per gruppe.** `topic_query()` bygges av `probe`-feltet i
+registeret, så registeret er både stoffliste OG søkespesifikasjon — et nytt stoff blir søkt
+opp uten kodeendring. Grunnen til at det ikke er gruppert: slår man ni vitaminer sammen i én
+spørring og kutter på `MAX_FETCH_PER_TOPIC`, er det alltid det største stoffet som overlever
+kuttet. K2 (9 kvalifiserende studier på to år) ville aldri sett dagens lys ved siden av
+D-vitamin (417). Kostnaden er 34 HTTP-kall, og de er gratis.
+
+**3. Bevis-gulvet er en FUNKSJON, ikke en mangel.** Stoffene i gruppen `uavklart` gir null
+treff gjennom kvalitetsfilteret: **BPC-157 har 193 publikasjoner og 0 kontrollerte
+menneskestudier**, de øvrige peptidene 395 og 0, medisinsopp 2 374 og 3.
+`measure_evidence_floor()` teller begge tallene med to gratis `hitCount`-kall per stoff (kun
+for stoffer uten evidens, målt på nytt etter `FLOOR_RECHECK_DAYS = 30`) og lagrer dem på
+stoffet. `EvidenceFloor.astro` viser dem som selve oppslaget. **Ikke fjern disse stoffene
+fordi de er tomme** — fraværet av evidens er svaret for nettopp de stoffene som markedsføres
+hardest, og et stoff uten oppslag lar leseren tro at spørsmålet ikke er stilt.
+
+#### Registeret (`supplement_topics.py`)
+
+34 stoffer i seks grupper (`basis` / `ytelse` / `longevity` / `sovn` / `tarm` / `uavklart`).
+Per stoff: `slug` (**endres ALDRI** etter publisering — identiteten til all evidens),
+`name`, `kind`, `blurb`, `claim`, `terms`, `probe`, og valgfritt `floor_verdict`.
+
+- **`claim` er ikke pynt.** Det er markedsføringspåstanden, og syntesen får den i prompten
+  med instruks om å sette den opp mot hva studiene faktisk har målt (`measured`-feltet).
+  For NAD-forløpere er påstanden «klarhet i hodet» mens utfallet i studiene er
+  NAD+-konsentrasjon i helblod — å vise de to ved siden av hverandre (`.sclaim` øverst på
+  hvert oppslag) er oppslagsverkets viktigste enkeltgrep.
+- **`floor_verdict`** (kun `bpc-157` og `andre-peptider`, begge `risiko`) er dommen stoffet
+  har så lenge det ikke finnes kvalifiserende evidens. Den utledes **ikke** av studier, men
+  av regulatorisk status og av at stoffet injiseres uten humane sikkerhetsdata — derfor står
+  den i registeret og ikke hos Claude. Uten feltet faller et tomt stoff til `ukjent`, som er
+  riktig for et harmløst dårlig studert stoff (glysin) og feil for et gråmarkedspeptid:
+  «ukjent» leses som «kanskje verdt et forsøk». `_load_kb()` håndhever den hver kjøring helt
+  til stoffet faktisk får evidens og en syntese overtar dommen.
+
+#### Domsaksen — fem nivåer, og to av dem MÅ holdes fra hverandre
+
+`ta` / `vurder` / `dropp` / `risiko` / `ukjent`.
+
+**`dropp` og `ukjent` er bevisst forskjellige dommer.** «Godt undersøkt, og effekten er
+omtrent null» (multivitamin) og «vi vet ikke» er helt ulike svar, og et oppslagsverk som
+slår dem sammen er verdiløst — `dropp` er en STERK konklusjon. Prompten sier det eksplisitt.
+**`risiko` er skilt fra begge** fordi et uregulert peptid uten sikkerhetsdata ikke skal kunne
+leses som «kanskje verdt et forsøk». De har også ulik farge i CSS: `dropp` er nøytral grå,
+`risiko` er rød — å gi dem samme rødt ville gjort et virkningsløst multivitamin like
+alarmerende som et gråmarkedspeptid.
+
+#### Syntesen
+
+Ett JSON-objekt per stoff, parset av `_parse_synth()` med samme balanserte-klamme-skanner som
+tekstil, og validert mot registeret. Kan svaret ikke tolkes, står stoffet **uendret**.
+Feltene: `summary`, **`measured`** (påstand mot måling — det viktigste), `verdict`,
+`confidence`, `who` (skiller mellom påvist mangel og normal status — for de fleste vitaminer
+er det hele forskjellen), `dose` (0–3, dosen brukt i STUDIENE, ikke på boksen, med `strength`
+per rad), `interactions` (0–3) og `changes_verdict` (0–3, hva som ville endret dommen —
+det leseren skal se etter framover).
+
+#### Lokal scoring — to støytyper som MÅ straffes
+
+Spørringene er presise (én per stoff), men presis er ikke relevant: D-vitamin gir 417 treff
+og flertallet handler om graviditet, spedbarn, dialyse eller husdyr.
+
+- **`_OFF_POPULATION`** — feil populasjon. Vitaminlitteraturen domineres av svangerskap,
+  spedbarn og intensivmedisin. God forskning, feil spørsmål: leseren er en frisk voksen.
+  Uten lista ville D-vitamin-oppslaget blitt skrevet på svangerskapsstudier. −4,0 på
+  tittelen, −1,0 i abstractet. Dyre-/in vitro-ord står også her, fordi oversiktsartikler
+  slipper gjennom `KW:"Humans"`.
+- **`_NOT_A_SUPPLEMENT`** — stoffet er en biomarkør, en analysemetode eller en
+  infusjonsbehandling, ikke noe man kan kjøpe og ta. «Serum zinc as a prognostic marker in
+  sepsis» treffer stoffet `sink` perfekt og er helt ubrukelig. −4,0 på tittelen.
+
+I tillegg gir `_DOSE_PATTERNS` +1,2 for oppgitt dose og −1,0 uten: uten dose kan omtalen
+ikke si hva funnet faktisk gjelder. `MIN_SCORE = 3.0`.
+
+#### Filer på volumet — MÅ persisteres
+
+- `supplement_kb.json` — **kunnskapsbasen. Kan ikke regenereres** (summen av hver omtale og
+  hver syntese). Ligger på `briefing-data`, altså dekket av backup-kommandoen.
+- `supplement_queue.json` — kø. Bygges opp igjen, men omtalene i den er betalt for.
+- `supplement_seen.json` — `{id: {last, rolled, refused}}`, samme to-nivå-logikk som
+  `textile_seen.json` og `research_seen_dois.json`.
+
 ## Datalager — JSON-kontrakten
 
 `store_briefing()` (i `news_briefing.py`) skriver/merger til
@@ -576,6 +690,13 @@ bygges uten ekstra datainnhenting.
   ('' på subdomenet, '/forskning' ved sti-tilgang/dev). `Base.astro` tar
   `site="forskning"` + `base` for egen header/nav. Anker `#s<i>` per studie
   (i = posisjon i `research_md`) — nyhetssidens tittelliste lenker dit.
+- **Ruter (tilskudd):** `/forskning/tilskudd` (oversikt), `/forskning/tilskudd/stoff/<slug>`
+  (ett stoff), `/forskning/tilskudd/protokoll` (alle doseringer + ikke-lista +
+  interaksjoner), `/forskning/tilskudd/studier` (alle studier, server-side søk/filter via
+  `?q=&stoff=`). Ligger UNDER forskning-prefikset, så host-rutingen i `middleware.js`
+  trengte ingen endring — på subdomenet blir URL-en `forskning.modr.no/tilskudd`.
+  Stoffsidene ligger i undermappen `stoff/` og ikke rett under `tilskudd/`, slik at en
+  fremtidig `slug` som «protokoll» eller «studier» ikke kan kollidere med en fast rute.
 - **Ruter (tekstil):** `/tekstil` (oversikt), `/tekstil/emne/<slug>` (ett oppslag),
   `/tekstil/krav` (samlet kravspesifikasjon), `/tekstil/studier` (alle studier, server-side
   søk/filter via `?q=&emne=`). Host `tekstil.*` rutes internt hit, `locals.tbase` er
@@ -777,6 +898,15 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
   `studiesForDay(b)` (splitResearch + kilde-metadata fra `research_items` + `anchor`; se
   forskningsseksjonen), `researchNeighbors(date)` (forrige/neste dag med studier),
   `formatDateNo()`/`weekdayNo()` (lokaltid-trygg norsk dato).
+- **`src/lib/supplements.js`:** speiler `textile.js` (`getKb()` med mtime+størrelse-cache,
+  `topicsByKind()`, `getTopic()`, `topicStudies()`, `allStudies()`), pluss `doseGroups()`
+  (protokollen, gruppert på **dom** og ikke evidensstyrke — den skal inn i et medisinskap,
+  ikke ut til en leverandør), `skipList()` (stoffene med `dropp`/`risiko` — «ikke-lista»,
+  som står FØRST på oversikten fordi den er den korteste veien til nytte),
+  `interactionList()` og `verdictCounts()`. Sorteringen innad i en gruppe er på **dom**, ikke
+  på antall studier som i tekstil: her er et stoff med null studier og målt bevis-gulv ofte
+  det mest interessante på siden. Sti fra `SUPPLEMENT_KB` (`/data/supplement_kb.json` i prod).
+  Mangler filen, returnerer alt tomt — ingenting kaster.
 - **`src/lib/textile.js`:** `getKb()` (cache nøklet på mtime+størrelse — filen skrives
   atomisk, men mtime alene fanger ikke to skrivinger samme sekund), `topicsByKind()`,
   `getTopic()`, `topicStudies()`, `allStudies()`, `criteriaGroups()`, `supplierQuestions()`,
@@ -803,12 +933,13 @@ er vist, søkbare — pluss favorittmerkede gåter og quizspørsmål. Type-faner
 - **To volumer, ikke ett.** `briefing-data` (generatoren skriver, web leser read-only) og
   `saved-data` (kun web, rw). Backup-kommandoen må dekke **begge** — lagrede studier kan
   ikke regenereres.
-- **`textile_kb.json` kan ikke regenereres.** Køen bygges opp igjen av seg selv, men
+- **`textile_kb.json` og `supplement_kb.json` kan ikke regenereres.** Køen bygges opp igjen av seg selv, men
   kunnskapsbasen er summen av alt Claude noen gang har skrevet i dette systemet. Den ligger
   på `briefing-data`, så den er dekket av backup-kommandoen — men vit hva du sletter.
 - **Persistente data på volumet:** `briefings/<dato>.json`, `research_seen_dois.json`,
   `research_queue.json`, `quiz_seen.json`, `riddles_seen.json`, `learning_seen.json`,
-  `textile_kb.json`, `textile_queue.json` og `textile_seen.json` MÅ ligge
+  `textile_kb.json`, `textile_queue.json`, `textile_seen.json`, `supplement_kb.json`,
+  `supplement_queue.json` og `supplement_seen.json` MÅ ligge
   i `/data` (`BRIEFING_DATA_DIR=/data`), ellers tomt arkiv + nullstilt dedup. Mister du
   `research_queue.json`, bygges den opp igjen ved neste kjøring — men de ferdigskrevne
   Claude-omtalene i den er betalt for og må skrives på nytt.

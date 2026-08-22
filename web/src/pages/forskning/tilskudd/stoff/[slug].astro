@@ -1,0 +1,119 @@
+---
+// Ett stoffoppslag.
+//
+// Rekkefølgen på siden er selve argumentet: PÅSTAND → HVA SOM ER MÅLT → dom → dose →
+// hvem → interaksjoner → hva som ville endret dommen → studiene. Å sette
+// markedsføringspåstanden og utfallene som faktisk er målt rett over hverandre er
+// oppslagsverkets viktigste enkeltgrep; resten er begrunnelsen under det.
+import Base from '../../../../layouts/Base.astro';
+import SupplementVerdict from '../../../../components/SupplementVerdict.astro';
+import SupplementStudy from '../../../../components/SupplementStudy.astro';
+import EvidenceFloor from '../../../../components/EvidenceFloor.astro';
+import { getKb, getTopic, topicStudies } from '../../../../lib/supplements.js';
+import { renderMarkdown } from '../../../../lib/briefings.js';
+
+const fbase = Astro.locals.fbase ?? '/forskning';
+const base = `${fbase}/tilskudd`;
+const { slug } = Astro.params;
+const kb = await getKb();
+const topic = getTopic(kb, slug);
+if (!topic) return Astro.redirect(base, 302);
+
+const studies = topicStudies(kb, topic);
+const summaryHtml = topic.summary ? renderMarkdown(topic.summary) : null;
+const kindLabel = (kb.kind_labels || {})[topic.kind] || topic.kind;
+const floor = topic.evidence_floor;
+---
+
+<Base title={topic.name} site="forskning" base={fbase}>
+  <div class="page-head">
+    <a class="back" href={base}>← {kindLabel}</a>
+    <h1>{topic.name}</h1>
+    <div class="tverdict-row">
+      <SupplementVerdict
+        verdict={topic.verdict}
+        label={(kb.verdicts || {})[topic.verdict] || topic.verdict}
+        confidence={topic.summary ? topic.confidence : null}
+      />
+      <span class="tverdict-row__count">
+        {studies.length} {studies.length === 1 ? 'studie' : 'studier'}
+        {topic.synth_at && ` · oppslaget skrevet ${topic.synth_at}`}
+      </span>
+    </div>
+    <div class="date">{topic.blurb}</div>
+  </div>
+
+  {/* Påstand mot måling — hele poenget med oppslagsverket, øverst på siden. */}
+  <section class="sclaim">
+    <div class="sclaim__col sclaim__col--claim">
+      <div class="sclaim__label">Dette markedsføres det som</div>
+      <p>{topic.claim}</p>
+    </div>
+    <div class="sclaim__col sclaim__col--measured">
+      <div class="sclaim__label">Dette er faktisk målt</div>
+      {topic.measured
+        ? <p>{topic.measured}</p>
+        : <p class="sclaim__empty">
+            Ingen kontrollerte menneskestudier å måle påstanden mot ennå.
+          </p>}
+    </div>
+  </section>
+
+  {floor && <EvidenceFloor floor={floor} name={topic.name} />}
+
+  {summaryHtml && <section class="card tsummary" set:html={summaryHtml} />}
+
+  {!summaryHtml && !floor && studies.length > 0 && (
+    <p class="empty">
+      Stoffet har {studies.length} {studies.length === 1 ? 'studie' : 'studier'}, men
+      oppslaget er ikke skrevet ennå. Studiene står under.
+    </p>
+  )}
+
+  {((topic.dose || []).length > 0 || topic.who) && (
+    <section class="card sfacts">
+      {(topic.dose || []).length > 0 && (
+        <div class="sfacts__block">
+          <h2>Dose brukt i studiene</h2>
+          <ul class="sdose">
+            {topic.dose.map((d) => (
+              <li>
+                <span class="sdose__text">{d.text}</span>
+                <span class={`tstrength tstrength--${d.strength}`}>{d.strength}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {topic.who && (
+        <div class="sfacts__block">
+          <h2>Hvem det gjelder</h2>
+          <p class="sfacts__text">{topic.who}</p>
+        </div>
+      )}
+    </section>
+  )}
+
+  {(topic.interactions || []).length > 0 && (
+    <section class="card swarn">
+      <h2>Interaksjoner og grenser</h2>
+      <ul>{topic.interactions.map((i) => <li>{i}</li>)}</ul>
+    </section>
+  )}
+
+  {(topic.changes_verdict || []).length > 0 && (
+    <section class="card schange">
+      <h2>Hva som ville endret dommen</h2>
+      <ul>{topic.changes_verdict.map((c) => <li>{c}</li>)}</ul>
+    </section>
+  )}
+
+  {studies.length > 0 && (
+    <section class="tgroup">
+      <h2 class="tgroup__head">Evidensen ({studies.length})</h2>
+      <div class="tstudies">
+        {studies.map((s) => <SupplementStudy study={s} base={fbase} />)}
+      </div>
+    </section>
+  )}
+</Base>

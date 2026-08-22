@@ -1,0 +1,46 @@
+---
+// Én studie i tilskuddsbasen: tittel med kilde-lenke, metadata, og de fire merkede
+// avsnittene. «Resultat» får den nøytrale fremhevingen (tallene er det som veier),
+// «Hva det betyr for deg» får accent-fargen — samme fordeling som ResearchList.astro
+// bruker på forskningssiden, så de to sidene leses likt.
+const { study, showTopics = false, topicNames = {}, base = '' } = Astro.props;
+const fmt = (d) => {
+  const s = String(d || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return s || null;
+  return new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
+    .format(new Date(`${s}T12:00:00`));
+};
+const KEY = 'Hva det betyr for deg';
+const NUM = 'Resultat';
+---
+<article class="tstudy">
+  <h3 class="tstudy__title">
+    {study.url ? <a href={study.url} target="_blank" rel="noopener">{study.title}</a> : study.title}
+  </h3>
+  <div class="tstudy__meta">
+    <span>{study.journal}</span>
+    {fmt(study.date) && <><span aria-hidden="true">·</span><span>{fmt(study.date)}</span></>}
+    <span aria-hidden="true">·</span>
+    <span class="tstudy__src">Europe PMC</span>
+    {study.doi && <><span aria-hidden="true">·</span><span class="tstudy__doi">{study.doi}</span></>}
+  </div>
+  {showTopics && study.topics?.length > 0 && (
+    <div class="tstudy__topics">
+      {study.topics.map((slug) => (
+        <a class="ttag" href={`${base}/tilskudd/stoff/${slug}`}>{topicNames[slug] || slug}</a>
+      ))}
+    </div>
+  )}
+  {study.html ? (
+    <div class="tstudy__body" set:html={study.html} />
+  ) : (
+    <div class="tstudy__parts">
+      {study.parts.map((p) => (
+        <div class={`tpart${p.label === KEY ? ' tpart--key' : ''}${p.label === NUM ? ' tpart--num' : ''}`}>
+          <div class="tpart__label">{p.label}</div>
+          <div class="tpart__text" set:html={p.html} />
+        </div>
+      ))}
+    </div>
+  )}
+</article>

@@ -2836,3 +2836,146 @@ main {
 .tlatest li { display: grid; gap: 0.15rem; }
 .tlatest a { font-weight: 550; }
 .tlatest__meta { font-size: 0.78rem; color: var(--text-faint); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tilskudds-kunnskapsbasen (forskning.modr.no/tilskudd)
+   ───────────────────────────────────────────────────────────────────────────
+   Gjenbruker tekstilsidens strukturklasser (.tv, .tgrid, .ttopic, .tgroup,
+   .tstudy, .tcrit-*, .tstrength) — layouten er den samme, det er bare
+   domsaksen og innholdstypene som er nye. Her ligger derfor kun (1) de fem
+   nye dom-modifikatorene, og (2) blokkene som ikke finnes på tekstilsiden:
+   påstand-mot-måling, bevis-gulvet, dose og advarsler.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Dommene ────────────────────────────────────────────────────────────────
+   `dropp` og `risiko` er BEVISST ulike farger: «godt undersøkt, virker ikke»
+   er en nøytral konklusjon, mens «uregulert, ingen sikkerhetsdata» er en
+   advarsel. Å gi dem samme røde ville gjort et virkningsløst multivitamin
+   like alarmerende som et gråmarkedspeptid. */
+.tv--ta { color: var(--up); background: var(--up-bg); border-color: transparent; }
+.tv--vurder { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.tv--dropp { color: var(--text-muted); background: var(--surface-2, transparent); }
+.tv--risiko { color: var(--down); background: var(--down-bg); border-color: transparent; }
+
+.tgroup__head--ta { color: var(--up); }
+.tgroup__head--vurder { color: var(--accent); }
+.tgroup__head--skip { color: var(--down); }
+.sgroup__lead {
+  margin: -0.4rem 0 0.9rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  max-width: 62ch;
+}
+
+.ttopic--risiko { border-left: 3px solid var(--down); }
+.ttopic--dropp { border-left: 3px solid var(--border-strong); }
+.ttopic__floor { color: var(--down); font-weight: 600; }
+
+.tcrit__row--ta { border-left-color: var(--up); }
+.tcrit__row--vurder { border-left-color: var(--accent); }
+.tcrit__row--risiko { border-left-color: var(--down); }
+.tcrit__row--dropp { border-left-color: var(--border-strong); }
+
+/* ── Påstand mot måling ─────────────────────────────────────────────────────
+   Oppslagsverkets viktigste enkeltgrep, og derfor øverst på hvert stoff. De to
+   kolonnene skal stå SIDE OM SIDE der det er plass — det er sammenstillingen
+   som bærer poenget, ikke de to tekstene hver for seg. Under 760px stables de,
+   men påstanden står fortsatt først. */
+.sclaim {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin: 1.2rem 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.sclaim__col { background: var(--surface); padding: 1rem 1.1rem; }
+.sclaim__col--claim { color: var(--text-muted); }
+.sclaim__col--measured { color: var(--text); }
+.sclaim__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+  color: var(--text-faint);
+}
+.sclaim__col--measured .sclaim__label { color: var(--accent); }
+.sclaim p { margin: 0; font-size: 0.94rem; line-height: 1.6; }
+.sclaim__col--claim p { font-style: italic; }
+.sclaim__empty { color: var(--text-faint); }
+@media (max-width: 760px) {
+  .sclaim { grid-template-columns: 1fr; }
+}
+
+/* ── Bevis-gulvet ───────────────────────────────────────────────────────────
+   Vises kun for stoffer uten evidens, og er da hele oppslaget. Formet som et
+   varsel og ikke som en tom tilstand, fordi det ER et funn: avstanden mellom
+   «mye publisert» og «null kontrollerte studier». */
+.sfloor {
+  margin: 1.2rem 0;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--down);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.sfloor__head {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--down);
+  margin-bottom: 0.7rem;
+}
+.sfloor__nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+.sfloor__num { display: grid; gap: 0.15rem; }
+.sfloor__num b { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
+.sfloor__num span { font-size: 0.78rem; color: var(--text-muted); max-width: 26ch; }
+.sfloor__num--zero b { color: var(--down); }
+.sfloor__text { margin: 0; font-size: 0.92rem; line-height: 1.6; max-width: 68ch; }
+.sfloor__foot {
+  margin-top: 0.7rem;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-family: var(--mono);
+}
+
+/* ── Dose, hvem, advarsler ──────────────────────────────────────────────────
+   Doselista er det leseren kommer tilbake for, så den skal være skannbar:
+   dosen i monospace (tall skal ligge under hverandre), styrken som pille bak. */
+.sfacts { display: grid; gap: 1.2rem; }
+.sfacts__block h2,
+.swarn h2,
+.schange h2 { margin: 0 0 0.6rem; font-size: 1rem; }
+.sfacts__text { margin: 0; font-size: 0.94rem; line-height: 1.6; color: var(--text-muted); }
+.sdose { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.sdose li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-sm, 6px);
+  background: var(--surface-2, transparent);
+  border: 1px solid var(--border);
+}
+.sdose__text { flex: 1 1 320px; font-size: 0.94rem; line-height: 1.5; }
+
+.swarn { border-left: 3px solid var(--down); }
+.schange { border-left: 3px solid var(--accent); }
+.swarn ul,
+.schange ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.4rem; }
+.swarn li,
+.schange li { font-size: 0.92rem; line-height: 1.55; }
+
+/* «Resultat»-avsnittet i en tilskuddsstudie får nøytral fremheving — det er
+   tallene, ikke tolkningen. Samme fordeling som ResearchList.astro. */
+.tpart--num .tpart__label { color: var(--text); font-weight: 700; }
