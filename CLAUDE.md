@@ -99,7 +99,22 @@ markdown-backup). Begge skriver **alltid** dagens briefing til datalageret via
 
 ### Designvalg — ikke endre uten grunn
 
-- **Modell:** `claude-sonnet-4-6` (begge scriptene). Ikke bytt til opus/haiku.
+- **Modell:** `claude-opus-5` (alle fire generatorene). Byttet fra `claude-sonnet-4-6`
+  1. september 2026. **Opus 5 tenker som standard** — det er ikke en gratis oppgradering, og
+  to ting følger av det:
+  - **`max_tokens` er et felles tak for tenking OG svar.** Alle takene ble hevet i samme
+    slengen (`MAX_TOKENS` 4096 → 16000 i nyheter, 16000 → 32000 i de tre andre;
+    `SYNTH_MAX_TOKENS` 4000 → 12000; læring 2000 → 8000, refleksjon 700 → 4000). Et for lavt
+    tak gir ikke feilmelding — svaret kappes midt i, og JSON-parsingen faller til myk feil.
+  - **`content[0]` er ikke nødvendigvis tekst.** Første blokk kan være en thinking-blokk.
+    `_text_of()` i `news_briefing.py` slår sammen tekst-blokkene; de tre andre generatorene
+    gjorde allerede dette i syntesen.
+  - **Unntak: refusal-probene** (`CLAUDE_PROBE_MAX_TOKENS = 16`) kjører med
+    `thinking={"type": "disabled"}` — de spør kun ja/nei om sikkerhetsklassifikatoren slår
+    til, og tenking ville spist hele budsjettet. Lovlig fordi `effort` er `high` som standard
+    (Opus 5 avviser avslått tenking først på `xhigh`/`max`).
+  - **Pris:** $5/$25 per million tokens mot Sonnet 4.6 sine $3/$15, og tenketokens faktureres
+    som output. Regn ~2× på kjøringen.
 - **Streaming:** Claude-output streames til terminal, ikke bufret.
 - **Myke feil:** én RSS-feed, vær- eller markedsfeil stopper ikke resten av kjøringen.
 - **Artikler uten dato inkluderes alltid** (kan ikke fastslå alder).

@@ -183,8 +183,9 @@ utvelgelsen, og Claude får bare de 10 den skal skrive om.
 | Kastet arbeid | 35 vurderinger per dag | 0 |
 
 `MAX_TOKENS` må opp fra 8192 til **16000** for å få plass til 10 omtaler (~700 tokens hver
-inkludert overhead). Sjekk at `MODEL = "claude-sonnet-4-6"` tåler det — det gjør den; ikke bytt
-modell (designvalg i CLAUDE.md).
+inkludert overhead). Sjekk at modellen tåler det — den gjør det. (Historisk notat: den gang sto
+`MODEL = "claude-sonnet-4-6"`; fra 1. september 2026 er det `claude-opus-5`, og taket ble
+hevet til 32000 fordi tenkingen deler budsjettet — se CLAUDE.md.)
 
 #### Endringer i `SYSTEM_PROMPT`
 

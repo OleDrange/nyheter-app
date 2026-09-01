@@ -61,9 +61,9 @@ from textile_topics import (
 # CONFIG — juster her
 # ─────────────────────────────────────────────────────────────────────────────
 
-MODEL = "claude-sonnet-4-6"          # samme modell som de to andre generatorene
-MAX_TOKENS = 16000                   # 8 omtaler i ett svar
-SYNTH_MAX_TOKENS = 4000              # ett emnesammendrag
+MODEL = "claude-opus-5"                # samme modell som de tre andre generatorene
+MAX_TOKENS = 32000                   # 8 omtaler + Opus 5 sin tenking
+SYNTH_MAX_TOKENS = 12000             # ett emnesammendrag + tenking
 
 # Vindu på publiseringsdato. Tekstilkjemi har ingen nyhetssyklus i det hele tatt — en
 # patch-test-serie fra 2023 er like gyldig som en fra i går, og feltet publiserer langt
@@ -951,6 +951,9 @@ def _batch_refuses(client, articles: list[dict]) -> bool:
     try:
         resp = client.messages.create(
             model=MODEL, max_tokens=CLAUDE_PROBE_MAX_TOKENS,
+            # Proben er et rent ja/nei på refusal — tenking ville bare spist
+            # opp de 16 tokenene (lovlig å slå av: effort er «high» som standard).
+            thinking={"type": "disabled"},
             system=_writeup_system_prompt(),
             messages=[{"role": "user", "content": _build_user_content(articles)}],
         )

@@ -49,8 +49,8 @@ from news_briefing import (
 # CONFIG — juster her
 # ─────────────────────────────────────────────────────────────────────────────
 
-MODEL = "claude-sonnet-4-6"
-MAX_TOKENS = 16000  # 10 studieomtaler i ett svar (~700 tokens hver + overhead)
+MODEL = "claude-opus-5"
+MAX_TOKENS = 32000  # 10 studieomtaler (~700 tokens hver) + Opus 5 sin tenking
 
 # Vindu på publiseringsdato. Forskning har ingen nyhetssyklus — en metaanalyse fra april er
 # like relevant som en fra i går — så vi jakter ikke på det ferskeste, men på det BESTE vi
@@ -825,6 +825,9 @@ def _batch_refuses(client: "anthropic.Anthropic", articles: list[dict]) -> bool:
         resp = client.messages.create(
             model=MODEL,
             max_tokens=CLAUDE_PROBE_MAX_TOKENS,
+            # Proben er et rent ja/nei på refusal — tenking ville bare spist
+            # opp de 16 tokenene (lovlig å slå av: effort er «high» som standard).
+            thinking={"type": "disabled"},
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": _build_user_content(articles)}],
         )
