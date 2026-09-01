@@ -1,0 +1,605 @@
+{
+  "category": "Kultur og litteratur",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvem skrev «Et dukkehjem»?",
+      "answer": "Henrik Ibsen",
+      "options": [
+        "Henrik Ibsen",
+        "Bjørnstjerne Bjørnson",
+        "Knut Hamsun",
+        "Jonas Lie"
+      ],
+      "explanation": "Stykket fra 1879 vakte slik oppsikt at Ibsen motvillig skrev en alternativ slutt for tyske teatre, der Nora blir. Han kalte den selv en «barbarisk voldshandling» mot verket."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket instrument har 88 tangenter?",
+      "answer": "Piano",
+      "options": [
+        "Piano",
+        "Orgel",
+        "Cembalo",
+        "Trekkspill"
+      ],
+      "explanation": "52 hvite og 36 svarte. Spennet dekker omtrent hele frekvensområdet et orkester kan produsere — det var hele poenget med å standardisere det."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem malte «Skrik»?",
+      "answer": "Edvard Munch",
+      "options": [
+        "Edvard Munch",
+        "Christian Krohg",
+        "Harald Sohlberg",
+        "Nikolai Astrup"
+      ],
+      "explanation": "Det finnes fire versjoner. Himmelen kan være inspirert av asken fra Krakatau-utbruddet i 1883, som ga uvanlig røde solnedganger over Europa i årevis."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken norsk forfatter skrev «Sult»?",
+      "answer": "Knut Hamsun",
+      "options": [
+        "Knut Hamsun",
+        "Sigrid Undset",
+        "Alexander Kielland",
+        "Arne Garborg"
+      ],
+      "explanation": "Romanen fra 1890 regnes som en av de første moderne psykologiske romanene i Europa — handlingen er nesten fraværende, alt skjer inne i hodet på fortelleren."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem komponerte «Peer Gynt-suiten»?",
+      "answer": "Edvard Grieg",
+      "options": [
+        "Edvard Grieg",
+        "Johan Svendsen",
+        "Ole Bull",
+        "Christian Sinding"
+      ],
+      "explanation": "Grieg skrev musikken motvillig på oppdrag fra Ibsen og syntes selv «I Dovregubbens hall» var «så full av kuruk» at han knapt orket å høre den."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by huser museet Louvre?",
+      "answer": "Paris",
+      "options": [
+        "Paris",
+        "London",
+        "Roma",
+        "Madrid"
+      ],
+      "explanation": "Louvre var kongeslott før det ble museum i 1793. I dag er det verdens mest besøkte kunstmuseum, med rundt 35 000 utstilte verk."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem skrev «Romeo og Julie»?",
+      "answer": "William Shakespeare",
+      "options": [
+        "William Shakespeare",
+        "Christopher Marlowe",
+        "Ben Jonson",
+        "John Milton"
+      ],
+      "explanation": "Shakespeare fant ikke på handlingen — den bygger på en italiensk novelle. Det nye var språket, og han innførte anslagsvis 1700 ord i engelsk."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles en fortelling som er dikta opp?",
+      "answer": "Fiksjon",
+      "options": [
+        "Fiksjon",
+        "Sakprosa",
+        "Biografi",
+        "Essay"
+      ],
+      "explanation": "Skillet er yngre enn man tror. Fram til 1700-tallet ble romaner ofte presentert som funne dagbøker eller ekte brev, fordi ren oppdiktning ble sett på som løgn."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket band ga ut albumet «Abbey Road»?",
+      "answer": "The Beatles",
+      "options": [
+        "The Beatles",
+        "The Rolling Stones",
+        "Pink Floyd",
+        "The Who"
+      ],
+      "explanation": "Det var det siste albumet de spilte inn sammen, i 1969. Fotograferingen på fotgjengerfeltet tok ti minutter, og politiet stanset trafikken imens."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem skrev «Harry Potter»-bøkene?",
+      "answer": "J.K. Rowling",
+      "options": [
+        "J.K. Rowling",
+        "Philip Pullman",
+        "Roald Dahl",
+        "C.S. Lewis"
+      ],
+      "explanation": "Den første boka ble avvist av tolv forlag. Redaktøren som til slutt sa ja, gjorde det etter at hans åtte år gamle datter ba om neste kapittel."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles en dikt-linje?",
+      "answer": "Verselinje",
+      "options": [
+        "Verselinje",
+        "Strofe",
+        "Rim",
+        "Metrum"
+      ],
+      "explanation": "Flere verselinjer utgjør en strofe. Ordet «vers» brukes i dagligtale om begge deler, noe som gjør diktanalyse unødvendig forvirrende."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken norsk maler er kjent for «Vinternatt i Rondane»?",
+      "answer": "Harald Sohlberg",
+      "options": [
+        "Harald Sohlberg",
+        "Edvard Munch",
+        "Theodor Kittelsen",
+        "J.C. Dahl"
+      ],
+      "explanation": "Maleriet fra 1914 ble kåret til Norges nasjonalmaleri i en avstemning i 1995. Sohlberg jobbet med motivet i over femten år."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges nasjonalscene for opera og ballett?",
+      "answer": "Operahuset i Bjørvika",
+      "options": [
+        "Operahuset i Bjørvika",
+        "Nationaltheatret",
+        "Chateau Neuf",
+        "Den Nationale Scene"
+      ],
+      "explanation": "Bygget åpnet i 2008, og taket er offentlig gangareal — arkitektene ville at man skulle kunne gå på operaen uten å kjøpe billett."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem skrev eventyrene om «Den lille havfruen» og «Den stygge andungen»?",
+      "answer": "H.C. Andersen",
+      "options": [
+        "H.C. Andersen",
+        "Brødrene Grimm",
+        "Charles Perrault",
+        "Astrid Lindgren"
+      ],
+      "explanation": "Andersen fant på de fleste selv, i motsetning til brødrene Grimm som samlet inn folkeeventyr. Han skrev også reiseskildringer og romaner som nesten ingen leser i dag."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken kunstform er Salvador Dalí mest forbundet med?",
+      "answer": "Surrealisme",
+      "options": [
+        "Surrealisme",
+        "Kubisme",
+        "Impresjonisme",
+        "Realisme"
+      ],
+      "explanation": "De smeltende klokkene i «Hukommelsens bestandighet» skal ifølge Dalí selv være inspirert av camembert som fløt ut i sola."
+    },
+    {
+      "question": "Hvilken norsk litteraturpris er den eldste, delt ut siden 1948?",
+      "answer": "Bokhandlerprisen",
+      "options": [
+        "Bokhandlerprisen",
+        "Brageprisen",
+        "Nordisk råds litteraturpris",
+        "Kritikerprisen"
+      ],
+      "explanation": "Bokhandlerprisen kåres av bokhandlerne selv. Brageprisen, som mange tror er den eldste, kom først i 1992.",
+      "difficulty": "easy"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem regisserte filmen «Jaws» fra 1975?",
+      "answer": "Steven Spielberg",
+      "options": [
+        "Steven Spielberg",
+        "George Lucas",
+        "Martin Scorsese",
+        "Francis Ford Coppola"
+      ],
+      "explanation": "Mekanikkhaien virket nesten aldri, så Spielberg måtte antyde den med musikk og kamera i stedet. Filmen ble skummel nettopp fordi utstyret sviktet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem skrev romanen «Kristin Lavransdatter»?",
+      "answer": "Sigrid Undset",
+      "options": [
+        "Sigrid Undset",
+        "Cora Sandel",
+        "Amalie Skram",
+        "Camilla Collett"
+      ],
+      "explanation": "Trilogien kom 1920–22, og Undset fikk nobelprisen i 1928. Hun leste middelalderske diplomer i original for å få detaljene riktige."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken kunstretning oppsto i Frankrike på 1870-tallet med Monet som sentral skikkelse?",
+      "answer": "Impresjonisme",
+      "options": [
+        "Impresjonisme",
+        "Ekspresjonisme",
+        "Kubisme",
+        "Romantikken"
+      ],
+      "explanation": "Navnet kom fra en kritiker som mente Monets «Impression, soleil levant» var uferdig. Kunstnerne tok skjellsordet og gjorde det til merkelapp."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem skrev «Prosessen» og «Forvandlingen»?",
+      "answer": "Franz Kafka",
+      "options": [
+        "Franz Kafka",
+        "Thomas Mann",
+        "Hermann Hesse",
+        "Robert Musil"
+      ],
+      "explanation": "Kafka ba vennen Max Brod brenne alt uutgitt da han døde i 1924. Brod publiserte det i stedet — og skapte dermed hele forfatterskapet vi kjenner."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken komponist skrev «Den niende symfoni» med «Ode til gleden»?",
+      "answer": "Ludwig van Beethoven",
+      "options": [
+        "Ludwig van Beethoven",
+        "Wolfgang Amadeus Mozart",
+        "Johannes Brahms",
+        "Franz Schubert"
+      ],
+      "explanation": "Han var praktisk talt døv da den ble urframført i 1824, og måtte snus mot publikum for å se at de klappet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles en roman som følger en person fra ungdom til modning?",
+      "answer": "Danningsroman",
+      "options": [
+        "Danningsroman",
+        "Pikareskroman",
+        "Epistolarroman",
+        "Nøkkelroman"
+      ],
+      "explanation": "Sjangeren regnes å starte med Goethes «Wilhelm Meister» i 1795. Mye moderne ungdomslitteratur følger fortsatt samme grunnform."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem malte takfreskene i Det sixtinske kapell?",
+      "answer": "Michelangelo",
+      "options": [
+        "Michelangelo",
+        "Rafael",
+        "Leonardo da Vinci",
+        "Botticelli"
+      ],
+      "explanation": "Han jobbet stående med hodet bakover i fire år, ikke liggende slik myten sier — og regnet seg først og fremst som skulptør, ikke maler."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken norsk forfatter fikk nobelprisen i litteratur i 2023?",
+      "answer": "Jon Fosse",
+      "options": [
+        "Jon Fosse",
+        "Karl Ove Knausgård",
+        "Dag Solstad",
+        "Herbjørg Wassmo"
+      ],
+      "explanation": "Han er den fjerde norske vinneren, etter Bjørnson, Hamsun og Undset — og skriver på nynorsk, som dermed fikk sin første litteraturnobelpris."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter det klassiske greske teaterets to hovedsjangre?",
+      "answer": "Tragedie og komedie",
+      "options": [
+        "Tragedie og komedie",
+        "Epos og lyrikk",
+        "Drama og satire",
+        "Prolog og epilog"
+      ],
+      "explanation": "Ordet «tragedie» betyr bokstavelig «bukkesang». Den mest sannsynlige forklaringen er at en bukk var premien i dramakonkurransene i Athen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket instrument spilte Louis Armstrong?",
+      "answer": "Trompet",
+      "options": [
+        "Trompet",
+        "Saksofon",
+        "Piano",
+        "Klarinett"
+      ],
+      "explanation": "Han begynte på kornett i et ungdomshjem i New Orleans. Måten han spilte soloer på gjorde jazz til en solistmusikk — før ham var den først og fremst kollektiv."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles rimmønsteret der første og tredje linje rimer, og andre og fjerde?",
+      "answer": "Kryssrim",
+      "options": [
+        "Kryssrim",
+        "Parrim",
+        "Omsluttende rim",
+        "Enderim"
+      ],
+      "explanation": "Skjemaet skrives abab. Parrim (aabb) virker mer barnslig i norsk øre nettopp fordi det brukes så mye i regler og barnesanger."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem skrev «Det annet kjønn» fra 1949?",
+      "answer": "Simone de Beauvoir",
+      "options": [
+        "Simone de Beauvoir",
+        "Virginia Woolf",
+        "Hannah Arendt",
+        "Betty Friedan"
+      ],
+      "explanation": "Setningen «man fødes ikke som kvinne, man blir det» er verkets mest siterte. Boka havnet på Vatikanets liste over forbudte bøker."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles en komposisjon for solist og orkester?",
+      "answer": "Konsert",
+      "options": [
+        "Konsert",
+        "Symfoni",
+        "Sonate",
+        "Suite"
+      ],
+      "explanation": "Ordet kommer fra italiensk «concertare», som kan bety både å samstemme og å strides — begge deler beskriver forholdet mellom solist og orkester godt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken forfatter skapte detektiven Sherlock Holmes?",
+      "answer": "Arthur Conan Doyle",
+      "options": [
+        "Arthur Conan Doyle",
+        "Agatha Christie",
+        "Edgar Allan Poe",
+        "Wilkie Collins"
+      ],
+      "explanation": "Doyle drepte Holmes i 1893 fordi han ville skrive historiske romaner i stedet. Protestene var så massive at han gjenopplivet ham åtte år senere."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket norsk maleri- og arkitekturprogram preget nasjonalromantikken på 1800-tallet?",
+      "answer": "Å bygge en norsk nasjonal identitet",
+      "options": [
+        "Å bygge en norsk nasjonal identitet",
+        "Å importere fransk klassisisme",
+        "Å avvise all folkekunst",
+        "Å fremme industriell arkitektur"
+      ],
+      "explanation": "Asbjørnsen og Moe samlet eventyr, Ivar Aasen bygde landsmål, og malerne dro til fjells. Prosjektet var å finne noe særnorsk etter 400 år under Danmark."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles teknikken der en forteller henvender seg direkte til leseren?",
+      "answer": "Metafiksjon",
+      "options": [
+        "Metafiksjon",
+        "Allegori",
+        "Metonymi",
+        "Ironi"
+      ],
+      "explanation": "Grepet er langt eldre enn moderne litteratur — Laurence Sternes «Tristram Shandy» fra 1759 leker med leseren mer enn de fleste romaner gjør i dag."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem regisserte «Gudfaren» fra 1972?",
+      "answer": "Francis Ford Coppola",
+      "options": [
+        "Francis Ford Coppola",
+        "Martin Scorsese",
+        "Sidney Lumet",
+        "Roman Polanski"
+      ],
+      "explanation": "Studioet ville ikke ha Marlon Brando og ville sparke Al Pacino underveis. Coppola holdt på begge og regnet med å bli avskiltet når som helst."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den japanske diktformen på tre linjer med 5-7-5 stavelser?",
+      "answer": "Haiku",
+      "options": [
+        "Haiku",
+        "Tanka",
+        "Renga",
+        "Sonett"
+      ],
+      "explanation": "Formen krever tradisjonelt et årstidsord. Stavelsestellingen er egentlig japanske lydenheter, som ikke tilsvarer norske stavelser — derfor virker norske haiku ofte lengre."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem skrev «Ulysses» fra 1922?",
+      "answer": "James Joyce",
+      "options": [
+        "James Joyce",
+        "Virginia Woolf",
+        "Marcel Proust",
+        "T.S. Eliot"
+      ],
+      "explanation": "Hele romanen foregår i løpet av én dag, 16. juni 1904, i Dublin. Datoen feires årlig som Bloomsday, oppkalt etter hovedpersonen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den musikalske formen der et tema gjentas og imiteres i flere stemmer?",
+      "answer": "Fuge",
+      "options": [
+        "Fuge",
+        "Kanon",
+        "Sonate",
+        "Rondo"
+      ],
+      "explanation": "Bach regnes som mesteren. «Kunsten å fuge» ble stående uferdig — den siste fugen bryter av midt i et parti bygget på hans eget navn: B-A-C-H."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem malte «Guernica» fra 1937?",
+      "answer": "Pablo Picasso",
+      "options": [
+        "Pablo Picasso",
+        "Joan Miró",
+        "Salvador Dalí",
+        "Henri Matisse"
+      ],
+      "explanation": "Bildet skildrer bombingen av en baskisk by. Picasso nektet at det skulle vises i Spania så lenge Franco satt ved makten — det kom først dit i 1981."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles en sonett med 14 linjer i formen Shakespeare brukte?",
+      "answer": "Engelsk sonett",
+      "options": [
+        "Engelsk sonett",
+        "Italiensk sonett",
+        "Fransk ballade",
+        "Spensersk strofe"
+      ],
+      "explanation": "Den slutter med et rimende par som ofte snur hele diktet. Den italienske varianten deler i stedet på åtte og seks linjer."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem komponerte operaen «Tryllefløyten»?",
+      "answer": "Wolfgang Amadeus Mozart",
+      "options": [
+        "Wolfgang Amadeus Mozart",
+        "Joseph Haydn",
+        "Christoph Willibald Gluck",
+        "Antonio Salieri"
+      ],
+      "explanation": "Den ble skrevet for et folkelig forstadsteater, ikke for hoffet, og hadde talte replikker mellom numrene. Mozart døde to måneder etter premieren i 1791."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken litterær retning brøt Émile Zola med, og hva kalles hans egen?",
+      "answer": "Naturalismen",
+      "options": [
+        "Naturalismen",
+        "Symbolismen",
+        "Romantikken",
+        "Klassisismen"
+      ],
+      "explanation": "Zola ville skrive romaner som eksperimenter, med mennesket bestemt av arv og miljø. Han brukte samme metode i «J'accuse», som veltet Dreyfus-saken."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den norske kunstneren bak eventyrillustrasjonene med troll?",
+      "answer": "Theodor Kittelsen",
+      "options": [
+        "Theodor Kittelsen",
+        "Erik Werenskiold",
+        "Gerhard Munthe",
+        "Hans Gude"
+      ],
+      "explanation": "Kittelsen tegnet også pesten som en gammel kone med rake og kost. Bildene er senere blitt norske trolls og svartedaudens ansikt utad, langt utover bøkene."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem skrev «Hundre års ensomhet»?",
+      "answer": "Gabriel García Márquez",
+      "options": [
+        "Gabriel García Márquez",
+        "Jorge Luis Borges",
+        "Mario Vargas Llosa",
+        "Julio Cortázar"
+      ],
+      "explanation": "Boka fra 1967 gjorde magisk realisme til verdenslitteratur. Márquez skrev den på 18 måneder mens familien levde på kreditt hos slakteren."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles overgangen fra dur til moll i samme toneart?",
+      "answer": "Modusskifte",
+      "options": [
+        "Modusskifte",
+        "Modulasjon",
+        "Transponering",
+        "Synkope"
+      ],
+      "explanation": "Effekten er en av de mest brukte i filmmusikk: samme melodi, samme toneart, men et helt annet følelsesuttrykk med tre halvtoner endret."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket årstall regnes som filmens fødsel med Lumière-brødrenes visning i Paris?",
+      "answer": "1895",
+      "options": [
+        "1895",
+        "1888",
+        "1901",
+        "1912"
+      ],
+      "explanation": "Publikum betalte for å se arbeidere forlate en fabrikk. Brødrene selv trodde kino var «en oppfinnelse uten framtid» og satset heller på fotografi."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem skrev «Til fyret» og «Mrs Dalloway»?",
+      "answer": "Virginia Woolf",
+      "options": [
+        "Virginia Woolf",
+        "Katherine Mansfield",
+        "Doris Lessing",
+        "Iris Murdoch"
+      ],
+      "explanation": "Woolf drev også forlaget Hogarth Press sammen med mannen sin, og satte selv typene på trykkpressen — blant annet til T.S. Eliots dikt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles arkitekturstilen med spissbuer og ribbehvelv i middelalderens katedraler?",
+      "answer": "Gotikk",
+      "options": [
+        "Gotikk",
+        "Romansk stil",
+        "Barokk",
+        "Rokokko"
+      ],
+      "explanation": "Navnet var opprinnelig en fornærmelse fra renessansen: «gotisk» betydde barbarisk. Nidarosdomen er Norges viktigste eksempel."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem skrev musikken til balletten «Vårofferet», som utløste bråk ved premieren i 1913?",
+      "answer": "Igor Stravinskij",
+      "options": [
+        "Igor Stravinskij",
+        "Sergej Prokofjev",
+        "Claude Debussy",
+        "Maurice Ravel"
+      ],
+      "explanation": "Publikum bråkte så høyt at danserne ikke hørte orkesteret. Koreografen måtte rope takten fra kulissene."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles fortellergrepet der hendelser presenteres i annen rekkefølge enn de skjedde?",
+      "answer": "Anakroni",
+      "options": [
+        "Anakroni",
+        "Allitterasjon",
+        "Katarsis",
+        "Peripeti"
+      ],
+      "explanation": "Tilbakeblikk og frampek er de vanligste formene. Homer åpner allerede «Iliaden» midt i handlingen — grepet kalles in medias res."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken norsk dramatiker skrev «Over Ævne»?",
+      "answer": "Bjørnstjerne Bjørnson",
+      "options": [
+        "Bjørnstjerne Bjørnson",
+        "Henrik Ibsen",
+        "Gunnar Heiberg",
+        "Nordahl Grieg"
+      ],
+      "explanation": "Bjørnson skrev også teksten til «Ja, vi elsker dette landet», og fikk nobelprisen i litteratur i 1903 — to år før unionsoppløsningen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den italienske sangstilen der teksten framføres i talenært tempo i opera?",
+      "answer": "Resitativ",
+      "options": [
+        "Resitativ",
+        "Arie",
+        "Koral",
+        "Kadens"
+      ],
+      "explanation": "Resitativet driver handlingen framover, arien stopper tiden for å utdype en følelse. Vekslingen mellom de to er selve grunnrytmen i klassisk opera."
+    }
+  ]
+}

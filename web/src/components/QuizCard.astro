@@ -1,9 +1,12 @@
 ---
-// Dagens hjernetrim — ett flervalgsspørsmål per kategori fra det lokale
-// spørsmålsbiblioteket (quiz_bank/), nivå merket lett/middels/vanskelig.
-// Antall spørsmål følger antall kategorier, så komponenten er antalluavhengig.
+// Dagens hjernetrim — flervalgsspørsmål fra det lokale spørsmålsbiblioteket
+// (quiz_bank/), nivå merket lett/middels/vanskelig. Antallet bestemmes av
+// generatoren (ferske + repetisjoner), så komponenten er antalluavhengig.
 // Fasit er skjult til brukeren trykker på et svaralternativ; riktig svar
-// markeres grønt, feil valg rødt. Ingen bundling — ren inline-script.
+// markeres grønt, feil valg rødt. Har spørsmålet en `explanation`, vises den
+// etter svaret — uansett om du svarte riktig: den ekstra konteksten er hele
+// læringspoenget, og den forsvinner hvis den bare belønner feil svar.
+// Ingen bundling — ren inline-script.
 import SaveButton from './SaveButton.astro';
 import { buildId } from '../lib/saved.js';
 const { quiz, date = '', canPin = false, saved = new Set() } = Astro.props;
@@ -43,6 +46,7 @@ const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
         ))}
       </div>
       <p class="quiz-q__verdict" hidden></p>
+      {q.explanation && <p class="quiz-q__explanation" hidden>{q.explanation}</p>}
     </article>
   ))}
 </div>
@@ -61,6 +65,7 @@ const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
     for (const card of cards) {
       const answer = card.dataset.answer;
       const verdict = card.querySelector('.quiz-q__verdict');
+      const explanation = card.querySelector('.quiz-q__explanation');
       card.querySelectorAll('.quiz-opt').forEach((btn) => {
         btn.addEventListener('click', () => {
           if (card.classList.contains('quiz-q--done')) return;
@@ -80,6 +85,7 @@ const DIFF_NO = { easy: 'Lett', medium: 'Middels', hard: 'Vanskelig' };
             verdict.classList.add('quiz-q__verdict--wrong');
           }
           verdict.hidden = false;
+          if (explanation) explanation.hidden = false;
           answered += 1;
           if (answered === cards.length && scoreEl && scoreText) {
             scoreText.textContent = `Dagens fasit: ${correct} av ${cards.length} riktige 🧠`;

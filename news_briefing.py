@@ -710,10 +710,12 @@ def market_notion_blocks(market: dict) -> list[dict]:
 # ─────────────────────────────────────────────────────────────────────────────
 #
 # Spørsmålene bor i quiz_bank/<kategori>.json (i repoet, følger med i imaget).
-# Én fil = én kategori; hver dag trekkes ett nytt spørsmål per kategorifil, så
-# antall spørsmål/dag = antall filer. Legg til flere kategorifiler → flere
-# spørsmål/dag, uten kodeendring. Rekkefølgen på kategoriene i quizen styres av
-# _QUIZ_CATEGORY_ORDER (kjente filer først, resten alfabetisk).
+# Én fil = én kategori, og hver dag trekkes ett ferskt spørsmål fra hver av
+# _QUIZ_FRESH_PER_DAY kategorier — hvilke roterer med datoen, så alle
+# kategorier kommer innom over noen dager. I tillegg hentes inntil
+# _QUIZ_REVIEW_PER_DAY tidligere sette spørsmål tilbake som repetisjon.
+# Rekkefølgen på kategoriene styres av _QUIZ_CATEGORY_ORDER (kjente filer
+# først, resten alfabetisk).
 
 _QUIZ_BANK_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quiz_bank")
 _QUIZ_SEEN_FILE = "quiz_seen.json"  # i BRIEFING_DATA_DIR — må persisteres (volumet)
@@ -722,20 +724,31 @@ _QUIZ_SEEN_RETENTION_DAYS = 365
 # alfabetisk, så nye kategorier virker uten å endre denne lista.
 _QUIZ_CATEGORY_ORDER = [
     "historie",
+    "verdenshistorie",
     "geografi",
+    "naturvitenskap",
     "norsk_samfunn",
+    "teknologi_og_ai",
     "medisin_og_kropp",
+    "psykologi_og_laering",
+    "kultur_og_litteratur",
+    "sport",
 ]
+# Antall ferske spørsmål per dag. Er det flere kategorier enn dette, roterer
+# utvalget med datoen (sammenhengende vindu, wrapper rundt) så alle kategorier
+# kommer innom. Er det færre kategorifiler enn tallet, trekkes det fra alle.
+_QUIZ_FRESH_PER_DAY = 7
 # Vanskelighetsgrad roterer per dag/kategori så en bruker møter en blanding
 # over uka i stedet for samme nivå hver gang.
 _QUIZ_DIFFICULTY_CYCLE = ["easy", "medium", "hard"]
-# Spaced repetition: i tillegg til dagens ferske spørsmål hentes ett tidligere
-# sett spørsmål tilbake når det er «forfalt» for repetisjon (retrieval practice
-# + spacing er den best dokumenterte lærings­kombinasjonen). Intervallet vokser
-# med antall ganger spørsmålet er vist (utvidende repetisjon, Leitner-aktig):
-# indeks = reps-1, klemt til siste. Repetisjonsspørsmålet merkes `repeat: True`
-# så nettsiden kan vise et repetisjonsmerke.
+# Spaced repetition: i tillegg til dagens ferske spørsmål hentes inntil
+# _QUIZ_REVIEW_PER_DAY tidligere sette spørsmål tilbake når de er «forfalt» for
+# repetisjon (retrieval practice + spacing er den best dokumenterte
+# lærings­kombinasjonen). Intervallet vokser med antall ganger spørsmålet er
+# vist (utvidende repetisjon, Leitner-aktig): indeks = reps-1, klemt til siste.
+# Repetisjonsspørsmål merkes `repeat: True` så nettsiden kan vise et merke.
 _QUIZ_REVIEW_INTERVALS = [7, 30, 90, 180]  # dager før neste repetisjon
+_QUIZ_REVIEW_PER_DAY = 3
 
 
 def _quiz_seen_path() -> str:
@@ -812,21 +825,26 @@ def _load_quiz_bank() -> list[tuple[str, dict]]:
     return banks
 
 
-def _pick_review_question(seen: dict, bank_map: dict, day_ord: int):
+def _pick_review_questions(seen: dict, bank_map: dict, day_ord: int, limit: int):
     """
-    Velg ett tidligere sett spørsmål som er forfalt for repetisjon (spaced
-    repetition). Et spørsmål vist `reps` ganger er forfalt når alderen (dager
-    siden sist sett) ≥ _QUIZ_REVIEW_INTERVALS[reps-1] (klemt til siste). Blant
-    forfalte velges det mest forfalte (størst overskridelse); uavgjort brytes
-    deterministisk av innsettingsrekkefølgen. Spørsmål som ikke lenger finnes i
-    banken ignoreres.
+    Velg inntil `limit` tidligere sette spørsmål som er forfalt for repetisjon
+    (spaced repetition). Et spørsmål vist `reps` ganger er forfalt når alderen
+    (dager siden sist sett) ≥ _QUIZ_REVIEW_INTERVALS[reps-1] (klemt til siste).
+
+    Blant de forfalte prioriteres først spørsmål som HAR en forklaring, deretter
+    de mest forfalte. Forklaringen er hele poenget med en repetisjon — møter du
+    spørsmålet igjen uten å få vite hvorfor svaret er som det er, har turen
+    tilbake liten læringsverdi. Eldre spørsmål i banken mangler feltet, og
+    prioriteringen sørger for at de faller bakerst uten å låses helt ute.
+    Uavgjort brytes deterministisk av innsettingsrekkefølgen.
+
+    Spørsmål som ikke lenger finnes i banken ignoreres.
 
     `bank_map`: {normalisert spørsmål: (slug, label, question_dict)}.
-    Returnerer (norm_key, question_dict, label) eller None.
+    Returnerer [(norm_key, question_dict, label)], mest prioriterte først.
     """
-    best = None
-    best_overdue = -1
-    for key, rec in seen.items():
+    due = []
+    for order, (key, rec) in enumerate(seen.items()):
         entry = bank_map.get(key)
         if entry is None:
             continue
@@ -837,31 +855,34 @@ def _pick_review_question(seen: dict, bank_map: dict, day_ord: int):
         except (ValueError, KeyError, TypeError):
             continue
         overdue = (day_ord - last_ord) - interval
-        if overdue >= 0 and overdue > best_overdue:
-            best_overdue = overdue
-            best = (key, entry)
-    if best is None:
-        return None
-    key, (_slug, label, q) = best
-    return key, q, label
+        if overdue < 0:
+            continue
+        _slug, label, q = entry
+        has_expl = 1 if (q.get("explanation") or "").strip() else 0
+        due.append((has_expl, overdue, -order, key, q, label))
+    due.sort(reverse=True)
+    return [(key, q, label) for _e, _o, _n, key, q, label in due[:limit]]
 
 
 def fetch_daily_quiz() -> list[dict]:
     """
-    Trekk ett nytt spørsmål per kategori fra det lokale spørsmålsbiblioteket
-    (quiz_bank/). Dedup mot quiz_seen.json så samme spørsmål ikke gjentas innen
-    retention-vinduet. Vanskelighetsgraden roterer per dag/kategori for en
-    blanding over uka; går tom for ferske spørsmål på ønsket nivå faller vi
-    tilbake til andre nivåer, og til slutt til allerede sette (biblioteket kan
-    være mindre enn retention-vinduet).
+    Trekk ett ferskt spørsmål fra hver av dagens kategorier i det lokale
+    spørsmålsbiblioteket (quiz_bank/). Er det flere kategorifiler enn
+    _QUIZ_FRESH_PER_DAY, roterer utvalget med datoen så alle kategorier kommer
+    innom over noen dager. Dedup mot quiz_seen.json så samme spørsmål ikke
+    gjentas innen retention-vinduet. Vanskelighetsgraden roterer per
+    dag/kategori for en blanding over uka; går vi tom for ferske spørsmål på
+    ønsket nivå faller vi tilbake til andre nivåer, og til slutt til allerede
+    sette (biblioteket kan være mindre enn retention-vinduet).
 
-    I tillegg hentes ett tidligere sett spørsmål tilbake som repetisjon når det
-    er forfalt (spaced repetition, se _pick_review_question). Dette merkes
-    `repeat: True` og legges sist. Finnes ingen forfalte spørsmål (tidlige
-    dager) utelates det.
+    I tillegg hentes inntil _QUIZ_REVIEW_PER_DAY tidligere sette spørsmål
+    tilbake som repetisjon når de er forfalte (se _pick_review_questions).
+    Disse merkes `repeat: True` og legges sist. Finnes ingen forfalte spørsmål
+    (tidlige dager) utelates de.
 
     Returnerer liste av { level, difficulty, category, question, options,
-    answer[, repeat] } der options er stokket og answer er fasitteksten.
+    answer[, explanation][, repeat] } der options er stokket og answer er
+    fasitteksten.
     """
     import random
 
@@ -877,7 +898,7 @@ def fetch_daily_quiz() -> list[dict]:
     drawn_keys: set[str] = set()
 
     # Oppslag normalisert spørsmål → (slug, label, question_dict) for å hente
-    # tilbake fulle data til repetisjonsspørsmålet. Velg kandidaten fra
+    # tilbake fulle data til repetisjonsspørsmålene. Velg kandidatene fra
     # gårsdagens seen-tilstand (før dagens ferske spørsmål markeres) så dagens
     # nye spørsmål aldri kan bli valgt som repetisjon.
     bank_map: dict = {}
@@ -887,9 +908,17 @@ def fetch_daily_quiz() -> list[dict]:
             qn = _norm_title(q.get("question", ""))
             if qn:
                 bank_map.setdefault(qn, (slug, label, q))
-    review = _pick_review_question(seen, bank_map, day_ord)
+    reviews = _pick_review_questions(seen, bank_map, day_ord, _QUIZ_REVIEW_PER_DAY)
 
-    for cat_i, (slug, data) in enumerate(banks):
+    # Dagens kategoriutvalg: et sammenhengende vindu som roterer med datoen.
+    # Vinduet bevarer _QUIZ_CATEGORY_ORDER internt, så rekkefølgen på siden er
+    # forutsigbar selv om startpunktet flytter seg.
+    n_fresh = min(_QUIZ_FRESH_PER_DAY, len(banks))
+    offset = day_ord % len(banks)
+    todays_idx = sorted((offset + i) % len(banks) for i in range(n_fresh))
+    todays_banks = [banks[i] for i in todays_idx]
+
+    for cat_i, (slug, data) in enumerate(todays_banks):
         label = data.get("category", slug)
         questions = data["questions"]
         # Kandidater som ikke er brukt innen retention-vinduet.
@@ -917,45 +946,50 @@ def fetch_daily_quiz() -> list[dict]:
             print(f"  ⚠  quiz: hoppet over ugyldig spørsmål i {slug}")
             continue
         random.shuffle(options)
-        quiz.append(
-            {
-                "level": len(quiz) + 1,
-                "difficulty": chosen.get("difficulty", ""),
-                "category": label,
-                "question": question,
-                "options": options,
-                "answer": answer,
-            }
-        )
+        item = {
+            "level": len(quiz) + 1,
+            "difficulty": chosen.get("difficulty", ""),
+            "category": label,
+            "question": question,
+            "options": options,
+            "answer": answer,
+        }
+        explanation = (chosen.get("explanation") or "").strip()
+        if explanation:
+            item["explanation"] = explanation
+        quiz.append(item)
         key = _norm_title(question)
         drawn_keys.add(key)
         prev = seen.get(key)
         reps = (prev.get("reps", 1) + 1) if isinstance(prev, dict) else 1
         seen[key] = {"last": today, "reps": reps}
 
-    # Repetisjonsspørsmål sist — hopp over hvis det tilfeldigvis er trukket som
-    # ferskt spørsmål i dag (kan skje i fallback-grenen når banken er liten).
-    if review is not None:
-        rkey, rq, rlabel = review
+    # Repetisjonsspørsmål sist — hopp over de som tilfeldigvis er trukket som
+    # ferske spørsmål i dag (kan skje i fallback-grenen når banken er liten).
+    for rkey, rq, rlabel in reviews:
         options = list(rq.get("options", []))
         answer = rq.get("answer", "")
         question = rq.get("question", "")
-        if rkey not in drawn_keys and question and answer and len(options) >= 2:
-            random.shuffle(options)
-            quiz.append(
-                {
-                    "level": len(quiz) + 1,
-                    "difficulty": rq.get("difficulty", ""),
-                    "category": rlabel,
-                    "question": question,
-                    "options": options,
-                    "answer": answer,
-                    "repeat": True,
-                }
-            )
-            prev = seen.get(rkey)
-            reps = (prev.get("reps", 1) + 1) if isinstance(prev, dict) else 2
-            seen[rkey] = {"last": today, "reps": reps}
+        if rkey in drawn_keys or not question or not answer or len(options) < 2:
+            continue
+        random.shuffle(options)
+        item = {
+            "level": len(quiz) + 1,
+            "difficulty": rq.get("difficulty", ""),
+            "category": rlabel,
+            "question": question,
+            "options": options,
+            "answer": answer,
+            "repeat": True,
+        }
+        explanation = (rq.get("explanation") or "").strip()
+        if explanation:
+            item["explanation"] = explanation
+        quiz.append(item)
+        drawn_keys.add(rkey)
+        prev = seen.get(rkey)
+        reps = (prev.get("reps", 1) + 1) if isinstance(prev, dict) else 2
+        seen[rkey] = {"last": today, "reps": reps}
 
     if quiz:
         _save_quiz_seen(seen)

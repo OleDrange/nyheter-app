@@ -1,0 +1,605 @@
+{
+  "category": "Naturvitenskap",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvilken planet ligger nærmest sola?",
+      "answer": "Merkur",
+      "options": [
+        "Merkur",
+        "Venus",
+        "Jorda",
+        "Mars"
+      ],
+      "explanation": "Merkur går rundt sola på 88 døgn, men roterer så sakte at ett døgn der varer 176 jorddøgn — dagen er altså dobbelt så lang som året."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er det kjemiske symbolet for gull?",
+      "answer": "Au",
+      "options": [
+        "Au",
+        "Go",
+        "Ag",
+        "Gd"
+      ],
+      "explanation": "Au kommer av latin «aurum». Alt gull som noen gang er utvunnet ville fylt en kube på bare rundt 22 meter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken gass utgjør mesteparten av jordas atmosfære?",
+      "answer": "Nitrogen",
+      "options": [
+        "Nitrogen",
+        "Oksygen",
+        "Karbondioksid",
+        "Argon"
+      ],
+      "explanation": "78 % nitrogen mot 21 % oksygen. Karbondioksid utgjør bare rundt 0,04 %, men det er nok til å styre klimaet."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles prosessen der planter lager energi fra sollys?",
+      "answer": "Fotosyntese",
+      "options": [
+        "Fotosyntese",
+        "Respirasjon",
+        "Osmose",
+        "Gjæring"
+      ],
+      "explanation": "Fotosyntesen står for praktisk talt all fri oksygen på jorda, og havets planteplankton produserer omtrent halvparten av den."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange planeter er det i solsystemet vårt?",
+      "answer": "8",
+      "options": [
+        "8",
+        "9",
+        "7",
+        "10"
+      ],
+      "explanation": "Pluto ble omklassifisert til dvergplanet i 2006 fordi den ikke har «ryddet» banen sin for andre objekter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er det hardeste naturlig forekommende materialet?",
+      "answer": "Diamant",
+      "options": [
+        "Diamant",
+        "Kvarts",
+        "Granitt",
+        "Topas"
+      ],
+      "explanation": "Diamant har 10 på Mohs' hardhetsskala, og består av rent karbon — nøyaktig samme grunnstoff som den myke grafitten i en blyant."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken planet kalles den røde planeten?",
+      "answer": "Mars",
+      "options": [
+        "Mars",
+        "Venus",
+        "Jupiter",
+        "Merkur"
+      ],
+      "explanation": "Fargen kommer fra jernoksid — rust — i støvet. Mars har også solsystemets høyeste vulkan, Olympus Mons, på rundt 22 km."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er H₂O bedre kjent som?",
+      "answer": "Vann",
+      "options": [
+        "Vann",
+        "Salt",
+        "Sukker",
+        "Eddik"
+      ],
+      "explanation": "Vann er et av svært få stoffer som utvider seg når det fryser. Derfor flyter is — og derfor bunnfryser ikke innsjøer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken kraft holder oss fast på bakken?",
+      "answer": "Tyngdekraften",
+      "options": [
+        "Tyngdekraften",
+        "Friksjon",
+        "Magnetisme",
+        "Sentrifugalkraft"
+      ],
+      "explanation": "Tyngdekraften er den klart svakeste av naturens fire grunnkrefter: en liten kjøleskapsmagnet slår hele jordas tiltrekning."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken planet er den største i solsystemet?",
+      "answer": "Jupiter",
+      "options": [
+        "Jupiter",
+        "Saturn",
+        "Neptun",
+        "Uranus"
+      ],
+      "explanation": "Jupiter er mer enn dobbelt så tung som alle de andre planetene til sammen, og Den store røde flekken er en storm som har rast i minst 190 år."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles dyr som har ryggrad?",
+      "answer": "Virveldyr",
+      "options": [
+        "Virveldyr",
+        "Leddyr",
+        "Bløtdyr",
+        "Pattedyr"
+      ],
+      "explanation": "Bare rundt 5 % av alle kjente dyrearter er virveldyr. Insektene alene utgjør over en million beskrevne arter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket dyr er verdens største?",
+      "answer": "Blåhvalen",
+      "options": [
+        "Blåhvalen",
+        "Afrikansk elefant",
+        "Spermhval",
+        "Hvithai"
+      ],
+      "explanation": "Opptil 30 meter og 150 tonn. Hjertet alene kan veie rundt 180 kg, og kalven legger på seg omtrent 90 kg i døgnet."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles vann i gassform?",
+      "answer": "Vanndamp",
+      "options": [
+        "Vanndamp",
+        "Kondens",
+        "Tåke",
+        "Damptrykk"
+      ],
+      "explanation": "Vanndamp er usynlig. Det du ser stige fra en kokende kjele har allerede kondensert tilbake til bittesmå dråper."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er det kjemiske navnet på vanlig bordsalt?",
+      "answer": "Natriumklorid",
+      "options": [
+        "Natriumklorid",
+        "Kaliumklorid",
+        "Natriumkarbonat",
+        "Kalsiumklorid"
+      ],
+      "explanation": "NaCl. Hver del er farlig alene — natrium tar fyr i vann og klor er en giftig gass — men sammen er de livsnødvendige."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles sentrum av et atom?",
+      "answer": "Atomkjernen",
+      "options": [
+        "Atomkjernen",
+        "Elektronskyen",
+        "Molekylet",
+        "Ionet"
+      ],
+      "explanation": "Kjernen rommer nesten hele massen, men bare en billiondel av volumet. Er atomet en fotballbane, er kjernen en ert på midtstreken."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket stoff gir plantene den grønne fargen?",
+      "answer": "Klorofyll",
+      "options": [
+        "Klorofyll",
+        "Karotin",
+        "Hemoglobin",
+        "Melanin"
+      ],
+      "explanation": "Klorofyll absorberer rødt og blått lys og reflekterer grønt. Om høsten brytes det ned først, og de gule karotenoidene som var der hele tiden blir synlige."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er lydens hastighet i luft omtrent?",
+      "answer": "343 meter i sekundet",
+      "options": [
+        "343 meter i sekundet",
+        "34 meter i sekundet",
+        "3430 meter i sekundet",
+        "1000 meter i sekundet"
+      ],
+      "explanation": "Rundt 1235 km/t ved 20 °C. Farten synker med temperaturen, så lyden går saktere høyt oppe i atmosfæren."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket grunnstoff har atomnummer 1?",
+      "answer": "Hydrogen",
+      "options": [
+        "Hydrogen",
+        "Helium",
+        "Karbon",
+        "Litium"
+      ],
+      "explanation": "Hydrogen utgjør rundt 75 % av all vanlig masse i universet, og alt sammen ble dannet i løpet av de første minuttene etter Big Bang."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter galaksen vår?",
+      "answer": "Melkeveien",
+      "options": [
+        "Melkeveien",
+        "Andromeda",
+        "Triangulum",
+        "Sombrero"
+      ],
+      "explanation": "Den er rundt 100 000 lysår tvers over, og i sentrum sitter et svart hull på omtrent 4 millioner solmasser: Sagittarius A*."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor lang tid bruker lyset fra sola til jorda?",
+      "answer": "Cirka 8 minutter",
+      "options": [
+        "Cirka 8 minutter",
+        "Cirka 8 sekunder",
+        "Cirka 1 time",
+        "Det går momentant"
+      ],
+      "explanation": "8 minutter og 20 sekunder. Sluknet sola nå, ville du merket det først etter at det hadde vært mørkt i åtte minutter."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles overgangen fra fast stoff direkte til gass?",
+      "answer": "Sublimasjon",
+      "options": [
+        "Sublimasjon",
+        "Fordampning",
+        "Kondensasjon",
+        "Smelting"
+      ],
+      "explanation": "Tørris — fast CO₂ — sublimerer ved −78 °C, derfor «røyken» uten en dråpe væske. Snø kan også sublimere bort på en kald, solrik dag."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er pH-verdien til rent vann ved 25 °C?",
+      "answer": "7",
+      "options": [
+        "7",
+        "0",
+        "14",
+        "5"
+      ],
+      "explanation": "pH-skalaen er logaritmisk: magesyre på pH 2 er hundre ganger surere enn appelsinjuice på pH 4."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem formulerte relativitetsteorien?",
+      "answer": "Albert Einstein",
+      "options": [
+        "Albert Einstein",
+        "Isaac Newton",
+        "Niels Bohr",
+        "James Clerk Maxwell"
+      ],
+      "explanation": "Den spesielle kom i 1905, den generelle i 1915 — men nobelprisen fikk han for den fotoelektriske effekten, ikke for relativitet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles en stjerne som kollapser og eksploderer?",
+      "answer": "Supernova",
+      "options": [
+        "Supernova",
+        "Nova",
+        "Kvasar",
+        "Pulsar"
+      ],
+      "explanation": "En supernova kan i noen uker lyse sterkere enn hele galaksen rundt seg. Alt jernet i blodet ditt ble laget i slike eksplosjoner."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er den kjemiske formelen for karbondioksid?",
+      "answer": "CO₂",
+      "options": [
+        "CO₂",
+        "CO",
+        "C₂O",
+        "CaO"
+      ],
+      "explanation": "Konsentrasjonen i atmosfæren har gått fra rundt 280 ppm før industrialiseringen til over 420 ppm i dag."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange grunnstoffer har periodesystemet i dag?",
+      "answer": "118",
+      "options": [
+        "118",
+        "92",
+        "103",
+        "150"
+      ],
+      "explanation": "De 94 første finnes i naturen; resten er laget i akseleratorer. Nummer 118, oganesson, har bare eksistert i noen få atomer om gangen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles studiet av jordskjelv?",
+      "answer": "Seismologi",
+      "options": [
+        "Seismologi",
+        "Vulkanologi",
+        "Geodesi",
+        "Meteorologi"
+      ],
+      "explanation": "Magnitudeskalaen er logaritmisk: ett helt trinn opp tilsvarer omtrent 32 ganger mer frigjort energi."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva skjer med vannets kokepunkt når du går høyt til fjells?",
+      "answer": "Det synker",
+      "options": [
+        "Det synker",
+        "Det stiger",
+        "Det er uendret",
+        "Vann kan ikke koke der"
+      ],
+      "explanation": "Lavere lufttrykk. På toppen av Mount Everest koker vann ved rundt 70 °C — for kaldt til å koke et egg skikkelig."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem la fram evolusjonsteorien i «Artenes opprinnelse»?",
+      "answer": "Charles Darwin",
+      "options": [
+        "Charles Darwin",
+        "Gregor Mendel",
+        "Jean-Baptiste Lamarck",
+        "Carl von Linné"
+      ],
+      "explanation": "Boka kom i 1859. Darwin satt på materialet i over 20 år og publiserte først da Alfred Russel Wallace kom til samme konklusjon uavhengig av ham."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er SI-enheten for elektrisk motstand?",
+      "answer": "Ohm",
+      "options": [
+        "Ohm",
+        "Volt",
+        "Ampere",
+        "Watt"
+      ],
+      "explanation": "Ohms lov: spenning = strøm × motstand. Georg Ohm ble avvist av samtiden i årevis før loven ble akseptert."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket grunnstoff er grunnbyggesteinen i alt kjent liv?",
+      "answer": "Karbon",
+      "options": [
+        "Karbon",
+        "Silisium",
+        "Nitrogen",
+        "Jern"
+      ],
+      "explanation": "Karbon kan binde seg til fire andre atomer samtidig og danne lange kjeder — hele grunnen til at organisk kjemi finnes som eget fag."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles jordas ytterste, oppsprukne skall av plater?",
+      "answer": "Litosfæren",
+      "options": [
+        "Litosfæren",
+        "Astenosfæren",
+        "Mantelen",
+        "Ytre kjerne"
+      ],
+      "explanation": "Platene beveger seg omtrent like fort som neglene dine vokser. Atlanterhavet blir rundt 2,5 cm bredere hvert år."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles en blanding der stoffene ikke er jevnt fordelt?",
+      "answer": "Heterogen blanding",
+      "options": [
+        "Heterogen blanding",
+        "Homogen blanding",
+        "Løsning",
+        "Kjemisk forbindelse"
+      ],
+      "explanation": "Melk ser homogen ut, men er en emulsjon: bittesmå fettdråper som svever i vann og sprer lyset. Derfor er den hvit."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den delen av lysspekteret som ligger like utenfor rødt?",
+      "answer": "Infrarødt",
+      "options": [
+        "Infrarødt",
+        "Ultrafiolett",
+        "Røntgen",
+        "Gammastråling"
+      ],
+      "explanation": "William Herschel oppdaget det i 1800 ved å måle temperaturen forbi den røde enden av et prismespekter — og fant at den var høyest der det ikke var noe synlig lys."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er det absolutte nullpunkt i celsius?",
+      "answer": "−273,15 °C",
+      "options": [
+        "−273,15 °C",
+        "−100 °C",
+        "−459 °C",
+        "0 °C"
+      ],
+      "explanation": "Ved dette punktet har partiklene minst mulig bevegelsesenergi. Det kan nærmes, men aldri nås — laboratorier har kommet ned i milliarddeler av en grad over."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles fenomenet der lys bøyes når det går fra ett stoff til et annet?",
+      "answer": "Refraksjon",
+      "options": [
+        "Refraksjon",
+        "Refleksjon",
+        "Diffraksjon",
+        "Interferens"
+      ],
+      "explanation": "Det er derfor en skje ser knekt ut i et vannglass, og derfor et prisme sprer hvitt lys i regnbuens farger."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem oppdaget penicillin?",
+      "answer": "Alexander Fleming",
+      "options": [
+        "Alexander Fleming",
+        "Louis Pasteur",
+        "Robert Koch",
+        "Joseph Lister"
+      ],
+      "explanation": "Ved et uhell i 1928: en muggsopp forurenset en bakterieskål mens han var bortreist. Det tok over ti år før Florey og Chain klarte å masseprodusere stoffet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er halveringstiden til karbon-14 omtrent?",
+      "answer": "5730 år",
+      "options": [
+        "5730 år",
+        "100 år",
+        "50 000 år",
+        "1 million år"
+      ],
+      "explanation": "Derfor virker C-14-datering på funn opp til rundt 50 000 år. Eldre prøver har for lite igjen til at det lar seg måle."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken prosess driver sola?",
+      "answer": "Kjernefusjon",
+      "options": [
+        "Kjernefusjon",
+        "Kjernefisjon",
+        "Kjemisk forbrenning",
+        "Radioaktivt henfall"
+      ],
+      "explanation": "Sola smelter rundt 600 millioner tonn hydrogen til helium hvert sekund, og taper fire millioner tonn masse som ren energi i prosessen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er Avogadros tall omtrent?",
+      "answer": "6,022 × 10²³",
+      "options": [
+        "6,022 × 10²³",
+        "3,14 × 10⁸",
+        "1,6 × 10⁻¹⁹",
+        "9,81 × 10¹⁰"
+      ],
+      "explanation": "Antall partikler i ett mol. Ett mol vann er 18 gram — omtrent en spiseskje — og rommer flere molekyler enn det er stjerner i det observerbare universet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles et materiale som leder strøm helt uten motstand?",
+      "answer": "Superleder",
+      "options": [
+        "Superleder",
+        "Halvleder",
+        "Isolator",
+        "Dielektrikum"
+      ],
+      "explanation": "De fleste superledere krever ekstrem kulde. En magnet svever over en superleder på grunn av Meissner-effekten, som presser magnetfeltet helt ut av materialet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva står DNA for?",
+      "answer": "Deoksyribonukleinsyre",
+      "options": [
+        "Deoksyribonukleinsyre",
+        "Dinukleotidsyre",
+        "Deoksyribosenukleotid",
+        "Diaminonukleinsyre"
+      ],
+      "explanation": "DNA-et i én eneste menneskecelle er rundt to meter langt utstrukket. Strekker du ut alt DNA i kroppen, rekker det mange ganger til sola og tilbake."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem formulerte de tre bevegelseslovene?",
+      "answer": "Isaac Newton",
+      "options": [
+        "Isaac Newton",
+        "Galileo Galilei",
+        "Johannes Kepler",
+        "Christiaan Huygens"
+      ],
+      "explanation": "«Principia» kom i 1687. Newton viste også at hvitt lys er sammensatt — og brukte mer tid på alkymi og teologi enn på fysikk."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er entropi et mål på?",
+      "answer": "Graden av uorden i et system",
+      "options": [
+        "Graden av uorden i et system",
+        "Mengden energi i et system",
+        "Temperaturen i et system",
+        "Trykket i et system"
+      ],
+      "explanation": "Termodynamikkens andre lov sier at entropien i et lukket system aldri synker. Det er den fysiske grunnen til at tiden har én retning."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken partikkel gir andre partikler masse?",
+      "answer": "Higgs-bosonet",
+      "options": [
+        "Higgs-bosonet",
+        "Nøytrinoet",
+        "Gluonet",
+        "Fotonet"
+      ],
+      "explanation": "Påvist ved CERN i 2012, nesten 50 år etter at det ble foreslått. Peter Higgs fikk nobelprisen året etter."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er lysets hastighet i vakuum?",
+      "answer": "299 792 458 meter i sekundet",
+      "options": [
+        "299 792 458 meter i sekundet",
+        "300 000 meter i sekundet",
+        "150 000 000 meter i sekundet",
+        "3 000 000 meter i sekundet"
+      ],
+      "explanation": "Tallet er ikke målt, det er definert: siden 1983 er meteren definert ut fra lysfarten, ikke omvendt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva sier Heisenbergs usikkerhetsprinsipp?",
+      "answer": "Posisjon og bevegelsesmengde kan ikke begge kjennes nøyaktig samtidig",
+      "options": [
+        "Posisjon og bevegelsesmengde kan ikke begge kjennes nøyaktig samtidig",
+        "Ingen måling kan gjentas nøyaktig",
+        "Energi kan verken skapes eller ødelegges",
+        "Ingen partikkel kan overskride lysfarten"
+      ],
+      "explanation": "Det er ikke en svakhet ved måleutstyret, men en egenskap ved naturen selv: jo skarpere posisjonen er, desto mer utsmurt er farten."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er SI-enheten for radioaktivitet?",
+      "answer": "Becquerel",
+      "options": [
+        "Becquerel",
+        "Sievert",
+        "Gray",
+        "Curie"
+      ],
+      "explanation": "Becquerel teller henfall per sekund; sievert måler biologisk dose. En banan gir rundt 15 becquerel fra sitt naturlige kalium-40."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles en samling like celler med samme oppgave?",
+      "answer": "Vev",
+      "options": [
+        "Vev",
+        "Organ",
+        "Organsystem",
+        "Organelle"
+      ],
+      "explanation": "Kroppen har fire hovedtyper: epitel, bindevev, muskelvev og nervevev. Alt fra hjertet til huden er kombinasjoner av de fire."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den ytre grensen rundt et svart hull der ingenting kan slippe ut?",
+      "answer": "Hendelseshorisonten",
+      "options": [
+        "Hendelseshorisonten",
+        "Singulariteten",
+        "Akkresjonsskiven",
+        "Fotonsfæren"
+      ],
+      "explanation": "Det første bildet av en hendelseshorisont ble offentliggjort i 2019 — av det svarte hullet i galaksen M87, 55 millioner lysår unna."
+    }
+  ]
+}

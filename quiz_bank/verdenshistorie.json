@@ -1,0 +1,605 @@
+{
+  "category": "Verdenshistorie",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvilket imperium hadde Roma som hovedstad?",
+      "answer": "Romerriket",
+      "options": [
+        "Romerriket",
+        "Det osmanske riket",
+        "Det bysantinske riket",
+        "Perserriket"
+      ],
+      "explanation": "På sitt største rundt år 117 omkranset Romerriket hele Middelhavet, som romerne selv kalte «mare nostrum» — vårt hav."
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket år startet andre verdenskrig i Europa?",
+      "answer": "1939",
+      "options": [
+        "1939",
+        "1941",
+        "1938",
+        "1940"
+      ],
+      "explanation": "Tyskland angrep Polen 1. september 1939. Storbritannia og Frankrike erklærte krig to dager senere, men de første månedene skjedde nesten ingenting ved vestfronten."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken mur delte Berlin fra 1961 til 1989?",
+      "answer": "Berlinmuren",
+      "options": [
+        "Berlinmuren",
+        "Hadrians mur",
+        "Den kinesiske mur",
+        "Maginotlinjen"
+      ],
+      "explanation": "Muren ble reist nærmest over natten i august 1961 og falt 9. november 1989 — delvis på grunn av en forvirret pressekonferanse som ga inntrykk av at grensen åpnet umiddelbart."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var den første mannen på månen?",
+      "answer": "Neil Armstrong",
+      "options": [
+        "Neil Armstrong",
+        "Buzz Aldrin",
+        "Juri Gagarin",
+        "Michael Collins"
+      ],
+      "explanation": "Apollo 11 landet 20. juli 1969. Buzz Aldrin fulgte 19 minutter senere, mens Michael Collins ble igjen alene i kommandomodulen i bane rundt månen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land bygde pyramidene i Giza?",
+      "answer": "Egypt",
+      "options": [
+        "Egypt",
+        "Hellas",
+        "Roma",
+        "Persia"
+      ],
+      "explanation": "Kheopspyramiden sto ferdig rundt 2560 f.Kr. og var verdens høyeste byggverk i over 3800 år — til Lincoln-katedralen i England overtok."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var den første presidenten i USA?",
+      "answer": "George Washington",
+      "options": [
+        "George Washington",
+        "Thomas Jefferson",
+        "Abraham Lincoln",
+        "Benjamin Franklin"
+      ],
+      "explanation": "Han ble innsatt i 1789 og takket nei til en tredje periode. Den frivillige avgangen ble normen i 150 år, lenge før den ble skrevet inn i grunnloven."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket skip forliste etter å ha truffet et isfjell i 1912?",
+      "answer": "Titanic",
+      "options": [
+        "Titanic",
+        "Lusitania",
+        "Bismarck",
+        "Endurance"
+      ],
+      "explanation": "Skipet hadde livbåter til rundt halvparten av dem om bord — og fulgte likevel datidens regelverk, som regnet livbåter etter skipets tonnasje, ikke antall passasjerer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken italiensk by var sentrum for renessansen?",
+      "answer": "Firenze",
+      "options": [
+        "Firenze",
+        "Venezia",
+        "Napoli",
+        "Milano"
+      ],
+      "explanation": "Bankfamilien Medici finansierte både Michelangelo og Botticelli. De tjente formuen på bankdrift, ikke på kunst — men kjøpte seg innflytelse med den."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem ledet Sovjetunionen under andre verdenskrig?",
+      "answer": "Josef Stalin",
+      "options": [
+        "Josef Stalin",
+        "Vladimir Lenin",
+        "Nikita Khrusjtsjov",
+        "Leo Trotskij"
+      ],
+      "explanation": "Sovjetunionen mistet anslagsvis 27 millioner mennesker i krigen — langt flere enn noe annet land, og mer enn alle vestfrontens tap til sammen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het den perioden i Europa mellom antikken og renessansen?",
+      "answer": "Middelalderen",
+      "options": [
+        "Middelalderen",
+        "Opplysningstiden",
+        "Bronsealderen",
+        "Barokken"
+      ],
+      "explanation": "Navnet ble laget i ettertid av renessansehumanister som så på tiden som en mellomperiode — en nedvurdering historikere fortsatt sliter med å bli kvitt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land var Napoleon Bonaparte keiser over?",
+      "answer": "Frankrike",
+      "options": [
+        "Frankrike",
+        "Spania",
+        "Italia",
+        "Østerrike"
+      ],
+      "explanation": "Han kronet seg selv i 1804. Nederlaget ved Waterloo i 1815 kom etter at han hadde rømt fra eksil på Elba og styrt i nøyaktig hundre dager."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken sivilisasjon bygde Machu Picchu?",
+      "answer": "Inkaene",
+      "options": [
+        "Inkaene",
+        "Aztekerne",
+        "Mayaene",
+        "Olmekerne"
+      ],
+      "explanation": "Anlegget ble reist rundt 1450 og var trolig et kongelig gods. Spanjolene fant det aldri, og det ble først kjent for omverdenen i 1911."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by ble rammet av verdens første atombombe i krig?",
+      "answer": "Hiroshima",
+      "options": [
+        "Hiroshima",
+        "Nagasaki",
+        "Tokyo",
+        "Osaka"
+      ],
+      "explanation": "6. august 1945. Nagasaki ble rammet tre dager senere, og Japan kunngjorde kapitulasjon 15. august."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem malte Mona Lisa?",
+      "answer": "Leonardo da Vinci",
+      "options": [
+        "Leonardo da Vinci",
+        "Michelangelo",
+        "Rafael",
+        "Caravaggio"
+      ],
+      "explanation": "Bildet ble verdensberømt først etter at det ble stjålet fra Louvre i 1911. De tomme veggene trakk mer publikum enn maleriet hadde gjort."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het den kalde krigens to hovedmotstandere?",
+      "answer": "USA og Sovjetunionen",
+      "options": [
+        "USA og Sovjetunionen",
+        "Storbritannia og Tyskland",
+        "Kina og Japan",
+        "Frankrike og Russland"
+      ],
+      "explanation": "Begrepet «kald krig» ble popularisert av George Orwell i 1945: en krig som aldri kjempes direkte, fordi begge sider vet at alt vil gå tapt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken oppdagelsesreisende ledet ekspedisjonen som først seilte jorda rundt?",
+      "answer": "Ferdinand Magellan",
+      "options": [
+        "Ferdinand Magellan",
+        "Christofer Columbus",
+        "Vasco da Gama",
+        "James Cook"
+      ],
+      "explanation": "Magellan selv døde underveis på Filippinene i 1521. Av fem skip og over 250 mann kom ett skip og 18 mann tilbake."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land ga Frihetsgudinnen i gave til USA?",
+      "answer": "Frankrike",
+      "options": [
+        "Frankrike",
+        "Storbritannia",
+        "Spania",
+        "Nederland"
+      ],
+      "explanation": "Gaven kom i 1886 og markerte hundreårsjubileet for uavhengigheten. Statuen var kobberblank da den kom; det grønne er tiår med irr."
+    },
+    {
+      "difficulty": "medium",
+      "question": "I hvilket år falt Konstantinopel?",
+      "answer": "1453",
+      "options": [
+        "1453",
+        "1066",
+        "1204",
+        "1492"
+      ],
+      "explanation": "Osmanerne brukte kanoner støpt av en ungarsk ingeniør som først hadde tilbudt tjenestene sine til bysantinerne — de hadde ikke råd."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken revolusjon startet i 1789?",
+      "answer": "Den franske revolusjon",
+      "options": [
+        "Den franske revolusjon",
+        "Den amerikanske revolusjon",
+        "Den russiske revolusjon",
+        "Den industrielle revolusjon"
+      ],
+      "explanation": "Stormingen av Bastillen 14. juli frigjorde bare sju fanger. Symbolverdien lå i festningen selv, ikke i fangene."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den store pesten som herjet Europa på 1300-tallet?",
+      "answer": "Svartedauden",
+      "options": [
+        "Svartedauden",
+        "Spanskesyken",
+        "Koleraepidemien",
+        "Tyfusepidemien"
+      ],
+      "explanation": "Anslagsvis en tredel til halvparten av Europas befolkning døde. I Norge førte arbeidskraftmangelen til at mange gårder ble liggende øde i over hundre år."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken traktat avsluttet første verdenskrig formelt?",
+      "answer": "Versaillestraktaten",
+      "options": [
+        "Versaillestraktaten",
+        "Wienerkongressen",
+        "Westfalerfreden",
+        "Jaltakonferansen"
+      ],
+      "explanation": "Signert i 1919. De harde erstatningskravene mot Tyskland regnes av mange historikere som en medvirkende årsak til neste krig 20 år senere."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var Sør-Afrikas første svarte president?",
+      "answer": "Nelson Mandela",
+      "options": [
+        "Nelson Mandela",
+        "Desmond Tutu",
+        "Thabo Mbeki",
+        "Steve Biko"
+      ],
+      "explanation": "Han satt 27 år i fengsel og ble president i 1994. Sannhets- og forsoningskommisjonen etterpå valgte bevisst tilståelse framfor straff."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket dynasti bygde mesteparten av Den kinesiske mur slik den ser ut i dag?",
+      "answer": "Ming",
+      "options": [
+        "Ming",
+        "Han",
+        "Qin",
+        "Tang"
+      ],
+      "explanation": "Muren er ikke én mur, men flere anlegg bygget over 2000 år. Ming-delene fra 1300–1600-tallet er de best bevarte — og de turistene faktisk går på."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles perioden da Europa koloniserte store deler av verden fra 1400-tallet?",
+      "answer": "Oppdagelsestiden",
+      "options": [
+        "Oppdagelsestiden",
+        "Opplysningstiden",
+        "Reformasjonen",
+        "Restaurasjonen"
+      ],
+      "explanation": "«Oppdagelse» er sett fra Europa. Utvekslingen av planter og sykdommer over Atlanterhavet endret kostholdet på begge kontinenter: poteten kom til Europa, hesten til Amerika."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem startet reformasjonen i 1517?",
+      "answer": "Martin Luther",
+      "options": [
+        "Martin Luther",
+        "Jean Calvin",
+        "Erasmus av Rotterdam",
+        "Ulrich Zwingli"
+      ],
+      "explanation": "De 95 tesene spredte seg over Europa på få uker — takket være boktrykkerkunsten, som var blitt oppfunnet omtrent 60 år tidligere."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken hær beseiret Napoleon ved Waterloo i 1815?",
+      "answer": "En britisk-preussisk styrke",
+      "options": [
+        "En britisk-preussisk styrke",
+        "En russisk-østerriksk styrke",
+        "En spansk-portugisisk styrke",
+        "En italiensk-sveitsisk styrke"
+      ],
+      "explanation": "Wellington holdt stillingen til Blüchers preussere nådde fram sent på dagen. Slaget ble avgjort på under ti timer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken by var sentrum i Det bysantinske riket?",
+      "answer": "Konstantinopel",
+      "options": [
+        "Konstantinopel",
+        "Athen",
+        "Alexandria",
+        "Antiokia"
+      ],
+      "explanation": "Riket kalte seg aldri «bysantinsk» — de var romere. Navnet ble funnet på av tyske historikere over hundre år etter at riket falt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var den industrielle revolusjonens viktigste nye kraftkilde?",
+      "answer": "Dampmaskinen",
+      "options": [
+        "Dampmaskinen",
+        "Vindmøllen",
+        "Elektrisiteten",
+        "Forbrenningsmotoren"
+      ],
+      "explanation": "James Watts forbedring fra 1770-tallet var å skille kondensatoren fra sylinderen. Det tredoblet virkningsgraden og gjorde maskinen lønnsom utenfor gruvene."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land ble delt i to av en demilitarisert sone i 1953?",
+      "answer": "Korea",
+      "options": [
+        "Korea",
+        "Vietnam",
+        "Tyskland",
+        "Jemen"
+      ],
+      "explanation": "Krigen ble avsluttet med våpenhvile, ikke fredsavtale. Formelt er de to statene fortsatt i krig mer enn 70 år senere."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var dronning av England under den spanske armadas nederlag i 1588?",
+      "answer": "Elisabeth I",
+      "options": [
+        "Elisabeth I",
+        "Maria Stuart",
+        "Viktoria",
+        "Anne"
+      ],
+      "explanation": "Armadaen ble like mye slått av storm som av engelske skip. Elisabeth lot slå en medalje med innskriften «Gud blåste, og de ble spredt»."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken konflikt utløste Cubakrisen i 1962?",
+      "answer": "Sovjetiske atomraketter på Cuba",
+      "options": [
+        "Sovjetiske atomraketter på Cuba",
+        "Amerikansk invasjon av Cuba",
+        "En cubansk revolusjon",
+        "En handelsblokade mot USA"
+      ],
+      "explanation": "Krisen varte 13 dager. Etterpå ble det opprettet en direkte teleks-forbindelse mellom Washington og Moskva — den såkalte «hotlinen»."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem grunnla islam på 600-tallet?",
+      "answer": "Muhammad",
+      "options": [
+        "Muhammad",
+        "Ali",
+        "Abu Bakr",
+        "Umar"
+      ],
+      "explanation": "Den islamske tidsregningen starter ikke ved hans fødsel, men ved utvandringen til Medina i år 622 — hijra."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den amerikanske borgerkrigens to sider?",
+      "answer": "Unionen og Konføderasjonen",
+      "options": [
+        "Unionen og Konføderasjonen",
+        "Nord- og Sørstatsforbundet",
+        "Republikken og Kolonien",
+        "Føderasjonen og Alliansen"
+      ],
+      "explanation": "Krigen (1861–65) kostet rundt 620 000 liv — flere amerikanske falne enn i alle senere kriger til sammen fram til Vietnam."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket rike ble styrt fra Persepolis?",
+      "answer": "Perserriket",
+      "options": [
+        "Perserriket",
+        "Assyrerriket",
+        "Babylonia",
+        "Det hettittiske riket"
+      ],
+      "explanation": "Alexander den store brente Persepolis i 330 f.Kr. Brannen forkullet leirtavler i arkivet — og bevarte dermed tekster som ellers ville råtnet bort."
+    },
+    {
+      "difficulty": "hard",
+      "question": "I hvilket år ble Magna Carta undertegnet?",
+      "answer": "1215",
+      "options": [
+        "1215",
+        "1066",
+        "1348",
+        "1415"
+      ],
+      "explanation": "Pave Innocent III annullerte den etter ti uker. Den overlevde likevel som idé: at også kongen står under loven."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het slaget der Vilhelm Erobreren vant England?",
+      "answer": "Slaget ved Hastings",
+      "options": [
+        "Slaget ved Hastings",
+        "Slaget ved Agincourt",
+        "Slaget ved Bosworth",
+        "Slaget ved Stamford Bridge"
+      ],
+      "explanation": "1066. Harald Godwinson hadde tre uker tidligere marsjert nordover og slått en norsk hær ved Stamford Bridge — og måtte snu sørover umiddelbart."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken traktat fra 1648 avsluttet trettiårskrigen?",
+      "answer": "Den westfalske fred",
+      "options": [
+        "Den westfalske fred",
+        "Utrechtfreden",
+        "Wienerkongressen",
+        "Freden i Augsburg"
+      ],
+      "explanation": "Den regnes som fødselen til det moderne statssystemet: hver stat suveren innenfor egne grenser. Trettiårskrigen hadde da drept opp mot en tredel av befolkningen i deler av Tyskland."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var keiser i Roma da byen brant i år 64?",
+      "answer": "Nero",
+      "options": [
+        "Nero",
+        "Caligula",
+        "Claudius",
+        "Vespasian"
+      ],
+      "explanation": "Historien om at han spilte lyre mens byen brant kommer fra fiendtlige kilder skrevet tiår etter. Han var etter alle solemerker ikke engang i Roma da brannen startet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den kinesiske bevegelsen som førte til massiv hungersnød rundt 1959–61?",
+      "answer": "Det store spranget",
+      "options": [
+        "Det store spranget",
+        "Kulturrevolusjonen",
+        "Boksesopprøret",
+        "Den lange marsjen"
+      ],
+      "explanation": "Bønder ble satt til å smelte skrapjern i bakgårdsovner i stedet for å høste. Anslagene over antall døde ligger på 15–45 millioner."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble Sovjetunionen formelt oppløst?",
+      "answer": "1991",
+      "options": [
+        "1991",
+        "1989",
+        "1993",
+        "1990"
+      ],
+      "explanation": "26. desember 1991. Berlinmuren hadde falt to år tidligere; det gikk altså langt raskere fra symbol til oppløsning enn samtiden trodde."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het det bysantinske rikets mest kjente lovsamling?",
+      "answer": "Corpus Juris Civilis",
+      "options": [
+        "Corpus Juris Civilis",
+        "Codex Hammurabi",
+        "Magna Carta",
+        "De tolv tavlers lov"
+      ],
+      "explanation": "Justinian samlet romerretten på 500-tallet. Da teksten ble gjenoppdaget i Italia på 1000-tallet, ble den fundamentet for jussen i store deler av Europa."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken by ble beleiret i nesten 900 dager under andre verdenskrig?",
+      "answer": "Leningrad",
+      "options": [
+        "Leningrad",
+        "Stalingrad",
+        "Warszawa",
+        "Sevastopol"
+      ],
+      "explanation": "Fra 1941 til 1944. Over en million sivile døde, de fleste av sult. Forsyningene kom over Ladogasjøens is om vinteren — «livets vei»."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het handelsnettverket som knyttet Kina til Middelhavet i antikken?",
+      "answer": "Silkeveien",
+      "options": [
+        "Silkeveien",
+        "Hansaruten",
+        "Krydderveien",
+        "Ravveien"
+      ],
+      "explanation": "Navnet ble laget av en tysk geograf først i 1877. Det var aldri én vei, og det viktigste som ble fraktet var kanskje ikke silke, men ideer og sykdommer."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem oppfant boktrykkerkunsten med løse typer i Europa?",
+      "answer": "Johann Gutenberg",
+      "options": [
+        "Johann Gutenberg",
+        "William Caxton",
+        "Aldus Manutius",
+        "Nicolas Jenson"
+      ],
+      "explanation": "Rundt 1450. Kina hadde hatt løse typer i 400 år, men et skriftspråk med tusenvis av tegn gjorde teknikken langt mindre revolusjonerende der."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket slag i 1571 stanset osmansk ekspansjon i Middelhavet?",
+      "answer": "Slaget ved Lepanto",
+      "options": [
+        "Slaget ved Lepanto",
+        "Slaget ved Actium",
+        "Slaget ved Trafalgar",
+        "Slaget ved Salamis"
+      ],
+      "explanation": "Det var det siste store sjøslaget kjempet hovedsakelig med roskip. Forfatteren Cervantes deltok og mistet bruken av venstre hånd."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den egyptiske farao som Howard Carter fant graven til i 1922?",
+      "answer": "Tutankhamon",
+      "options": [
+        "Tutankhamon",
+        "Ramses II",
+        "Kheops",
+        "Akhenaton"
+      ],
+      "explanation": "Han var en ubetydelig farao som døde rundt 19 år gammel. Grunnen til at graven var urørt, var trolig at inngangen ble skjult under byggemasser fra en senere grav."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken avtale delte Øst-Europa i innflytelsessfærer i august 1939?",
+      "answer": "Molotov–Ribbentrop-pakten",
+      "options": [
+        "Molotov–Ribbentrop-pakten",
+        "Münchenavtalen",
+        "Locarnotraktaten",
+        "Warszawapakten"
+      ],
+      "explanation": "Den hemmelige tilleggsprotokollen ble benektet av Sovjetunionen helt til 1989. Estland, Latvia og Litauen lå på sovjetisk side av streken."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var den siste keiseren av Kina?",
+      "answer": "Puyi",
+      "options": [
+        "Puyi",
+        "Guangxu",
+        "Qianlong",
+        "Yongle"
+      ],
+      "explanation": "Han abdiserte som seksåring i 1912, ble senere japansk marionettkeiser i Mandsjuria, og endte livet som gartner i Beijing."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken oppdagelse i 1799 gjorde det mulig å tyde egyptiske hieroglyfer?",
+      "answer": "Rosettasteinen",
+      "options": [
+        "Rosettasteinen",
+        "Dødehavsrullene",
+        "Behistun-innskriften",
+        "Kodeks Sinaiticus"
+      ],
+      "explanation": "Samme tekst på tre skriftsystemer. Champollion knakk koden i 1822 — hjulpet av at han kunne koptisk, en sen etterkommer av det egyptiske språket."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble FN opprettet?",
+      "answer": "1945",
+      "options": [
+        "1945",
+        "1919",
+        "1948",
+        "1950"
+      ],
+      "explanation": "Charteret ble undertegnet i San Francisco i juni 1945, før krigen mot Japan var over. Forgjengeren, Folkeforbundet, hadde manglet nettopp USA som medlem."
+    }
+  ]
+}

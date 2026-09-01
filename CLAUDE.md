@@ -151,8 +151,14 @@ ikke trenger).
 - **Markedsdata sendes IKKE til Claude** — Claude forklarer *hvorfor* markedet beveget seg.
 - **Vær:** MET Locationforecast, **`complete`-endepunktet** (UV finnes ikke i `compact`).
 - **Quiz og gåter** trekkes fra lokale banker i repoet — ingen Claude-bruk, ingen ekstern API.
-  **Én quiz-fil = én kategori = ett spørsmål per dag**, så flere spørsmål/dag krever bare en ny
-  fil, ingen kodeendring. Begge har dedup + spaced repetition på volumet.
+  **Én quiz-fil = én kategori.** Dagen er 7 ferske (fra et kategorivindu som roterer med
+  datoen) + inntil 3 forfalte repetisjoner. Begge har dedup + spaced repetition på volumet.
+  **Tilsiget er den harde grensen, som i køgeneratorene:** 240 spørsmål ble tømt på under et
+  år, og fallback-grenen (`pool = unseen or questions`) begynner da stille å trekke allerede
+  sette spørsmål på nytt — uten varsel. Vokser dagsantallet, må banken vokse først.
+  **Feltet `explanation` er valgfritt og skal aldri fjernes fra eldre spørsmål:**
+  repetisjonsutvelgelsen prioriterer spørsmål som har det, siden en repetisjon uten den ekstra
+  konteksten har liten læringsverdi. Nye spørsmål skal alltid ha feltet.
 - **Inspirasjon:** Claude refererer episoder kun via **indeks-id** mot vår RSS-liste, så
   podcast/tittel/URL aldri kan hallusineres — kun rådsteksten og boktipsene er generert.
 

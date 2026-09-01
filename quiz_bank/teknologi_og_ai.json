@@ -1,0 +1,605 @@
+{
+  "category": "Teknologi og AI",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva står «www» for?",
+      "answer": "World Wide Web",
+      "options": [
+        "World Wide Web",
+        "Wireless Web Wave",
+        "World Web Wire",
+        "Web Wide World"
+      ],
+      "explanation": "Tim Berners-Lee fant det opp ved CERN i 1989 — for å hjelpe fysikere å dele dokumenter. Han ga teknologien bort gratis, uten patent."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles den vanligste enheten for datamengde, satt sammen av 8 bit?",
+      "answer": "Byte",
+      "options": [
+        "Byte",
+        "Hertz",
+        "Pixel",
+        "Node"
+      ],
+      "explanation": "Én byte kan representere 256 ulike verdier — akkurat nok til å dekke alle tegnene i det opprinnelige ASCII-alfabetet med god margin."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket selskap står bak operativsystemet Windows?",
+      "answer": "Microsoft",
+      "options": [
+        "Microsoft",
+        "Apple",
+        "IBM",
+        "Google"
+      ],
+      "explanation": "Windows 1.0 kom i 1985 og var i starten bare et grafisk skall oppå MS-DOS — du kunne fortsatt se kommandolinjen under."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles et program som er laget for å skade eller misbruke en datamaskin?",
+      "answer": "Skadevare",
+      "options": [
+        "Skadevare",
+        "Fastvare",
+        "Mellomvare",
+        "Åpen kildekode"
+      ],
+      "explanation": "Det første virusspredningen som virkelig fikk oppmerksomhet var Morris-ormen i 1988. Den infiserte anslagsvis 6000 maskiner — omtrent 10 % av datidens internett."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva står «AI» for på engelsk?",
+      "answer": "Artificial Intelligence",
+      "options": [
+        "Artificial Intelligence",
+        "Automated Interface",
+        "Advanced Integration",
+        "Applied Informatics"
+      ],
+      "explanation": "Begrepet ble myntet på en workshop i Dartmouth i 1956. Deltakerne trodde de skulle løse det meste av problemet i løpet av én sommer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles den fysiske delen av en datamaskin?",
+      "answer": "Maskinvare",
+      "options": [
+        "Maskinvare",
+        "Programvare",
+        "Fastvare",
+        "Skyen"
+      ],
+      "explanation": "Grensen er ikke skarp: fastvare er programvare som er lagret permanent i en brikke, som i en ruter eller en mikrobølgeovn."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket selskap laget iPhone?",
+      "answer": "Apple",
+      "options": [
+        "Apple",
+        "Samsung",
+        "Nokia",
+        "Sony"
+      ],
+      "explanation": "Den første kom i 2007 og hadde verken app-butikk eller kopier-og-lim-inn. App Store åpnet først året etter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles en samling nettsider under samme adresse?",
+      "answer": "Et nettsted",
+      "options": [
+        "Et nettsted",
+        "En nettleser",
+        "En server",
+        "Et domene"
+      ],
+      "explanation": "Verdens første nettsted, info.cern.ch, er fortsatt tilgjengelig. Det forklarte rett og slett hva World Wide Web var for noe."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva brukes en nettleser til?",
+      "answer": "Å vise nettsider",
+      "options": [
+        "Å vise nettsider",
+        "Å lagre filer permanent",
+        "Å skrive programkode",
+        "Å koble til strømnettet"
+      ],
+      "explanation": "Den første nettleseren med bilder inne i teksten var Mosaic (1993). Før den åpnet bilder seg i egne vinduer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er en algoritme?",
+      "answer": "En oppskrift på hvordan et problem skal løses steg for steg",
+      "options": [
+        "En oppskrift på hvordan et problem skal løses steg for steg",
+        "En type datamaskin",
+        "Et programmeringsspråk",
+        "En form for lagring"
+      ],
+      "explanation": "Ordet kommer fra matematikeren al-Khwarizmi, som virket i Bagdad på 800-tallet. «Algebra» stammer fra tittelen på en av bøkene hans."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles et trådløst lokalnett i hjemmet?",
+      "answer": "Wi-Fi",
+      "options": [
+        "Wi-Fi",
+        "Bluetooth",
+        "Ethernet",
+        "NFC"
+      ],
+      "explanation": "Navnet betyr ingenting — det ble funnet på av et reklamebyrå i 1999 fordi «IEEE 802.11b Direct Sequence» var vanskelig å selge."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva gjør en søkemotor?",
+      "answer": "Finner og rangerer nettsider som svarer på et søk",
+      "options": [
+        "Finner og rangerer nettsider som svarer på et søk",
+        "Lagrer alle filene dine",
+        "Beskytter mot virus",
+        "Kobler datamaskinen til strøm"
+      ],
+      "explanation": "Googles gjennombrudd var PageRank: en side ble regnet som viktig hvis andre viktige sider lenket til den — omtrent som siteringer i forskning."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det når data lagres på andres servere over internett i stedet for lokalt?",
+      "answer": "Skylagring",
+      "options": [
+        "Skylagring",
+        "Lokal lagring",
+        "Fastvare",
+        "Kryptering"
+      ],
+      "explanation": "«Skyen» er alltid noen andres datamaskin. Skytjenestene står i enorme datasentre, og kjøling er ofte den største enkeltposten i strømregningen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva står «app» for?",
+      "answer": "Applikasjon",
+      "options": [
+        "Applikasjon",
+        "Apparat",
+        "Approksimasjon",
+        "Applet"
+      ],
+      "explanation": "Ordet er eldgammelt i databransjen, men fikk sin moderne betydning da App Store åpnet i 2008 med 500 apper. I dag er tallet i millionklassen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er en «chatbot»?",
+      "answer": "Et program som fører en samtale i tekst",
+      "options": [
+        "Et program som fører en samtale i tekst",
+        "En robot med hjul",
+        "En type nettleser",
+        "En form for e-post"
+      ],
+      "explanation": "Den første, ELIZA (1966), speilet bare brukerens egne ord tilbake som spørsmål. Folk betrodde seg likevel til den, noe skaperen fant urovekkende."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva beskytter et passord først og fremst?",
+      "answer": "Tilgangen til en konto",
+      "options": [
+        "Tilgangen til en konto",
+        "Batteritiden",
+        "Nettverkshastigheten",
+        "Skjermlysstyrken"
+      ],
+      "explanation": "De mest brukte passordene i verden er fortsatt «123456» og «password». Lengde beskytter mer enn spesialtegn."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles en datamaskin som leverer tjenester til andre maskiner?",
+      "answer": "En server",
+      "options": [
+        "En server",
+        "En klient",
+        "En ruter",
+        "En terminal"
+      ],
+      "explanation": "Ordene beskriver roller, ikke utstyr: samme maskin kan være server for én tjeneste og klient for en annen i samme sekund."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem regnes som verdens første programmerer?",
+      "answer": "Ada Lovelace",
+      "options": [
+        "Ada Lovelace",
+        "Grace Hopper",
+        "Alan Turing",
+        "Charles Babbage"
+      ],
+      "explanation": "I 1843 skrev hun en algoritme for Babbages analytiske maskin — en maskin som aldri ble bygget ferdig — og så at den kunne håndtere mer enn tall."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva står «HTTP» for?",
+      "answer": "Hypertext Transfer Protocol",
+      "options": [
+        "Hypertext Transfer Protocol",
+        "High Transfer Text Protocol",
+        "Hyperlink Text Transport Program",
+        "Host Transfer Protocol"
+      ],
+      "explanation": "S-en i HTTPS står for «Secure». I dag er over 95 % av all nettrafikk kryptert; i 2014 var andelen under en tredel."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles maskinlæringsmodeller bygget av lag med kunstige nevroner?",
+      "answer": "Nevrale nettverk",
+      "options": [
+        "Nevrale nettverk",
+        "Beslutningstrær",
+        "Regresjonstabeller",
+        "Genetiske algoritmer"
+      ],
+      "explanation": "Ideen er fra 1940-tallet, men ble liggende brakk i tiår. Det som endret alt rundt 2012 var ikke ny teori, men grafikkort og enorme datamengder."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter dataarkitekturen som ligger bak dagens store språkmodeller?",
+      "answer": "Transformer",
+      "options": [
+        "Transformer",
+        "Perceptron",
+        "Random forest",
+        "Bayesisk nettverk"
+      ],
+      "explanation": "Den ble beskrevet i artikkelen «Attention Is All You Need» i 2017. T-en i GPT står for nettopp Transformer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det når en AI-modell finner på fakta som ser troverdige ut?",
+      "answer": "Hallusinasjon",
+      "options": [
+        "Hallusinasjon",
+        "Overtilpasning",
+        "Regresjon",
+        "Komprimering"
+      ],
+      "explanation": "Modellen forutsier hva som er sannsynlig å skrive videre, ikke hva som er sant. Derfor er de mest overbevisende feilene ofte de vanskeligste å oppdage."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva står «CPU» for?",
+      "answer": "Central Processing Unit",
+      "options": [
+        "Central Processing Unit",
+        "Computer Power Unit",
+        "Central Program Utility",
+        "Core Processing Unifier"
+      ],
+      "explanation": "Intels første mikroprosessor, 4004 fra 1971, hadde 2300 transistorer. Moderne brikker har titalls milliarder på samme flate."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det når to personer deler en hemmelig nøkkel så bare de kan lese meldingene?",
+      "answer": "Ende-til-ende-kryptering",
+      "options": [
+        "Ende-til-ende-kryptering",
+        "Komprimering",
+        "Autentisering",
+        "Indeksering"
+      ],
+      "explanation": "Poenget er at heller ikke tjenesten selv kan lese innholdet. Det gjør at et innbrudd hos leverandøren ikke automatisk avslører samtalene dine."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «åpen kildekode»?",
+      "answer": "Programvare der koden er fritt tilgjengelig å lese og endre",
+      "options": [
+        "Programvare der koden er fritt tilgjengelig å lese og endre",
+        "Programvare uten passord",
+        "Programvare som kjører i nettleseren",
+        "Programvare uten reklame"
+      ],
+      "explanation": "Linux driver i dag de aller fleste servere, alle Android-telefoner og samtlige av verdens 500 raskeste superdatamaskiner."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles en tjeneste som lar programmer snakke med hverandre over nett?",
+      "answer": "API",
+      "options": [
+        "API",
+        "URL",
+        "GUI",
+        "SQL"
+      ],
+      "explanation": "Application Programming Interface. Når en app viser deg været, henter den som regel ikke dataene selv — den spør et API som andre driver."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva står «GPU» for, og hva var den opprinnelig laget for?",
+      "answer": "Graphics Processing Unit — grafikk i spill",
+      "options": [
+        "Graphics Processing Unit — grafikk i spill",
+        "General Purpose Unit — generelle beregninger",
+        "Global Processing Unit — nettverk",
+        "Graphic Print Unit — utskrift"
+      ],
+      "explanation": "Grafikkort ble laget for å regne på tusenvis av piksler samtidig. Nøyaktig den evnen viste seg å være det maskinlæring trengte mest."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det å teste et system for sikkerhetshull med eierens tillatelse?",
+      "answer": "Penetrasjonstesting",
+      "options": [
+        "Penetrasjonstesting",
+        "Phishing",
+        "Kryptoanalyse",
+        "Refaktorering"
+      ],
+      "explanation": "Skillet mot kriminalitet er samtykket. Mange selskaper betaler «bug bounty» for hull som meldes inn i stedet for å utnyttes."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «Moores lov»?",
+      "answer": "At antall transistorer på en brikke omtrent dobles annethvert år",
+      "options": [
+        "At antall transistorer på en brikke omtrent dobles annethvert år",
+        "At datamaskiner blir dobbelt så billige hvert år",
+        "At internett dobles hvert år",
+        "At programvare alltid blir tregere"
+      ],
+      "explanation": "Gordon Moore formulerte den i 1965 basert på fire års data. Det var en observasjon, ikke en naturlov — og bransjen brukte den som mål i 50 år."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles et forsøk på å lure noen til å oppgi passord via falske e-poster?",
+      "answer": "Phishing",
+      "options": [
+        "Phishing",
+        "Spoofing",
+        "Sniffing",
+        "Spamming"
+      ],
+      "explanation": "Det er fortsatt den vanligste inngangen ved store datainnbrudd. Teknikken angriper mennesket, ikke maskinen — derfor hjelper ikke bedre brannmurer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva menes med at en AI-modell er «trent»?",
+      "answer": "At den har justert parametrene sine ut fra store mengder eksempler",
+      "options": [
+        "At den har justert parametrene sine ut fra store mengder eksempler",
+        "At den er testet av mennesker",
+        "At den er installert på en server",
+        "At den er koblet til internett"
+      ],
+      "explanation": "Treningen er engangsjobben som koster mest. Å bruke modellen etterpå er billig per spørsmål — men når mange nok spør, blir det den største regningen likevel."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den unike adressen hver enhet har på et nettverk?",
+      "answer": "IP-adresse",
+      "options": [
+        "IP-adresse",
+        "URL",
+        "MAC-protokoll",
+        "DNS-navn"
+      ],
+      "explanation": "IPv4 har rundt 4,3 milliarder adresser, og de tok slutt. IPv6 har så mange at hvert sandkorn på jorda kunne fått sin egen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva gjør DNS på internett?",
+      "answer": "Oversetter domenenavn til IP-adresser",
+      "options": [
+        "Oversetter domenenavn til IP-adresser",
+        "Krypterer trafikken",
+        "Lagrer nettsider",
+        "Fordeler strøm til servere"
+      ],
+      "explanation": "DNS er internetts telefonkatalog. Når store DNS-tjenester faller ut, virker fortsatt maskinene — men ingen finner dem, og det ser ut som hele nettet er nede."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er en «token» i sammenheng med språkmodeller?",
+      "answer": "En bit av tekst modellen regner på, ofte et ordfragment",
+      "options": [
+        "En bit av tekst modellen regner på, ofte et ordfragment",
+        "En sikkerhetsnøkkel",
+        "En type minnebrikke",
+        "Et betalingsmiddel"
+      ],
+      "explanation": "En tommelfingerregel er at norsk tekst bruker flere tokens per ord enn engelsk — språkmodeller er i praksis billigere å bruke på engelsk."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem beskrev i 1936 den teoretiske maskinen som ligger til grunn for all moderne databehandling?",
+      "answer": "Alan Turing",
+      "options": [
+        "Alan Turing",
+        "John von Neumann",
+        "Claude Shannon",
+        "Kurt Gödel"
+      ],
+      "explanation": "Turingmaskinen er ren matematikk, ikke jern. Turing viste samtidig at det finnes problemer ingen datamaskin noensinne kan løse — som stoppproblemet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles arkitekturen der program og data ligger i samme minne?",
+      "answer": "Von Neumann-arkitekturen",
+      "options": [
+        "Von Neumann-arkitekturen",
+        "Harvard-arkitekturen",
+        "RISC-arkitekturen",
+        "Turing-arkitekturen"
+      ],
+      "explanation": "Nesten alle dagens datamaskiner bygger på den. Flaskehalsen er kjent: prosessoren venter ofte på minnet, ikke omvendt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem grunnla informasjonsteorien og innførte begrepet «bit»?",
+      "answer": "Claude Shannon",
+      "options": [
+        "Claude Shannon",
+        "Alan Turing",
+        "Norbert Wiener",
+        "Vannevar Bush"
+      ],
+      "explanation": "I artikkelen fra 1948 viste han at all kommunikasjon kan måles i bit — og satte en hard øvre grense for hvor mye data en kanal kan bære."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «overtilpasning» (overfitting) i maskinlæring?",
+      "answer": "At modellen lærer treningsdataene utenat og gjør det dårlig på nye data",
+      "options": [
+        "At modellen lærer treningsdataene utenat og gjør det dårlig på nye data",
+        "At modellen blir for stor for maskinen",
+        "At treningen tar for lang tid",
+        "At dataene er feilmerket"
+      ],
+      "explanation": "Det er grunnen til at man alltid holder tilbake et testsett. En modell som scorer perfekt på treningsdataene er som regel en dårlig nyhet, ikke en god."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles metoden der en språkmodell finjusteres med menneskelige preferanser?",
+      "answer": "RLHF",
+      "options": [
+        "RLHF",
+        "GAN",
+        "LSTM",
+        "PCA"
+      ],
+      "explanation": "Reinforcement Learning from Human Feedback. Det var dette steget, mer enn selve størrelsen, som gjorde språkmodeller til noe folk faktisk kunne snakke med."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva står «SQL» for?",
+      "answer": "Structured Query Language",
+      "options": [
+        "Structured Query Language",
+        "Simple Question Logic",
+        "System Query Loader",
+        "Sequential Query Layer"
+      ],
+      "explanation": "Språket er fra 1970-tallet og bygger på Edgar Codds relasjonsmodell. Det har overlevd praktisk talt alle teknologiskifter siden."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er en «race condition» i programmering?",
+      "answer": "At resultatet avhenger av rekkefølgen to samtidige operasjoner tilfeldigvis kjører i",
+      "options": [
+        "At resultatet avhenger av rekkefølgen to samtidige operasjoner tilfeldigvis kjører i",
+        "At programmet bruker for mye minne",
+        "At koden kjører for sakte",
+        "At to programmer bruker samme fil"
+      ],
+      "explanation": "Slike feil forsvinner ofte når du prøver å finne dem, fordi feilsøkingen endrer timingen. Therac-25-ulykkene på 1980-tallet skyldtes nettopp dette."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var ARPANET?",
+      "answer": "Forløperen til internett, finansiert av det amerikanske forsvaret",
+      "options": [
+        "Forløperen til internett, finansiert av det amerikanske forsvaret",
+        "Verdens første nettleser",
+        "Det første e-postprogrammet",
+        "Et tidlig operativsystem"
+      ],
+      "explanation": "Den første meldingen ble sendt i 1969 og skulle være «LOGIN». Systemet krasjet etter to bokstaver, så den første beskjeden på nettet ble «LO»."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles teknikken der en modell lærer å gjenskape data den selv har fått forvrengt?",
+      "answer": "Diffusjonsmodell",
+      "options": [
+        "Diffusjonsmodell",
+        "Beslutningstre",
+        "Støttevektormaskin",
+        "Markovkjede"
+      ],
+      "explanation": "Modellen trenes på å fjerne støy steg for steg. Starter man med ren støy og kjører prosessen baklengs, får man et helt nytt bilde — grunnprinsippet bak dagens bildegeneratorer."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Turing-testen»?",
+      "answer": "En test på om en maskin kan føre en samtale uten at mennesket merker forskjell",
+      "options": [
+        "En test på om en maskin kan føre en samtale uten at mennesket merker forskjell",
+        "En måling av prosessorhastighet",
+        "En test på om et program kan kjøre uten feil",
+        "En sikkerhetstest av kryptering"
+      ],
+      "explanation": "Turing kalte den selv «imitasjonsleken» i 1950. Han unngikk med vilje spørsmålet om maskiner kan tenke, og spurte i stedet om noe man faktisk kan måle."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles en distribuert database der oppføringene er kjedet sammen kryptografisk?",
+      "answer": "Blokkjede",
+      "options": [
+        "Blokkjede",
+        "Relasjonsdatabase",
+        "Grafdatabase",
+        "Filsystem"
+      ],
+      "explanation": "Hver blokk inneholder en kryptografisk sjekksum av den forrige. Endrer du én gammel blokk, brytes alle etterfølgende — det er hele sikkerhetsmekanismen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva menes med «kontekstvindu» i en språkmodell?",
+      "answer": "Hvor mye tekst modellen kan ha i minnet samtidig",
+      "options": [
+        "Hvor mye tekst modellen kan ha i minnet samtidig",
+        "Hvor lenge modellen har vært trent",
+        "Hvor mange brukere den tåler",
+        "Hvor stor skjermen må være"
+      ],
+      "explanation": "Alt utenfor vinduet finnes rett og slett ikke for modellen. Derfor «glemmer» lange samtaler starten sin — det er ikke svikt, det er vindusgrensen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Big-O-notasjon» et mål på?",
+      "answer": "Hvordan en algoritmes tidsbruk vokser med datamengden",
+      "options": [
+        "Hvordan en algoritmes tidsbruk vokser med datamengden",
+        "Hvor mye plass et program tar på disken",
+        "Hvor mange linjer kode et program har",
+        "Hvor stort et datasenter er"
+      ],
+      "explanation": "Forskjellen mellom O(n²) og O(n log n) betyr lite for 100 elementer og alt for 100 millioner. Det er derfor sorteringsalgoritmer er så grundig studert."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles det når data om at en modell er trent på noe gjør at den kan gjengi det ordrett?",
+      "answer": "Memorering",
+      "options": [
+        "Memorering",
+        "Generalisering",
+        "Normalisering",
+        "Kvantisering"
+      ],
+      "explanation": "Det er kjernen i flere opphavsrettssaker: en modell som gjengir treningsteksten ordrett har ikke lært et mønster, den har lagret en kopi."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hensikten med «kvantisering» av en AI-modell?",
+      "answer": "Å redusere presisjonen i tallene så modellen bruker mindre minne",
+      "options": [
+        "Å redusere presisjonen i tallene så modellen bruker mindre minne",
+        "Å trene modellen raskere",
+        "Å øke antall parametre",
+        "Å kryptere modellvektene"
+      ],
+      "explanation": "Går man fra 16 til 4 bit per vekt, krymper modellen omtrent til en firedel. Ofte merkes knapt forskjellen — og det er derfor store modeller kan kjøre på en laptop."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva står «RAM» for, og hva er hovedegenskapen?",
+      "answer": "Random Access Memory — innholdet forsvinner når strømmen går",
+      "options": [
+        "Random Access Memory — innholdet forsvinner når strømmen går",
+        "Rapid Access Module — permanent lagring",
+        "Read And Modify — kun for lesing",
+        "Runtime Allocated Memory — kun for programmer"
+      ],
+      "explanation": "«Random access» betyr at enhver adresse nås like raskt. Det var det revolusjonerende sammenlignet med magnetbånd, der man måtte spole."
+    }
+  ]
+}

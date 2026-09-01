@@ -10,7 +10,8 @@
         "Leveren",
         "Hjernen",
         "Tarmen"
-      ]
+      ],
+      "explanation": "Huden veier rundt 4 kg og fornyer seg helt i løpet av omtrent en måned. Mye av husstøvet ditt er avstøtte hudceller."
     },
     {
       "difficulty": "easy",
@@ -120,7 +121,8 @@
         "Hammeren",
         "Ambolten",
         "Lillefingerknokkelen"
-      ]
+      ],
+      "explanation": "Stigbøylen er rundt 3 mm lang. Sammen med hammeren og ambolten forsterker den lydtrykket omtrent tjue ganger på vei inn til det indre øret."
     },
     {
       "difficulty": "easy",
@@ -164,7 +166,8 @@
         "AB positiv",
         "A positiv",
         "B negativ"
-      ]
+      ],
+      "explanation": "O negativ mangler både A-, B- og Rh-antigen, så immunforsvaret finner ingenting å reagere på. Rundt 6 % av befolkningen har den — derfor er blodbankene kronisk lave på nettopp den."
     },
     {
       "difficulty": "easy",
@@ -362,7 +365,8 @@
         "Rakitt",
         "Beriberi",
         "Pellagra"
-      ]
+      ],
+      "explanation": "Skjørbuk. Uten C-vitamin klarer ikke kroppen å bygge kollagen, så gamle sår åpner seg på nytt. Britiske sjøfolk fikk sitrusfrukt fra 1795 og ble kalt «limeys»."
     },
     {
       "difficulty": "medium",
@@ -384,7 +388,8 @@
         "Storhjernen",
         "Hjernestammen",
         "Hypothalamus"
-      ]
+      ],
+      "explanation": "Lillehjernen utgjør bare rundt 10 % av hjernens vekt, men rommer over halvparten av alle nervecellene i hjernen."
     },
     {
       "difficulty": "medium",
@@ -428,7 +433,8 @@
         "Melanin",
         "Hemoglobin",
         "Insulin"
-      ]
+      ],
+      "explanation": "Kollagen er det vanligste proteinet i kroppen og utgjør omtrent en tredel av all proteinmasse. Produksjonen begynner å synke allerede fra 25-årsalderen."
     },
     {
       "difficulty": "medium",
@@ -450,7 +456,8 @@
         "Netthinnen",
         "Linsen",
         "Hornhinnen"
-      ]
+      ],
+      "explanation": "Pupillen er bare et hull; det er regnbuehinnens muskler som styrer størrelsen. Den utvider seg også ved interesse og oppmerksomhet, ikke bare i mørke."
     },
     {
       "difficulty": "medium",
@@ -472,7 +479,8 @@
         "Nåler og kjegler",
         "Prikker og streker",
         "Kuler og staver"
-      ]
+      ],
+      "explanation": "Stavene ser i mørke, men bare i gråtoner. Tappene gir farger og trenger mye lys — derfor er alle katter grå om natten, også for mennesker."
     },
     {
       "difficulty": "medium",
@@ -626,7 +634,8 @@
         "Kolesterol",
         "Jernlager",
         "Nyrefunksjon"
-      ]
+      ],
+      "explanation": "Andelen røde blodceller med sukker bundet til hemoglobinet. Siden cellene lever rundt 120 dager, viser prøven blodsukkeret de siste 8–12 ukene — ikke hva du spiste i går."
     },
     {
       "difficulty": "hard",

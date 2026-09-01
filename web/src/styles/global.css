@@ -1501,6 +1501,17 @@ main {
 .quiz-q__verdict--wrong {
   color: var(--down);
 }
+/* Kroken: ett faktum du IKKE ble spurt om, vist etter at svaret er gitt. */
+.quiz-q__explanation {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  padding: 9px 11px;
+  border-left: 2px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
 .quiz-score {
   margin: 14px 0 0;
   font-size: 0.95rem;

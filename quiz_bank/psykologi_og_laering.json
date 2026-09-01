@@ -1,0 +1,605 @@
+{
+  "category": "Psykologi og læring",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles hjernens evne til å endre seg gjennom hele livet?",
+      "answer": "Nevroplastisitet",
+      "options": [
+        "Nevroplastisitet",
+        "Nevrogenese",
+        "Synapsehemming",
+        "Kognitiv dissonans"
+      ],
+      "explanation": "Lenge trodde man at hjernen var ferdig utviklet i ungdomsårene. I dag vet vi at strukturen endrer seg målbart av trening, læring og til og med av nye vaner i voksen alder."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Omtrent hvor mange timer søvn anbefales for en voksen per natt?",
+      "answer": "7–9 timer",
+      "options": [
+        "7–9 timer",
+        "4–5 timer",
+        "10–12 timer",
+        "6 timer"
+      ],
+      "explanation": "Andelen mennesker som faktisk klarer seg godt på under seks timer er anslått til under 1 %. De aller fleste som tror de hører til der, presterer målbart dårligere enn de selv opplever."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det å øve på å hente fram kunnskap fra hukommelsen i stedet for å lese på nytt?",
+      "answer": "Aktiv gjenkalling",
+      "options": [
+        "Aktiv gjenkalling",
+        "Passiv repetisjon",
+        "Overlæring",
+        "Assosiasjonslæring"
+      ],
+      "explanation": "Å teste seg selv gir langt bedre langtidshukommelse enn å lese teksten om igjen — selv om gjenlesing føles tryggere underveis. Følelsen av flyt er en dårlig indikator på læring."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det når man fordeler læringen over tid i stedet for å pugge alt på én gang?",
+      "answer": "Spacing",
+      "options": [
+        "Spacing",
+        "Blokklæring",
+        "Skumlesing",
+        "Multitasking"
+      ],
+      "explanation": "Effekten ble påvist av Hermann Ebbinghaus allerede på 1880-tallet, og er en av de mest robuste funnene i hele psykologien."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles kroppens indre døgnrytme?",
+      "answer": "Døgnrytmen (circadian rytme)",
+      "options": [
+        "Døgnrytmen (circadian rytme)",
+        "Sesongrytmen",
+        "Pulsrytmen",
+        "Ultradian rytme"
+      ],
+      "explanation": "Den styres av en klynge på rundt 20 000 celler i hypothalamus, og stilles først og fremst av dagslys i øynene — ikke av klokka på veggen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket hormon stiger naturlig når det blir mørkt og gjør oss søvnige?",
+      "answer": "Melatonin",
+      "options": [
+        "Melatonin",
+        "Kortisol",
+        "Adrenalin",
+        "Insulin"
+      ],
+      "explanation": "Blått lys om kvelden bremser utskillelsen. Effekten er reell, men mindre enn markedsføringen av blålysbriller antyder — tidspunktet du legger deg betyr mer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles frykt som er så sterk at den er ute av proporsjon med faren?",
+      "answer": "Fobi",
+      "options": [
+        "Fobi",
+        "Mani",
+        "Apati",
+        "Empati"
+      ],
+      "explanation": "Eksponeringsterapi virker fordi hjernen lærer en ny assosiasjon. Den gamle frykten slettes ikke — den overskrives av en sterkere, ny erfaring."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kaller vi den delen av hukommelsen som holder på informasjon i noen få sekunder?",
+      "answer": "Arbeidsminnet",
+      "options": [
+        "Arbeidsminnet",
+        "Langtidsminnet",
+        "Prosedyreminnet",
+        "Sansehukommelsen"
+      ],
+      "explanation": "Klassisk anslag er «7 pluss/minus 2» enheter, men nyere forskning peker mot at fire er nærmere sannheten. Derfor deles telefonnumre opp i grupper."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det når man utsetter oppgaver man vet man burde gjøre?",
+      "answer": "Prokrastinering",
+      "options": [
+        "Prokrastinering",
+        "Perfeksjonisme",
+        "Dissosiasjon",
+        "Habituering"
+      ],
+      "explanation": "Forskningen peker på at det sjelden handler om latskap, men om å regulere ubehag. Derfor virker det å gjøre oppgaven mindre — ikke å ta seg sammen mer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «placebo»?",
+      "answer": "En virkningsløs behandling som likevel kan gi bedring",
+      "options": [
+        "En virkningsløs behandling som likevel kan gi bedring",
+        "En bivirkning av medisin",
+        "En form for terapi",
+        "Et mål på effektstørrelse"
+      ],
+      "explanation": "Effekten er sterkest på subjektive utfall som smerte og kvalme. Merkelig nok kan den virke selv når pasienten får vite at pillen er uvirksom."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles evnen til å forstå og dele andres følelser?",
+      "answer": "Empati",
+      "options": [
+        "Empati",
+        "Sympati",
+        "Apati",
+        "Intuisjon"
+      ],
+      "explanation": "Forskere skiller mellom å forstå hva andre føler og å føle det selv. Hjelpeyrker som brenner ut, rammes oftest av den andre typen, ikke den første."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva står forkortelsen «IQ» for?",
+      "answer": "Intelligenskvotient",
+      "options": [
+        "Intelligenskvotient",
+        "Individuell kvalifikasjon",
+        "Innlæringskvotient",
+        "Intuitiv kapasitet"
+      ],
+      "explanation": "Skalaen er konstruert slik at gjennomsnittet alltid er 100. Fordi råskårene har steget gjennom hele 1900-tallet, må testene med jevne mellomrom kalibreres på nytt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det å gjøre flere krevende ting samtidig?",
+      "answer": "Multitasking",
+      "options": [
+        "Multitasking",
+        "Batching",
+        "Priming",
+        "Chunking"
+      ],
+      "explanation": "Hjernen gjør det i praksis ikke samtidig, den bytter fram og tilbake. Hvert bytte koster tid, og på krevende oppgaver kan totalen bli vesentlig lengre enn å ta én ting av gangen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken type minne bruker du når du sykler uten å tenke på det?",
+      "answer": "Prosedyreminnet",
+      "options": [
+        "Prosedyreminnet",
+        "Episodisk minne",
+        "Semantisk minne",
+        "Arbeidsminnet"
+      ],
+      "explanation": "Det ligger i andre hjernestrukturer enn faktahukommelsen. Pasienter som mister evnen til å danne nye minner, kan fortsatt lære nye ferdigheter uten å huske at de har øvd."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles positiv forsterkning i psykologien?",
+      "answer": "Å belønne ønsket atferd så den gjentas",
+      "options": [
+        "Å belønne ønsket atferd så den gjentas",
+        "Å straffe uønsket atferd",
+        "Å ignorere all atferd",
+        "Å bytte ut en vane med en annen"
+      ],
+      "explanation": "B.F. Skinner viste at uforutsigbare belønninger fester atferden hardest. Det er samme mekanisme som gjør spilleautomater og varslinger vanskelige å legge fra seg."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles hvile der du er våken, men lar tankene vandre uten oppgave?",
+      "answer": "Hvilemodusnettverket i aktivitet",
+      "options": [
+        "Hvilemodusnettverket i aktivitet",
+        "REM-søvn",
+        "Dyp søvn",
+        "Hypnose"
+      ],
+      "explanation": "Hjernen bruker nesten like mye energi når den «ikke gjør noe». Det er i disse periodene mange rapporterer at løsninger på fastlåste problemer dukker opp."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det når kroppen tåler stadig mer av et stoff og trenger større dose?",
+      "answer": "Toleranse",
+      "options": [
+        "Toleranse",
+        "Abstinens",
+        "Avhengighet",
+        "Sensitivering"
+      ],
+      "explanation": "Koffeintoleranse bygger seg opp på under en uke. Etter det holder morgenkaffen deg i praksis mest på normalnivå, i stedet for å løfte deg over det."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles tendensen til å lete etter informasjon som bekrefter det man allerede tror?",
+      "answer": "Bekreftelsesfeilen",
+      "options": [
+        "Bekreftelsesfeilen",
+        "Tilgjengelighetsfeilen",
+        "Forankringseffekten",
+        "Attribusjonsfeilen"
+      ],
+      "explanation": "Den er sterkest når saken er identitetsnær. Å bli presentert for motargumenter kan da forsterke standpunktet i stedet for å svekke det."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det når det første tallet du hører påvirker vurderingen din etterpå?",
+      "answer": "Forankringseffekten",
+      "options": [
+        "Forankringseffekten",
+        "Halo-effekten",
+        "Rammeeffekten",
+        "Flokkeffekten"
+      ],
+      "explanation": "Den virker selv når tallet åpenbart er tilfeldig. Derfor sier forhandlingslitteraturen at det ofte lønner seg å nevne et tall først."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles ubehaget ved å holde to motstridende oppfatninger samtidig?",
+      "answer": "Kognitiv dissonans",
+      "options": [
+        "Kognitiv dissonans",
+        "Kognitiv overbelastning",
+        "Konfabulering",
+        "Dissosiasjon"
+      ],
+      "explanation": "Leon Festinger beskrev den i 1957. Vi løser ubehaget oftest ved å endre holdningen, ikke handlingen — det er den billigste veien ut."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles søvnfasen der de fleste drømmene oppstår?",
+      "answer": "REM-søvn",
+      "options": [
+        "REM-søvn",
+        "Dyp søvn",
+        "Lett søvn",
+        "N3-søvn"
+      ],
+      "explanation": "Kroppen er nærmest lammet under REM, trolig for å hindre at man utfører drømmene. Fasen blir lengre utover natten — kutter du de siste timene, kutter du mest REM."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles teknikken der du deler informasjon i mindre biter for å huske den bedre?",
+      "answer": "Chunking",
+      "options": [
+        "Chunking",
+        "Priming",
+        "Framing",
+        "Anchoring"
+      ],
+      "explanation": "Et telefonnummer på ti sifre er nesten umulig som ti enheter, men lett som tre. Sjakkspillere husker stillinger på samme måte — som mønstre, ikke enkeltbrikker."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den tendensen at vi vurderer sannsynlighet etter hvor lett vi kommer på eksempler?",
+      "answer": "Tilgjengelighetsfeilen",
+      "options": [
+        "Tilgjengelighetsfeilen",
+        "Bekreftelsesfeilen",
+        "Sunk cost-feilen",
+        "Dunning-Kruger-effekten"
+      ],
+      "explanation": "Derfor overvurderer folk faren ved flystyrter og hai, som får store oppslag, og undervurderer hjerte- og karsykdom, som ikke gjør det."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det å fortsette med noe fordi man alt har investert mye i det?",
+      "answer": "Sunk cost-feilen",
+      "options": [
+        "Sunk cost-feilen",
+        "Statusquo-skjevheten",
+        "Optimismeskjevheten",
+        "Endringsblindhet"
+      ],
+      "explanation": "Pengene som alt er brukt, bør logisk sett ikke telle. Likevel gjør de det — også i store industriprosjekter, der fenomenet har eget kallenavn: Concorde-feilen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva viste Milgrams eksperiment fra 1960-tallet?",
+      "answer": "At vanlige mennesker adlyder autoritet lenger enn de selv tror",
+      "options": [
+        "At vanlige mennesker adlyder autoritet lenger enn de selv tror",
+        "At grupper tar bedre beslutninger enn individer",
+        "At belønning virker bedre enn straff",
+        "At minner kan plantes"
+      ],
+      "explanation": "Rundt to tredeler gikk helt til øverste nivå. Metoden er senere kritisert hardt, men grunnfunnet er gjentatt i mildere former med lignende resultat."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det når en generell positiv oppfatning smitter over på urelaterte egenskaper?",
+      "answer": "Halo-effekten",
+      "options": [
+        "Halo-effekten",
+        "Bekreftelsesfeilen",
+        "Priming",
+        "Rammeeffekten"
+      ],
+      "explanation": "Vi antar at den som ser bra ut, også er smartere og snillere. Effekten er målt i alt fra jobbintervjuer til rettssaler."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den delen av hjernen som er sentral for å danne nye minner?",
+      "answer": "Hippocampus",
+      "options": [
+        "Hippocampus",
+        "Amygdala",
+        "Lillehjernen",
+        "Pannelappen"
+      ],
+      "explanation": "Navnet betyr sjøhest på gresk, etter formen. Pasienten «H.M.» fikk begge fjernet i 1953 og kunne aldri danne nye faktaminner igjen — én operasjon som formet hele hukommelsesforskningen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den kognitive skjevheten der lite kunnskap gir stor selvtillit?",
+      "answer": "Dunning-Kruger-effekten",
+      "options": [
+        "Dunning-Kruger-effekten",
+        "Impostersyndromet",
+        "Halo-effekten",
+        "Forankringseffekten"
+      ],
+      "explanation": "Poenget er at det å vurdere egen kompetanse krever nettopp den kompetansen man mangler. Effektens størrelse er omdiskutert, men mønsteret er gjenfunnet mange ganger."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles behandlingsformen som utfordrer og endrer tankemønstre?",
+      "answer": "Kognitiv atferdsterapi",
+      "options": [
+        "Kognitiv atferdsterapi",
+        "Psykoanalyse",
+        "Gestaltterapi",
+        "Hypnoterapi"
+      ],
+      "explanation": "Den er den best dokumenterte psykologiske behandlingen for angst og depresjon, og virker i mange studier på linje med medikamenter — med lavere tilbakefall etter avsluttet behandling."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles fenomenet der forventning om en effekt gjør at man faktisk opplever den?",
+      "answer": "Placeboeffekten",
+      "options": [
+        "Placeboeffekten",
+        "Noceboeffekten",
+        "Habituering",
+        "Priming"
+      ],
+      "explanation": "Motstykket heter nocebo: forventer du bivirkninger, får du dem oftere. I blindede studier rapporterer placebogruppen jevnlig de samme bivirkningene som den aktive gruppen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles det når man gradvis slutter å reagere på et gjentatt stimulus?",
+      "answer": "Habituering",
+      "options": [
+        "Habituering",
+        "Sensitivering",
+        "Ekstinksjon",
+        "Generalisering"
+      ],
+      "explanation": "Det er derfor du slutter å høre kjøleskapet. Samme mekanisme gjør at nye ting — en ny jobb, en ny bil — gir mindre glede etter kort tid enn man forventet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «flyt» (flow) i psykologien?",
+      "answer": "En tilstand av full oppslukthet i en passe krevende oppgave",
+      "options": [
+        "En tilstand av full oppslukthet i en passe krevende oppgave",
+        "En form for dyp avslapning",
+        "En type søvnfase",
+        "En metode for meditasjon"
+      ],
+      "explanation": "Csikszentmihalyi fant at flyt krever balanse: for lett gir kjedsomhet, for vanskelig gir angst. Sonen imellom er smal og flytter seg etter hvert som du blir bedre."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den effekten at vi husker uavsluttede oppgaver bedre enn avsluttede?",
+      "answer": "Zeigarnik-effekten",
+      "options": [
+        "Zeigarnik-effekten",
+        "Von Restorff-effekten",
+        "Primæreffekten",
+        "Recency-effekten"
+      ],
+      "explanation": "Bluma Zeigarnik la merke til at servitører husket ubetalte bestillinger i detalj — og glemte dem i det regningen var gjort opp."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles den tendensen at gruppen tar mer ekstreme beslutninger enn hvert medlem ville gjort alene?",
+      "answer": "Gruppepolarisering",
+      "options": [
+        "Gruppepolarisering",
+        "Gruppetenkning",
+        "Sosial loffing",
+        "Konformitet"
+      ],
+      "explanation": "Effekten forsterkes når gruppen alt er enig fra start. Det er en av mekanismene bak hvordan nettforum radikaliserer seg over tid."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den utvidende repetisjonsteknikken der intervallene mellom hver gjentakelse øker?",
+      "answer": "Spaced repetition",
+      "options": [
+        "Spaced repetition",
+        "Interleaving",
+        "Elaborering",
+        "Overlæring"
+      ],
+      "explanation": "Metoden bygger på Ebbinghaus' glemselskurve fra 1885: repetisjonen gir mest når du er akkurat i ferd med å glemme. Derfor øker gode systemer intervallet hver gang du husker riktig."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles det å blande ulike oppgavetyper under øving i stedet for å ta én type av gangen?",
+      "answer": "Interleaving",
+      "options": [
+        "Interleaving",
+        "Blokkøving",
+        "Chunking",
+        "Skygging"
+      ],
+      "explanation": "Det føles verre og gir dårligere resultater underveis — men klart bedre på testen uker senere. Et av de tydeligste eksemplene på at læringsfølelse og læring peker i hver sin retning."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles teorien om at hukommelsen rekonstrueres, ikke spilles av?",
+      "answer": "Rekonstruktiv hukommelse",
+      "options": [
+        "Rekonstruktiv hukommelse",
+        "Fotografisk hukommelse",
+        "Ekkoisk hukommelse",
+        "Implisitt hukommelse"
+      ],
+      "explanation": "Elizabeth Loftus viste at ordvalget i et spørsmål endrer hva vitner «husker» å ha sett. Hvert gjenkall skriver minnet tilbake i en litt endret form."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den kognitive belastningen som ikke bidrar til læring, og som bør fjernes fra undervisning?",
+      "answer": "Fremmed kognitiv belastning",
+      "options": [
+        "Fremmed kognitiv belastning",
+        "Iboende kognitiv belastning",
+        "Relevant kognitiv belastning",
+        "Perseptuell belastning"
+      ],
+      "explanation": "Rot i presentasjonen, dårlig figurtekst og irrelevante detaljer stjeler av arbeidsminnet. Stoffets egen vanskelighetsgrad kan man ikke kutte — støyen rundt kan man."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «testeffekten»?",
+      "answer": "At det å bli testet i seg selv styrker hukommelsen",
+      "options": [
+        "At det å bli testet i seg selv styrker hukommelsen",
+        "At testangst svekker prestasjonen",
+        "At testresultater varierer tilfeldig",
+        "At testing måler mer enn kunnskap"
+      ],
+      "explanation": "Effekten gjelder også når du ikke får vite om svaret var riktig. Selve anstrengelsen ved å hente fram noe er det som fester det."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den delen av hjernen som er sentral i frykt- og trusselreaksjoner?",
+      "answer": "Amygdala",
+      "options": [
+        "Amygdala",
+        "Hippocampus",
+        "Thalamus",
+        "Corpus callosum"
+      ],
+      "explanation": "Signalveien dit går raskere enn til bevisstheten. Du reagerer på en slange på stien før du har rukket å se at det er en gren."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles evnen til å regulere impulser og planlegge, knyttet til pannelappen?",
+      "answer": "Eksekutive funksjoner",
+      "options": [
+        "Eksekutive funksjoner",
+        "Semantisk kompetanse",
+        "Sensorisk integrasjon",
+        "Motorisk kontroll"
+      ],
+      "explanation": "Prefrontal cortex er den siste delen av hjernen som modnes ferdig, ofte først i midten av tjueårene."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles den forskningsmetoden der verken deltaker eller forsker vet hvem som får aktiv behandling?",
+      "answer": "Dobbeltblind studie",
+      "options": [
+        "Dobbeltblind studie",
+        "Åpen studie",
+        "Kohortstudie",
+        "Kasus-kontrollstudie"
+      ],
+      "explanation": "Blindingen beskytter mot forventningseffekter på begge sider av bordet. Uten den har behandleren en systematisk tendens til å vurdere sin egen gruppe mildere."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles effekten der folk endrer atferd fordi de vet de blir observert?",
+      "answer": "Hawthorne-effekten",
+      "options": [
+        "Hawthorne-effekten",
+        "Placeboeffekten",
+        "Pygmalion-effekten",
+        "Barnum-effekten"
+      ],
+      "explanation": "Navnet stammer fra en fabrikkstudie på 1920-tallet der produktiviteten steg uansett hva forskerne endret — også da de skrudde lyset ned igjen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles tendensen til å godta vage personlighetsbeskrivelser som treffende om seg selv?",
+      "answer": "Barnum-effekten",
+      "options": [
+        "Barnum-effekten",
+        "Halo-effekten",
+        "Bekreftelsesfeilen",
+        "Selvtjenende skjevhet"
+      ],
+      "explanation": "Den forklarer hvorfor horoskoper virker presise. I klassiske forsøk får alle deltakerne samme beskrivelse — og de fleste kjenner seg igjen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles fenomenet der en forventning om noen får dem til å prestere deretter?",
+      "answer": "Pygmalion-effekten",
+      "options": [
+        "Pygmalion-effekten",
+        "Zeigarnik-effekten",
+        "Halo-effekten",
+        "Stroop-effekten"
+      ],
+      "explanation": "I klasseromsforsøk presterte tilfeldig utvalgte elever bedre etter at læreren var fortalt at de var særlig lovende. Læreren behandlet dem annerledes uten å vite det."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva måler Stroop-testen?",
+      "answer": "Evnen til å undertrykke en automatisk respons",
+      "options": [
+        "Evnen til å undertrykke en automatisk respons",
+        "Korttidsminnets kapasitet",
+        "Reaksjonstid på lyd",
+        "Romlig orienteringsevne"
+      ],
+      "explanation": "Å lese ordet «rød» skrevet i blå skrift tar merkbart lengre tid. Lesingen er så automatisert at den må aktivt hemmes."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles søvnpresset som bygger seg opp jo lenger du er våken?",
+      "answer": "Adenosinopphopning",
+      "options": [
+        "Adenosinopphopning",
+        "Melatoninfall",
+        "Kortisolstigning",
+        "Dopaminmangel"
+      ],
+      "explanation": "Koffein virker ved å blokkere adenosinreseptorene — det fjerner ikke trettheten, det skjuler den. Når koffeinet slipper taket, står alt adenosinet fortsatt der."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles det når hjernen konsoliderer dagens læring under søvn?",
+      "answer": "Minnekonsolidering",
+      "options": [
+        "Minnekonsolidering",
+        "Synaptisk beskjæring",
+        "Nevrogenese",
+        "Habituering"
+      ],
+      "explanation": "Dyp søvn ser ut til å styrke faktaminner, mens REM knyttes til ferdigheter og mønstre. Én natt uten søvn etter læring reduserer det som sitter uker senere."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles forskningsdesignet der samme personer følges over tid?",
+      "answer": "Longitudinell studie",
+      "options": [
+        "Longitudinell studie",
+        "Tverrsnittstudie",
+        "Kasusstudie",
+        "Metaanalyse"
+      ],
+      "explanation": "Grant-studien ved Harvard har fulgt de samme mennene siden 1938. Den sterkeste enkeltprediktoren for helse og lykke i høy alder var kvaliteten på nære relasjoner."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles studien som kombinerer resultater fra mange enkeltstudier statistisk?",
+      "answer": "Metaanalyse",
+      "options": [
+        "Metaanalyse",
+        "Longitudinell studie",
+        "Pilotstudie",
+        "Kohortstudie"
+      ],
+      "explanation": "Den regnes som høyeste nivå av evidens — men arver skjevhetene i studiene den bygger på. Publiseringsskjevhet gjør at effekter systematisk ser større ut enn de er."
+    }
+  ]
+}

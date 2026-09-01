@@ -1,0 +1,605 @@
+{
+  "category": "Sport",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange spillere har et fotballag på banen samtidig?",
+      "answer": "11",
+      "options": [
+        "11",
+        "10",
+        "12",
+        "9"
+      ],
+      "explanation": "Tallet ble fastsatt av engelske skoler på 1800-tallet, trolig fordi et sovesalslag besto av ti gutter og en prefekt. Det har stått uendret siden reglene ble skrevet ned i 1863."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor ofte arrangeres sommer-OL?",
+      "answer": "Hvert fjerde år",
+      "options": [
+        "Hvert fjerde år",
+        "Hvert andre år",
+        "Hvert tredje år",
+        "Hvert femte år"
+      ],
+      "explanation": "Siden 1994 er vinter- og sommerleker forskjøvet med to år, slik at det er OL annethvert år. Før det ble begge holdt samme år."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken norsk fotballklubb spiller sine hjemmekamper på Brann stadion?",
+      "answer": "SK Brann",
+      "options": [
+        "SK Brann",
+        "Vålerenga",
+        "Rosenborg",
+        "Viking"
+      ],
+      "explanation": "Stadion åpnet i 1919 og ligger i Årstad i Bergen. Publikumsrekorden er fra 1961 og har aldri vært i nærheten av å bli slått, siden ståplassene er borte."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange runder er det i en vanlig proffboksekamp om VM-tittelen i dag?",
+      "answer": "12",
+      "options": [
+        "12",
+        "15",
+        "10",
+        "8"
+      ],
+      "explanation": "Antallet ble kuttet fra 15 til 12 i 1983 etter at Duk Koo Kim døde av skader i en kamp som gikk til fjortende runde."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken sport spilles med kølle, puck og skøyter?",
+      "answer": "Ishockey",
+      "options": [
+        "Ishockey",
+        "Bandy",
+        "Curling",
+        "Landhockey"
+      ],
+      "explanation": "Pucken fryses før kamp for at den ikke skal sprette. En kald puck kan komme opp i over 160 km/t på et hardt skudd."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange gull tok Norge sammenlagt som nasjon i vinter-OL i Pyeongchang 2018?",
+      "answer": "14",
+      "options": [
+        "14",
+        "9",
+        "11",
+        "20"
+      ],
+      "explanation": "Norge tok 39 medaljer totalt, som var ny rekord for én nasjon i ett vinter-OL."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken idrett er Marit Bjørgen kjent for?",
+      "answer": "Langrenn",
+      "options": [
+        "Langrenn",
+        "Skiskyting",
+        "Alpint",
+        "Skøyter"
+      ],
+      "explanation": "Med 15 OL-medaljer er hun tidenes mestvinnende vinterolympier, uansett kjønn og nasjon."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor lang er en maraton?",
+      "answer": "42,195 km",
+      "options": [
+        "42,195 km",
+        "40 km",
+        "45 km",
+        "21,1 km"
+      ],
+      "explanation": "De skjeve 195 meterne kom i London 1908: løypa ble forlenget så starten kunne legges under vinduene i Windsor Castle. Distansen ble stående for godt i 1921."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange spillere er det på et håndballag på banen?",
+      "answer": "7",
+      "options": [
+        "7",
+        "6",
+        "5",
+        "8"
+      ],
+      "explanation": "Seks utespillere pluss keeper. Norsk kvinnehåndball har siden 1980-tallet vært blant verdens beste, med gull i EM, VM og OL."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter verdens største sykkelritt, arrangert i Frankrike hver sommer?",
+      "answer": "Tour de France",
+      "options": [
+        "Tour de France",
+        "Giro d'Italia",
+        "Vuelta a España",
+        "Paris–Roubaix"
+      ],
+      "explanation": "Rittet ble startet i 1903 av en avis som ville øke opplaget. Den gule ledertrøya har fargen til papiret avisen ble trykket på."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken ball er minst av disse?",
+      "answer": "Golfball",
+      "options": [
+        "Golfball",
+        "Tennisball",
+        "Håndball",
+        "Fotball"
+      ],
+      "explanation": "En golfball har minst 42,67 mm diameter. Groptene i overflaten er ikke pynt — de halverer luftmotstanden og gjør at ballen flyr dobbelt så langt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land har vunnet flest VM i fotball for herrer?",
+      "answer": "Brasil",
+      "options": [
+        "Brasil",
+        "Tyskland",
+        "Italia",
+        "Argentina"
+      ],
+      "explanation": "Fem titler. Brasil er også det eneste landet som har deltatt i samtlige VM-sluttspill siden 1930."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles det når en fotballspiller scorer tre mål i én kamp?",
+      "answer": "Hat trick",
+      "options": [
+        "Hat trick",
+        "Triplett",
+        "Trippelmål",
+        "Treer"
+      ],
+      "explanation": "Uttrykket kommer fra cricket, der en bowler som tok tre wickets på rad fikk en hatt av klubben."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken idrett kombinerer langrenn og skyting?",
+      "answer": "Skiskyting",
+      "options": [
+        "Skiskyting",
+        "Kombinert",
+        "Femkamp",
+        "Orientering"
+      ],
+      "explanation": "Sporten stammer fra militær grensepatrulje. Pulsen må ned fra rundt 180 til skytenivå på sekunder — derfor skytes det mellom hjerteslagene."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor mange sett må man vinne for å ta en herresingle i Grand Slam-tennis?",
+      "answer": "3",
+      "options": [
+        "3",
+        "2",
+        "4",
+        "5"
+      ],
+      "explanation": "Best av fem gjelder bare Grand Slam-turneringene for herrer. Alle andre kamper spilles best av tre."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva heter Norges nasjonalanlegg for hopp i Oslo?",
+      "answer": "Holmenkollbakken",
+      "options": [
+        "Holmenkollbakken",
+        "Vikersundbakken",
+        "Granåsen",
+        "Lysgårdsbakken"
+      ],
+      "explanation": "Det har stått hoppbakke i Holmenkollen siden 1892, og anlegget er bygget om nitten ganger. Vikersund er derimot bakken for skiflyging."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken farge har det andre kortet en dommer viser før utvisning i fotball?",
+      "answer": "Rødt",
+      "options": [
+        "Rødt",
+        "Gult",
+        "Blått",
+        "Svart"
+      ],
+      "explanation": "Kortene ble innført i VM 1970 etter at en engelsk dommer fikk ideen mens han sto i et trafikklys. Før det måtte dommeren gjøre seg forstått muntlig."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket år arrangerte Lillehammer vinter-OL?",
+      "answer": "1994",
+      "options": [
+        "1994",
+        "1992",
+        "1998",
+        "1996"
+      ],
+      "explanation": "Lekene ble husket for fulle løyper og for at åpningen ble holdt i tolv kuldegrader. Det var også første gang vinter-OL ikke fant sted samme år som sommer-OL."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem har flest Ballon d'Or-utmerkelser i fotball?",
+      "answer": "Lionel Messi",
+      "options": [
+        "Lionel Messi",
+        "Cristiano Ronaldo",
+        "Michel Platini",
+        "Johan Cruyff"
+      ],
+      "explanation": "Prisen har vært delt ut siden 1956, men var fram til 1995 forbeholdt europeiske spillere i europeiske klubber."
+    },
+    {
+      "question": "Hvilken norsk skøyteløper vant tre gull med verdensrekord i Lillehammer-OL 1994?",
+      "answer": "Johann Olav Koss",
+      "options": [
+        "Johann Olav Koss",
+        "Ådne Søndrål",
+        "Eskil Ervik",
+        "Håvard Bøkko"
+      ],
+      "explanation": "Koss vant 1500, 5000 og 10 000 meter, alle med verdensrekord, og ga premiepengene til Olympic Aid.",
+      "difficulty": "medium"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange poeng gir en «touchdown» i amerikansk fotball?",
+      "answer": "6",
+      "options": [
+        "6",
+        "7",
+        "3",
+        "5"
+      ],
+      "explanation": "Ekstrapoenget etterpå gjør det til sju. Navnet er en levning fra rugby, der ballen faktisk måtte trykkes ned i bakken."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken tennisturnering spilles på gress?",
+      "answer": "Wimbledon",
+      "options": [
+        "Wimbledon",
+        "French Open",
+        "US Open",
+        "Australian Open"
+      ],
+      "explanation": "Den er den eldste tennisturneringen i verden, fra 1877. Gresset klippes til nøyaktig 8 millimeter under mesterskapet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter fotballklubben som har vunnet flest norske seriemesterskap?",
+      "answer": "Rosenborg",
+      "options": [
+        "Rosenborg",
+        "Fredrikstad",
+        "Brann",
+        "Vålerenga"
+      ],
+      "explanation": "Rosenborg vant 13 seriegull på rad fra 1992 til 2004 — en rekke det ikke finnes maken til i noen annen europeisk toppdivisjon."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land vant fotball-VM for kvinner i 1995, med Norge i finalen?",
+      "answer": "Norge",
+      "options": [
+        "Norge",
+        "USA",
+        "Tyskland",
+        "Sverige"
+      ],
+      "explanation": "Norge slo Tyskland 2–0 i finalen i Stockholm. Året etter tok laget bronse i OL, og i 2000 kom OL-gullet i Sydney."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er verdensrekorden på 100 meter for menn omtrent?",
+      "answer": "9,58 sekunder",
+      "options": [
+        "9,58 sekunder",
+        "9,79 sekunder",
+        "10,01 sekunder",
+        "9,21 sekunder"
+      ],
+      "explanation": "Usain Bolt satte den i Berlin i 2009. Toppfarten hans ble målt til over 44 km/t, og han nådde den først etter 60–70 meter."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange ruter er det på et sjakkbrett?",
+      "answer": "64",
+      "options": [
+        "64",
+        "81",
+        "100",
+        "49"
+      ],
+      "explanation": "8 × 8. Antall mulige stillinger etter bare fire trekk hver er over 288 milliarder — derfor er sjakk fortsatt uløst."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem ble verdensmester i sjakk i 2013 og holdt tittelen til 2023?",
+      "answer": "Magnus Carlsen",
+      "options": [
+        "Magnus Carlsen",
+        "Viswanathan Anand",
+        "Fabiano Caruana",
+        "Ian Nepomniatsjtsjij"
+      ],
+      "explanation": "Carlsen ga fra seg tittelen frivillig i 2023 fordi han ikke fant VM-formatet motiverende — noe ingen regjerende verdensmester hadde gjort før."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken idrett dominerte Ole Einar Bjørndalen?",
+      "answer": "Skiskyting",
+      "options": [
+        "Skiskyting",
+        "Langrenn",
+        "Kombinert",
+        "Skøyter"
+      ],
+      "explanation": "Med 8 OL-gull er han tidenes mestvinnende vinterolympier på gullsiden. Han tok sitt siste OL-gull som 40-åring."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den øverste engelske fotballdivisjonen?",
+      "answer": "Premier League",
+      "options": [
+        "Premier League",
+        "Championship",
+        "La Liga",
+        "Serie A"
+      ],
+      "explanation": "Den ble skilt ut fra Football League i 1992 nettopp for å kunne selge TV-rettighetene separat. Det er fortsatt hovedinntekten."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange gull tok Norge i vinter-OL i Beijing 2022?",
+      "answer": "16",
+      "options": [
+        "16",
+        "14",
+        "11",
+        "20"
+      ],
+      "explanation": "Det er den høyeste gullfangsten noen nasjon har tatt i ett vinter-OL. Norge tok 37 medaljer totalt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land arrangerte fotball-VM i 2018?",
+      "answer": "Russland",
+      "options": [
+        "Russland",
+        "Qatar",
+        "Brasil",
+        "Sør-Afrika"
+      ],
+      "explanation": "Frankrike vant finalen 4–2 over Kroatia — den mest målrike VM-finalen siden 1966."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva kalles startposisjonen i et Formel 1-løp som gis til den raskeste i kvalifiseringen?",
+      "answer": "Pole position",
+      "options": [
+        "Pole position",
+        "Grid start",
+        "Front row",
+        "Sprint slot"
+      ],
+      "explanation": "Uttrykket kommer fra hesteveddeløp, der den innerste posisjonen var merket med en stolpe."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvor mange OL-gull tok Bjørn Dæhlie i langrenn?",
+      "answer": "8",
+      "options": [
+        "8",
+        "6",
+        "10",
+        "4"
+      ],
+      "explanation": "Han tok i tillegg fire sølv, og var i mange år tidenes mestvinnende vinterolympier — til Bjørndalen og Bjørgen passerte ham."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva heter den norske toppdivisjonen i fotball for menn?",
+      "answer": "Eliteserien",
+      "options": [
+        "Eliteserien",
+        "Tippeligaen",
+        "OBOS-ligaen",
+        "Postenligaen"
+      ],
+      "explanation": "Navnet ble byttet fra Tippeligaen i 2017, da Norsk Tipping ga fra seg navnesponsoratet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem scoret «Guds hånd»-målet i VM 1986?",
+      "answer": "Diego Maradona",
+      "options": [
+        "Diego Maradona",
+        "Pelé",
+        "Jorge Valdano",
+        "Mario Kempes"
+      ],
+      "explanation": "Fire minutter senere scoret han et mål som er kåret til århundrets — samme kamp, samme spiller, to helt motsatte typer historie."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket år ble det første moderne OL arrangert, og hvor?",
+      "answer": "1896 i Athen",
+      "options": [
+        "1896 i Athen",
+        "1900 i Paris",
+        "1888 i London",
+        "1904 i St. Louis"
+      ],
+      "explanation": "241 utøvere fra 14 land deltok, alle menn. Maratonløpet ble innført til nettopp disse lekene — det fantes ikke i antikkens OL."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er den lengste distansen i skiskyting for menn i OL?",
+      "answer": "20 km normal",
+      "options": [
+        "20 km normal",
+        "15 km",
+        "12,5 km jaktstart",
+        "10 km sprint"
+      ],
+      "explanation": "På normaldistansen gir hver bom ett strafferminutt i stedet for en strafferunde. Derfor kan en løper med treg ski vinne på ren skyting."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem vant Tour de France fem ganger på rad fra 1991 til 1995?",
+      "answer": "Miguel Indurain",
+      "options": [
+        "Miguel Indurain",
+        "Bernard Hinault",
+        "Eddy Merckx",
+        "Jacques Anquetil"
+      ],
+      "explanation": "Indurain hadde en målt hvilepuls rundt 28 og et lungevolum på nesten åtte liter — nesten det dobbelte av gjennomsnittet."
+    },
+    {
+      "question": "Hvilket lag slo Norge 2–1 i gruppespillet i fotball-VM 1998?",
+      "answer": "Brasil",
+      "options": [
+        "Brasil",
+        "Italia",
+        "Skottland",
+        "Marokko"
+      ],
+      "explanation": "Kjetil Rekdal scoret på straffe i det 89. minutt. Norge gikk videre til åttendedelsfinalen, men tapte 0–1 for Italia — fortsatt lagets beste VM-plassering.",
+      "difficulty": "hard"
+    },
+    {
+      "question": "Hvilken norsk hopper vant OL-gull i normalbakken i Lillehammer 1994?",
+      "answer": "Espen Bredesen",
+      "options": [
+        "Espen Bredesen",
+        "Lasse Ottesen",
+        "Roar Ljøkelsøy",
+        "Bjørn Einar Romøren"
+      ],
+      "explanation": "Bredesen ble kalt «Espen Ørnen» etter comebacket. To år tidligere, i Albertville, hadde han endt sist av alle i begge bakkene.",
+      "difficulty": "hard"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva kalles regelen i fotball som hindrer en angriper i å ligge bak siste forsvarer?",
+      "answer": "Offside",
+      "options": [
+        "Offside",
+        "Frispark",
+        "Hands",
+        "Fordelsregelen"
+      ],
+      "explanation": "Regelen fantes allerede i 1863, men krevde da tre motspillere foran. Endringen til to i 1925 nesten doblet antall mål per kamp umiddelbart."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem er tidenes toppscorer i norsk eliteserie for menn?",
+      "answer": "Sigurd Rushfeldt",
+      "options": [
+        "Sigurd Rushfeldt",
+        "Harald Brattbakk",
+        "Petter Belsvik",
+        "Frode Johnsen"
+      ],
+      "explanation": "172 mål. Han spilte til han var 40, og scoret i eliteserien i fire ulike tiår om man teller fra debuten i 1990."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «triathlon» i olympisk distanse?",
+      "answer": "1,5 km svømming, 40 km sykling og 10 km løping",
+      "options": [
+        "1,5 km svømming, 40 km sykling og 10 km løping",
+        "3 km svømming, 80 km sykling og 20 km løping",
+        "1 km svømming, 20 km sykling og 5 km løping",
+        "4 km svømming, 180 km sykling og 42 km løping"
+      ],
+      "explanation": "Ironman-distansen er nesten fire ganger så lang: 3,8 km, 180 km og en hel maraton til slutt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken klubb vant den første utgaven av Mesterligaen etter omleggingen i 1992?",
+      "answer": "Marseille",
+      "options": [
+        "Marseille",
+        "AC Milan",
+        "Barcelona",
+        "Ajax"
+      ],
+      "explanation": "Marseille slo AC Milan 1–0 i finalen. Klubben ble senere fratatt det franske ligagullet samme sesong på grunn av kampfiksing, men Europacupen fikk de beholde."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva heter den norske skøytedistansen som kalles «kongedistansen»?",
+      "answer": "10 000 meter",
+      "options": [
+        "10 000 meter",
+        "5000 meter",
+        "1500 meter",
+        "500 meter"
+      ],
+      "explanation": "Den tar rundt 12,5 minutter og går over 25 runder. Sammenlagt i allround-mesterskap er den ofte avgjørende, fordi feil pacing straffes ekstremt hardt."
+    },
+    {
+      "question": "Hvor mange ganger har SK Brann vunnet det norske seriemesterskapet for menn?",
+      "answer": "3",
+      "options": [
+        "3",
+        "1",
+        "5",
+        "7"
+      ],
+      "explanation": "1961–62, 1963 og 2007. Mellom de to første og det siste gikk det 44 år.",
+      "difficulty": "hard"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Grand Slam» i tennis?",
+      "answer": "Å vinne alle fire majorturneringer samme kalenderår",
+      "options": [
+        "Å vinne alle fire majorturneringer samme kalenderår",
+        "Å vinne tre turneringer på rad",
+        "Å vinne en turnering uten å tape et sett",
+        "Å vinne både single og double"
+      ],
+      "explanation": "Bare fem spillere har klart det i single. Steffi Graf gjorde det i 1988 og tok OL-gull samme år — den eneste «gyldne» Grand Slam i historien."
+    },
+    {
+      "question": "I hvilken norsk bakke settes verdensrekordene i skiflyging?",
+      "answer": "Vikersundbakken",
+      "options": [
+        "Vikersundbakken",
+        "Holmenkollbakken",
+        "Granåsen",
+        "Lysgårdsbakken"
+      ],
+      "explanation": "Bakken er bygget om flere ganger nettopp for å tåle lengre hopp. Ved slike lengder er landingsfarten rundt 100 km/t.",
+      "difficulty": "hard"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvor mange spillere er det på et lag i vannpolo?",
+      "answer": "7",
+      "options": [
+        "7",
+        "6",
+        "5",
+        "8"
+      ],
+      "explanation": "Seks utespillere pluss keeper. Bunnen kan ikke berøres — spillerne tråkker vann i fire perioder ved hjelp av en teknikk kalt eggbeater."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken norsk friidrettsutøver vant OL-gull på 1500 meter i 2021?",
+      "answer": "Jakob Ingebrigtsen",
+      "options": [
+        "Jakob Ingebrigtsen",
+        "Karsten Warholm",
+        "Henrik Ingebrigtsen",
+        "Filip Ingebrigtsen"
+      ],
+      "explanation": "Samme leker vant Karsten Warholm 400 meter hekk med verdensrekord på 45,94 — den første under 46 sekunder noensinne."
+    }
+  ]
+}

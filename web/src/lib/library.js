@@ -225,7 +225,12 @@ async function archiveDrills() {
         title: q.question,
         category: null,
         journal: q.category || null,
-        snapshot: { parts: [part('Fasit', q.answer)] },
+        snapshot: {
+          parts: [
+            part('Fasit', q.answer),
+            ...(q.explanation ? [part('Visste du at', q.explanation)] : []),
+          ],
+        },
       });
     }
   }
