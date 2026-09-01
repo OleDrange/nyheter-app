@@ -70,6 +70,21 @@ Rollback: `git revert <commit> && git push`, deretter rebuild + `up -d web`.
   subdomene krever DNS A-post → serverens IP før Caddy kan hente sertifikat. Caddy har `admin off` → reload med
   `docker compose restart caddy` (validér først:
   `docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile`).
+- **SSH-tilgang:** kun nøkkel. `/etc/ssh/sshd_config.d/10-hardening.conf` setter
+  `PasswordAuthentication no` + `AllowUsers root`; **root er eneste konto med skall**, så en
+  klient som gjetter brukernavn fra lokal PC (VS Code Remote-SSH gjør det) treffer en
+  ikke-eksisterende bruker og får passord-spørsmål som aldri kan lykkes — bruk `root@` i
+  `~/.ssh/config`. Endrer du konfigen: valider med `sshd -t` FØR `systemctl restart ssh`,
+  og bekreft at nøkkelinnlogging fortsatt virker fra en ANNEN forbindelse før du lukker
+  den du sitter i. `ssh.service` er `disabled` — det er riktig, `ssh.socket` er den som
+  er `enabled` og starter ved boot.
+- **fail2ban:** `sshd`-jail (`/etc/fail2ban/jail.local`), 5 forsøk / 10 min → 1t bansperre
+  med økende straff opptil 1 uke. `ignoreip` inneholder Oles hjemme-IP — den er dynamisk, så
+  linja kan bli feil over tid. Status: `fail2ban-client status sshd`; løslat med
+  `fail2ban-client set sshd unbanip <ip>`.
+- **Ingen ufw, bevisst.** Docker publiserer porter ved å skrive iptables-regler direkte og
+  går utenom ufws INPUT-kjede, så en ufw-regel ville gitt falsk trygghet for 80/443 samtidig
+  som den kunne stengt 22 ute. Kun 22/80/443 lytter eksternt, og alle tre skal være åpne.
 - **Inspisere data:** `docker compose exec web ls -la /data/briefings` /
   `… cat /data/briefings/<dato>.json`.
 - **Logger:** generator → `/root/nyheter-cron.log`; web → `docker compose logs -f web`.
