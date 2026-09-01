@@ -7,8 +7,9 @@
 // kosttilskuddsside vil vise deg.
 import Base from '../../../layouts/Base.astro';
 import SupplementVerdict from '../../../components/SupplementVerdict.astro';
+import SupplementStudy from '../../../components/SupplementStudy.astro';
 import {
-  getKb, topicsByKind, verdictCounts, doseGroups, skipList, allStudies, plain,
+  getKb, topicsByKind, verdictCounts, doseGroups, skipList, allStudies, latestBatch, plain,
 } from '../../../lib/supplements.js';
 
 const fbase = Astro.locals.fbase ?? '/forskning';
@@ -19,7 +20,23 @@ const verdicts = verdictCounts(kb).filter((v) => v.count > 0);
 const doses = doseGroups(kb);
 const doseCount = doses.reduce((n, g) => n + g.rows.length, 0);
 const skip = skipList(kb);
-const latest = allStudies(kb).slice(0, 5);
+// «Sist innrullet» hopper over dagens batch — den står allerede i sin helhet lenger
+// oppe, og en liste som gjentar den ser ut som en feil.
+const fresh0 = latestBatch(kb);
+const latest = allStudies(kb).filter((s) => s.added !== fresh0.date).slice(0, 5);
+// Dagens påfyll står øverst av én grunn: alt annet på siden er et oppslagsverk som er
+// like gyldig i morgen, mens dette er det eneste som forsvinner hvis leseren ikke ser
+// det i dag.
+const fresh = fresh0;
+const topicNames = Object.fromEntries(
+  Object.values(kb.topics || {}).map((t) => [t.slug, t.name]),
+);
+const freshTopics = [...new Set(fresh.studies.flatMap((s) => s.topics || []))];
+const fmtDate = (d) =>
+  d
+    ? new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long' })
+        .format(new Date(`${d}T12:00:00`))
+    : '';
 const topics = Object.values(kb.topics || {}).filter((t) => !t.retired);
 const written = topics.filter((t) => t.summary).length;
 const floors = topics.filter((t) => (t.evidence_floor || {}).checked).length;
@@ -62,6 +79,30 @@ const hasTopics = topics.length > 0;
           </a>
         )}
       </section>
+
+      {fresh.studies.length > 0 && (
+        <section class="tgroup tfresh" id="nytt">
+          <h2 class="tgroup__head tgroup__head--fresh">
+            {fresh.stale ? 'Siste påfyll' : 'Nytt i dag'}
+            <span class="tgroup__n">{fresh.studies.length}</span>
+          </h2>
+          <p class="sgroup__lead">
+            {fresh.stale
+              ? `Ingen nye studier er rullet inn i dag. Dette er det siste påfyllet, fra ${fmtDate(fresh.date)}.`
+              : `Rullet inn ${fmtDate(fresh.date)} — studiene generatoren hentet, scoret og skrev om i natt.`}
+            {freshTopics.length > 0 && (
+              <> Berører {freshTopics.map((slug, i) => (
+                <>{i > 0 && ', '}<a href={`${base}/stoff/${slug}`}>{topicNames[slug] || slug}</a></>
+              ))}.</>
+            )}
+          </p>
+          <div class="tstudies">
+            {fresh.studies.map((s) => (
+              <SupplementStudy study={s} showTopics={true} topicNames={topicNames} base={fbase} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {skip.length > 0 && (
         <section class="tgroup">
@@ -125,7 +166,7 @@ const hasTopics = topics.length > 0;
 
       {latest.length > 0 && (
         <section class="tgroup">
-          <h2 class="tgroup__head">Sist innrullet</h2>
+          <h2 class="tgroup__head">Tidligere innrullet</h2>
           <ul class="tlatest">
             {latest.map((s) => (
               <li>

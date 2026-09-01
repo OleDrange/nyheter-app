@@ -129,6 +129,30 @@ function decorate(study) {
   };
 }
 
+/** Studiene som ble rullet inn SIST — «dagens påfyll».
+ *
+ *  Generatoren kjører én gang i døgnet og ruller inn et fast antall studier, så den
+ *  nyeste `added`-datoen ER dagens batch. Vi returnerer hele datoen framfor et fast
+ *  antall: leseren skal se nøyaktig det som kom inn i dag, ikke «de fem siste» som kan
+ *  spenne over to kjøringer hvis en dag feilet.
+ *
+ *  `stale` sier at siste påfyll IKKE er fra i dag (kjøringen feilet, eller køen var tom).
+ *  Da skal siden si det rett ut heller enn å presentere gårsdagens studier som nye. */
+export function latestBatch(kb, today = new Date()) {
+  const all = Object.values(kb.studies || {});
+  if (!all.length) return { date: null, stale: true, studies: [] };
+  const date = all.reduce((m, s) => (String(s.added) > m ? String(s.added) : m), '');
+  const iso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Oslo' }).format(today);
+  return {
+    date,
+    stale: date !== iso,
+    studies: all
+      .filter((s) => String(s.added) === date)
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
+      .map(decorate),
+  };
+}
+
 /** Alle doseringene i basen, gruppert på dom.
  *
  *  Dette er tilskuddssidens motstykke til tekstilens kravspesifikasjon, men snudd:
