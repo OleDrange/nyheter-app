@@ -281,9 +281,16 @@ studie rulles inn i 1–3 **emner** som blir stående og vokser.
   forurensningen HAVNER (innsjø, sediment, fisk). Faglig gode, men de svarer på et annet
   spørsmål: vi skal velge et plagg, ikke kartlegge en innsjø.
 - **Kostnaden vokser med basen, ikke med tilsiget.** Syntesen er eneste post som skalerer med
-  størrelsen, og bremses av to ting: et emne står ikke for tur før det har fått nok nye
-  studier, og inputen kappes til de nyeste omtalene. Uten begge ville et emne med 40 studier
-  kostet 40 omtaler i input hver gang én ny kom inn.
+  størrelsen, og var **~halve API-regningen** fram til 11. september 2026 (57 synteser på 10
+  dager, mot 22 omtale-batcher): med terskel 2 nye studier og 5 innrullinger/dag sto den på
+  maks 3 + 3 hver dag, og hvert kall sendte de 14 nyeste omtalene (~9 000 tokens) for å
+  oppdatere ett avsnitt. Tre bremser nå, i begge basene: terskel **4** nye studier og maks
+  **2** synteser per kjøring; inputen er **de nye omtalene + 3 eldre som anker** (tak 8) —
+  forrige oppslag sendes med og bærer resten av evidensen, og prompten sier eksplisitt at
+  konklusjoner fra eldre studier skal bæres videre derfra; og `effort: low` (syntesen er
+  omskriving av gitt input, tenking koster som output). Målt på «Bomull» (36 studier):
+  ~3 600 tokens input mot ~9 000. Hever du `SYNTH_CONTEXT_STUDIES`, er det driften over mange
+  omskrivinger (sammendrag av sammendrag) du kjøper deg ut av — ikke bedre enkeltoppslag.
 - **Kan syntesesvaret ikke tolkes, står emnet uendret** — et halvt oppdatert oppslag er verre
   enn et gammelt. KB-en lagres etter hvert emne, så en feil på emne 3 ikke koster de to første.
 - Studien lagres **én gang** i `kb["studies"]`; emnene refererer til den med id.

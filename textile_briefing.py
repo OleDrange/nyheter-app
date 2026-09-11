@@ -91,12 +91,12 @@ WRITEUP_MAX_PASSES = 2     # hoppet stille over så mange ganger → rejected
 # Hvor mye kunnskapsbasen vokser per kjøring. Dette er den eneste knappen som styrer
 # tempoet: alt annet (henting, scoring) er gratis og skjer uansett.
 MAX_ROLLIN_PER_RUN = 5     # studier som rulles inn i KB-en per kjøring
-MAX_SYNTH_PER_RUN = 3      # emner som re-syntetiseres per kjøring
+MAX_SYNTH_PER_RUN = 2      # emner som re-syntetiseres per kjøring
 
 # Et emne re-syntetiseres først når det har fått nok ny evidens til at teksten faktisk kan
 # bli en annen. Uten terskelen ville hver eneste studie utløst et Claude-kall på et emne
 # som allerede har 20 studier under seg, og teksten hadde knapt endret seg.
-SYNTH_PENDING_MIN = 2      # antall nye studier før et emne står for tur
+SYNTH_PENDING_MIN = 4      # antall nye studier før et emne står for tur
 SYNTH_FIRST_MIN = 1        # …men et emne uten sammendrag i det hele tatt trenger bare én
 
 MAX_ABSTRACT_CHARS = 3500  # maks tegn fra hvert abstract i prompten (aldri før scoring)
@@ -1179,7 +1179,9 @@ def roll_into_kb(kb: dict, queue: list[dict], limit: int) -> list[dict]:
 # 40 omtaler i input hver gang det oppdateres.
 # ─────────────────────────────────────────────────────────────────────────────
 
-SYNTH_MAX_STUDIES = 14
+SYNTH_MAX_STUDIES = 8      # tak på omtaler i én syntese: de nye + SYNTH_CONTEXT_STUDIES eldre
+SYNTH_CONTEXT_STUDIES = 3  # eldre omtaler som følger med som anker (forrige oppslag bærer resten)
+SYNTH_EFFORT = "low"       # syntesen er omskriving av gitt input — tenking gir lite, koster som output
 
 
 def topics_due_for_synthesis(kb: dict) -> list[dict]:
@@ -1198,7 +1200,11 @@ def topics_due_for_synthesis(kb: dict) -> list[dict]:
 
 
 def _synth_user_content(kb: dict, topic: dict) -> str:
-    ids = topic["studies"][:SYNTH_MAX_STUDIES]
+    # Inputen er de NYE omtalene (forrest i lista) + noen få eldre som anker. Resten av
+    # den eldre evidensen bæres av forrige oppslag, som sendes med under. Før dette
+    # gikk de 14 nyeste inn hver gang — ~9 000 tokens for å oppdatere ett avsnitt.
+    pending = max(topic.get("pending", 0), 1)
+    ids = topic["studies"][:min(SYNTH_MAX_STUDIES, pending + SYNTH_CONTEXT_STUDIES)]
     blocks = []
     for sid in ids:
         s = kb["studies"].get(sid)
@@ -1210,10 +1216,11 @@ def _synth_user_content(kb: dict, topic: dict) -> str:
         f"{KIND_LABELS.get(topic['kind'], topic['kind'])})",
         f"BESKRIVELSE: {topic['blurb']}",
         f"ANTALL STUDIER UNDER EMNET: {len(topic['studies'])}"
-        + (f" (de {len(ids)} nyeste vises under)" if len(topic["studies"]) > len(ids) else ""),
+        + (f" (de {len(ids)} nyeste vises under; den øvrige evidensen er allerede\n"
+           f"  veid inn i forrige oppslag og skal ikke gå tapt)" if len(topic["studies"]) > len(ids) else ""),
     ]
     if prev:
-        parts.append(f"\nFORRIGE SAMMENDRAG (skal erstattes, ikke bygges videre på ordrett):\n{prev}")
+        parts.append(f"\nFORRIGE SAMMENDRAG (skal erstattes, ikke bygges videre på ordrett — men konklusjoner fra eldre studier som ikke vises under, skal bæres videre herfra):\n{prev}")
     parts.append("\nEVIDENS:\n\n" + "\n\n---\n\n".join(blocks))
     return "\n".join(parts)
 
@@ -1286,6 +1293,7 @@ def synthesize_topic(client, kb: dict, topic: dict) -> bool:
     try:
         resp = client.messages.create(
             model=MODEL, max_tokens=SYNTH_MAX_TOKENS,
+            output_config={"effort": SYNTH_EFFORT},
             system=SYNTH_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": _synth_user_content(kb, topic)}],
         )

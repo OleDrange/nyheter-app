@@ -110,11 +110,13 @@ WRITEUP_BATCH_SIZE = 8     # omtaler per Claude-kall (MAX_TOKENS må følge med)
 WRITEUP_MAX_PASSES = 2     # hoppet stille over så mange ganger → rejected
 
 MAX_ROLLIN_PER_RUN = 5     # studier som rulles inn i KB-en per kjøring
-MAX_SYNTH_PER_RUN = 3      # stoffer som re-syntetiseres per kjøring
+MAX_SYNTH_PER_RUN = 2      # stoffer som re-syntetiseres per kjøring
 
-SYNTH_PENDING_MIN = 2      # antall nye studier før et stoff står for tur
+SYNTH_PENDING_MIN = 4      # antall nye studier før et stoff står for tur
 SYNTH_FIRST_MIN = 1        # …men et stoff uten oppslag i det hele tatt trenger bare én
-SYNTH_MAX_STUDIES = 14     # nyeste omtaler som sendes inn ved syntese
+SYNTH_MAX_STUDIES = 8      # tak på omtaler i én syntese: de nye + SYNTH_CONTEXT_STUDIES eldre
+SYNTH_CONTEXT_STUDIES = 3  # eldre omtaler som følger med som anker (forrige oppslag bærer resten)
+SYNTH_EFFORT = "low"       # syntesen er omskriving av gitt input — tenking gir lite, koster som output
 
 MAX_ABSTRACT_CHARS = 4000  # maks tegn fra hvert abstract i PROMPTEN (aldri før scoring)
 
@@ -1165,7 +1167,11 @@ def topics_due_for_synthesis(kb: dict) -> list[dict]:
 
 
 def _synth_user_content(kb: dict, topic: dict) -> str:
-    ids = topic["studies"][:SYNTH_MAX_STUDIES]
+    # Inputen er de NYE omtalene (forrest i lista) + noen få eldre som anker. Resten av
+    # den eldre evidensen bæres av forrige oppslag, som sendes med under. Før dette
+    # gikk de 14 nyeste inn hver gang — ~9 000 tokens for å oppdatere ett avsnitt.
+    pending = max(topic.get("pending", 0), 1)
+    ids = topic["studies"][:min(SYNTH_MAX_STUDIES, pending + SYNTH_CONTEXT_STUDIES)]
     blocks = []
     for sid in ids:
         s = kb["studies"].get(sid)
@@ -1178,11 +1184,12 @@ def _synth_user_content(kb: dict, topic: dict) -> str:
         f"BESKRIVELSE: {topic['blurb']}",
         f"DETTE MARKEDSFØRES STOFFET SOM: {topic.get('claim', '—')}",
         f"ANTALL STUDIER UNDER STOFFET: {len(topic['studies'])}"
-        + (f" (de {len(ids)} nyeste vises under)" if len(topic["studies"]) > len(ids) else ""),
+        + (f" (de {len(ids)} nyeste vises under; den øvrige evidensen er allerede\n"
+           f"  veid inn i forrige oppslag og skal ikke gå tapt)" if len(topic["studies"]) > len(ids) else ""),
     ]
     if prev:
         parts.append(
-            f"\nFORRIGE OPPSLAG (skal erstattes, ikke bygges videre på ordrett):\n{prev}")
+            f"\nFORRIGE OPPSLAG (skal erstattes, ikke bygges videre på ordrett — men konklusjoner fra eldre studier som ikke vises under, skal bæres videre herfra):\n{prev}")
     parts.append("\nEVIDENS:\n\n" + "\n\n---\n\n".join(blocks))
     return "\n".join(parts)
 
@@ -1259,6 +1266,7 @@ def synthesize_topic(client, kb: dict, topic: dict) -> bool:
     try:
         resp = client.messages.create(
             model=MODEL, max_tokens=SYNTH_MAX_TOKENS,
+            output_config={"effort": SYNTH_EFFORT},
             system=SYNTH_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": _synth_user_content(kb, topic)}],
         )
