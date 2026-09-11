@@ -111,8 +111,11 @@ ikke trenger).
 
 ## Generator — felles designvalg
 
-- **Modell: `claude-opus-5`** i alle fire generatorene (byttet fra `claude-sonnet-4-6`
-  1. september 2026). **Opus 5 tenker som standard**, og to ting følger av det:
+- **Modell: `claude-sonnet-5`** i alle fire generatorene (byttet 11. september 2026 av
+  kostnadshensyn; `claude-opus-5` 1.–11. september, `claude-sonnet-4-6` før det). Estimert
+  forbruk på Opus 5 var ~$1,65/dag, der syntesene i de to kunnskapsbasene alene sto for
+  ~halvparten — tenketokens faktureres som output. **Sonnet 5 tenker som standard** (som
+  Opus 5), og to ting følger av det:
   - **`max_tokens` er et felles tak for tenking OG svar.** Et for lavt tak gir **ingen
     feilmelding** — svaret kappes midt i, og JSON-parsingen faller til myk feil. Alle takene
     ble hevet i samme slengen da modellen ble byttet; hever du batch-størrelser, må taket følge.
@@ -120,10 +123,14 @@ ikke trenger).
     Slå sammen tekstblokkene (`_text_of()`).
   - **Unntak: refusal-probene** (`CLAUDE_PROBE_MAX_TOKENS = 16`) kjører med
     `thinking={"type": "disabled"}` — de spør kun ja/nei om sikkerhetsklassifikatoren slår til,
-    og tenking ville spist hele budsjettet. Lovlig fordi `effort` er `high` (Opus 5 avviser
-    avslått tenking først på `xhigh`/`max`).
-  - **Pris:** $5/$25 per million mot Sonnet 4.6 sine $3/$15, og tenketokens faktureres som
-    output. Regn ~2× på kjøringen.
+    og tenking ville spist hele budsjettet. (Opus 5 godtar avslått tenking kun ved `effort`
+    `high` eller lavere — relevant om modellen byttes tilbake.)
+  - **Pris:** $2/$10 per million (Opus 5: $5/$25), og tenketokens faktureres som output.
+- **Kostnadspause: `PAUSE_KNOWLEDGE=1` i `.env`** (satt 11. september 2026). Entrypointet
+  kjører da kun nyhetsbriefingen med Claude; `research_briefing.py --no-claude` publiserer
+  fra ferdigskrevne i køen til den er tom (deretter utelates forskningsfeltet — myk feil),
+  og tilskudd/tekstil hoppes over helt. Slå på igjen ved å fjerne linjen — leses ved hver
+  `docker compose run`, ingen rebuild. Køene og `seen` står urørt i pausen.
 - **Myke feil:** én RSS-feed, vær- eller markedsfeil stopper ikke resten av kjøringen. Hver
   seksjon som feiler, utelates fra dagsfila framfor å velte kjøringen.
 - **Streaming** til terminal, ikke bufret.

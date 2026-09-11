@@ -73,8 +73,8 @@ from supplement_topics import (
 # CONFIG
 # ─────────────────────────────────────────────────────────────────────────────
 
-MODEL = "claude-opus-5"                # samme modell som de tre andre generatorene
-MAX_TOKENS = 32000                   # 8 omtaler + Opus 5 sin tenking
+MODEL = "claude-sonnet-5"                # samme modell som de tre andre generatorene
+MAX_TOKENS = 32000                   # 8 omtaler + Sonnet 5 sin tenking
 SYNTH_MAX_TOKENS = 12000             # ett stoffoppslag + tenking
 
 # Tilskuddsforskning har ingen nyhetssyklus, men den har en resepsjonssyklus: en

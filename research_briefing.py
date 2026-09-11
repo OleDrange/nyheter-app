@@ -49,8 +49,8 @@ from news_briefing import (
 # CONFIG — juster her
 # ─────────────────────────────────────────────────────────────────────────────
 
-MODEL = "claude-opus-5"
-MAX_TOKENS = 32000  # 10 studieomtaler (~700 tokens hver) + Opus 5 sin tenking
+MODEL = "claude-sonnet-5"
+MAX_TOKENS = 32000  # 10 studieomtaler (~700 tokens hver) + Sonnet 5 sin tenking
 
 # Vindu på publiseringsdato. Forskning har ingen nyhetssyklus — en metaanalyse fra april er
 # like relevant som en fra i går — så vi jakter ikke på det ferskeste, men på det BESTE vi
@@ -1149,11 +1149,17 @@ def main() -> None:
         help="Fyll og prun køen uten å kalle Claude (koster ingenting). "
              "Publiserer fra det som allerede ligger ferdigskrevet i køen.",
     )
+    parser.add_argument(
+        "--no-claude",
+        action="store_true",
+        help="Publiser fra det som ligger ferdigskrevet i køen, men kall aldri Claude. "
+             "Brukes av entrypointet når PAUSE_KNOWLEDGE er satt (kostnadspause).",
+    )
     args = parser.parse_args()
 
     _load_dotenv()
 
-    if not os.environ.get("ANTHROPIC_API_KEY") and not args.dry_run:
+    if not os.environ.get("ANTHROPIC_API_KEY") and not (args.dry_run or args.no_claude):
         print("Feil: ANTHROPIC_API_KEY er ikke satt.")
         sys.exit(1)
 
@@ -1191,6 +1197,10 @@ def main() -> None:
     refused_dois: list[str] = []
     if args.dry_run:
         print("\n  ⓘ  --dry-run: hopper over Claude-kallet.")
+    elif args.no_claude:
+        print(f"\n  ⓘ  --no-claude: hopper over Claude-kallet (kostnadspause). "
+              f"{counts['ready']} ferdigskrevne igjen "
+              f"= {counts['ready'] // MAX_ITEMS} dager med forskningsbriefing.")
     elif counts["ready"] >= WRITEUP_REFILL_BELOW:
         print(f"\n  ⓘ  {counts['ready']} ferdigskrevne studier i kø "
               f"(≥ {WRITEUP_REFILL_BELOW}) — hopper over Claude-kallet. Gratis dag.")

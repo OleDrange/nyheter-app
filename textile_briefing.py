@@ -61,8 +61,8 @@ from textile_topics import (
 # CONFIG — juster her
 # ─────────────────────────────────────────────────────────────────────────────
 
-MODEL = "claude-opus-5"                # samme modell som de tre andre generatorene
-MAX_TOKENS = 32000                   # 8 omtaler + Opus 5 sin tenking
+MODEL = "claude-sonnet-5"                # samme modell som de tre andre generatorene
+MAX_TOKENS = 32000                   # 8 omtaler + Sonnet 5 sin tenking
 SYNTH_MAX_TOKENS = 12000             # ett emnesammendrag + tenking
 
 # Vindu på publiseringsdato. Tekstilkjemi har ingen nyhetssyklus i det hele tatt — en

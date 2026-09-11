@@ -133,8 +133,8 @@ RSS_FEEDS: dict[str, str] = {
     "STAT News": "https://www.statnews.com/feed/",
 }
 
-MODEL = "claude-opus-5"
-MAX_TOKENS = 16000   # tenking + svar deler taket på Opus 5 — rikelig margin
+MODEL = "claude-sonnet-5"
+MAX_TOKENS = 16000   # tenking + svar deler taket på Sonnet 5 — rikelig margin
 LOOKBACK_HOURS = 24
 MAX_PER_FEED = 25  # maks antall artikler per kilde
 MAX_DESC_CHARS = 300  # maks tegn fra ingress/beskrivelse per artikkel
@@ -144,7 +144,7 @@ NEWS_HISTORY_DAYS = 2  # dedup: ikke gjenta saker fra briefingene de siste N dag
 def _text_of(resp) -> str:
     """Slå sammen tekst-blokkene i et Claude-svar.
 
-    Opus 5 tenker som standard, så `content[0]` kan være en thinking-blokk —
+    Sonnet 5 tenker som standard, så `content[0]` kan være en thinking-blokk —
     å lese `.text` der ville kastet. Speiler hjelperen i de tre andre
     generatorene."""
     return "".join(
@@ -1159,7 +1159,7 @@ _LEARNING_SEEN_RETENTION_DAYS = 180
 _LEARNING_LOOKBACK_DAYS = 14
 _LEARNING_MAX_PER_FEED = 4
 _LEARNING_DESC_CHARS = 500
-_LEARNING_MAX_TOKENS = 8000     # tenking + svar deler taket (Opus 5)
+_LEARNING_MAX_TOKENS = 8000     # tenking + svar deler taket (Sonnet 5)
 
 _LEARNING_SYSTEM_PROMPT = """Du kuraterer daglig læring på norsk for en leser i Bergen \
 med to hovedinteresser, i prioritert rekkefølge:
@@ -1376,7 +1376,7 @@ def fetch_daily_learning() -> dict | None:
 # nyheter og inspirasjon; elaborering/refleksjon er godt dokumentert for læring)
 # ─────────────────────────────────────────────────────────────────────────────
 
-_REFLECTION_MAX_TOKENS = 4000   # tenking + svar deler taket (Opus 5)
+_REFLECTION_MAX_TOKENS = 4000   # tenking + svar deler taket (Sonnet 5)
 
 _REFLECTION_SYSTEM_PROMPT = """Du lager daglige refleksjonsspørsmål på norsk for en \
 investor i Bergen som vil lære og vokse som person. Målet er elaborering: at leseren \
