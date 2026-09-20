@@ -1,6 +1,6 @@
 ---
 name: forskning-uke
-description: Fyller forskningskøen for forskning.modr.no for én uke — henter og scorer studier fra Europe PMC, lar leseren stryke kandidater, skriver 42 omtaler (6 kategorier × 7 dager) i Claude Code uten API-kall, og importerer dem i køen som cron publiserer fra. Bruk ved /forskning-uke, «ukens forskning», «fyll forskningskøen», eller når forskningssiden står tom.
+description: Fyller forskningskøen for forskning.modr.no for én uke — henter og scorer studier fra Europe PMC, skriver 42 omtaler (6 kategorier × 7 dager) i Claude Code uten API-kall, og importerer dem i køen som cron publiserer fra. Bruk ved /forskning-uke, «ukens forskning», «fyll forskningskøen», eller når forskningssiden står tom.
 ---
 
 # Ukentlig forskningsrunde
@@ -14,7 +14,7 @@ Alle kommandoer kjøres fra `/root/nyheter-app`.
 ```
 Fremdrift:
 - [ ] 1 Hent og scor      --refill
-- [ ] 2 Vis kandidater    --propose 9 → list_kandidater.py → leseren stryker
+- [ ] 2 Hent kandidater   --propose 9 → list_kandidater.py
 - [ ] 3 Skriv omtaler     7 per kategori → omtaler.md
 - [ ] 4 Importér          --import-writeups → null advarsler, ≥ 42 ferdigskrevne
 - [ ] 5 Oppsummer         kun titler
@@ -30,15 +30,15 @@ Pruner, scorer køen på nytt etter gjeldende regler og henter nytt fra Europe P
 Sluttlinja viser «venter på tekst» per kategori. Er en kategori under 9, si det til leseren:
 det er tilsigssignalet, og fiksen er spørringen — ikke terskelen (se CLAUDE.md).
 
-## 2. Vis kandidater
+## 2. Hent kandidater
 
 ```bash
 docker compose run --rm -T generator python research_briefing.py --propose 9 > kandidater.json
-python .claude/skills/forskning-uke/scripts/list_kandidater.py kandidater.json
+python3 .claude/skills/forskning-uke/scripts/list_kandidater.py kandidater.json
 ```
 
-9 per kategori: 7 skal skrives, 2 er slingringsmonn for det leseren stryker. Vis listen
-slik scriptet skriver den, og be leseren svare med numrene som skal strykes.
+9 per kategori: 7 skal skrives, 2 er reserve for det SKIP-reglene vraker. Ingen godkjenning
+fra leseren — utvalget er reglenes ansvar.
 
 ## 3. Skriv omtaler
 
@@ -48,22 +48,20 @@ Les leserprofil, SKIP-regler, FORMAT og REGLER fra kilden — de endres der, ikk
 sed -n '/^SYSTEM_PROMPT = """/,/^_STUDY_SEPARATOR/p' research_briefing.py
 ```
 
-Per kategori: de 7 høyest scorede som ikke er strøket. Godkjente utover 7 blir liggende
-som `scored` til neste uke — verken skriv eller stryk dem.
+Per kategori: de 7 høyest scorede som ikke vrakes. Resten blir liggende som `scored` til
+neste uke — verken skriv eller vrak dem.
 
 Skriv til `omtaler.md` i scratchpad, **6–7 omtaler per skriving** (en enkelt utskrift på 42
 kappes). Én omtale = FORMAT-blokken: `## [tittel](URL)` med URL-en fra `kandidater.json`
 uendret, så de fem `**…:**`-avsnittene. Skill blokkene med `\n\n---\n\n`. Grunnlaget er
 abstractet i JSON-en; tall som ikke står der, finnes ikke.
 
-Strøkne og ubrukelige studier får én linje i samme fil, så de aldri kommer tilbake:
+En studie som er ubrukelig etter SKIP-reglene får én linje i samme fil, så den aldri kommer
+tilbake, og den neste i kategorien skrives i stedet:
 
 ```
-## SKIP <url> — strøket av leser
 ## SKIP <url> — <grunn fra SKIP-reglene>
 ```
-
-Vraker du en selv, skriv den neste godkjente i kategorien i stedet, så den fortsatt får 7.
 
 ## 4. Importér
 

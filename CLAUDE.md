@@ -131,9 +131,10 @@ ikke trenger).
 - **Forskning bruker aldri API-et fra cron** (fra 20. september 2026): entrypointet kjører
   alltid `research_briefing.py --no-claude`, som publiserer 6/dag fra ferdigskrevne i køen
   og utelater feltet (myk feil) når den er tom. Skriving skjer i **`/forskning-uke`** (se
-  `.claude/skills/forskning-uke/SKILL.md`): `--refill` → `--propose 9` → leseren stryker →
-  Claude Code skriver 42 omtaler → `--import-writeups`. Køen + `seen` er hukommelsen, så
-  ingen studie vurderes to ganger; strøkne studier blir `rejected`-gravsteiner.
+  `.claude/skills/forskning-uke/SKILL.md`): `--refill` → `--propose 9` → Claude Code skriver 42
+  omtaler → `--import-writeups`. Ingen godkjenning fra leseren (prøvd og valgt bort 20.
+  september 2026). Køen + `seen` er hukommelsen, så ingen studie vurderes to ganger; vrakede
+  studier blir `rejected`-gravsteiner.
 - **Kostnadspause: `PAUSE_KNOWLEDGE=1` i `.env`** (satt 11. september 2026): tilskudd/tekstil
   hoppes over helt. Slå på igjen ved å fjerne linjen — leses ved hver `docker compose run`,
   ingen rebuild. Køene og `seen` står urørt i pausen.
