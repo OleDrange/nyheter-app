@@ -1,76 +1,87 @@
 ---
 name: forskning-uke
-description: Ukentlig forskningsrunde for forskning.modr.no — hent og scor nye studier, la leseren godkjenne listen, skriv 42 omtaler (6 kategorier × 7 dager) her i Claude Code uten API-kostnad, og legg dem i køen som cron publiserer fra. Bruk når brukeren sier /forskning-uke, «ukens forskning», «fyll forskningskøen» eller lignende.
+description: Fyller forskningskøen for forskning.modr.no for én uke — henter og scorer studier fra Europe PMC, lar leseren stryke kandidater, skriver 42 omtaler (6 kategorier × 7 dager) i Claude Code uten API-kall, og importerer dem i køen som cron publiserer fra. Bruk ved /forskning-uke, «ukens forskning», «fyll forskningskøen», eller når forskningssiden står tom.
 ---
 
 # Ukentlig forskningsrunde
 
-Målet er at køen i `research_queue.json` (Docker-volumet) har **≥ 42 ferdigskrevne omtaler**
-når du er ferdig — cron publiserer 6 per dag (én per kategori) i en uke. Alt Claude-arbeid
-skjer **her i sesjonen**; generatoren kaller aldri API-et for forskning.
+Målet er at `research_queue.json` på volumet har **≥ 42 ferdigskrevne omtaler** når du er
+ferdig; cron publiserer 6 per dag. Generatoren kaller aldri Claude-API-et for forskning —
+skrivingen skjer her.
 
-Kjør alle generator-kommandoer via `docker compose run --rm -T generator python
-research_briefing.py …` fra `/root/nyheter-app`. Bruk scratchpad-mappa til alle mellomfiler.
+Alle kommandoer kjøres fra `/root/nyheter-app`.
 
-## 1. Hent og scor (gratis)
+```
+Fremdrift:
+- [ ] 1 Hent og scor      --refill
+- [ ] 2 Vis kandidater    --propose 9 → list_kandidater.py → leseren stryker
+- [ ] 3 Skriv omtaler     7 per kategori → omtaler.md
+- [ ] 4 Importér          --import-writeups → null advarsler, ≥ 42 ferdigskrevne
+- [ ] 5 Oppsummer         kun titler
+```
+
+## 1. Hent og scor
 
 ```bash
 docker compose run --rm -T generator python research_briefing.py --refill
 ```
 
-Pruner, scorer køen på nytt med gjeldende regler og henter fra Europe PMC. Merk sluttlinja
-«venter på tekst: trening N, kosthold N, …». Er en kategori under 9, si det til brukeren —
-det er tilsigssignalet (se CLAUDE.md), og fiksen er spørringen, ikke terskelen.
+Pruner, scorer køen på nytt etter gjeldende regler og henter nytt fra Europe PMC (gratis).
+Sluttlinja viser «venter på tekst» per kategori. Er en kategori under 9, si det til leseren:
+det er tilsigssignalet, og fiksen er spørringen — ikke terskelen (se CLAUDE.md).
 
-## 2. Foreslå kandidater
+## 2. Vis kandidater
 
 ```bash
-docker compose run --rm -T generator python research_briefing.py --propose 9 > <scratchpad>/kandidater.json
+docker compose run --rm -T generator python research_briefing.py --propose 9 > kandidater.json
+python .claude/skills/forskning-uke/scripts/list_kandidater.py kandidater.json
 ```
 
-9 per kategori (54) — 7 skal skrives, resten er slingringsmonn for det brukeren stryker.
-Vis brukeren en **kompakt liste** gruppert per kategori: løpenummer, score, design,
-tittel (kort) — én linje per studie, ingen abstracts. Spør hvilke som skal strykes (svar
-med nummer). Ikke gå videre før brukeren har svart.
+9 per kategori: 7 skal skrives, 2 er slingringsmonn for det leseren stryker. Vis listen
+slik scriptet skriver den, og be leseren svare med numrene som skal strykes.
 
-## 3. Skriv omtalene
+## 3. Skriv omtaler
 
-Les leserprofil, vrakingsregler, FORMAT og REGLER **fra kilden**, ikke fra hukommelsen:
+Les leserprofil, SKIP-regler, FORMAT og REGLER fra kilden — de endres der, ikke her:
 
 ```bash
 sed -n '/^SYSTEM_PROMPT = """/,/^_STUDY_SEPARATOR/p' research_briefing.py
 ```
 
-Per kategori: skriv de 7 høyest scorede blant de godkjente. Godkjente utover 7 blir
-liggende som `scored` til neste uke — ikke skriv dem, ikke vrak dem.
+Per kategori: de 7 høyest scorede som ikke er strøket. Godkjente utover 7 blir liggende
+som `scored` til neste uke — verken skriv eller stryk dem.
 
-Skriv til én markdown-fil i scratchpad, **i batcher på 6–7 omtaler per Write/append** (42
-omtaler i én utskrift kappes). Hver omtale er nøyaktig FORMAT-blokken: `## [tittel](URL)`
-med URL-en fra `kandidater.json` **uendret**, deretter de fem `**…:**`-avsnittene. Skill
-blokkene med `\n\n---\n\n`. Grunnlaget er abstractet i JSON-en — dikt aldri tall som ikke står der.
+Skriv til `omtaler.md` i scratchpad, **6–7 omtaler per skriving** (en enkelt utskrift på 42
+kappes). Én omtale = FORMAT-blokken: `## [tittel](URL)` med URL-en fra `kandidater.json`
+uendret, så de fem `**…:**`-avsnittene. Skill blokkene med `\n\n---\n\n`. Grunnlaget er
+abstractet i JSON-en; tall som ikke står der, finnes ikke.
 
-- Strøket av brukeren → én linje: `## SKIP <url> — strøket av leser`
-- Ubrukelig etter vrakingsreglene → `## SKIP <url> — <kort grunn>`, og skriv neste
-  godkjente i samme kategori i stedet, så kategorien fortsatt får 7.
+Strøkne og ubrukelige studier får én linje i samme fil, så de aldri kommer tilbake:
+
+```
+## SKIP <url> — strøket av leser
+## SKIP <url> — <grunn fra SKIP-reglene>
+```
+
+Vraker du en selv, skriv den neste godkjente i kategorien i stedet, så den fortsatt får 7.
 
 ## 4. Importér
 
 ```bash
-docker compose run --rm -T generator python research_briefing.py --import-writeups - < <scratchpad>/omtaler.md
+docker compose run --rm -T generator python research_briefing.py --import-writeups - < omtaler.md
 ```
 
-Importen lagrer bare blokker med kjent URL og alle fem avsnitt, og skriver ut advarsler
-for resten. Er det advarsler: rett filen og kjør importen igjen (allerede lagrede hoppes
-over). Sjekk at sluttlinja sier ≥ 42 ferdigskrevne / ≥ 7 dager.
+Bare blokker med kjent URL og alle fem avsnitt lagres; resten gis som `⚠`-linjer. Rett
+filen og kjør igjen til det er null advarsler (lagrede hoppes over). Sluttlinja skal si
+≥ 42 ferdigskrevne.
 
 ## 5. Oppsummer
 
-Til brukeren: **kun** en kort liste med titlene som ble skrevet, gruppert per kategori, og
-antall dager køen dekker. Ingen omtaletekst, ingen prosessbeskrivelse.
+Kun titlene som ble skrevet, gruppert per kategori, og hvor mange dager køen dekker.
 
 ## Fallgruver
 
-- `docker compose run` uten `-T` feiler når stdin er en fil.
-- Aldri `docker compose run generator` uten kommando — det kjører hele briefingen.
-- Ikke rediger `research_queue.json` direkte; all skriving går via `--import-writeups`.
-- Går en kategori tom, skriv de andre likevel — pop_for_today fyller dagen mykt.
+- `docker compose run` uten `-T` feiler med fil på stdin.
+- `docker compose run generator` uten kommando kjører hele dagsbriefingen (koster kvote).
+- Rediger aldri `research_queue.json` direkte — all skriving går via `--import-writeups`.
+- Går en kategori tom, skriv de andre likevel; publiseringen fyller dagen mykt.
