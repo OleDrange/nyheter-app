@@ -13,8 +13,10 @@ Daglig briefing-app på VPS-en `MODR` (`/root/nyheter-app`, remote
 via JSON på et delt Docker-volum:
 
 - **Generator** (Python, cron 05:00) — fire script: `news_briefing.py` (nyheter, vær, marked,
-  quiz, gåter, inspirasjon, refleksjon, Brann), `research_briefing.py` (longevity-studier),
-  `supplement_briefing.py` og `textile_briefing.py` (to kunnskapsbaser, **ikke** dagsbaserte).
+  quiz, gåter, inspirasjon, refleksjon, Brann), `research_briefing.py` (forskning — henter,
+  scorer og publiserer fra kø; **omtalene skrives ukentlig i Claude Code via skillen
+  `/forskning-uke`**, ingen API-kostnad), `supplement_briefing.py` og `textile_briefing.py`
+  (to kunnskapsbaser, **ikke** dagsbaserte).
 - **Nettside** (`web/`, Astro 5 SSR på Node) — leser JSON ved hver forespørsel. Nytt *innhold*
   vises uten rebuild; *kodeendringer* krever rebuild.
 
@@ -126,11 +128,15 @@ ikke trenger).
     og tenking ville spist hele budsjettet. (Opus 5 godtar avslått tenking kun ved `effort`
     `high` eller lavere — relevant om modellen byttes tilbake.)
   - **Pris:** $2/$10 per million (Opus 5: $5/$25), og tenketokens faktureres som output.
-- **Kostnadspause: `PAUSE_KNOWLEDGE=1` i `.env`** (satt 11. september 2026). Entrypointet
-  kjører da kun nyhetsbriefingen med Claude; `research_briefing.py --no-claude` publiserer
-  fra ferdigskrevne i køen til den er tom (deretter utelates forskningsfeltet — myk feil),
-  og tilskudd/tekstil hoppes over helt. Slå på igjen ved å fjerne linjen — leses ved hver
-  `docker compose run`, ingen rebuild. Køene og `seen` står urørt i pausen.
+- **Forskning bruker aldri API-et fra cron** (fra 20. september 2026): entrypointet kjører
+  alltid `research_briefing.py --no-claude`, som publiserer 6/dag fra ferdigskrevne i køen
+  og utelater feltet (myk feil) når den er tom. Skriving skjer i **`/forskning-uke`** (se
+  `.claude/skills/forskning-uke/SKILL.md`): `--refill` → `--propose 9` → leseren stryker →
+  Claude Code skriver 42 omtaler → `--import-writeups`. Køen + `seen` er hukommelsen, så
+  ingen studie vurderes to ganger; strøkne studier blir `rejected`-gravsteiner.
+- **Kostnadspause: `PAUSE_KNOWLEDGE=1` i `.env`** (satt 11. september 2026): tilskudd/tekstil
+  hoppes over helt. Slå på igjen ved å fjerne linjen — leses ved hver `docker compose run`,
+  ingen rebuild. Køene og `seen` står urørt i pausen.
 - **Myke feil:** én RSS-feed, vær- eller markedsfeil stopper ikke resten av kjøringen. Hver
   seksjon som feiler, utelates fra dagsfila framfor å velte kjøringen.
 - **Streaming** til terminal, ikke bufret.
@@ -178,8 +184,8 @@ maskineri. Forskjellene mellom dem står i hver sin seksjon under; dette gjelder
 varig kø sortert synkende på score. En kjøring hopper over de tunge stegene når de ikke trengs:
 
 1. **Last** kø + `seen`. 2. **Prun** (for gamle, allerede brukte). 3. **Påfyll** — kun når køen
-er under terskel. 4. **Claude skriver omtaler** — kun når det er for få ferdigskrevne; batch
-per kall. 5. **Bruk** — publisering (research) eller innrulling + syntese (tekstil/tilskudd).
+er under terskel. 4. **Omtaler skrives** — kunnskapsbasene via API i batch når det er for få ferdigskrevne;
+forskningen i Claude Code via `/forskning-uke`. 5. **Bruk** — publisering (research) eller innrulling + syntese (tekstil/tilskudd).
 
 `--dry-run` kjører alt unntatt Claude-stegene. **Gratis, og eneste trygge måte å teste
 spørringene på.** `--seed` er engangsknappen som gjør en base brukbar fra dag én; den koster
@@ -220,12 +226,21 @@ settes da `rejected` og blir liggende som gravstein så den ikke settes inn igje
   uttørking, men årsaken var et ødelagt filter (se under). Mål `hitCount` per kategori før du
   justerer knapper.
 
-## `research_briefing.py` — longevity
+## `research_briefing.py` — forskning
 
-Målgruppe: menneskestudier med tydelige tall leseren kan handle på selv. Fire kategorier,
-kryss-kategori-duplikater fjernes (første kategori vinner). Uttak er `MAX_ITEMS` per dag med
-`MAX_PER_CATEGORY` som **mykt** tak — har køen ikke nok kategorier, fylles dagen opp likevel.
-En skjev dag er bedre enn en tom.
+Målgruppe (fra 20. september 2026): et par rundt 35 — én som trener styrke/løping/padel, én
+lege — med små barn i horisonten. Menneskestudier med tydelige tall de kan handle på selv.
+**Seks kategorier** (trening, kosthold, søvn/stress, longevity, medisin, barn), én per dag
+(`MAX_ITEMS = 6`, `MAX_PER_CATEGORY = 1` **mykt**) — har køen ikke nok kategorier, fylles
+dagen opp likevel. Kryss-kategori-duplikater fjernes (første spørring vinner).
+`CATEGORY_QUERIES` er en **liste** av (kategori, spørring) — trening har to.
+
+**Designkravet er per kategori, bevisst:** RCT/MA/SR som standard; trening og barn tar også
+`Clinical Trial` (crossover); prestasjonsspørringen (utøvere, VO2max, sener) har **ingen**
+designkrav — der er kravet flyttet til scoringen (0 designpoeng → må ha n, tall og utfall).
+Medisin er bundet til **tidsskrift** (NEJM, Lancet, JAMA, BMJ, Nat Med …), ikke tittel — et
+gjennombrudd har ingen felles emneord — og der straffes verken pasienter eller medikamenter.
+Målt hitCount per spørring står i kommentarene i koden.
 
 **Europe PMC-spørringen — her håndheves kvalitetskravene, og her er de dyreste feilene gjort:**
 
@@ -249,9 +264,15 @@ En skjev dag er bedre enn en tom.
   Tidligere hentet vi kun de 100 nyest indekserte per kategori, som utelot ~80 % av vinduet fra
   scoringen.
 
-**Lokal scoring** gir poeng for studiedesign, utvalgsstørrelse, tydelige effektmål og harde
-utfall, og **trekker fra** for smale pasientgrupper og medikament-/apparat-/genetikkstudier: en
-RCT på trening hos slagpasienter sier lite om hva en frisk leser bør gjøre.
+**Lokal scoring** gir poeng for studiedesign, utvalgsstørrelse, tydelige effektmål, relevante
+utfall (også prestasjon: 1RM, tidskjøring, HRV, mikrobiom) og målgruppe («healthy adults»,
+«athletes»), og **trekker fra** for smale pasientgrupper, medikamenter (ordliste **+
+suffiks-regex**: -tide, -mab, -flozin …; «peptide» er unntatt), «older adults» (−1,5) og
+observasjonelle titler («association», «prevalence», −1,5). Straffelistene er
+**kategoriavhengige**: barn-termer straffes ikke i barn, ingenting av dette i medisin.
+Kvinnehelse (menopause, svangerskap) er tatt ut av straffelisten. `--refill` **omscorer hele
+køen**, så en regelendring slår gjennom på det som allerede ligger der. Toppen av hver
+kategori er det eneste som teller — sjekk `--propose 9` etter en endring, ikke terskelen.
 
 **Nettsiden tåler at Claude dropper lenken i overskriften** (målt: 2 av 5 studier 8. august
 2026). `studiesForDay()` kobler `research_items` på studiene — først på URL, deretter

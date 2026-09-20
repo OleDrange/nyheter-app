@@ -136,14 +136,15 @@ export async function researchNeighbors(date) {
 export const FORSKNING_URL = 'https://forskning.modr.no';
 
 // Kategoriene i forskningsbriefingen — rekkefølge og emoji brukes av visningen.
-// `medisin` ligger sist og er legacy: generatoren produserer den ikke lenger, men arkiverte
-// briefinger har den, og tomme grupper skjules uansett i ResearchList.
+// Seks kategorier fra 20. september 2026 (`medisin` og `barn` nye/gjenopplivet); arkiverte
+// briefinger har fire, og tomme grupper skjules uansett i ResearchList.
 export const RESEARCH_CATEGORIES = [
-  { id: 'longevity', label: 'Longevity', emoji: '🧬' },
   { id: 'trening', label: 'Trening', emoji: '🏋️' },
   { id: 'kosthold', label: 'Kosthold', emoji: '🥗' },
   { id: 'sovn_stress', label: 'Søvn og stress', emoji: '😴' },
+  { id: 'longevity', label: 'Longevity', emoji: '🧬' },
   { id: 'medisin', label: 'Medisin', emoji: '🩺' },
+  { id: 'barn', label: 'Barn', emoji: '👶' },
 ];
 
 // Tickere i markedssnapshotet — rekkefølgen styrer også markedswidgeten.

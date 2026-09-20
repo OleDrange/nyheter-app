@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-research_briefing.py  —  Daglig forskningsbriefing med Claude AI og Notion-publisering
+research_briefing.py  —  Daglig forskningsbriefing fra en varig kø
 
-Henter nye fagfellevurderte studier (trening, helse og medisin) fra Europe PMC,
-lar Claude velge de mest relevante og oppsummere dem i abstract-form, og publiserer
-til en egen Notion-seksjon adskilt fra nyhetsbriefen.
+Henter fagfellevurderte studier fra Europe PMC, scorer dem lokalt og legger dem i en kø.
+Omtalene skrives normalt av Claude Code via skillen `/forskning-uke` (ingen API-kostnad) og
+importeres med `--import-writeups`; cron publiserer deretter MAX_ITEMS ferdigskrevne per dag.
 
 Kjør:
-    python research_briefing.py            # print til terminal
-    python research_briefing.py --save     # lagrer også som markdown-fil
+    python research_briefing.py --save --no-claude   # dagens publisering fra køen (cron)
+    python research_briefing.py --refill             # prun + hent + (re)scor køen, ingen publisering
+    python research_briefing.py --propose 9          # JSON: 9 beste «scored» per kategori
+    python research_briefing.py --import-writeups -  # les omtaler (markdown) fra stdin inn i køen
+    python research_briefing.py                      # legacy: Claude skriver via API
 
 Miljøvariabler (deles med news_briefing.py via .env):
     ANTHROPIC_API_KEY           — påkrevd
@@ -65,22 +68,25 @@ MAX_TOKENS = 32000  # 10 studieomtaler (~700 tokens hver) + Sonnet 5 sin tenking
 # siste halvår.
 LOOKBACK_DAYS = 180
 
-# 5, ikke 7: vinduet tar inn ~2,6 nye studier i døgnet, så alt over det tømmer reservoaret.
-# 7/dag drenerte halvårsvinduet på tre dager (23.–24. juli 2026 ga null studier).
-MAX_ITEMS = 5              # maks studier i briefen (tas fra køen, ikke valgt av Claude)
+# 6 = én per kategori. Omtalene skrives ukentlig i Claude Code (42 = 6 × 7 dager), så
+# dagsantallet er bundet til antall kategorier, ikke til tilsiget som før (7/dag drenerte
+# halvårsvinduet på tre dager i juli 2026 — men da var poolen 4 kategorier med RCT-krav).
+MAX_ITEMS = 6              # maks studier i briefen (tas fra køen, ikke valgt av Claude)
 
 # Maks studier fra samme kategori i én dagsbriefing. Køen er sortert på score alene, så uten
-# taket kan fem kosthold-studier havne på samme dag og nettsiden vise én eneste gruppe.
+# taket kan seks kosthold-studier havne på samme dag og nettsiden vise én eneste gruppe.
 # Taket er MYKT: har køen ikke nok kategorier, fylles dagen opp likevel — en skjev dag er
 # bedre enn en tom.
-MAX_PER_CATEGORY = 2
+MAX_PER_CATEGORY = 1
 
-# Henting: vi paginerer gjennom HELE poolen per kategori (cursorMark), ikke bare de nyeste
+# Henting: vi paginerer gjennom HELE poolen per spørring (cursorMark), ikke bare de nyeste
 # PAGE_SIZE. «Nyest først» ga oss ingenting når vinduet uansett er 180 dager — det utelukket
 # bare ~80 % av materialet fra scoringen. MAX_FETCH_PER_CATEGORY er en sikkerhetsventil hvis
-# en spørring plutselig eksploderer i treff (poolen er ~125 per kategori i dag).
+# en spørring plutselig eksploderer i treff. Målt 20. september 2026 (180 dager): trening
+# ~1 700, kosthold ~1 350, prestasjon ~1 070, søvn/stress ~870 — taket må ligge over det,
+# ellers scorer vi bare de nyeste og mister de beste. Kallene er gratis.
 PAGE_SIZE = 100
-MAX_FETCH_PER_CATEGORY = 600
+MAX_FETCH_PER_CATEGORY = 2500
 
 # ── Køen (research_queue.json) ──────────────────────────────────────────────
 # Studier vi har vurdert lokalt, men ennå ikke vist, ligger i en VARIG kø sortert synkende på
@@ -135,13 +141,14 @@ SEEN_RETENTION_DAYS = 400
 ARCHIVE_TITLE = "Forskning Arkiv"
 ANCHOR_TEXT = "Forskningsbriefinger"
 
-# Én emnespørring per kategori — kandidater hentes separat og merkes med kategorien.
+# Emnespørringer — én eller flere per kategori (CATEGORY_QUERIES er en liste av
+# (kategori, spørring)). Kandidater hentes separat og merkes med kategorien.
 # Syntaks: Europe PMC query language.
 #
-# _PMC_SUFFIX er der utvalgskriteriene FAKTISK håndheves (før het det bare i systemprompten):
+# Det er HER utvalgskriteriene faktisk håndheves (før het det bare i systemprompten):
 #   SRC:MED   — kun fagfellevurdert (MEDLINE/PubMed)
 #   KW:Humans — menneskestudier, ikke mus/cellekultur
-#   PUB_TYPE  — kun RCT, metaanalyse eller systematisk oversikt
+#   PUB_TYPE  — designkrav, PER KATEGORI (se _PMC_RCT / _PMC_TRIAL og kommentarene under)
 #
 # Emneordene er bundet til TITTELEN (`TITLE:"…"`), ikke fritekst. Uten det matcher Europe PMC
 # ordet hvor som helst i artikkelen, og ett tilfeldig «exercise» i et abstract om endometriose
@@ -164,62 +171,133 @@ ANCHOR_TEXT = "Forskningsbriefinger"
 # august 2026.
 #
 # `KW:"Humans"` treffer MeSH-termene og diskriminerer riktig (TITLE:"exercise" → 38 % beholdt,
-# TITLE:"rats" → 5 %, TITLE:"mice" → 14 %). Samme vindu og samme PUB_TYPE-krav gir da 5 226
-# studier (~29/døgn) — 13× poolen, og god margin over MAX_ITEMS selv etter MIN_SCORE.
-_PMC_SUFFIX = (
-    ' AND KW:"Humans"'
+# TITLE:"rats" → 5 %, TITLE:"mice" → 14 %).
+_PMC_BASE = ' AND KW:"Humans" AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y'
+
+# Strengt designkrav: RCT, metaanalyse eller systematisk oversikt.
+_PMC_RCT = (
     ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
     ' OR PUB_TYPE:"Systematic Review")'
-    " AND SRC:MED AND LANG:eng AND HAS_ABSTRACT:Y"
 )
-CATEGORY_QUERIES: dict[str, str] = {
-    "longevity": (
+# Lempet: også «Clinical Trial» (crossover, ikke-randomiserte intervensjoner). Trenings- og
+# prestasjonsforskning publiseres ofte slik og når sjelden metaanalyse-stadiet.
+_PMC_TRIAL = (
+    ' AND (PUB_TYPE:"Randomized Controlled Trial" OR PUB_TYPE:"Meta-Analysis"'
+    ' OR PUB_TYPE:"Systematic Review" OR PUB_TYPE:"Clinical Trial")'
+)
+_PMC_SUFFIX = _PMC_BASE + _PMC_RCT  # standardkravet — brukes der ikke annet er sagt
+
+# Seks kategorier (20. september 2026; før: fire). Leserne er to 35-åringer — en som trener
+# styrke, løping og padel, og en lege — med små barn i horisonten. Målt hitCount i 180-dagers-
+# vinduet står i kommentaren per spørring; alt er godt over de 7/uke hver kategori trenger.
+CATEGORY_QUERIES: list[tuple[str, str]] = [
+    # ~610 treff (RCT/MA/SR). «older adults» er tatt ut med hensikt: det dro poolen mot
+    # eldrestudier for en leser på 35. Sauna/kulde/varme ligger her, ikke under trening.
+    ("longevity", (
         '(TITLE:"mortality" OR TITLE:"longevity" OR TITLE:"life expectancy" OR TITLE:"aging" '
         'OR TITLE:"ageing" OR TITLE:"healthy aging" OR TITLE:"healthspan" '
-        'OR TITLE:"biological age" OR TITLE:"frailty" OR TITLE:"sarcopenia" '
-        'OR TITLE:"lifestyle" OR TITLE:"cardiovascular risk" OR TITLE:"older adults")'
-        + _PMC_SUFFIX
-    ),
-    "trening": (
+        'OR TITLE:"biological age" OR TITLE:"lifestyle" OR TITLE:"cardiovascular risk" '
+        'OR TITLE:"sauna" OR TITLE:"cold water immersion" OR TITLE:"cold exposure" '
+        'OR TITLE:"heat therapy" OR TITLE:"blood pressure" OR TITLE:"LDL" OR TITLE:"cholesterol" '
+        'OR TITLE:"metabolic health" OR TITLE:"visceral fat" OR TITLE:"cardiorespiratory fitness" '
+        'OR TITLE:"grip strength" OR TITLE:"menopause" OR TITLE:"perimenopause")'
+        + _PMC_BASE + _PMC_RCT
+    )),
+    # ~1 700 treff. Lempet designkrav (Clinical Trial) — se _PMC_TRIAL.
+    ("trening", (
         '(TITLE:"exercise" OR TITLE:"physical activity" OR TITLE:"training" '
         'OR TITLE:"resistance training" OR TITLE:"strength training" OR TITLE:"aerobic" '
         'OR TITLE:"interval training" OR TITLE:"muscle strength" OR TITLE:"hypertrophy" '
         'OR TITLE:"fitness" OR TITLE:"walking" OR TITLE:"running" OR TITLE:"steps" '
-        'OR TITLE:"sedentary")' + _PMC_SUFFIX
-    ),
-    "kosthold": (
+        'OR TITLE:"sedentary" OR TITLE:"stretching" OR TITLE:"warm-up" OR TITLE:"mobility")'
+        + _PMC_BASE + _PMC_TRIAL
+    )),
+    # ~1 070 treff UTEN designkrav — bevisst. Prestasjonsforskning (utøvere, VO2max, sener,
+    # periodisering) er små crossover- og kohortstudier som sjelden er merket RCT; kravet
+    # er flyttet til scoringen (ingen designpoeng → må ha n, tall og utfall for å nå terskel).
+    ("trening", (
+        '(TITLE:"athletes" OR TITLE:"runners" OR TITLE:"endurance performance" '
+        'OR TITLE:"running performance" OR TITLE:"VO2max" OR TITLE:"sprint" '
+        'OR TITLE:"high-intensity interval" OR TITLE:"periodization" OR TITLE:"tendon" '
+        'OR TITLE:"injury prevention" OR TITLE:"racket" OR TITLE:"padel" OR TITLE:"tennis" '
+        'OR TITLE:"marathon" OR TITLE:"plyometric" OR TITLE:"muscle soreness" '
+        'OR TITLE:"running economy" OR TITLE:"time trial")'
+        + _PMC_BASE
+    )),
+    # ~1 240 treff. Tarm/mikrobiom er lagt til; «fiber» alene matcher «Thulium Fiber Laser»,
+    # så kostfiber må sies eksplisitt.
+    ("kosthold", (
         '(TITLE:"diet" OR TITLE:"dietary" OR TITLE:"nutrition" OR TITLE:"supplementation" '
         'OR TITLE:"supplement" OR TITLE:"protein intake" OR TITLE:"fasting" '
-        'OR TITLE:"caloric restriction" OR TITLE:"weight loss" OR TITLE:"obesity" '
+        'OR TITLE:"time-restricted eating" OR TITLE:"caloric restriction" OR TITLE:"weight loss" '
         'OR TITLE:"vitamin" OR TITLE:"omega-3" OR TITLE:"creatine" OR TITLE:"caffeine" '
-        # «fiber» alene matcher «Thulium Fiber Laser» — kostfiber må sies eksplisitt.
-        'OR TITLE:"alcohol" OR TITLE:"dietary fiber" OR TITLE:"probiotic")' + _PMC_SUFFIX
-    ),
+        'OR TITLE:"alcohol" OR TITLE:"dietary fiber" OR TITLE:"fibre" OR TITLE:"probiotic" '
+        'OR TITLE:"gut microbiome" OR TITLE:"gut microbiota" OR TITLE:"microbiome" '
+        'OR TITLE:"fermented" OR TITLE:"ultra-processed" OR TITLE:"Mediterranean diet" '
+        'OR TITLE:"plant-based" OR TITLE:"whey" OR TITLE:"polyphenol" OR TITLE:"magnesium" '
+        'OR TITLE:"ashwagandha" OR TITLE:"nitrate" OR TITLE:"ketogenic" OR TITLE:"hydration")'
+        + _PMC_BASE + _PMC_RCT
+    )),
+    # ~790 treff. Fokus flyttet fra psykiatri (depression/anxiety/CBT er tatt UT — de ga
+    # pasientstudier) til stressmestring og søvn hos friske: HRV, kortisol, pust, natur, lys.
     # NB: «stress» og «recovery» kan IKKE stå alene — de matcher «oxidative stress» og
     # postoperativ restitusjon, og dro inn prostata-MR og hjertekirurgi i poolen. Kun fraser.
-    "sovn_stress": (
-        '(TITLE:"sleep" OR TITLE:"insomnia" OR TITLE:"circadian" OR TITLE:"mindfulness" '
-        'OR TITLE:"meditation" OR TITLE:"psychological stress" OR TITLE:"perceived stress" '
-        'OR TITLE:"stress reduction" OR TITLE:"stress management" OR TITLE:"chronic stress" '
-        'OR TITLE:"burnout" OR TITLE:"resilience" OR TITLE:"anxiety" OR TITLE:"depression" '
-        'OR TITLE:"wellbeing" OR TITLE:"well-being" OR TITLE:"mental health" '
-        'OR TITLE:"cognitive behavioral therapy")' + _PMC_SUFFIX
-    ),
-}
+    ("sovn_stress", (
+        '(TITLE:"sleep" OR TITLE:"insomnia" OR TITLE:"circadian" OR TITLE:"chronotype" '
+        'OR TITLE:"napping" OR TITLE:"mindfulness" OR TITLE:"meditation" '
+        'OR TITLE:"psychological stress" OR TITLE:"perceived stress" OR TITLE:"stress reduction" '
+        'OR TITLE:"stress management" OR TITLE:"chronic stress" OR TITLE:"burnout" '
+        'OR TITLE:"resilience" OR TITLE:"wellbeing" OR TITLE:"well-being" '
+        'OR TITLE:"heart rate variability" OR TITLE:"cortisol" OR TITLE:"breathing" '
+        'OR TITLE:"breathwork" OR TITLE:"nature exposure" OR TITLE:"forest" OR TITLE:"loneliness" '
+        'OR TITLE:"social connection" OR TITLE:"gratitude" OR TITLE:"screen time" '
+        'OR TITLE:"light exposure" OR TITLE:"blue light")'
+        + _PMC_BASE + _PMC_RCT
+    )),
+    # ~330 treff. Store medisinske gjennombrudd: bundet til TIDSSKRIFT, ikke tittel — et
+    # gjennombrudd har ingen felles emneord. Her er medikamenter og pasientgrupper TILLATT
+    # (scoringen straffer dem ikke i denne kategorien); kvalitetskravet er RCT/metaanalyse i
+    # et topptidsskrift. Leseren er lege; «Hva det betyr for deg» handler om praksis, ikke
+    # egen livsstil.
+    ("medisin", (
+        '(JOURNAL:"N Engl J Med" OR JOURNAL:"Lancet" OR JOURNAL:"JAMA" OR JOURNAL:"BMJ" '
+        'OR JOURNAL:"Nat Med" OR JOURNAL:"Lancet Oncol" OR JOURNAL:"Eur Heart J" '
+        'OR JOURNAL:"Circulation")'
+        + _PMC_BASE + _PMC_RCT
+    )),
+    # ~420 treff. Barneterm × livsstilsterm i tittelen, så vi får «søvn hos småbarn» og ikke
+    # «cellegift hos barn». Lempet designkrav (Clinical Trial). Svangerskap/amming hører hit.
+    ("barn", (
+        '(TITLE:"children" OR TITLE:"child" OR TITLE:"infant" OR TITLE:"infants" '
+        'OR TITLE:"toddler" OR TITLE:"preschool" OR TITLE:"adolescent" OR TITLE:"pregnancy" '
+        'OR TITLE:"breastfeeding" OR TITLE:"parent" OR TITLE:"parental" OR TITLE:"pediatric") '
+        'AND (TITLE:"sleep" OR TITLE:"diet" OR TITLE:"nutrition" OR TITLE:"screen time" '
+        'OR TITLE:"physical activity" OR TITLE:"exercise" OR TITLE:"allergy" '
+        'OR TITLE:"development" OR TITLE:"language" OR TITLE:"reading" OR TITLE:"outdoor" '
+        'OR TITLE:"play" OR TITLE:"obesity" OR TITLE:"iron" OR TITLE:"vitamin D" '
+        'OR TITLE:"probiotic" OR TITLE:"peanut" OR TITLE:"breastfeeding" OR TITLE:"feeding" '
+        'OR TITLE:"fever" OR TITLE:"antibiotic" OR TITLE:"vaccine" OR TITLE:"bedtime" '
+        'OR TITLE:"myopia" OR TITLE:"sunscreen" OR TITLE:"daycare")'
+        + _PMC_BASE + _PMC_TRIAL
+    )),
+]
 CATEGORY_LABELS = {
     "longevity": "Longevity",
     "trening": "Trening",
     "kosthold": "Kosthold",
     "sovn_stress": "Søvn og stress",
-    "medisin": "Medisin",  # legacy — kun i arkiverte briefinger
+    "medisin": "Medisin",
+    "barn": "Barn",
 }
+# Rekkefølgen dagens seks studier hentes i (én per kategori, mykt).
+CATEGORY_ORDER = ["trening", "kosthold", "sovn_stress", "longevity", "medisin", "barn"]
 
 _API_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 _HEADERS = {"User-Agent": "research-briefing/1.0 (personal script)"}
 
-SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for én bestemt leser: en oppegående lekperson som er opptatt av LONGEVITY — å leve lenge og friskt — og som vil vite hva han selv kan gjøre. Han bryr seg om trening, kosthold, søvn og stress, og han vil ha studier med tydelige tall han kan stole på.
+SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for to bestemte lesere: et par rundt 35 år. Den ene trener mye styrke, løping og padel; den andre er lege. Begge er opptatt av ernæring, trening, søvn, stressmestring og hva som gir et godt og langt liv, de har små barn i horisonten, og de vil følge store medisinske gjennombrudd. Overordnet vil de ha forskning de kan BRUKE selv — med tydelige tall de kan stole på. Eksempler på treff: ashwagandha og løpekapasitet, søvnregularitet mot søvnlengde, hva som gir mest av styrke- eller løpetrening, fiber/protein/tarmflora, hvordan redusere stress.
 
-Du får en liste med studier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er allerede menneskestudier av typen RCT, metaanalyse eller systematisk oversikt, og alle er forhåndsrangert som relevante.
+Du får en liste med studier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er menneskestudier, forhåndsrangert som relevante. De fleste er RCT, metaanalyse eller systematisk oversikt; i kategorien Trening kan det også være crossover- og kohortstudier på utøvere — si da tydelig i Metode og Forbehold hva designet ikke kan vise.
 
 Skriv en omtale av HVER studie i listen, i den rekkefølgen de står. Du skal ikke velge mellom dem — utvalget er gjort.
 
@@ -227,16 +305,16 @@ VRAKING: er en studie likevel ubrukelig for denne leseren, skal du IKKE skrive e
 ## SKIP [n] — kort begrunnelse
 der [n] er studiens nummer i listen. Vrak kun når ett av disse er oppfylt:
 1. Ingen konkrete tall — sammendraget sier bare "signifikant bedring" uten effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer).
-2. Ingen handlingsrom — dette er klinisk behandling leseren aldri selv vil ta stilling til.
+2. Ingen handlingsrom — dette er klinisk behandling leseren aldri selv vil ta stilling til. Gjelder IKKE kategorien Medisin: der er poenget nettopp behandling, og kravet er i stedet at funnet er stort nok til å endre praksis.
 3. Studien er så svak eller så smal at et råd bygget på den ville villede.
 Vraking skal være unntaket. Er du i tvil, skriv omtalen.
 
 FORMAT — for hver studie du skriver om, nøyaktig denne strukturen:
 ## [Norsk tittel som bærer hovedfunnet](URL)
-**Kategori:** Longevity | Trening | Kosthold | Søvn og stress (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
+**Kategori:** Trening | Kosthold | Søvn og stress | Longevity | Medisin | Barn (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
 **Metode:** Hva slags studie er dette (RCT, metaanalyse av N studier, systematisk oversikt), hvor mange deltakere, hvem var de (alder, kjønn, helsetilstand), hvor lenge varte det, og hva gikk intervensjonen eller eksponeringen konkret ut på? Forklar designet slik at leseren skjønner hvorfor det gir grunn til å tro på resultatet. 3–4 setninger.
 **Resultat:** Hovedfunnene med konkrete tall — effektstørrelse, prosentvis endring, HR/RR/OR med konfidensintervall, p-verdi der den er oppgitt. Si alltid hva det ble sammenlignet MOT (kontrollgruppe, placebo, ingen endring). Ta med de viktigste sekundærfunnene hvis de er interessante. 3–4 setninger.
-**Hva det betyr for deg:** Oversett funnet til handling. Hvilken dose, frekvens eller mengde er det snakk om i praksis? Er effekten stor nok til å bry seg om? Hva bør leseren eventuelt endre — eller hva bekrefter dette at han kan fortsette med? Vær konkret; ingen runde formuleringer. 3–4 setninger.
+**Hva det betyr for deg:** Oversett funnet til handling. Hvilken dose, frekvens eller mengde er det snakk om i praksis? Er effekten stor nok til å bry seg om? Hva bør leseren eventuelt endre — eller hva bekrefter dette at de kan fortsette med? For Medisin: hva endrer dette i klinisk praksis, for hvem, og hvor stor er den absolutte gevinsten? For Barn: hva betyr det for foreldre i hverdagen? Vær konkret; ingen runde formuleringer. 3–4 setninger.
 **Forbehold:** Hva studien IKKE viser. Observasjonsdata kan ikke vise årsak; kort varighet sier ingenting om livslang effekt; et smalt utvalg (kun eliteutøvere, kun eldre kvinner) generaliserer dårlig; industrifinansiering, høy heterogenitet eller lav studiekvalitet i en metaanalyse svekker konklusjonen. 1–2 setninger.
 
 REGLER:
@@ -490,11 +568,14 @@ def _strip_html(text: str) -> str:
 # terskelen settes aldri i kø — heller færre enn svake.
 MIN_SCORE = 3.0
 
-# Studiedesign (matches mot pubTypeList)
+# Studiedesign (matches mot pubTypeList). «Clinical Trial» dekker crossover og ikke-
+# randomiserte intervensjoner (slippes inn i trening og barn); en kohort uten merking får 0
+# og må tjene terskelen på utvalg, tall og utfall alene.
 _DESIGN_POINTS = [
-    ("meta-analysis", 4.0),
+    ("meta-analysis", 3.5),
     ("randomized controlled trial", 3.0),
     ("systematic review", 2.0),
+    ("clinical trial", 1.5),
 ]
 
 # Tydelige statistiske resultater — selve kravet: «studier med tydelige tall».
@@ -507,23 +588,49 @@ _STATS_PATTERNS = [
     r"\b(smd|standardi[sz]ed mean difference)\b",
     r"\b(md|mean difference)\s*[:=]?\s*-?\d",
     r"\bp\s*[<=>]\s*0?\.\d",                 # p < 0.05
-    r"\b\d{1,3}(\.\d+)?\s*%\s*(lower|higher|reduction|increase|decrease|greater)",
+    r"\b\d{1,3}(\.\d+)?\s*%\s*(lower|higher|reduction|increase|decrease|greater|improvement)",
+    r"\b(effect size|cohen'?s d|d\s*=\s*-?\d)",
 ]
 
-# Harde/relevante utfall — det som faktisk betyr noe for et langt, friskt liv.
+# Harde/relevante utfall — det som betyr noe for et langt, friskt liv OG for prestasjon,
+# søvn og stress hos friske. Prestasjons- og livskvalitetsmålene (tidskjøring, 1RM, HRV,
+# søvneffektivitet, mikrobiom) sto ikke her før, så scoringen favoriserte sykdomsutfall.
 _OUTCOME_TERMS = [
     "all-cause mortality", "mortality", "life expectancy", "longevity", "healthspan",
     "cardiovascular", "cardiorespiratory fitness", "vo2", "blood pressure", "hba1c",
     "insulin sensitivity", "ldl", "body composition", "lean mass", "muscle mass",
     "muscle strength", "sarcopenia", "frailty", "bone density", "cognition",
-    "cognitive decline", "dementia", "depression", "sleep quality", "sleep duration",
+    "cognitive decline", "dementia", "sleep quality", "sleep duration",
     "biological age", "epigenetic age", "inflammation", "visceral fat", "type 2 diabetes",
+    # prestasjon
+    "time trial", "1rm", "one-repetition maximum", "running economy", "peak power",
+    "sprint performance", "endurance performance", "jump height", "grip strength",
+    "muscle soreness", "tendon", "injury",
+    # søvn/stress hos friske
+    "heart rate variability", "hrv", "cortisol", "sleep efficiency", "sleep onset",
+    "sleep regularity", "perceived stress",
+    # tarm
+    "microbiome", "microbiota", "short-chain fatty",
+    # barn
+    "language development", "cognitive development", "bmi z-score", "screen time",
+    "allergy", "atopic",
+]
+
+# Friske, trente eller unge voksne — folk som leserne. Løftes litt, så en studie på
+# «healthy adults» slår en ellers lik studie på en pasientgruppe.
+_TARGET_POPULATION = [
+    "healthy adults", "healthy young", "healthy men", "healthy women", "healthy volunteers",
+    "recreational", "trained", "athletes", "young adults", "middle-aged", "general population",
 ]
 
 # Smale pasientgrupper og ren klinikk. Tittelbindingen i spørringen sikrer at studien HANDLER
 # om trening/kosthold/søvn — men en RCT på trening hos pasienter med aksial spondylartritt eller
 # hos slagpasienter under rehabilitering sier lite om hva en frisk leser bør gjøre. Vektes ned
 # hardt, og på TITTELEN, som er der studiepopulasjonen faktisk står.
+#
+# Gjelder IKKE kategorien «medisin» (der ER pasienter poenget) og bare delvis «barn».
+# Kvinnehelse (menopause, svangerskap, postpartum) sto her fram til 20. september 2026 og
+# er tatt UT: den ene leseren er kvinne, og svangerskap hører til barn-kategorien.
 _NARROW_POPULATION = [
     # «patients with …» er det mest treffsikre enkeltsignalet på at studien gjelder en
     # pasientgruppe leseren ikke tilhører.
@@ -539,26 +646,76 @@ _NARROW_POPULATION = [
     "anesthesia", "anaesthesia", "rehabilitation", "intensive care", "mechanical ventilation",
     "sepsis", "transplant", "prosthesis", "denture", "dental", "orthodontic",
     "wound healing", "catheter", "amputation", "long covid",
-    "neonatal", "preterm", "perinatal", "pediatric", "paediatric", "children", "adolescent",
-    "pregnan", "postpartum", "menopaus", "infertility", "dysmenorrhea", "endometriosis",
+    "depression", "depressive", "anxiety disorder", "ptsd",
+    # Populasjonsavgrensning i tittelen: «adults with type 2 diabetes», «people with insomnia»
+    "adults with", "individuals with", "people with", "persons with", "women with", "men with",
+    "sleep apnea", "sleep apnoea", "heart failure", "diabetic", "retinopathy", "anaemia",
+    "anemia", "coagulation", "aldosteron", "down syndrome", "pandemic", "covid",
+    "air pollut", "tobacco", "cannabis", "nicotine", "smoking", "employment", "vocational",
+    "hypertension", "hypertensive", "hemorrhage", "haemorrhage", "myocardial infarction",
+    "infection", "viral", "acute", "anabolic", "steroid", "immunogenicity",
+    "psychopatholog", "pathophysiolog", "health care workers", "healthcare workers",
+    "patients", "gout", "liver disease", "steatotic", "aged 80",
 ]
 
+# Eldre: mildere straff (−1,5) — relevant for longevity, men leserne er 35, og uten den
+# fylte «older adults»-metaanalyser toppen av trening og søvn (målt 20. september 2026).
+_OLDER_TERMS = ["older adults", "elderly", "nursing home", "aged 65", "over 65", "geriatric"]
+
+# Observasjonelle sammenstillinger i tittelen: en metaanalyse av assosiasjoner eller
+# prevalens gir sjelden noe å gjøre. −1,5, så en RCT med tilsvarende tall vinner.
+_OBSERVATIONAL_TITLE = ["association", "associated with", "prevalence", "correlat"]
+
+# Prestasjon: utøverstudiene kommer fra spørringen uten designkrav og har 0 designpoeng;
+# uten bonusen nådde de aldri toppen av trening (målt 20. september 2026). Kun på tittel.
+_PERFORMANCE_TERMS = [
+    "athletes", "runners", "endurance", "vo2max", "vo2 max", "sprint", "high-intensity",
+    "hiit", "resistance training", "strength training", "hypertrophy", "running", "tendon",
+    "plyometric", "periodization", "time trial", "power output", "recreationally",
+]
+# Barn/ungdom er et eget emne fra 20. september 2026 — straffes bare UTENFOR barn-kategorien
+# (en treningsstudie på 12-åringer er fortsatt ikke for en 35-åring).
+_CHILD_TERMS = ["neonatal", "preterm", "perinatal", "pediatric", "paediatric", "children",
+                "adolescent", "infant", "toddler", "preschool", "pregnan", "postpartum",
+                "breastfeed"]
+
 # Medikament-/prosedyre-/apparatintervensjoner: leseren tar aldri stilling til dette selv.
+# Gjelder IKKE «medisin» — der er det nettopp dette vi vil ha.
 _DRUG_TERMS = [
     "drug", "pharmacolog", "antipsychotic", "antidepressant", "anticoagulant", "statin",
     "metformin", "semaglutide", "colchicine", "corticosteroid", "chemotherap",
     "immunotherap", "vaccine", "antibiotic", "acupuncture", "monoclonal",
     "inhibitor", "agonist", "antagonist",
     "transcranial", "electrical stimulation", "magnetic stimulation", "photobiomodulation",
-    "laser", "lithotripsy",
+    "laser", "lithotripsy", "benzodiazepine", "antihypertensive", "lowering therap",
+    "blood pressure control", "pharmacotherap",
     # Genetikk: interessant, men ikke noe leseren kan handle på.
     "polymorphism", "genotype", "gene variant", "mendelian randomization",
+]
+# Generiske legemiddelnavn kjennes på suffikset (tirzepa-TIDE, evolocu-MAB, dapagli-FLOZIN);
+# lista over kan aldri bli komplett. Regex på tittel, utenfor «medisin».
+_DRUG_SUFFIX_RE = re.compile(
+    r"\b(?!peptides?\b)\w{2,}(mab|tide|flozin|gliptin|statin|sartan|pril|olol|prazole|ciclib|"
+    r"tinib|parib|lukast|afil|dipine|oxetine|triptan|glutide|cretin)s?\b"
+)
+
+# Barn: vaksine og antibiotika er spørsmål foreldre faktisk står i, så de straffes ikke der.
+_DRUG_TERMS_OK_FOR_CHILDREN = {"vaccine", "antibiotic"}
+
+# Medisin: det som gjør en studie til et GJENNOMBRUDD og ikke bare en RCT i et fint tidsskrift.
+_BREAKTHROUGH_TERMS = [
+    "phase 3", "phase iii", "first-in-human", "first in human", "gene therapy", "crispr",
+    "mrna", "cure", "remission", "disease-modifying", "overall survival", "all-cause mortality",
+    "cardiovascular death", "major adverse", "primary prevention", "screening", "vaccine",
+    "glp-1", "semaglutide", "tirzepatide", "obesity", "alzheimer", "cancer", "stroke",
+    "myocardial infarction", "heart failure", "diabetes", "sepsis", "artificial intelligence",
+    "machine learning", "deep learning",
 ]
 
 _N_PATTERNS = [
     r"\bn\s*=\s*([\d,\. ]{2,12})",
-    r"([\d,\. ]{2,12})\s*(participants|patients|adults|subjects|individuals|men|women)",
-    r"(?:including|involving|comprising)\s+([\d,\. ]{2,12})\s",
+    r"([\d,\. ]{2,12})\s*(participants|patients|adults|subjects|individuals|men|women|children|infants|athletes|runners)",
+    r"(?:including|involving|comprising|enrolled)\s+([\d,\. ]{2,12})\s",
 ]
 
 
@@ -579,11 +736,16 @@ def _extract_sample_size(text: str) -> int:
 def _score_candidate(article: dict) -> tuple[float, str]:
     """Rangér en kandidat. Returnerer (score, kort begrunnelse for terminalloggen).
 
-    Emnet er allerede garantert av tittelbindingen i spørringen, så scoringen rangerer på
-    det som skiller en studie leseren kan BRUKE fra en han ikke kan: tydelige tall, harde
-    utfall, robust utvalg — og at funnet gjelder folk som ham, ikke en smal pasientgruppe."""
+    Emnet er allerede garantert av spørringen, så scoringen rangerer på det som skiller en
+    studie leserne kan BRUKE fra en de ikke kan: tydelige tall, relevante utfall, robust
+    utvalg — og at funnet gjelder folk som dem, ikke en smal pasientgruppe.
+
+    Straffelistene er KATEGORIAVHENGIGE: i «medisin» er pasienter og medikamenter selve
+    poenget og gir i stedet gjennombruddspoeng; i «barn» er barn/svangerskap emnet."""
+    category = article.get("category") or ""
     title = article["title"].lower()
-    text = f"{title} {article['abstract']}".lower()
+    abstract = article["abstract"].lower()
+    text = f"{title} {abstract}"
     pub_types = " ".join(article.get("pub_types") or []).lower()
     score = 0.0
     why = []
@@ -613,17 +775,48 @@ def _score_candidate(article: dict) -> tuple[float, str]:
         score += min(0.8 * outcome_hits, 3.0)
         why.append(f"{outcome_hits} utfall")
 
+    if category == "medisin":
+        # Gjennombrudd: store tall og harde utfall teller allerede; her premieres skala og
+        # nyhetsverdi. Ingen straff for pasientgrupper eller medikamenter.
+        bt = sum(1 for t in _BREAKTHROUGH_TERMS if t in text)
+        if bt:
+            score += min(1.0 * bt, 3.0)
+            why.append(f"{bt} gjennombrudd")
+        if "meta-analysis" in pub_types or "systematic review" in pub_types:
+            score -= 1.0  # et gjennombrudd er en primærstudie; oversikter er sjelden nyheter
+            why.append("−oversikt")
+        return score, ", ".join(why)
+
+    if any(t in text for t in _TARGET_POPULATION):
+        score += 1.5
+        why.append("+målgruppe")
+    if category == "trening" and any(t in title for t in _PERFORMANCE_TERMS):
+        score += 2.0
+        why.append("+prestasjon")
+    if any(t in title for t in _OLDER_TERMS):
+        score -= 1.5
+        why.append("−eldre")
+    if any(t in title for t in _OBSERVATIONAL_TITLE):
+        score -= 1.5
+        why.append("−observasjonell")
+
     # Smal pasientgruppe / ren klinikk: straffes på TITTELEN (der populasjonen står), og
     # svakere på abstractet (en nevnt bisetning skal ikke drepe en ellers god studie).
-    narrow_title = sum(1 for t in _NARROW_POPULATION if t in title)
+    narrow = list(_NARROW_POPULATION)
+    if category != "barn":
+        narrow += _CHILD_TERMS
+    narrow_title = sum(1 for t in narrow if t in title)
     if narrow_title:
         score -= 4.0 * narrow_title
         why.append(f"−smal populasjon×{narrow_title}")
-    elif any(t in article["abstract"].lower() for t in _NARROW_POPULATION):
+    elif any(t in abstract for t in narrow):
         score -= 1.0
         why.append("−klinisk kontekst")
 
-    drug_hits = sum(1 for t in _DRUG_TERMS if t in title)
+    drug_terms = _DRUG_TERMS
+    if category == "barn":
+        drug_terms = [t for t in _DRUG_TERMS if t not in _DRUG_TERMS_OK_FOR_CHILDREN]
+    drug_hits = sum(1 for t in drug_terms if t in title) + len(_DRUG_SUFFIX_RE.findall(title))
     if drug_hits:
         score -= 4.0 * drug_hits
         why.append(f"−medikament×{drug_hits}")
@@ -664,6 +857,32 @@ def _fetch_all_pages(query: str) -> list[dict]:
     return out
 
 
+def rescore_queue(queue: list[dict]) -> tuple[int, int]:
+    """Scor alle «scored» oppføringer på nytt med gjeldende regler. Returnerer (omscoret, fjernet).
+
+    Kjøres ved --refill, så en endring i scoringen (nye straffe-/bonuslister, nye kategorier)
+    slår gjennom på det som allerede ligger i køen — ikke bare på nytt tilsig. Oppføringer
+    som faller under MIN_SCORE fjernes (de ble aldri vist, så det er ingen dedup å bevare;
+    havner de over terskel igjen senere, hentes de på nytt). «ready» og «rejected» røres
+    ikke — teksten er skrevet, og gravsteinene skal stå."""
+    kept, rescored, dropped = [], 0, 0
+    for e in queue:
+        if e.get("status", "scored") != "scored" or not e.get("abstract"):
+            kept.append(e)
+            continue
+        score, why = _score_candidate(_entry_to_article(e))
+        rescored += 1
+        if score < MIN_SCORE:
+            dropped += 1
+            continue
+        e["score"], e["score_why"] = round(score, 2), why
+        kept.append(e)
+    queue[:] = kept
+    if rescored:
+        print(f"  ⓘ  {rescored} køoppføringer scoret på nytt, {dropped} falt under terskel")
+    return rescored, dropped
+
+
 def refill_queue(queue: list[dict], seen: dict, today: date) -> int:
     """Hent nye studier fra Europe PMC og sett dem inn i køen. Returnerer antall innsatte.
 
@@ -686,7 +905,7 @@ def refill_queue(queue: list[dict], seen: dict, today: date) -> int:
     skipped_dupe = 0
     inserted = 0
 
-    for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES.items()):
+    for ci, (category, cat_query) in enumerate(CATEGORY_QUERIES):
         if ci:
             _time.sleep(1)  # høflig mot Europe PMC
         try:
@@ -1057,6 +1276,93 @@ def pop_for_today(queue: list[dict]) -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Ukentlig skriving i Claude Code (skillen /forskning-uke) — ingen API-kostnad
+#
+# --propose skriver de beste «scored» per kategori som JSON til stdout; Claude Code viser
+# titlene til leseren for godkjenning, skriver omtalene selv og mater dem tilbake med
+# --import-writeups. Køen og seen er hukommelsen: en studie vurderes aldri to ganger.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Avsnittene en omtale MÅ ha for å bli lagret — nettsidens splitResearch() bygger kortet av
+# dem. En omtale uten dem ville rendret som rå tekst under riktig tittel.
+_REQUIRED_PARTS = ("**Kategori:**", "**Metode:**", "**Resultat:**",
+                   "**Hva det betyr for deg:**", "**Forbehold:**")
+_SKIP_URL_RE = re.compile(r"^##\s*SKIP\s+(\S+)\s*(?:[—–-]+\s*(.*))?$", re.IGNORECASE)
+
+
+def propose_candidates(queue: list[dict], per_category: int) -> list[dict]:
+    """De `per_category` høyest scorede «scored» studiene i hver kategori, med fullt
+    abstract (kuttet til MAX_ABSTRACT_CHARS — det er skrivegrunnlaget, ikke scoringen)."""
+    out: list[dict] = []
+    for cat in CATEGORY_ORDER:
+        picked = [e for e in queue
+                  if e.get("status", "scored") == "scored" and e.get("category") == cat
+                  ][:per_category]  # køen er sortert synkende på score
+        for e in picked:
+            out.append({
+                "category": cat,
+                "label": CATEGORY_LABELS.get(cat, cat),
+                "score": e.get("score"),
+                "score_why": e.get("score_why"),
+                "title": e.get("title"),
+                "journal": e.get("journal"),
+                "date": e.get("date"),
+                "design": ", ".join(e.get("pub_types") or []),
+                "url": e.get("url"),
+                "abstract": (e.get("abstract") or "")[:MAX_ABSTRACT_CHARS],
+            })
+    return out
+
+
+def import_writeups(queue: list[dict], text: str) -> tuple[int, int, list[str]]:
+    """Legg ferdigskrevne omtaler inn i køen. Returnerer (lagret, vraket, advarsler).
+
+    Samme kontrakt som _parse_writeups: blokker mappes på URL, ikke rekkefølge, og en blokk
+    som ikke kan knyttes til en køoppføring lagres ALDRI. `## SKIP <url> — grunn` setter
+    studien til rejected (gravstein), så en studie leseren har strøket ikke kommer tilbake."""
+    by_url = {e.get("url"): e for e in queue if e.get("url")}
+    today = datetime.now().date().isoformat()
+    saved, rejected, warnings = 0, 0, []
+
+    for raw in re.split(r"\n(?=##\s)", text.strip()):
+        block = raw.strip().strip("-").strip()
+        if not block.startswith("##"):
+            continue
+        first_line = block.split("\n", 1)[0].strip()
+
+        m = _SKIP_URL_RE.match(first_line)
+        if m:
+            e = by_url.get(m.group(1))
+            if not e:
+                warnings.append(f"SKIP peker på ukjent URL: {m.group(1)}")
+                continue
+            e["status"] = "rejected"
+            e["reject_reason"] = (m.group(2) or "vraket ved ukesgjennomgang").strip()
+            e.pop("abstract", None)
+            rejected += 1
+            continue
+
+        entry = next((e for url, e in by_url.items() if url in first_line), None)
+        if not entry:
+            warnings.append(f"omtale uten kjent URL i overskriften: {first_line[:80]}")
+            continue
+        if entry.get("status") == "ready":
+            warnings.append(f"allerede skrevet, hoppet over: {entry['title'][:60]}")
+            continue
+        missing = [p for p in _REQUIRED_PARTS if p not in block]
+        if missing:
+            warnings.append(f"mangler {', '.join(missing)} — ikke lagret: {entry['title'][:60]}")
+            continue
+        entry["status"] = "ready"
+        entry["writeup"] = block
+        entry["writeup_at"] = today
+        entry.pop("abstract", None)
+        saved += 1
+
+    return saved, rejected, warnings
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Notion-publisering (egen seksjon)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -1155,13 +1461,56 @@ def main() -> None:
         help="Publiser fra det som ligger ferdigskrevet i køen, men kall aldri Claude. "
              "Brukes av entrypointet når PAUSE_KNOWLEDGE er satt (kostnadspause).",
     )
+    parser.add_argument(
+        "--refill",
+        action="store_true",
+        help="Prun, hent fra Europe PMC og scor køen på nytt med gjeldende regler. "
+             "Ingen Claude, ingen publisering. Brukes av skillen /forskning-uke.",
+    )
+    parser.add_argument(
+        "--propose",
+        type=int,
+        metavar="N",
+        help="Skriv de N beste «scored» studiene per kategori som JSON til stdout (med "
+             "abstract) og avslutt. Brukes av skillen /forskning-uke.",
+    )
+    parser.add_argument(
+        "--import-writeups",
+        metavar="FIL",
+        help="Les omtaler (markdown i SYSTEM_PROMPT-formatet, «-» = stdin) inn i køen som "
+             "ferdigskrevne. «## SKIP <url> — grunn» vraker en studie for godt.",
+    )
     args = parser.parse_args()
 
     _load_dotenv()
 
-    if not os.environ.get("ANTHROPIC_API_KEY") and not (args.dry_run or args.no_claude):
+    offline = args.dry_run or args.no_claude or args.refill or args.propose or args.import_writeups
+    if not os.environ.get("ANTHROPIC_API_KEY") and not offline:
         print("Feil: ANTHROPIC_API_KEY er ikke satt.")
         sys.exit(1)
+
+    today = datetime.now().date()
+    seen = _load_seen()
+
+    # ── Skill-modus: --propose skriver KUN JSON til stdout, så ingen banner her ──────────
+    if args.propose:
+        queue = _load_queue()
+        print(json.dumps(propose_candidates(queue, args.propose), ensure_ascii=False, indent=1))
+        return
+
+    if args.import_writeups:
+        text = (sys.stdin.read() if args.import_writeups == "-"
+                else open(args.import_writeups, encoding="utf-8").read())
+        queue = _load_queue()
+        saved, rejected, warnings = import_writeups(queue, text)
+        _save_queue(queue)
+        for w in warnings:
+            print(f"  ⚠  {w}")
+        counts = _queue_counts(queue)
+        print(f"✓  {saved} omtaler lagret, {rejected} vraket. Kø nå: {counts['ready']} "
+              f"ferdigskrevne (= {counts['ready'] // MAX_ITEMS} dager), "
+              f"{counts['scored']} venter på tekst.")
+        return
 
     today_str = datetime.now().strftime("%Y-%m-%d")
     today_human = datetime.now().strftime("%A %d. %B %Y")
@@ -1170,14 +1519,25 @@ def main() -> None:
     print(f"  Forskningsbriefing  —  {today_human}")
     print(f"{'─'*70}\n")
 
-    today = datetime.now().date()
-    seen = _load_seen()
-
     # ── 1–2. Last og prun køen ───────────────────────────────────────────────
     queue = _prune_queue(_load_queue(), seen, today)
     counts = _queue_counts(queue)
     print(f"Kø: {counts['ready']} ferdigskrevne, {counts['scored']} venter på tekst, "
           f"{counts['rejected']} vraket.")
+
+    if args.refill:
+        rescore_queue(queue)
+        print(f"\nHenter forskning fra Europe PMC, siste {LOOKBACK_DAYS} dager...")
+        refill_queue(queue, seen, today)
+        _save_queue(queue)
+        counts = _queue_counts(queue)
+        per_cat: dict[str, int] = {}
+        for e in queue:
+            if e.get("status", "scored") == "scored":
+                per_cat[e.get("category", "?")] = per_cat.get(e.get("category", "?"), 0) + 1
+        print(f"  → kø: {counts['ready']} ferdige, {counts['scored']} venter på tekst: "
+              + ", ".join(f"{c} {per_cat.get(c, 0)}" for c in CATEGORY_ORDER))
+        return
 
     # ── 3. Påfylling fra Europe PMC — kun når køen er kort nok ───────────────
     if counts["scored"] >= QUEUE_REFILL_BELOW:
