@@ -3,18 +3,6 @@
   "questions": [
     {
       "difficulty": "easy",
-      "question": "Hva står «www» for?",
-      "answer": "World Wide Web",
-      "options": [
-        "World Wide Web",
-        "Wireless Web Wave",
-        "World Web Wire",
-        "Web Wide World"
-      ],
-      "explanation": "Tim Berners-Lee fant det opp ved CERN i 1989 — for å hjelpe fysikere å dele dokumenter. Han ga teknologien bort gratis, uten patent."
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva kalles den vanligste enheten for datamengde, satt sammen av 8 bit?",
       "answer": "Byte",
       "options": [
@@ -48,18 +36,6 @@
         "Åpen kildekode"
       ],
       "explanation": "Det første virusspredningen som virkelig fikk oppmerksomhet var Morris-ormen i 1988. Den infiserte anslagsvis 6000 maskiner — omtrent 10 % av datidens internett."
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva står «AI» for på engelsk?",
-      "answer": "Artificial Intelligence",
-      "options": [
-        "Artificial Intelligence",
-        "Automated Interface",
-        "Advanced Integration",
-        "Applied Informatics"
-      ],
-      "explanation": "Begrepet ble myntet på en workshop i Dartmouth i 1956. Deltakerne trodde de skulle løse det meste av problemet i løpet av én sommer."
     },
     {
       "difficulty": "easy",
@@ -159,18 +135,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hva står «app» for?",
-      "answer": "Applikasjon",
-      "options": [
-        "Applikasjon",
-        "Apparat",
-        "Approksimasjon",
-        "Applet"
-      ],
-      "explanation": "Ordet er eldgammelt i databransjen, men fikk sin moderne betydning da App Store åpnet i 2008 med 500 apper. I dag er tallet i millionklassen."
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva er en «chatbot»?",
       "answer": "Et program som fører en samtale i tekst",
       "options": [
@@ -219,18 +183,6 @@
     },
     {
       "difficulty": "medium",
-      "question": "Hva står «HTTP» for?",
-      "answer": "Hypertext Transfer Protocol",
-      "options": [
-        "Hypertext Transfer Protocol",
-        "High Transfer Text Protocol",
-        "Hyperlink Text Transport Program",
-        "Host Transfer Protocol"
-      ],
-      "explanation": "S-en i HTTPS står for «Secure». I dag er over 95 % av all nettrafikk kryptert; i 2014 var andelen under en tredel."
-    },
-    {
-      "difficulty": "medium",
       "question": "Hva kalles maskinlæringsmodeller bygget av lag med kunstige nevroner?",
       "answer": "Nevrale nettverk",
       "options": [
@@ -267,18 +219,6 @@
     },
     {
       "difficulty": "medium",
-      "question": "Hva står «CPU» for?",
-      "answer": "Central Processing Unit",
-      "options": [
-        "Central Processing Unit",
-        "Computer Power Unit",
-        "Central Program Utility",
-        "Core Processing Unifier"
-      ],
-      "explanation": "Intels første mikroprosessor, 4004 fra 1971, hadde 2300 transistorer. Moderne brikker har titalls milliarder på samme flate."
-    },
-    {
-      "difficulty": "medium",
       "question": "Hva kalles det når to personer deler en hemmelig nøkkel så bare de kan lese meldingene?",
       "answer": "Ende-til-ende-kryptering",
       "options": [
@@ -312,18 +252,6 @@
         "SQL"
       ],
       "explanation": "Application Programming Interface. Når en app viser deg været, henter den som regel ikke dataene selv — den spør et API som andre driver."
-    },
-    {
-      "difficulty": "medium",
-      "question": "Hva står «GPU» for, og hva var den opprinnelig laget for?",
-      "answer": "Graphics Processing Unit — grafikk i spill",
-      "options": [
-        "Graphics Processing Unit — grafikk i spill",
-        "General Purpose Unit — generelle beregninger",
-        "Global Processing Unit — nettverk",
-        "Graphic Print Unit — utskrift"
-      ],
-      "explanation": "Grafikkort ble laget for å regne på tusenvis av piksler samtidig. Nøyaktig den evnen viste seg å være det maskinlæring trengte mest."
     },
     {
       "difficulty": "medium",
@@ -471,18 +399,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "Hva står «SQL» for?",
-      "answer": "Structured Query Language",
-      "options": [
-        "Structured Query Language",
-        "Simple Question Logic",
-        "System Query Loader",
-        "Sequential Query Layer"
-      ],
-      "explanation": "Språket er fra 1970-tallet og bygger på Edgar Codds relasjonsmodell. Det har overlevd praktisk talt alle teknologiskifter siden."
-    },
-    {
-      "difficulty": "hard",
       "question": "Hva er en «race condition» i programmering?",
       "answer": "At resultatet avhenger av rekkefølgen to samtidige operasjoner tilfeldigvis kjører i",
       "options": [
@@ -588,18 +504,6 @@
         "Å kryptere modellvektene"
       ],
       "explanation": "Går man fra 16 til 4 bit per vekt, krymper modellen omtrent til en firedel. Ofte merkes knapt forskjellen — og det er derfor store modeller kan kjøre på en laptop."
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hva står «RAM» for, og hva er hovedegenskapen?",
-      "answer": "Random Access Memory — innholdet forsvinner når strømmen går",
-      "options": [
-        "Random Access Memory — innholdet forsvinner når strømmen går",
-        "Rapid Access Module — permanent lagring",
-        "Read And Modify — kun for lesing",
-        "Runtime Allocated Memory — kun for programmer"
-      ],
-      "explanation": "«Random access» betyr at enhver adresse nås like raskt. Det var det revolusjonerende sammenlignet med magnetbånd, der man måtte spole."
     }
   ]
 }

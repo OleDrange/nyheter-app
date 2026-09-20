@@ -37,28 +37,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hvilket organ pumper blod rundt i kroppen?",
-      "answer": "Hjertet",
-      "options": [
-        "Hjertet",
-        "Leveren",
-        "Lungene",
-        "Milten"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva frakter de røde blodcellene rundt i kroppen?",
-      "answer": "Oksygen",
-      "options": [
-        "Oksygen",
-        "Karbondioksid alene",
-        "Hormoner",
-        "Avfallsstoffer alene"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvilket organ renser blodet og produserer urin?",
       "answer": "Nyrene",
       "options": [
@@ -70,17 +48,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hvor i kroppen finner du trommehinnen?",
-      "answer": "I øret",
-      "options": [
-        "I øret",
-        "I øyet",
-        "I halsen",
-        "I nesen"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvilket vitamin lager huden når den utsettes for sollys?",
       "answer": "Vitamin D",
       "options": [
@@ -88,28 +55,6 @@
         "Vitamin C",
         "Vitamin A",
         "Vitamin B12"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva kalles kroppens naturlige forsvar mot infeksjoner?",
-      "answer": "Immunforsvaret",
-      "options": [
-        "Immunforsvaret",
-        "Nervesystemet",
-        "Hormonsystemet",
-        "Lymfeanlegget"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket organ styrer tanker, følelser og bevegelser?",
-      "answer": "Hjernen",
-      "options": [
-        "Hjernen",
-        "Hjertet",
-        "Ryggmargen alene",
-        "Hypofysen"
       ]
     },
     {
@@ -137,17 +82,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hvilke organer bruker vi til å puste?",
-      "answer": "Lungene",
-      "options": [
-        "Lungene",
-        "Nyrene",
-        "Leveren og milten",
-        "Bronkiene alene"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva heter muskelen som skiller brysthulen fra bukhulen og hjelper oss å puste?",
       "answer": "Mellomgulvet",
       "options": [
@@ -171,17 +105,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hva måler man med et blodtrykksapparat?",
-      "answer": "Trykket i blodårene",
-      "options": [
-        "Trykket i blodårene",
-        "Puls alene",
-        "Blodsukker",
-        "Oksygenmetning"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvor mange tenner har et fullt voksent tannsett med visdomstenner?",
       "answer": "32",
       "options": [
@@ -189,50 +112,6 @@
         "28",
         "30",
         "36"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva heter det vi kaller kroppens temperatur ved feber over?",
-      "answer": "Cirka 38 grader",
-      "options": [
-        "Cirka 38 grader",
-        "Cirka 37 grader",
-        "Cirka 39,5 grader",
-        "Cirka 36 grader"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket organ produserer insulin?",
-      "answer": "Bukspyttkjertelen",
-      "options": [
-        "Bukspyttkjertelen",
-        "Leveren",
-        "Nyrene",
-        "Milten"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilken sykdom skyldes mangel på insulin eller nedsatt insulinvirkning?",
-      "answer": "Diabetes",
-      "options": [
-        "Diabetes",
-        "Astma",
-        "Gikt",
-        "Anemi"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva kalles cellene som bekjemper infeksjoner i blodet?",
-      "answer": "Hvite blodceller",
-      "options": [
-        "Hvite blodceller",
-        "Røde blodceller",
-        "Blodplater",
-        "Plasmaceller"
       ]
     },
     {

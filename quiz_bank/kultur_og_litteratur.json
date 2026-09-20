@@ -519,18 +519,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "Hvilket årstall regnes som filmens fødsel med Lumière-brødrenes visning i Paris?",
-      "answer": "1895",
-      "options": [
-        "1895",
-        "1888",
-        "1901",
-        "1912"
-      ],
-      "explanation": "Publikum betalte for å se arbeidere forlate en fabrikk. Brødrene selv trodde kino var «en oppfinnelse uten framtid» og satset heller på fotografi."
-    },
-    {
-      "difficulty": "hard",
       "question": "Hvem skrev «Til fyret» og «Mrs Dalloway»?",
       "answer": "Virginia Woolf",
       "options": [

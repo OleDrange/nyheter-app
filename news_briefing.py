@@ -723,11 +723,13 @@ _QUIZ_SEEN_RETENTION_DAYS = 365
 # Foretrukket rekkefølge (filnavn uten .json). Ukjente filer legges bakerst
 # alfabetisk, så nye kategorier virker uten å endre denne lista.
 _QUIZ_CATEGORY_ORDER = [
-    "historie",
+    "norsk_historie",
     "verdenshistorie",
     "geografi",
+    "okonomi_og_verden",
     "naturvitenskap",
     "norsk_samfunn",
+    "filosofi_og_ideer",
     "teknologi_og_ai",
     "medisin_og_kropp",
     "psykologi_og_laering",
@@ -923,7 +925,11 @@ def fetch_daily_quiz() -> list[dict]:
         questions = data["questions"]
         # Kandidater som ikke er brukt innen retention-vinduet.
         unseen = [q for q in questions if _norm_title(q.get("question", "")) not in seen]
-        pool = unseen or questions  # tom bank → tillat gjenbruk
+        # Tom kategori → gjenbruk sette spørsmål (umerket, som «ferske»). Det er
+        # tilsigssignalet: fyll på med /quiz-runde, ikke senk dagsantallet her.
+        if not unseen:
+            print(f"  ⚠  quiz: {slug} er tømt ({len(questions)} spm, alle sett) — kjør /quiz-runde")
+        pool = unseen or questions
 
         # Ønsket nivå roterer per dag og kategori.
         want = _QUIZ_DIFFICULTY_CYCLE[(day_ord + cat_i) % len(_QUIZ_DIFFICULTY_CYCLE)]

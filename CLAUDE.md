@@ -167,12 +167,20 @@ ikke trenger).
 - **Quiz og gåter** trekkes fra lokale banker i repoet — ingen Claude-bruk, ingen ekstern API.
   **Én quiz-fil = én kategori.** Dagen er 7 ferske (fra et kategorivindu som roterer med
   datoen) + inntil 3 forfalte repetisjoner. Begge har dedup + spaced repetition på volumet.
-  **Tilsiget er den harde grensen, som i køgeneratorene:** 240 spørsmål ble tømt på under et
-  år, og fallback-grenen (`pool = unseen or questions`) begynner da stille å trekke allerede
-  sette spørsmål på nytt — uten varsel. Vokser dagsantallet, må banken vokse først.
-  **Feltet `explanation` er valgfritt og skal aldri fjernes fra eldre spørsmål:**
-  repetisjonsutvelgelsen prioriterer spørsmål som har det, siden en repetisjon uten den ekstra
-  konteksten har liten læringsverdi. Nye spørsmål skal alltid ha feltet.
+  **Tilsiget er den harde grensen, som i køgeneratorene:** 7 ferske/dag er ~2 550/år. De
+  fire opprinnelige bankene (240 spm) var tømt på 78 dager, og fallback-grenen
+  (`pool = unseen or questions`) trakk da stille sette spørsmål på nytt, umerket — det var
+  «gjentakelsene» leseren så i september 2026. Nå logges det som `⚠ … er tømt`, og
+  påfyll skjer i **`/quiz-runde`** (`.claude/skills/quiz-runde/SKILL.md`): kriteriene,
+  kategoriavgrensningen og dedup-scriptet bor der, ikke her. Vokser dagsantallet, må
+  runden vokse først. **Kvalitetskriteriene er skjønn + mekanikk:** scriptet nekter
+  årstall-, paragraf- og forkortelsesspørsmål, korte forklaringer og nær-duplikater — den
+  20. september 2026 ble ~80 slike fjernet (alle allerede sett, så null tilsig tapt), og
+  `historie` ble splittet i `norsk_historie` + `verdenshistorie` fordi tre kategorier stilte
+  samme spørsmål (pyramidene i Giza ×3). **Feltet `explanation` skal aldri fjernes fra eldre
+  spørsmål:** repetisjonsutvelgelsen prioriterer spørsmål som har det. De gamle bankene
+  mangler det på ~200 spørsmål — bevisst ikke etterfylt (20. september 2026), de fases ut av
+  prioriteringen. Nye spørsmål må ha det (håndhevet av importen).
 - **Inspirasjon:** Claude refererer episoder kun via **indeks-id** mot vår RSS-liste, så
   podcast/tittel/URL aldri kan hallusineres — kun rådsteksten og boktipsene er generert.
 

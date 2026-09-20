@@ -15,18 +15,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "I hvilket år startet andre verdenskrig i Europa?",
-      "answer": "1939",
-      "options": [
-        "1939",
-        "1941",
-        "1938",
-        "1940"
-      ],
-      "explanation": "Tyskland angrep Polen 1. september 1939. Storbritannia og Frankrike erklærte krig to dager senere, men de første månedene skjedde nesten ingenting ved vestfronten."
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvilken mur delte Berlin fra 1961 til 1989?",
       "answer": "Berlinmuren",
       "options": [
@@ -204,18 +192,6 @@
         "Nederland"
       ],
       "explanation": "Gaven kom i 1886 og markerte hundreårsjubileet for uavhengigheten. Statuen var kobberblank da den kom; det grønne er tiår med irr."
-    },
-    {
-      "difficulty": "medium",
-      "question": "I hvilket år falt Konstantinopel?",
-      "answer": "1453",
-      "options": [
-        "1453",
-        "1066",
-        "1204",
-        "1492"
-      ],
-      "explanation": "Osmanerne brukte kanoner støpt av en ungarsk ingeniør som først hadde tilbudt tjenestene sine til bysantinerne — de hadde ikke råd."
     },
     {
       "difficulty": "medium",
@@ -411,18 +387,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "I hvilket år ble Magna Carta undertegnet?",
-      "answer": "1215",
-      "options": [
-        "1215",
-        "1066",
-        "1348",
-        "1415"
-      ],
-      "explanation": "Pave Innocent III annullerte den etter ti uker. Den overlevde likevel som idé: at også kongen står under loven."
-    },
-    {
-      "difficulty": "hard",
       "question": "Hva het slaget der Vilhelm Erobreren vant England?",
       "answer": "Slaget ved Hastings",
       "options": [
@@ -468,18 +432,6 @@
         "Den lange marsjen"
       ],
       "explanation": "Bønder ble satt til å smelte skrapjern i bakgårdsovner i stedet for å høste. Anslagene over antall døde ligger på 15–45 millioner."
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hvilket år ble Sovjetunionen formelt oppløst?",
-      "answer": "1991",
-      "options": [
-        "1991",
-        "1989",
-        "1993",
-        "1990"
-      ],
-      "explanation": "26. desember 1991. Berlinmuren hadde falt to år tidligere; det gikk altså langt raskere fra symbol til oppløsning enn samtiden trodde."
     },
     {
       "difficulty": "hard",
@@ -590,16 +542,192 @@
       "explanation": "Samme tekst på tre skriftsystemer. Champollion knakk koden i 1822 — hjulpet av at han kunne koptisk, en sen etterkommer av det egyptiske språket."
     },
     {
-      "difficulty": "hard",
-      "question": "Hvilket år ble FN opprettet?",
-      "answer": "1945",
+      "difficulty": "easy",
+      "question": "Hvem var Sovjetunionens leder under mesteparten av andre verdenskrig?",
+      "answer": "Josef Stalin",
       "options": [
-        "1945",
-        "1919",
-        "1948",
-        "1950"
+        "Josef Stalin",
+        "Vladimir Lenin",
+        "Nikita Khrusjtsjov",
+        "Leo Trotskij"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "I hvilket land startet reformasjonen med Martin Luther i 1517?",
+      "answer": "Tyskland",
+      "options": [
+        "Tyskland",
+        "England",
+        "Frankrike",
+        "Italia"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem ledet den russiske revolusjonen i 1917?",
+      "answer": "Vladimir Lenin",
+      "options": [
+        "Vladimir Lenin",
+        "Josef Stalin",
+        "Karl Marx",
+        "Leo Trotskij"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het freden som avsluttet trettiårskrigen i 1648?",
+      "answer": "Den westfalske fred",
+      "options": [
+        "Den westfalske fred",
+        "Kielfreden",
+        "Freden i Roskilde",
+        "Wienerkongressen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var keiser i Frankrike og tapte slaget ved Waterloo i 1815?",
+      "answer": "Napoleon Bonaparte",
+      "options": [
+        "Napoleon Bonaparte",
+        "Ludvig XVI",
+        "Karl den store",
+        "Louis-Philippe"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken amerikansk president holdt Gettysburg-talen under borgerkrigen?",
+      "answer": "Abraham Lincoln",
+      "options": [
+        "Abraham Lincoln",
+        "George Washington",
+        "Ulysses S. Grant",
+        "Thomas Jefferson"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem grunnla det mongolske verdensriket på 1200-tallet?",
+      "answer": "Djengis Khan",
+      "options": [
+        "Djengis Khan",
+        "Kublai Khan",
+        "Attila",
+        "Tamerlan"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den franske revolusjonens periode med massehenrettelser 1793–94?",
+      "answer": "Terrorveldet",
+      "options": [
+        "Terrorveldet",
+        "Restaurasjonen",
+        "Direktoriet",
+        "Konsulatet"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket land koloniserte størstedelen av Sør-Amerika utenom Brasil?",
+      "answer": "Spania",
+      "options": [
+        "Spania",
+        "Portugal",
+        "Frankrike",
+        "Nederland"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var dronning av England i den elisabethanske gullalderen?",
+      "answer": "Elisabet I",
+      "options": [
+        "Elisabet I",
+        "Maria I",
+        "Victoria",
+        "Anne"
       ],
-      "explanation": "Charteret ble undertegnet i San Francisco i juni 1945, før krigen mot Japan var over. Forgjengeren, Folkeforbundet, hadde manglet nettopp USA som medlem."
+      "explanation": "Elisabet I regjerte 1558–1603 og giftet seg aldri. Under henne skrev Shakespeare stykkene sine, og England ble en sjømakt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den egyptiske farao hvis nesten intakte grav ble funnet av Howard Carter i 1922?",
+      "answer": "Tutankhamon",
+      "options": [
+        "Tutankhamon",
+        "Ramses II",
+        "Kheops",
+        "Akhenaten"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het traktaten i 1919 som avsluttet første verdenskrig formelt?",
+      "answer": "Versaillestraktaten",
+      "options": [
+        "Versaillestraktaten",
+        "Brest-Litovsk-traktaten",
+        "Locarno-avtalen",
+        "Trianon-traktaten"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var den siste tsaren av Russland?",
+      "answer": "Nikolai II",
+      "options": [
+        "Nikolai II",
+        "Aleksander III",
+        "Peter den store",
+        "Ivan den grusomme"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket dynasti styrte Kina fra 1368 til 1644?",
+      "answer": "Ming",
+      "options": [
+        "Ming",
+        "Qing",
+        "Tang",
+        "Han"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het slaget i 1815 der en preussisk-britisk styrke endelig beseiret Napoleon?",
+      "answer": "Slaget ved Waterloo",
+      "options": [
+        "Slaget ved Waterloo",
+        "Slaget ved Leipzig",
+        "Slaget ved Austerlitz",
+        "Slaget ved Borodino"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den greske bystaten som ledet forsvaret mot perserne ved Thermopylene?",
+      "answer": "Sparta",
+      "options": [
+        "Sparta",
+        "Athen",
+        "Theben",
+        "Korint"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva het den kinesiske muren-byggende dynastiet som forente Kina i 221 f.Kr.?",
+      "answer": "Qin",
+      "options": [
+        "Qin",
+        "Han",
+        "Zhou",
+        "Ming"
+      ]
     }
   ]
 }

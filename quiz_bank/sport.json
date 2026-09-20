@@ -207,18 +207,6 @@
     },
     {
       "difficulty": "medium",
-      "question": "Hvilket år arrangerte Lillehammer vinter-OL?",
-      "answer": "1994",
-      "options": [
-        "1994",
-        "1992",
-        "1998",
-        "1996"
-      ],
-      "explanation": "Lekene ble husket for fulle løyper og for at åpningen ble holdt i tolv kuldegrader. Det var også første gang vinter-OL ikke fant sted samme år som sommer-OL."
-    },
-    {
-      "difficulty": "medium",
       "question": "Hvem har flest Ballon d'Or-utmerkelser i fotball?",
       "answer": "Lionel Messi",
       "options": [
@@ -420,18 +408,6 @@
         "Mario Kempes"
       ],
       "explanation": "Fire minutter senere scoret han et mål som er kåret til århundrets — samme kamp, samme spiller, to helt motsatte typer historie."
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hvilket år ble det første moderne OL arrangert, og hvor?",
-      "answer": "1896 i Athen",
-      "options": [
-        "1896 i Athen",
-        "1900 i Paris",
-        "1888 i London",
-        "1904 i St. Louis"
-      ],
-      "explanation": "241 utøvere fra 14 land deltok, alle menn. Maratonløpet ble innført til nettopp disse lekene — det fantes ikke i antikkens OL."
     },
     {
       "difficulty": "hard",

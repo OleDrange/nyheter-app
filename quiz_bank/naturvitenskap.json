@@ -495,18 +495,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "Hva står DNA for?",
-      "answer": "Deoksyribonukleinsyre",
-      "options": [
-        "Deoksyribonukleinsyre",
-        "Dinukleotidsyre",
-        "Deoksyribosenukleotid",
-        "Diaminonukleinsyre"
-      ],
-      "explanation": "DNA-et i én eneste menneskecelle er rundt to meter langt utstrukket. Strekker du ut alt DNA i kroppen, rekker det mange ganger til sola og tilbake."
-    },
-    {
-      "difficulty": "hard",
       "question": "Hvem formulerte de tre bevegelseslovene?",
       "answer": "Isaac Newton",
       "options": [

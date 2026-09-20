@@ -135,18 +135,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hva står forkortelsen «IQ» for?",
-      "answer": "Intelligenskvotient",
-      "options": [
-        "Intelligenskvotient",
-        "Individuell kvalifikasjon",
-        "Innlæringskvotient",
-        "Intuitiv kapasitet"
-      ],
-      "explanation": "Skalaen er konstruert slik at gjennomsnittet alltid er 100. Fordi råskårene har steget gjennom hele 1900-tallet, må testene med jevne mellomrom kalibreres på nytt."
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva kalles det å gjøre flere krevende ting samtidig?",
       "answer": "Multitasking",
       "options": [

@@ -3,39 +3,6 @@
   "questions": [
     {
       "difficulty": "easy",
-      "question": "Hva er hovedstaden i Norge?",
-      "answer": "Oslo",
-      "options": [
-        "Oslo",
-        "Bergen",
-        "Trondheim",
-        "Stavanger"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i Sverige?",
-      "answer": "Stockholm",
-      "options": [
-        "Stockholm",
-        "Göteborg",
-        "Oslo",
-        "København"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i Frankrike?",
-      "answer": "Paris",
-      "options": [
-        "Paris",
-        "Lyon",
-        "Marseille",
-        "Nice"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvilket hav ligger vest for Norge?",
       "answer": "Nordsjøen / Atlanterhavet",
       "options": [
@@ -93,61 +60,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hvilken by er kjent som «Norges nest største by»?",
-      "answer": "Bergen",
-      "options": [
-        "Bergen",
-        "Trondheim",
-        "Stavanger",
-        "Tromsø"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i Danmark?",
-      "answer": "København",
-      "options": [
-        "København",
-        "Aarhus",
-        "Odense",
-        "Aalborg"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket kontinent ligger Egypt i hovedsak på?",
-      "answer": "Afrika",
-      "options": [
-        "Afrika",
-        "Asia",
-        "Europa",
-        "Sør-Amerika"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i USA?",
-      "answer": "Washington D.C.",
-      "options": [
-        "Washington D.C.",
-        "New York",
-        "Los Angeles",
-        "Chicago"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket land ligger rett øst for Norge?",
-      "answer": "Sverige",
-      "options": [
-        "Sverige",
-        "Finland",
-        "Russland",
-        "Danmark"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva heter verdens største ørken (varm)?",
       "answer": "Sahara",
       "options": [
@@ -155,28 +67,6 @@
         "Gobi",
         "Kalahari",
         "Atacama"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket land er kjent for pyramidene i Giza?",
-      "answer": "Egypt",
-      "options": [
-        "Egypt",
-        "Mexico",
-        "Peru",
-        "Irak"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i Storbritannia?",
-      "answer": "London",
-      "options": [
-        "London",
-        "Manchester",
-        "Edinburgh",
-        "Birmingham"
       ]
     },
     {
@@ -190,17 +80,6 @@
         "Bergen"
       ],
       "explanation": "Tromsø ligger på 69,6 grader nord — lenger nord enn nesten hele Alaska. Golfstrømmen gjør at byen likevel har mildere vintre enn Oslo enkelte år."
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er hovedstaden i Italia?",
-      "answer": "Roma",
-      "options": [
-        "Roma",
-        "Milano",
-        "Napoli",
-        "Venezia"
-      ]
     },
     {
       "difficulty": "easy",

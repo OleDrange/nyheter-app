@@ -1,0 +1,228 @@
+{
+  "category": "Norsk historie",
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hvilken norsk konge samlet Norge til ett rike etter slaget i Hafrsfjord?",
+      "answer": "Harald Hårfagre",
+      "options": [
+        "Harald Hårfagre",
+        "Olav den hellige",
+        "Håkon den gode",
+        "Sverre Sigurdsson"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvem var Norges konge under andre verdenskrig?",
+      "answer": "Haakon VII",
+      "options": [
+        "Haakon VII",
+        "Olav V",
+        "Harald V",
+        "Oscar II"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles perioden i norsk historie fra ca. 800 til 1050?",
+      "answer": "Vikingtiden",
+      "options": [
+        "Vikingtiden",
+        "Steinalderen",
+        "Bronsealderen",
+        "Middelalderen"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken by var Norges hovedstad i middelalderen før Oslo?",
+      "answer": "Bergen",
+      "options": [
+        "Bergen",
+        "Trondheim",
+        "Stavanger",
+        "Tønsberg"
+      ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het den norske oppdageren som nådde Sydpolen først i 1911?",
+      "answer": "Roald Amundsen",
+      "options": [
+        "Roald Amundsen",
+        "Fridtjof Nansen",
+        "Thor Heyerdahl",
+        "Otto Sverdrup"
+      ],
+      "explanation": "Amundsen kom fram 14. desember 1911, 34 dager før Scott. Han vant først og fremst på hunder og ski, mens britene trakk sledene selv."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva het skipet Thor Heyerdahl seilte over Stillehavet med i 1947?",
+      "answer": "Kon-Tiki",
+      "options": [
+        "Kon-Tiki",
+        "Fram",
+        "Gjøa",
+        "Ra"
+      ],
+      "explanation": "Kon-Tiki var en balsaflåte bygget uten en eneste spiker. De drev 8000 km på 101 døgn — teorien om at Polynesia ble befolket fra Sør-Amerika er senere avvist av DNA-forskning."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva kalles tiden da Norge var i union med Danmark (1380–1814)?",
+      "answer": "Dansketiden",
+      "options": [
+        "Dansketiden",
+        "Svensketiden",
+        "Hanseatertiden",
+        "Kalmartiden"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvem var Norges første statsminister etter unionsoppløsningen i 1905?",
+      "answer": "Christian Michelsen",
+      "options": [
+        "Christian Michelsen",
+        "Johan Sverdrup",
+        "Gunnar Knudsen",
+        "Otto Blehr"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket slag i 1030 regnes ofte som slutten på vikingtiden i Norge?",
+      "answer": "Slaget på Stiklestad",
+      "options": [
+        "Slaget på Stiklestad",
+        "Slaget i Hafrsfjord",
+        "Slaget ved Nesjar",
+        "Slaget ved Svolder"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den tyske rikskommissæren i Norge under okkupasjonen 1940–1945?",
+      "answer": "Josef Terboven",
+      "options": [
+        "Josef Terboven",
+        "Vidkun Quisling",
+        "Heinrich Himmler",
+        "Wilhelm Rediess"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het den handelsorganisasjonen som dominerte Bergen i senmiddelalderen?",
+      "answer": "Hansaforbundet",
+      "options": [
+        "Hansaforbundet",
+        "Kalmarunionen",
+        "Vindilerforbundet",
+        "Det ostindiske kompani"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Ved hvilken fredsavtale ble Norge avstått fra Danmark til Sverige i 1814?",
+      "answer": "Kielfreden",
+      "options": [
+        "Kielfreden",
+        "Den westfalske fred",
+        "Freden i Roskilde",
+        "Moss-konvensjonen"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilket norsk polarskip ble brukt av både Nansen og Amundsen?",
+      "answer": "Fram",
+      "options": [
+        "Fram",
+        "Gjøa",
+        "Maud",
+        "Kon-Tiki"
+      ]
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva het motstandsgruppen som sank tungtvann på Rjukan under krigen?",
+      "answer": "Kompani Linge / tungtvannssabotørene",
+      "options": [
+        "Kompani Linge / tungtvannssabotørene",
+        "Milorg-avdeling 13",
+        "XU",
+        "Osvaldgruppen"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var norsk statsminister ved unionsoppløsningen som gikk av like før 1905, og som ga navn til «Sverdrup-linjen»?",
+      "answer": "Johan Sverdrup",
+      "options": [
+        "Johan Sverdrup",
+        "Christian Michelsen",
+        "Frederik Stang",
+        "Emil Stang"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilket slag i 1066 gjorde slutt på det norske Harald Hardrådes forsøk på å erobre England?",
+      "answer": "Slaget ved Stamford Bridge",
+      "options": [
+        "Slaget ved Stamford Bridge",
+        "Slaget ved Hastings",
+        "Slaget ved Svolder",
+        "Slaget ved Nesjar"
+      ],
+      "explanation": "Slaget ved Stamford Bridge. Tre uker senere tapte den samme engelske hæren mot Vilhelm Erobreren ved Hastings, utslitt etter marsjen sørover."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken traktat i 1920 anerkjente norsk suverenitet over Svalbard?",
+      "answer": "Svalbardtraktaten",
+      "options": [
+        "Svalbardtraktaten",
+        "Kielfreden",
+        "Barentstraktaten",
+        "Spitsbergentraktaten fra 1925"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvilken norsk konge innførte kristenretten på Moster rundt år 1024?",
+      "answer": "Olav Haraldsson (den hellige)",
+      "options": [
+        "Olav Haraldsson (den hellige)",
+        "Håkon den gode",
+        "Olav Tryggvason",
+        "Harald Hårfagre"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var Norges statsminister som ledet regjeringen i eksil i London under krigen?",
+      "answer": "Johan Nygaardsvold",
+      "options": [
+        "Johan Nygaardsvold",
+        "Einar Gerhardsen",
+        "Christian Michelsen",
+        "Trygve Lie"
+      ]
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvem var den første norske generalsekretæren i FN?",
+      "answer": "Trygve Lie",
+      "options": [
+        "Trygve Lie",
+        "Dag Hammarskjöld",
+        "Gro Harlem Brundtland",
+        "Jens Stoltenberg"
+      ]
+    }
+  ]
+}

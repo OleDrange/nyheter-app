@@ -14,50 +14,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hvor ofte er det stortingsvalg i Norge?",
-      "answer": "Hvert 4. år",
-      "options": [
-        "Hvert 4. år",
-        "Hvert 5. år",
-        "Hvert 3. år",
-        "Hvert 2. år"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva er stemmerettsalderen ved stortingsvalg?",
-      "answer": "18 år",
-      "options": [
-        "18 år",
-        "16 år",
-        "20 år",
-        "21 år"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva heter Norges nasjonaldag?",
-      "answer": "17. mai",
-      "options": [
-        "17. mai",
-        "7. juni",
-        "1. mai",
-        "24. desember"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva heter Norges valuta?",
-      "answer": "Norske kroner",
-      "options": [
-        "Norske kroner",
-        "Euro",
-        "Daler",
-        "Norske mark"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hva heter Norges øverste domstol?",
       "answer": "Høyesterett",
       "options": [
@@ -65,28 +21,6 @@
         "Lagmannsretten",
         "Tingretten",
         "Riksretten"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvem er Norges statsoverhode?",
-      "answer": "Kongen",
-      "options": [
-        "Kongen",
-        "Statsministeren",
-        "Stortingspresidenten",
-        "Høyesterettsjustitiarius"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva heter det norske kongeslottet i Oslo?",
-      "answer": "Slottet",
-      "options": [
-        "Slottet",
-        "Akershus festning",
-        "Oscarshall",
-        "Bygdøy kongsgård"
       ]
     },
     {
@@ -114,17 +48,6 @@
     },
     {
       "difficulty": "easy",
-      "question": "Hva heter Norges nasjonalforsamling?",
-      "answer": "Stortinget",
-      "options": [
-        "Stortinget",
-        "Riksdagen",
-        "Folketinget",
-        "Landstinget"
-      ]
-    },
-    {
-      "difficulty": "easy",
       "question": "Hvor mange år varer grunnskolen i Norge?",
       "answer": "10 år",
       "options": [
@@ -132,50 +55,6 @@
         "9 år",
         "12 år",
         "13 år"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva kalles den norske folkedrakten?",
-      "answer": "Bunad",
-      "options": [
-        "Bunad",
-        "Kofte",
-        "Lusekofte",
-        "Stakk"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilken brun norsk ost lages av myse?",
-      "answer": "Brunost",
-      "options": [
-        "Brunost",
-        "Gamalost",
-        "Nøkkelost",
-        "Pultost"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva heter den offentlige kringkasteren i Norge?",
-      "answer": "NRK",
-      "options": [
-        "NRK",
-        "TV 2",
-        "TVNorge",
-        "P4"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilke to offisielle målformer har norsk?",
-      "answer": "Bokmål og nynorsk",
-      "options": [
-        "Bokmål og nynorsk",
-        "Bokmål og samisk",
-        "Riksmål og landsmål",
-        "Bokmål og dansk"
       ]
     },
     {
@@ -209,28 +88,6 @@
         "Aftenposten",
         "Dagbladet",
         "Dagens Næringsliv"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hvilket skianlegg i Oslo er nasjonalanlegg for hopp?",
-      "answer": "Holmenkollen",
-      "options": [
-        "Holmenkollen",
-        "Vikersund",
-        "Granåsen",
-        "Lysgårdsbakken"
-      ]
-    },
-    {
-      "difficulty": "easy",
-      "question": "Hva spiser mange nordmenn tradisjonelt på julaften på Vestlandet?",
-      "answer": "Pinnekjøtt",
-      "options": [
-        "Pinnekjøtt",
-        "Ribbe kun",
-        "Lutefisk kun",
-        "Kalkun"
       ]
     },
     {
@@ -560,40 +417,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "Hvilken paragraf i Grunnloven slår fast at Norge er et fritt og udelelig rike?",
-      "answer": "Paragraf 1",
-      "options": [
-        "Paragraf 1",
-        "Paragraf 100",
-        "Paragraf 112",
-        "Paragraf 17"
-      ]
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hvilken grunnlovsparagraf beskytter ytringsfriheten?",
-      "answer": "Paragraf 100",
-      "options": [
-        "Paragraf 100",
-        "Paragraf 1",
-        "Paragraf 97",
-        "Paragraf 105"
-      ]
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hvilken grunnlovsparagraf handler om retten til et sunt miljø?",
-      "answer": "Paragraf 112",
-      "options": [
-        "Paragraf 112",
-        "Paragraf 100",
-        "Paragraf 2",
-        "Paragraf 93"
-      ],
-      "explanation": "Paragraf 112 kom inn i 1992 og gir også kommende generasjoner rett til et miljø som sikrer helsen. Den har vært prøvd for Høyesterett i klimasøksmål."
-    },
-    {
-      "difficulty": "hard",
       "question": "Hva heter domstolen som behandler saker mot statsråder for embetsforbrytelser?",
       "answer": "Riksretten",
       "options": [
@@ -627,17 +450,6 @@
     },
     {
       "difficulty": "hard",
-      "question": "Hvilket år ble kirken formelt skilt fra staten som eget rettssubjekt?",
-      "answer": "2017",
-      "options": [
-        "2017",
-        "2012",
-        "2008",
-        "2020"
-      ]
-    },
-    {
-      "difficulty": "hard",
       "question": "Hva heter loven som regulerer forholdet mellom forvaltningen og innbyggerne i enkeltvedtak?",
       "answer": "Forvaltningsloven",
       "options": [
@@ -645,17 +457,6 @@
         "Offentleglova",
         "Tvisteloven",
         "Kommuneloven"
-      ]
-    },
-    {
-      "difficulty": "hard",
-      "question": "Hvilket år ble kvinnelig verneplikt innført i Norge?",
-      "answer": "2015",
-      "options": [
-        "2015",
-        "2010",
-        "2018",
-        "2005"
       ]
     },
     {
