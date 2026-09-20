@@ -223,6 +223,486 @@
         "Gro Harlem Brundtland",
         "Jens Stoltenberg"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor dro vikingene ut — som plyndrere, handelsmenn og bosettere — akkurat fra rundt år 800?",
+      "answer": "Bedre skip, befolkningsvekst hjemme og rike, dårlig forsvarte klostre og byer i vest — mulighet møtte behov",
+      "options": [
+        "Karl den stores kriger mot sakserne presset hedenske folk nordover og gjorde skandinavene til fiender av kristenheten",
+        "Bedre skip, befolkningsvekst hjemme og rike, dårlig forsvarte klostre og byer i vest — mulighet møtte behov",
+        "Klimaet ble kaldere, og avlingene sviktet i Skandinavia",
+        "Høvdingene ble drevet ut av Harald Hårfagres rikssamling"
+      ],
+      "explanation": "Kjølen og seilet gjorde langskipet raskt nok til å krysse Nordsjøen på to døgn og grunt nok til å seile opp elver. Lindisfarne i 793 var starten. Nordmenn dro vest (Skottland, Irland, Island, Grønland), dansker sør (England, Frankrike), svensker øst (Russland, Bysants). Færre enn man tror var krigere — de fleste var bønder og handelsmenn som hadde et skip."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor forsvant den norrøne bosetningen på Grønland etter 400 år, mens inuittene overlevde?",
+      "answer": "Klimaet ble kaldere, handelen med Norge døde ut, og de holdt fast på husdyrhold i stedet for å leve av havet som inuittene",
+      "options": [
+        "Svartedauden nådde Grønland med et handelsskip fra Bergen og utslettet bosetningene på få år, mens inuittene lenger nord unngikk smitten",
+        "Klimaet ble kaldere, handelen med Norge døde ut, og de holdt fast på husdyrhold i stedet for å leve av havet som inuittene",
+        "Inuittene angrep og fordrev dem i en serie kriger",
+        "De flyttet til Vinland i Nord-Amerika"
+      ],
+      "explanation": "Rundt 3 000 nordmenn bodde der på det meste. Den lille istiden fra 1300 gjorde beitet dårlig og seilasen farlig; hvalrosstann, deres eksportvare, tapte for elfenben fra Afrika. De siste sporene er fra rundt 1450. Jared Diamond brukte dem som eksempel på et samfunn som valgte å ikke tilpasse seg — de spiste knapt fisk, viser beinfunnene."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor ble Norge et lydrike under Danmark i 1536, og ikke en likeverdig partner?",
+      "answer": "Reformasjonen ble innført ved kongelig makt, den norske kirken — siste selvstendige institusjon — ble knust, og riksrådet oppløst",
+      "options": [
+        "Norge tapte en krig mot Danmark og måtte godta en fredsavtale som gjorde landet til provins med dansk guvernør, dansk lov og dansk hær i alle byene",
+        "Reformasjonen ble innført ved kongelig makt, den norske kirken — siste selvstendige institusjon — ble knust, og riksrådet oppløst",
+        "Den norske adelen solgte selvstendigheten mot skattefritak",
+        "Hansaen tvang Danmark til å ta kontroll over Bergen"
+      ],
+      "explanation": "Christian III skrev i sin håndfestning at Norge «heretter ikke skal være et rike for seg», men et ledemot av Danmark. Erkebiskop Olav Engelbrektsson, som hadde forsøkt å holde Norge katolsk og selvstendig, flyktet. Kirkegodset — en tredjedel av jorda — gikk til kongen. Dansk ble skriftspråk, og prestene ble kongens embetsmenn. «400-årsnatten» begynte her."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor var Lofotfisket i århundrer den viktigste enkelthendelsen i norsk økonomi hvert år?",
+      "answer": "Skreien kommer fra Barentshavet for å gyte på samme sted hver vinter, og tørrfisken var Norges største eksportvare fra 1100-tallet til 1800-tallet",
+      "options": [
+        "Kongen eide fiskeretten og krevde inn tienden der, så statens inntekter for hele året ble avgjort på tre måneder i Lofoten — og været avgjorde om kongen fikk råd til krig",
+        "Skreien kommer fra Barentshavet for å gyte på samme sted hver vinter, og tørrfisken var Norges største eksportvare fra 1100-tallet til 1800-tallet",
+        "Sildefisket i Lofoten fôret hele Nord-Europa",
+        "Hvalfangsten hadde base der og sysselsatte halve Nord-Norge"
+      ],
+      "explanation": "Tørrfisk trenger kald, tørr vind og ingen frost — Lofoten i februar er perfekt. Opptil 30 000 fiskere kom i åpne båter hvert år, og fisken gikk via Bergen til Italia, der «stoccafisso» ennå er rett. Tørrfisken finansierte kirker, byer og kongemakt i middelalderen. Fisket reguleres i dag av verdens største torskebestand, forvaltet sammen med Russland."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva var poenget med «arbeidslinja» og de store forlikene mellom LO og NAF/NHO etter 1935?",
+      "answer": "Fred i arbeidslivet mot medbestemmelse og lønnsvekst — konflikter løses ved forhandling, og staten megler",
+      "options": [
+        "Staten overtok fastsettelsen av alle lønninger og priser for å hindre inflasjon, og fagforeningene mistet streikeretten fram til 1970",
+        "Fred i arbeidslivet mot medbestemmelse og lønnsvekst — konflikter løses ved forhandling, og staten megler",
+        "LO fikk plass i alle bedriftsstyrer i bytte mot å avstå fra politisk streik",
+        "Arbeiderpartiet og Høyre delte makten i en samlingsregjering"
+      ],
+      "explanation": "1920- og 30-årene var blant Europas mest konfliktfylte i arbeidslivet, med Menstad-slaget i 1931. Hovedavtalen i 1935 — «arbeidslivets grunnlov» — og Arbeiderpartiets kriseforlik med Bondepartiet samme år la grunnen for «den norske modellen»: sentraliserte lønnsoppgjør, små forskjeller og tillit. Frontfagsmodellen, der industrien setter rammen, er en direkte etterkommer."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kalles Rjukan og Notodden «stedet Norge ble moderne»?",
+      "answer": "Birkeland og Eyde laget kunstgjødsel av luft med vannkraft der — Norsk Hydro ble landets første storindustri og verdens første av sitt slag",
+      "options": [
+        "Norges første jernbane, første elektriske gatelys og første telefonsentral ble anlagt der av Sam Eyde som utstillingsvindu for elektrisiteten",
+        "Birkeland og Eyde laget kunstgjødsel av luft med vannkraft der — Norsk Hydro ble landets første storindustri og verdens første av sitt slag",
+        "Aluminiumsverket der var Europas største og ga Norge sin første eksportindustri",
+        "Norges første kraftverk ble bygd i Rjukanfossen i 1880-årene"
+      ],
+      "explanation": "Verden fryktet sult rundt 1900 fordi nitratet fra Chile tok slutt. Birkeland fanget nitrogen fra luft med en lysbue, Eyde skaffet kapital og foss. Rjukan var 1911 en by med 10 000 innbyggere der det få år før var ingen. Fossen betydde at Norge, uten kull, kunne industrialiseres — og Hydro ble modellen for staten som industribygger."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor gikk nordmenn i tog for å få oppleve Kong Haakons «nei» i 1940 — hva sa han egentlig nei til?",
+      "answer": "Tyskerne krevde at han skulle utnevne Quisling til statsminister; han svarte at han heller ville abdisere, og regjeringen fulgte ham",
+      "options": [
+        "Tyskerne krevde at Norge skulle overgi seg og at flåten skulle overleveres, og kongen nektet å underskrive kapitulasjonen i Elverum selv da byen ble bombet",
+        "Tyskerne krevde at han skulle utnevne Quisling til statsminister; han svarte at han heller ville abdisere, og regjeringen fulgte ham",
+        "Kongen nektet å forlate landet og dra i eksil",
+        "Kongen nektet å oppløse Stortinget"
+      ],
+      "explanation": "På Elverum 10. april la den tyske sendemannen fram kravet. Haakon, som var valgt av folket i 1905 og var dansk født, sa han ikke kunne gå mot Stortinget og folket. Kongens nei gjorde Quisling til forræder og regjeringen til rettmessig — det var forutsetningen for eksilregjeringen i London, for handelsflåten på alliert side og for hele motstanden. Uten det kunne Norge ha blitt et nytt Danmark."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor var jernbanen mellom Oslo og Bergen, åpnet 1909, et så stort nasjonalt prosjekt?",
+      "answer": "Den bandt for første gang Østlandet og Vestlandet sammen over fjellet — over 1 200 meter, gjennom en vinter ingen trodde man kunne bygge i",
+      "options": [
+        "Den var den første jernbanen i Norge og ble finansiert av folkeinnsamling etter at Stortinget nektet å bevilge penger til «et luksusprosjekt»",
+        "Den bandt for første gang Østlandet og Vestlandet sammen over fjellet — over 1 200 meter, gjennom en vinter ingen trodde man kunne bygge i",
+        "Den var Europas lengste tunnelbane og satte verdensrekord",
+        "Den var betingelsen Sverige stilte for å godta unionsoppløsningen"
+      ],
+      "explanation": "Fram til da var reisen Oslo–Bergen sjøveien rundt Sørlandet eller til fots over Hardangervidda. Bergensbanen kostet et helt statsbudsjett, og Finse-strekningen ble bygd med håndkraft i snø. Den er et symbol på det nye Norge etter 1905: én nasjon bundet sammen. Fortsatt er de 6,5 timene et ettermæle etter at planene om høyhastighet er lagt i skuffen gang på gang."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvordan endret potet og vaksine Norge mer enn noen konge på 1800-tallet?",
+      "answer": "De halverte dødeligheten og fordoblet befolkningen på 50 år — som ga utvandring, husmenn, byvekst og folkebevegelser",
+      "options": [
+        "De gjorde bøndene så velstående at de kunne betale skatt i penger i stedet for varer, og staten fikk råd til skoler og veier for første gang",
+        "De halverte dødeligheten og fordoblet befolkningen på 50 år — som ga utvandring, husmenn, byvekst og folkebevegelser",
+        "De fjernet hungersnøden som hadde gitt bondeopprør, og gjorde landet styrbart",
+        "De gjorde at prester og leger fikk autoritet i bygdene"
+      ],
+      "explanation": "Koppevaksinen ble påbudt i 1810, og poteten ga tre ganger så mange kalorier per mål som korn — og tålte norsk klima. Barnedødeligheten falt, og landet gikk fra 0,9 til 1,7 millioner mellom 1815 og 1865. Alt det andre — Amerika-utvandringen, Thrane-bevegelsen, industribyene — er svar på det ene spørsmålet: hvor skal alle de nye menneskene gjøre av seg?"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor var Norge nøytralt i første verdenskrig, men tjente og tapte enormt likevel?",
+      "answer": "Handelsflåten seilte for begge sider og tjente rekordsummer, mens rundt 2 000 sjøfolk døde av ubåter og miner",
+      "options": [
+        "Norge solgte fisk og ammunisjonsråstoff til Tyskland og skip til England, og ble presset av begge til å velge side — men klarte å holde seg utenfor",
+        "Handelsflåten seilte for begge sider og tjente rekordsummer, mens rundt 2 000 sjøfolk døde av ubåter og miner",
+        "Norge eksporterte mat til begge sider og opplevde hungersnød hjemme",
+        "Norge lånte penger til begge parter og tapte alt ved fredsavtalen"
+      ],
+      "explanation": "Norge var «den nøytrale allierte»: flåten ble stilt til rådighet for britene under press, halvparten av den ble senket. Redere ble styrtrike — «jobbetid» — mens vanlige folk fikk dyrtid og rasjonering. Krakket etter krigen la grunnen for 1920-tallets bankkriser og klassekonflikt. Sjøfolkene fra begge verdenskrigene har et eget minnesmerke fordi de lenge ble glemt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var «Menstad-slaget» i 1931, og hvorfor er det symbolet på mellomkrigstidens Norge?",
+      "answer": "Streikende arbeidere ved Norsk Hydro drev politiet på flukt; regjeringen sendte militære, og Quisling som forsvarsminister ville slå ned «revolusjonen»",
+      "options": [
+        "Bønder i Telemark slo tilbake namsmenn som ville tvangsselge gårder under gjeldskrisen, og regjeringen måtte innføre moratorium på gjeld for hele landet i tre år",
+        "Streikende arbeidere ved Norsk Hydro drev politiet på flukt; regjeringen sendte militære, og Quisling som forsvarsminister ville slå ned «revolusjonen»",
+        "Politiet skjøt mot streikende i Skien, og fem døde",
+        "Arbeiderpartiet ble forbudt etter gateslag i Oslo"
+      ],
+      "explanation": "Under storlockouten i 1931 var 90 000 utestengt. På Menstad forsøkte streikebrytere å laste gjødsel; 2 000 arbeidere jaget politiet. Regjeringen satte inn marinefartøy og garden — ingen skudd falt, men Quisling bygde sin frykt for arbeiderbevegelsen på det. Fire år senere kom Hovedavtalen og Arbeiderpartiet i regjering: Menstad var toppen av klassekampen, ikke starten på revolusjon."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor fikk Norge kvinnelig stemmerett i 1913, som et av de første landene i verden?",
+      "answer": "En organisert kvinnebevegelse fra 1880-tallet, folkeavstemningen i 1905 der kvinner samlet 280 000 underskrifter, og en gradvis utvidelse som gjorde skrittet lite",
+      "options": [
+        "Unionsoppløsningen krevde nye velgere, og Venstre utvidet stemmeretten til kvinner for å sikre flertall for republikk mot kongedømme i folkeavstemningen om statsformen",
+        "En organisert kvinnebevegelse fra 1880-tallet, folkeavstemningen i 1905 der kvinner samlet 280 000 underskrifter, og en gradvis utvidelse som gjorde skrittet lite",
+        "Første verdenskrig sendte mennene ut, og kvinnene overtok stemmeretten",
+        "Norge kopierte Sverige, som hadde innført det i 1909"
+      ],
+      "explanation": "Kvinner fikk ikke delta i folkeavstemningen om unionen — så de organiserte sin egen. Kommunal stemmerett for skattebetalende kvinner kom 1901, statlig for de samme i 1907, allmenn i 1913. Bare New Zealand, Australia og Finland var før. Gina Krog, Fredrikke Marie Qvam og Fernanda Nissen er navnene; Camilla Collett hadde stilt spørsmålet 60 år før."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor var Norge så avhengig av Marshallhjelpen og nøytralitetsbruddet mot Sovjet i 1949, når landet hadde kommet relativt godt fra krigen?",
+      "answer": "Halve handelsflåten var borte, Finnmark nedbrent, og Kuppet i Praha 1948 gjorde nøytralitet urealistisk med Sovjet som nabo",
+      "options": [
+        "Landet var totalt utbombet etter fem års okkupasjon, og Sovjet krevde baser på Svalbard som betaling for å ha frigjort Finnmark",
+        "Halve handelsflåten var borte, Finnmark nedbrent, og Kuppet i Praha 1948 gjorde nøytralitet urealistisk med Sovjet som nabo",
+        "USA truet med å kutte handelen om Norge ikke gikk inn i NATO",
+        "Arbeiderpartiet var kommunistisk-fiendtlig og valgte Vesten av ideologi"
+      ],
+      "explanation": "Norge fikk 2,5 milliarder kroner i Marshallhjelp — betingelsen var vestlig samarbeid. Forsøket på et nøytralt nordisk forsvarsforbund strandet i 1949 da Sverige ville være uten stormakter og Norge ville ha amerikansk garanti. Etter kommunistkuppet i Tsjekkoslovakia og Stalins press på Finland sto valget klart. Norge valgte NATO, men med «basepolitikken»: ingen fremmede baser i fredstid, for ikke å provosere Moskva."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var «det store hamskiftet» i norske bygder på 1800-tallet?",
+      "answer": "Overgangen fra selvforsyning til pengeøkonomi — bonden solgte, kjøpte og lånte i stedet for å lage alt selv",
+      "options": [
+        "Overgangen fra teigblanding til samlede gårder gjennom utskiftingsloven, som tvang bøndene til å flytte husene ut av klyngetunene",
+        "Overgangen fra selvforsyning til pengeøkonomi — bonden solgte, kjøpte og lånte i stedet for å lage alt selv",
+        "Bøndenes overgang fra å være leilendinger til selveiere",
+        "Innføringen av folkeskolen som løste bygdene fra kirkens grep"
+      ],
+      "explanation": "Inge Krokanns begrep fra 1942. Nye redskaper, meieri, jernbane og lån gjorde gårdsdrift til forretning; husflid og bytte forsvant. Bygdene ble sårbare for kriser — gjeldskrisen på 1920-tallet slo rett inn — men også åpne for skoler, aviser og politikk. Utskiftingen av teigene var en del av det. Det er «moderniseringen» sett fra bygda."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var «Mot Dag» og de radikale intellektuelle på 1920-tallet viktige for Norge, når de aldri fikk mer enn noen hundre medlemmer?",
+      "answer": "De utdannet en hel generasjon Arbeiderparti-ledere og formet etterkrigstidens planøkonomi og kulturpolitikk",
+      "options": [
+        "De organiserte den første lovlige streiken mot statsmakten og sikret streikeretten i Grunnloven, som Arbeiderpartiet senere bygde videre på",
+        "De utdannet en hel generasjon Arbeiderparti-ledere og formet etterkrigstidens planøkonomi og kulturpolitikk",
+        "De var den norske grenen av Komintern og styrte Arbeiderpartiets utenrikspolitikk",
+        "De grunnla Universitetet i Bergen og NRK"
+      ],
+      "explanation": "Erling Falks studentgruppe var arrogant, disiplinert og briljant. Medlemmer som Karl Evang (helsedirektør 1938–72), Arne Ording og Trond Hegna gikk inn i Arbeiderpartiet da gruppen ble oppløst i 1936 og styrte vesentlige deler av oppbyggingen etter 1945. Norges helsevesen, kringkasting og skoleverk bærer preg av deres tro på at eksperter og stat kan planlegge samfunnet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor står fortsatt Kalmarunionen (1397) som et sår i norsk historieskriving, når Norge gikk inn frivillig?",
+      "answer": "Norge hadde ingen egen konge igjen etter 1387, og gikk inn som det svakeste av tre riker — utgangspunktet for dansk overherredømme",
+      "options": [
+        "Dronning Margrete erobret Norge militært etter å ha beseiret det norske riksrådet ved Oslo, og hun lot Norge betale unionens gjeld i 100 år",
+        "Norge hadde ingen egen konge igjen etter 1387, og gikk inn som det svakeste av tre riker — utgangspunktet for dansk overherredømme",
+        "Unionen tvang Norge til å avstå Jämtland og Härjedalen til Sverige",
+        "Norge måtte bytte kirke fra Nidaros til Lund"
+      ],
+      "explanation": "Kong Olav IV, sønn av Håkon VI og danske Margrete, døde 17 år gammel — siste konge født i Norge på 500 år. Margrete styrte alle tre rikene, og Norge, utpint av pesten, hadde verken adel eller hær til å hevde seg. Sverige brøt ut i 1523; Norge kunne ikke. Erik av Pommern ble kronet i Kalmar, og Norge har ikke hatt egen kronet konge fra 1397 til 1906."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor fikk Norge egen sentralbank og egen valuta først i 1816, og hva forteller det om hva en stat er?",
+      "answer": "Danmark hadde gått konkurs i 1813; Norge trengte tillit til pengene sine, og Norges Bank ble tvangsfinansiert med sølvskatt fra hele folket",
+      "options": [
+        "Sverige nektet Norge felles valuta i unionen, og Stortinget måtte selge statens skoger til England for å skaffe sølv til en egen bank",
+        "Danmark hadde gått konkurs i 1813; Norge trengte tillit til pengene sine, og Norges Bank ble tvangsfinansiert med sølvskatt fra hele folket",
+        "Napoleonskrigene hadde gjort gull så dyrt at Norge gikk over til papirpenger",
+        "Grunnloven av 1814 forbød utenlandske banker"
+      ],
+      "explanation": "Riksbankdalerens sammenbrudd hadde tappet folk for sparepenger. Sølvskatten — hver innbygger måtte skyte inn sølv etter formue — var upopulær, men ga speciedaleren dekning. Norges Bank ble lagt til Trondheim for å holde den unna politikerne i Christiania. Poenget: en stat er ikke ferdig med en grunnlov; den trenger penger folk stoler på. Kronen kom i 1875, med den skandinaviske myntunionen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor lyktes Norge med å bygge en «oljestat» uten den korrupsjonen og økonomiske forfallet mange andre oljeland fikk?",
+      "answer": "Institusjonene — rettsstat, forvaltning, presse — fantes før oljen; og fra 1990 ble inntektene sluset til et fond utenfor statsbudsjettet",
+      "options": [
+        "Norge overlot all drift til amerikanske og britiske selskaper og nøyde seg med skatt, så staten selv aldri kom i berøring med oljepengene",
+        "Institusjonene — rettsstat, forvaltning, presse — fantes før oljen; og fra 1990 ble inntektene sluset til et fond utenfor statsbudsjettet",
+        "Oljen ble funnet så sent at Norge kunne lære av Venezuela og Nigeria",
+        "Stortinget vedtok å begrense produksjonen til 90 millioner tonn i året"
+      ],
+      "explanation": "«Ressursforbannelsen»: oljepenger i et land uten sterke institusjoner gir korrupsjon, valutasjokk og en stat som ikke trenger skattebetalerne. Norge hadde hundre år med demokrati og en velfungerende forvaltning før Ekofisk. Likevel ble 1980-tallet en lærepenge: overforbruk, oljeprisfall 1986, bankkrise. Oljefondet (1990) og handlingsregelen (2001, maks 4 % — nå 3 % — av fondet årlig) er svaret."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var sølvverket på Kongsberg for dansk-norsk økonomi, og hvorfor er det nesten glemt?",
+      "answer": "Nordens største bergverk og statens største enkeltinntekt i 1700-tallet — med 4 000 arbeidere var Kongsberg Norges nest største by",
+      "options": [
+        "En dansk kongelig prestisjeinvestering som aldri ga overskudd og kostet mer enn den innbrakte, holdt i live for kongens ære",
+        "Nordens største bergverk og statens største enkeltinntekt i 1700-tallet — med 4 000 arbeidere var Kongsberg Norges nest største by",
+        "Stedet der Norges mynt ble preget, men gruvene var tomme etter 1650",
+        "Et privat tysk selskap som tok alt sølvet ut av landet"
+      ],
+      "explanation": "Sølvet ble funnet i 1623 og ga kongen mynt til kriger og slott. Tyske bergmenn kom med kunnskapen; norsk bergverksdrift, Norges tekniske høyskoles forløper og Kongsberg Våpenfabrikk (1814) vokste ut av det. Da sølvet tok slutt rundt 1900, sto den tekniske kulturen igjen — det er derfor Kongsberg i dag lager missiler og undervannsteknologi."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var ettpartistyret til Arbeiderpartiet 1945–1961 så uvanlig i et demokrati, og hva gjorde det mulig?",
+      "answer": "Rent flertall i fire valg på rad, bygd på gjenreisningens fellesskap, en splittet opposisjon og et valgsystem som ga største parti bonus",
+      "options": [
+        "Grunnloven ble endret i 1945 til å gi det største partiet flertall uansett stemmetall, for å sikre stabilitet under gjenreisningen",
+        "Rent flertall i fire valg på rad, bygd på gjenreisningens fellesskap, en splittet opposisjon og et valgsystem som ga største parti bonus",
+        "De borgerlige partiene var kompromittert av samarbeid med tyskerne",
+        "Kommunistene ble forbudt, og deres velgere gikk til Arbeiderpartiet"
+      ],
+      "explanation": "Arbeiderpartiet hadde 45–48 % av stemmene, men flertall på Stortinget takket være «bondeparagrafen» og d'Hondts metode. Gerhardsen styrte med planøkonomi, boligbygging og folketrygd, og opposisjonen var fire partier som ikke samarbeidet. Jens Arup Seip kalte det «ettpartistaten» i 1963 — samme år som Kings Bay felte regjeringen og viste at det fantes en annen vei."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kunne Norge få sin egen grunnlov i 1814, midt i en tid da landet var en brikke mellom stormaktene?",
+      "answer": "Danmark tapte Napoleonskrigene og måtte avstå Norge til Sverige — og i tomrommet før svenskene kom, handlet nordmennene selv",
+      "options": [
+        "Napoleon ga Norge selvstendighet som takk for støtten under blokaden av England, og stormaktene godtok det på Wienerkongressen",
+        "Danmark tapte Napoleonskrigene og måtte avstå Norge til Sverige — og i tomrommet før svenskene kom, handlet nordmennene selv",
+        "Sverige tilbød Norge grunnlov for å få landet frivillig inn i unionen",
+        "Bøndene gjorde opprør mot dansk skattlegging og tvang kongen til å gi etter"
+      ],
+      "explanation": "Kielfreden i januar ga Norge til Sverige som krigsbytte. Den danske prinsen Christian Frederik, som var stattholder, satset på norsk selvstendighet, og Eidsvollsmennene skrev Europas mest radikale grunnlov på seks uker. Sverige tok landet med makt om sommeren — men lot grunnloven stå, med små endringer. Derfor feirer vi 17. mai, ikke unionens dato."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor var svartedauden så mye mer ødeleggende for Norge enn for de fleste andre land?",
+      "answer": "Norge var tynt befolket og fattig fra før, og mistet både folk og hele eliten — riket fikk aldri reist seg før det gikk inn i union",
+      "options": [
+        "Pesten kom tidlig til Bergen med et engelsk skip og spredte seg langs kysten før noen visste hva det var, mens innlandet i Europa var advart",
+        "Norge var tynt befolket og fattig fra før, og mistet både folk og hele eliten — riket fikk aldri reist seg før det gikk inn i union",
+        "Kulden gjorde at pesten kom tilbake hver vinter i hundre år",
+        "Nordmennene hadde ingen immunitet fordi de aldri hadde hatt pest"
+      ],
+      "explanation": "Kanskje 60 % av befolkningen døde. Adelen forsvant nesten helt, prestene døde i sjelesorgen, og gårder lå øde i 150 år. Uten en egen elite ble Norge det svakeste leddet i Kalmarunionen og endte som dansk lydrike i 400 år. Ingen annen enkelthendelse har formet norsk historie så sterkt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva gjorde at Norge, et av Europas fattigste land i 1800, ble blant de rikeste allerede før oljen?",
+      "answer": "Skipsfart, fisk og trelast ga eksportinntekter, og vannkraften ga billig energi til industri fra 1900",
+      "options": [
+        "Utvandringen til Amerika sendte penger hjem og reduserte befolkningen så mye at de gjenværende fikk mer jord og høyere lønn",
+        "Skipsfart, fisk og trelast ga eksportinntekter, og vannkraften ga billig energi til industri fra 1900",
+        "Nøytraliteten under to verdenskriger lot Norge tjene på alle parter",
+        "Marshallhjelpen etter 1945 bygde landet opp fra bunnen"
+      ],
+      "explanation": "Rundt 1880 hadde Norge verdens tredje største handelsflåte. Fossekraft trakk utenlandsk kapital til Rjukan og Odda, og hjemfallsretten sikret at kraften ble norsk. I 1970, rett før oljen, lå Norge allerede rundt tiendeplass i verden i BNP per innbygger. Oljen gjorde et rikt land veldig rikt — den skapte ikke velstanden."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor utvandret nesten 800 000 nordmenn til Amerika mellom 1825 og 1925 — flest per innbygger i Europa etter Irland?",
+      "answer": "Befolkningen ble fordoblet på 50 år, og det fantes ikke jord til alle sønnene — Amerika ga gratis land",
+      "options": [
+        "Religiøs forfølgelse av kvekere og haugianere drev de første ut, og de trakk slekt og naboer etter seg i store bølger",
+        "Befolkningen ble fordoblet på 50 år, og det fantes ikke jord til alle sønnene — Amerika ga gratis land",
+        "Sult etter uår og potetpest tømte bygdene som i Irland",
+        "Svenske myndigheter presset nordmenn ut for å fylle unionen med svensker"
+      ],
+      "explanation": "Vaksine, potet og fred gjorde at Norge gikk fra 0,9 til 1,7 millioner mellom 1815 og 1865. Odelsgutten arvet gården; resten ble husmenn eller dro. Homestead Act (1862) ga 65 hektar gratis til den som dyrket det i fem år — mer enn de fleste norske storgårder. Kveker-«Restauration» i 1825 var starten, men motoren var demografi. I dag har flere amerikanere norske aner enn det bor nordmenn i Norge."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor var 9. april 1940 en så total overraskelse for Norge, når krigen hadde pågått i sju måneder?",
+      "answer": "Regjeringen trodde nøytraliteten ville holde som i 1914, og forsvaret var nedbygd og ikke mobilisert",
+      "options": [
+        "Britene hadde lovet å forsvare Norge, og regjeringen stolte på at Royal Navy ville stoppe enhver invasjon i Nordsjøen før den nådde kysten",
+        "Regjeringen trodde nøytraliteten ville holde som i 1914, og forsvaret var nedbygd og ikke mobilisert",
+        "Tyskerne angrep fra Sverige, som ingen hadde ventet",
+        "Kongen og regjeringen var på reise i utlandet"
+      ],
+      "explanation": "Advarslene kom — fra Berlin, fra britene, fra tyske skip senket i Skagerrak dagen før — men ble ikke trodd. Mobiliseringen ble sendt per brev. Likevel: Oscarsborg senket «Blücher» i Drøbaksundet og ga kongen og regjeringen tid til å flykte, så Norge fikk en lovlig regjering i eksil. Det var det som gjorde motstand mulig, og som ga Norge en plass blant seierherrene."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor gjorde tungtvannsaksjonen på Rjukan Norge til et mål i kappløpet om atombomben?",
+      "answer": "Norsk Hydro var verdens eneste produsent av tungtvann, som tyskerne trengte til sin reaktorforskning",
+      "options": [
+        "Rjukan hadde Europas største uranlager, kjøpt av Norsk Hydro før krigen til gjødselproduksjon, og tyskerne ville ha det til bomben",
+        "Norsk Hydro var verdens eneste produsent av tungtvann, som tyskerne trengte til sin reaktorforskning",
+        "Norske fysikere hadde kommet lengst i Europa i kjernefysikk",
+        "Anlegget var det eneste i Europa med nok strøm til å anrike uran"
+      ],
+      "explanation": "Tungtvann er et biprodukt av gjødselproduksjon med vannkraft — derfor lå det på Rjukan. Sabotørene fra Kompani Linge ødela anlegget i 1943, og ferja med restlageret ble senket på Tinnsjøen i 1944. Historikere er uenige om tyskerne var nær en bombe, men de allierte kunne ikke ta sjansen. Det er en av få norske krigshandlinger med global betydning."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor sa Norge nei til EF i 1972 og EU i 1994, når nesten hele det politiske og økonomiske etablissementet sa ja?",
+      "answer": "En allianse av fiskere, bønder, distriktene og deler av venstresiden fryktet for selvråderett og for næringer som lever av skjerming",
+      "options": [
+        "Oljefunnene i Nordsjøen gjorde nordmennene overbevist om at Norge ville klare seg bedre alene, og at EU bare ville kreve del i inntektene",
+        "En allianse av fiskere, bønder, distriktene og deler av venstresiden fryktet for selvråderett og for næringer som lever av skjerming",
+        "Ja-siden var splittet mellom Høyre og Arbeiderpartiet og førte ingen samlet kampanje",
+        "Folkeavstemningene falt sammen med økonomiske kriser i Europa"
+      ],
+      "explanation": "Begge ganger var ja-flertall i Oslo og nei-flertall i nord og i innlandet: 53,5 % nei i 1972, 52,2 % i 1994. Historien med 400 år under Danmark og 90 under Sverige ga «union» en dårlig klang. Løsningen ble EØS-avtalen, som gir Norge det indre markedet uten stemmerett — «alt unntatt fisk og landbruk». Ingen regjering har siden våget en tredje avstemning."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor kalles 1884 ofte det viktigste året i norsk politisk historie, viktigere enn 1905?",
+      "answer": "Parlamentarismen ble innført: regjeringen måtte ha Stortingets tillit, ikke kongens — makten flyttet fra Stockholm til folket",
+      "options": [
+        "Allmenn stemmerett for menn ble innført, og bøndene fikk flertall på Stortinget for første gang og kunne avsette embetsmannsstyret",
+        "Parlamentarismen ble innført: regjeringen måtte ha Stortingets tillit, ikke kongens — makten flyttet fra Stockholm til folket",
+        "Norge fikk eget flagg og eget konsulatvesen, som var starten på veien ut av unionen",
+        "Høyesterett fikk rett til å overprøve Stortingets lover"
+      ],
+      "explanation": "Kongen nektet å godta at statsrådene skulle møte i Stortinget. Johan Sverdrups Venstre-flertall stilte regjeringen for riksrett, dømte dem, og kongen måtte utnevne Sverdrup. Fra da av var kongen i praksis uten politisk makt. 1905 var følgen: et Storting som allerede styrte, trengte ikke svenskekongen. Samme år ble de første partiene, Venstre og Høyre, stiftet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvordan klarte Norge å gå ut av unionen med Sverige i 1905 uten krig?",
+      "answer": "Stortinget avsatte kongen ensidig, folkeavstemningen ga 99,9 % ja, og Sverige valgte forhandling framfor en krig stormaktene ikke ville ha",
+      "options": [
+        "Storbritannia og Tyskland garanterte Norges grenser i en hemmelig avtale og advarte Sverige mot å gripe inn militært",
+        "Stortinget avsatte kongen ensidig, folkeavstemningen ga 99,9 % ja, og Sverige valgte forhandling framfor en krig stormaktene ikke ville ha",
+        "Svenskekongen abdiserte frivillig for Norge etter press fra sitt eget parlament",
+        "Norge kjøpte seg fri med erstatning betalt over tjue år"
+      ],
+      "explanation": "Konsulatsaken var påskuddet: Norge ville ha egne konsuler for sin store handelsflåte. 7. juni erklærte Stortinget unionen oppløst fordi kongen «ikke lenger fungerte». Begge land mobiliserte, men Karlstad-forhandlingene i september endte med at Norge rev grensefestningene. Så valgte Norge en dansk prins til konge — Haakon VII — etter ny folkeavstemning. Nabolandene har ikke vært i krig siden 1814."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor ble Bergen, ikke Oslo, Norges største og viktigste by i 500 år?",
+      "answer": "Tørrfisken fra Nord-Norge ble samlet der og solgt til Europa gjennom Hansaen — det var landets eneste store eksportvare",
+      "options": [
+        "Bergen var kongens residens fra Sverre til reformasjonen, og hoffet og kirken trakk handelen med seg til byen",
+        "Tørrfisken fra Nord-Norge ble samlet der og solgt til Europa gjennom Hansaen — det var landets eneste store eksportvare",
+        "Bergen hadde den eneste isfrie havnen mot Nordsjøen",
+        "Byen var hovedstad i Kalmarunionen"
+      ],
+      "explanation": "Tørrfisk holder i årevis og var proteinet Europa spiste i fasten. Lofotfisket ga fisken, Bergen ga markedet, og hanseatene på Bryggen ga tilgangen til Tyskland. I 1600 var Bergen større enn København. Oslo tok over først da trelasten og embetsverket vokste på 1600–1700-tallet. Bryggen er verdensarv fordi den er Europas best bevarte hansakontor."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva gjorde Hans Nielsen Hauge til en av de viktigste nordmennene i historien, og hvorfor satt han ti år i fengsel for det?",
+      "answer": "Han skapte en vekkelse av bønder som leste, organiserte seg og startet bedrifter — utenfor prestenes og embetsmennenes kontroll",
+      "options": [
+        "Han oversatte Bibelen til folkelig norsk og lærte bøndene å lese, i strid med kirkens monopol på å tolke skriften og kongens sensur",
+        "Han skapte en vekkelse av bønder som leste, organiserte seg og startet bedrifter — utenfor prestenes og embetsmennenes kontroll",
+        "Han organiserte det første bondeopprøret mot dansk skatt",
+        "Han grunnla frikirken og nektet å betale tiende"
+      ],
+      "explanation": "Konventikkelplakaten forbød religiøse møter uten prest. Hauge vandret 15 000 km, skrev bøker som ble Norges mest leste, og satte venner i gang med møller, papirfabrikker og handel. Haugianerne ble ryggraden i bondeopposisjonen på Stortinget og i mye tidlig norsk næringsliv. Max Weber kunne skrevet om dem: lekmannsfromhet og forretning i samme person."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor var «landssvikoppgjøret» etter 1945 så omfattende — over 90 000 saker i et land på 3 millioner?",
+      "answer": "Medlemskap i NS ble i seg selv gjort straffbart, med tilbakevirkende kraft, for å ramme hele det kollaborerende apparatet",
+      "options": [
+        "Alle som hadde arbeidet for tyskerne, også de som bygde veier og flyplasser under tvang, ble tiltalt fordi London-regjeringen ville statuere et eksempel",
+        "Medlemskap i NS ble i seg selv gjort straffbart, med tilbakevirkende kraft, for å ramme hele det kollaborerende apparatet",
+        "Sovjet krevde et hardt oppgjør som betingelse for å trekke seg ut av Finnmark",
+        "Hjemmefronten gjennomførte oppgjøret på egen hånd før domstolene var på plass"
+      ],
+      "explanation": "Rundt 46 000 ble dømt, de fleste NS-medlemmer til bøter eller tap av rettigheter; 25 ble henrettet, Quisling først. Oppgjøret var strengere mot små NS-medlemmer enn mot store bedrifter som tjente på tyske kontrakter — det ble kritisert allerede da. Rettsgrunnlaget var London-regjeringens provisoriske anordninger, og debatten om tilbakevirkende kraft varer ennå."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor eier den norske staten oljen, mens i USA eier grunneieren det som ligger under bakken?",
+      "answer": "Norge slo fast i 1963, før noe var funnet, at ressursene på sokkelen tilhørte staten — og bygde et system der staten tok mesteparten av gevinsten",
+      "options": [
+        "Oljeselskapene fant oljen på statens grunn utenfor territorialgrensen, så ingen private kunne gjøre krav, og staten arvet rettighetene ved en tilfeldighet",
+        "Norge slo fast i 1963, før noe var funnet, at ressursene på sokkelen tilhørte staten — og bygde et system der staten tok mesteparten av gevinsten",
+        "Arbeiderpartiet nasjonaliserte feltene etter Ekofisk-funnet i 1969",
+        "Storbritannia og Norge delte Nordsjøen mellom statene, ikke selskapene"
+      ],
+      "explanation": "Lærdommen kom fra vannkraften: hjemfallsretten fra 1909 hadde sikret at fossene ble norske. Da Phillips ba om leterett i hele Nordsjøen i 1962, sa regjeringen nei og laget konsesjonssystemet. Delelinjen med Storbritannia etter midtlinjeprinsippet i 1965 var flaks — Ekofisk ligger få kilometer på norsk side. Med Statoil (1972) og 78 % skatt fikk staten kontrollen «de ti oljebud» hadde beskrevet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var husmannsvesenet, og hvorfor forsvant det på under hundre år?",
+      "answer": "Jordløse leide en plass mot pliktarbeid for bonden; utvandring, industri og jernbane ga dem alternativer, og systemet døde ut",
+      "options": [
+        "Livegne bønder som var bundet til godset og ikke kunne flytte; det ble avskaffet av Stortinget i 1851 etter press fra Marcus Thrane",
+        "Jordløse leide en plass mot pliktarbeid for bonden; utvandring, industri og jernbane ga dem alternativer, og systemet døde ut",
+        "Leilendinger på kirkegods som ble frie da kirken mistet jorda ved reformasjonen",
+        "Fiskere som bodde på handelsmannens grunn og skyldte ham fangsten"
+      ],
+      "explanation": "I 1850 var det 65 000 husmannsfamilier — flere enn bønder i mange bygder. De var ikke livegne, men fattige og avhengige. Marcus Thranes bevegelse (1849) samlet 30 000 av dem, og ble knust. Så tømte Amerika og byene bygdene for arbeidskraft, bonden måtte betale lønn, og plassene ble kjøpt fri eller lagt ned. Mange norske slekter går tilbake til en husmannsplass."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor ble Norge kristnet med sverd av kongene, mens Island vedtok kristendommen ved forlik på Alltinget?",
+      "answer": "For Olav Tryggvason og Olav Haraldsson var kristningen et redskap til å bryte høvdingenes makt og bygge et rike med én konge",
+      "options": [
+        "Norge hadde langt flere hedenske hov og prester som gjorde væpnet motstand, mens Island var bosatt av kristne fra Irland fra starten",
+        "For Olav Tryggvason og Olav Haraldsson var kristningen et redskap til å bryte høvdingenes makt og bygge et rike med én konge",
+        "Paven krevde makt for å anerkjenne den norske kongen",
+        "Island ble kristnet senere, da kirken hadde blitt mer forsonende"
+      ],
+      "explanation": "En kristen konge fikk kirkens organisasjon, skrift, lover og guddommelig legitimitet — og et påskudd til å knuse høvdinger som nektet. Trønderne drepte Olav Haraldsson på Stiklestad i 1030, men helgenkulten rundt ham ga kongemakten det den trengte: en nasjonal helgen og Nidaros. Islendingene, uten konge, valgte i år 1000 kristendom som kompromiss for å unngå borgerkrig."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor gikk Norge, i motsetning til Danmark, i union med Sverige og ikke med Danmark etter 1814 — mot befolkningens ønske?",
+      "answer": "Sverige hadde mistet Finland til Russland i 1809 og fikk løfte om Norge som kompensasjon for å slutte seg til koalisjonen mot Napoleon",
+      "options": [
+        "Den svenske kronprinsen Bernadotte var Napoleons marskalk og fikk Norge av keiseren som belønning før han skiftet side",
+        "Sverige hadde mistet Finland til Russland i 1809 og fikk løfte om Norge som kompensasjon for å slutte seg til koalisjonen mot Napoleon",
+        "Storbritannia ville ha en sterk skandinavisk stat mot Russland",
+        "Norge valgte selv Sverige for å slippe dansk gjeld"
+      ],
+      "explanation": "Bernadotte, fransk marskalk valgt til svensk tronfølger, forhandlet i 1812–13 med Russland og England: Sverige gikk mot Napoleon mot å få Norge. Danmark, som holdt på Napoleon, tapte og måtte betale med Norge i Kiel. Norge var altså et bytte i en europeisk handel. Nordmennene protesterte med grunnloven, og fikk beholde den — en union av to stater, ikke en innlemmelse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var tvangsevakueringen og nedbrenningen av Finnmark i 1944 nesten fraværende i norsk historieskriving i tiår?",
+      "answer": "Fortellingen om krigen ble bygd rundt London, Hjemmefronten og Sør-Norge; Finnmarks 50 000 fordrevne passet ikke inn og ble lite hørt",
+      "options": [
+        "Sovjetunionen frigjorde Finnmark, og under den kalde krigen ville ingen norsk regjering framheve at Den røde armé var befrieren",
+        "Fortellingen om krigen ble bygd rundt London, Hjemmefronten og Sør-Norge; Finnmarks 50 000 fordrevne passet ikke inn og ble lite hørt",
+        "Nedbrenningen ble hemmeligholdt fordi norske myndigheter selv hadde beordret den",
+        "Finnmark var militært sperreområde til 1960, og journalister slapp ikke inn"
+      ],
+      "explanation": "Tyskerne brente alt fra Tana til Lyngen under retretten: hus, kirker, båter, fjøs. Mange nektet å dra og overvintret i huler. Etter krigen bygde staten opp igjen med standardhus, og samisk og kvensk kultur mistet mye i flyttingen. Den kalde krigen bidro også — sovjetiske soldater som befriere var ubekvemt. Først på 2000-tallet kom historien inn i lærebøkene for alvor."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var fornorskingspolitikken overfor samene, og hva var den drevet av?",
+      "answer": "Et hundreårig program (ca. 1850–1960) for å utslette samisk språk og kultur gjennom skole og jordlov, drevet av nasjonsbygging og frykt for Russland",
+      "options": [
+        "Et forsøk fra 1900-tallets sosialdemokrater på å gi samene like rettigheter ved å integrere dem fullt i det norske samfunnet, som slo feil",
+        "Et hundreårig program (ca. 1850–1960) for å utslette samisk språk og kultur gjennom skole og jordlov, drevet av nasjonsbygging og frykt for Russland",
+        "Kirkens misjon for å kristne samene, som gikk over i tvangsdåp",
+        "En avtale mellom Norge, Sverige og Finland om å stenge reindriftens grenser"
+      ],
+      "explanation": "Samisk var forbudt i skolen fra 1880-årene; jord i Finnmark kunne fra 1902 bare kjøpes av dem som snakket norsk. Internatskoler skilte barn fra språk og familie. Bak lå det unge Norges behov for én nasjon — og angsten for at et flerspråklig Finnmark var en åpen dør for Russland. Sannhets- og forsoningskommisjonen leverte sin rapport i 2023. Alta-aksjonen i 1979–81 var vendepunktet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var Norge lenge et land nesten uten adel, og hva fikk det å si?",
+      "answer": "Svartedauden og dansketiden tømte den norske adelen; Stortinget avskaffet resten i 1821 — og Norge ble et land av selveiende bønder",
+      "options": [
+        "Harald Hårfagre avskaffet høvdingene og gjorde all jord til kongens; ingen adel fikk vokse fram etterpå fordi kongen eide alt",
+        "Svartedauden og dansketiden tømte den norske adelen; Stortinget avskaffet resten i 1821 — og Norge ble et land av selveiende bønder",
+        "Reformasjonen ga adelsgodset til kirken, som mistet det til bøndene",
+        "Adelen flyttet til København og ble dansk"
+      ],
+      "explanation": "På 1300-tallet var adelen liten; etter pesten giftet restene seg inn i dansk og svensk adel. Danskekongen solgte krongods til bøndene på 1600–1700-tallet for å finansiere kriger, så ved 1814 eide bøndene selv mesteparten av jorda — unikt i Europa. Bøndene fikk stemmerett i 1814 og flertall på Stortinget. Norsk likhetsideal og mistro til «fine folk» har røtter her."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var «Kings Bay-saken» i 1963, og hvorfor markerer den et vendepunkt?",
+      "answer": "En gruveulykke på Svalbard felte Gerhardsen-regjeringen — første gang etter krigen at Arbeiderpartiets styre ble brutt, og starten på borgerlig samarbeid",
+      "options": [
+        "Norge og Sovjet nesten kom i konflikt om gruvedriften i Barentsburg, og regjeringen måtte gå etter å ha holdt Stortinget uvitende",
+        "En gruveulykke på Svalbard felte Gerhardsen-regjeringen — første gang etter krigen at Arbeiderpartiets styre ble brutt, og starten på borgerlig samarbeid",
+        "En strid om hvem som skulle eie kullet på Svalbard endte med at staten overtok",
+        "Regjeringen gikk av fordi den hadde hemmeligholdt en NATO-base på Svalbard"
+      ],
+      "explanation": "21 gruvearbeidere døde i Ny-Ålesund i 1962, og industriministeren hadde holdt tilbake opplysninger. Sosialistisk Folkeparti, med to mandater på vippen, stemte med de borgerlige; John Lyng dannet regjering i 28 dager. Den varte kort, men viste at det fantes et alternativ — i 1965 vant de borgerlige valget. Slutten på det Jens Arup Seip kalte «ettpartistaten»."
     }
   ]
 }

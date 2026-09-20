@@ -513,6 +513,486 @@
         "Etiopia og Sudan",
         "Nigeria og Kamerun"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Sør-Europa så mye mer utsatt for tørke og skogbrann om sommeren enn Norge?",
+      "answer": "Middelhavsklimaet har regnet om vinteren og nesten ingenting om sommeren",
+      "options": [
+        "Solen står så høyt om sommeren at vannet fordamper fra jorda før det rekker ned til røttene",
+        "Middelhavsklimaet har regnet om vinteren og nesten ingenting om sommeren",
+        "Jordsmonnet rundt Middelhavet er tynt og holder ikke på fuktighet",
+        "Skogene der består av furu og eukalyptus som brenner lettere enn gran"
+      ],
+      "explanation": "Om sommeren flytter det subtropiske høytrykket seg nordover og legger seg over Middelhavet — samme tørre, synkende luft som lager Sahara. Athen får rundt 5 mm regn i juli, mot Bergens 150. Regnet kommer først når høytrykket trekker sør igjen om høsten."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor stor andel av jordas ferskvann er tilgjengelig i elver og innsjøer?",
+      "answer": "Under 1 prosent",
+      "options": [
+        "Under 1 prosent",
+        "Rundt 10 prosent",
+        "Rundt en tredjedel",
+        "Omtrent halvparten — resten er grunnvann"
+      ],
+      "explanation": "Bare 2,5 % av alt vann på jorda er ferskt, og av det er nesten 70 % låst i is på Antarktis og Grønland og 30 % grunnvann. Elvene og innsjøene vi henter drikkevann fra, er en brøkdel — men fornyes hele tiden av regnet."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Norges befolkning så mye mindre enn Sveriges, når landene er omtrent like store?",
+      "answer": "Norge har svært lite dyrkbar jord — bare rundt 3 % av arealet",
+      "options": [
+        "Norge har svært lite dyrkbar jord — bare rundt 3 % av arealet",
+        "Utvandringen til Amerika på 1800-tallet tømte Norge, men ikke Sverige",
+        "Sverige har hatt fred lenger og unngikk okkupasjonens tap",
+        "Klimaet i Norge er kaldere fordi landet ligger lenger nord"
+      ],
+      "explanation": "Sverige har rundt 7 % dyrkbar jord og store flate sletter i sør; Norge er fjell, myr og skog. Før industrialiseringen satte jorda taket for hvor mange et land kunne fø. Derfor var Sverige dobbelt så folkerikt som Norge allerede på 1600-tallet — samme forhold som i dag."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilket land har lengst kystlinje i verden?",
+      "answer": "Canada",
+      "options": [
+        "Russland",
+        "Canada",
+        "Norge",
+        "Indonesia"
+      ],
+      "explanation": "Canadas arktiske øyer gir over 200 000 km kyst. Norge er på andre- eller tredjeplass avhengig av hvordan man teller — tar man med alle øyer og fjorder, kommer Norge opp i over 100 000 km, mer enn en fjerdedel av veien til månen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kan Sahara-støv farge himmelen gul i Norge?",
+      "answer": "Storm løfter støvet høyt opp, og sørlige vinder bærer det nordover på noen dager",
+      "options": [
+        "Storm løfter støvet høyt opp, og sørlige vinder bærer det nordover på noen dager",
+        "Støvet følger Golfstrømmen som partikler i havet og løftes opp i havtåke",
+        "Det er egentlig askepartikler fra skogbranner i Sør-Europa som løftes opp av varmen, ikke sand",
+        "Jetstrømmen i 10 km høyde suger opp sand og slipper den ned over Nord-Europa"
+      ],
+      "explanation": "Rundt 180 millioner tonn Sahara-støv blåser ut over Atlanterhavet hvert år. Mye av det gjødsler Amazonas med fosfor. Når vinden står fra sør over Spania og Frankrike, når en del av det Skandinavia — og legger seg som et rødbrunt lag på snøen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Australias innland nesten folketomt, mens kysten i sørøst er tett befolket?",
+      "answer": "Innlandet ligger i ørkenbeltet, og regnet faller nesten bare langs kysten",
+      "options": [
+        "Innlandet er fjell og høyfjell som er for kaldt om vinteren",
+        "Innlandet ligger i ørkenbeltet, og regnet faller nesten bare langs kysten",
+        "Kolonimakten forbød bosetting i innlandet for å beskytte urbefolkningen",
+        "Innlandet mangler elver fordi kontinentet aldri hadde en istid som gravde daler og innsjøbassenger"
+      ],
+      "explanation": "Australia ligger på samme breddegrad som Sahara og Kalahari — det subtropiske høytrykket gjør 70 % av landet tørt. Nesten 90 % bor innenfor 5 mil fra kysten, de fleste i en smal, grønn stripe fra Brisbane til Adelaide."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedgrunnen til at Bangladesh rammes så hardt av flom?",
+      "answer": "Landet er et flatt delta der tre store elver møtes, og monsunen fyller dem samtidig",
+      "options": [
+        "Landet er et flatt delta der tre store elver møtes, og monsunen fyller dem samtidig",
+        "Skogene i Himalaya er hogd ned, så monsunregnet renner rett ned i elvene uten å bremses av jord og røtter",
+        "Landet synker fordi grunnvannet pumpes opp til risdyrking",
+        "Sykloner fra Bengalbukta presser havet innover land hvert år"
+      ],
+      "explanation": "Ganges, Brahmaputra og Meghna drenerer hele Himalaya og renner ut gjennom Bangladesh, som knapt ligger over havet. I monsunen står en femtedel av landet under vann i et normalår. Deltaet er samtidig noe av verdens mest fruktbare jord — derfor bor 170 millioner mennesker der."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor kan man bo i Longyearbyen på Svalbard, men ikke på tilsvarende breddegrad i Canada?",
+      "answer": "En arm av Golfstrømmen holder vestkysten av Svalbard isfri mesteparten av året",
+      "options": [
+        "Longyearbyen ligger i en lun dal som fanger sol hele døgnet om sommeren og gir varmere somre enn kysten",
+        "Svalbard har permafrost som gjør det mulig å bygge på fast grunn",
+        "En arm av Golfstrømmen holder vestkysten av Svalbard isfri mesteparten av året",
+        "Canadas arktis er fjell og innlandsis, mens Svalbard er lavland"
+      ],
+      "explanation": "Vestspitsbergenstrømmen fører atlantisk varme helt opp til 80° nord. På samme breddegrad i Canada ligger Ellesmere Island, låst i is året rundt. Svalbard er verdens nordligste bosetting med vanlig samfunnsliv — og stedet på jorda der oppvarmingen går raskest."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor har India monsun — en regntid der nesten hele årsnedbøren faller på fire måneder?",
+      "answer": "Det indiske landmassivet varmes opp om sommeren og suger fuktig luft inn fra havet",
+      "options": [
+        "Himalaya presser den kalde vinterluften sørover og utløser regnet når den møter varm luft",
+        "Sykloner fra Det indiske hav treffer kysten i rekkefølge gjennom sommeren",
+        "Det indiske landmassivet varmes opp om sommeren og suger fuktig luft inn fra havet",
+        "Jetstrømmen flytter seg over Himalaya om sommeren og drar regnskyene med seg"
+      ],
+      "explanation": "Land varmes fortere enn hav. Om sommeren stiger luften over det glovarme subkontinentet, og havluft strømmer inn for å fylle tomrommet — mettet med fukt fra Det indiske hav. Om vinteren snur det. Monsunen avgjør avlingene for over en milliard mennesker, og et forsinket monsunregn er forsidestoff i India."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Sør-Amerikas vestkyst en tynn stripe land, mens østsiden er enorm?",
+      "answer": "Andesfjellene reiser seg rett opp fra kysten der havbunnsplaten presses ned",
+      "options": [
+        "Andesfjellene reiser seg rett opp fra kysten der havbunnsplaten presses ned",
+        "Stillehavet har erodert vestkysten i millioner av år med kraftige stormer",
+        "Kontinentet driver vestover, og vestkysten brytes ned av kollisjonen med Stillehavsplaten",
+        "Amazonas har bygd østkysten utover med sedimenter i titalls millioner år"
+      ],
+      "explanation": "Nazca-platen dukker under Sør-Amerika langs hele vestkysten, og skorpa foldes opp til verdens lengste fjellkjede. Derfor ligger Chile som en 4 300 km lang, i snitt 18 mil bred stripe mellom fjell og hav — og derfor har Chile og Peru noen av verdens største jordskjelv."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Island fullt av vulkaner og varme kilder, mens Norge og Skottland ikke har noen?",
+      "answer": "Island ligger oppå riften der Nord-Amerika og Europa glir fra hverandre",
+      "options": [
+        "Island er restene av en gigantisk vulkan som en gang var like stor som Skottland",
+        "Island ligger oppå riften der Nord-Amerika og Europa glir fra hverandre",
+        "Island er yngre og har ikke rukket å avkjøles etter at den ble dannet",
+        "Golfstrømmen varmer opp havbunnen rundt Island og driver de varme kildene"
+      ],
+      "explanation": "Den midtatlantiske ryggen går tvers gjennom Island, og landet vokser rundt 2 cm i året. På Þingvellir kan man gå i sprekken mellom de to platene. Norge og Skottland lå på samme rift for 60 millioner år siden — Vestlandets basaltlag ved Bergen er rester av den."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er San Francisco ofte kald og tåkete om sommeren, mens byer 5 mil innenfor har over 35 grader?",
+      "answer": "Kaldt dypvann stiger opp langs kysten og lager tåke som innlandsvarmen suger inn gjennom bukta",
+      "options": [
+        "Byen ligger på en halvøy som er omgitt av kaldt vann på tre sider",
+        "Kaldt dypvann stiger opp langs kysten og lager tåke som innlandsvarmen suger inn gjennom bukta",
+        "Sjøbrisen fra Stillehavet holder byen kjølig, slik alle kystbyer er",
+        "Fjellene bak byen stenger den varme innlandsluften ute om sommeren"
+      ],
+      "explanation": "Nordavind langs California-kysten driver overflatevannet vekk, og iskaldt dypvann tar plassen (oppstrømning). Luften over blir tåke. Central Valley innenfor koker, varm luft stiger, og tåken suges inn gjennom Golden Gate som en naturlig klimaanleggsvifte. Mark Twain skal ha kalt en San Francisco-sommer «den kaldeste vinteren jeg har opplevd»."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedgrunnen til at Kaspihavet regnes som en innsjø, men er salt?",
+      "answer": "Den har ingen utløp, så saltet elvene bringer, blir liggende når vannet fordamper",
+      "options": [
+        "Den var en del av verdenshavet til jordskorpa lukket den inne, og saltet er fra den tiden",
+        "Den har ingen utløp, så saltet elvene bringer, blir liggende når vannet fordamper",
+        "Salt lekker inn fra oljefeltene og saltgruvene under bunnen",
+        "Sterk vind frakter havsalt over fra Svartehavet"
+      ],
+      "explanation": "Samme mekanisme lager Dødehavet og Great Salt Lake: Volga og andre elver bringer små mengder oppløst salt, vannet fordamper, saltet blir. Kaspihavet er verdens største innsjø — 5 ganger større enn Norges samlede innsjøareal — og synker nå fordi Volga tappes til jordbruk."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor ligger Norges eldste bergarter i vest og nord, mens Oslo-området er så mye yngre?",
+      "answer": "Oslofeltet er en 300 millioner år gammel rift der jordskorpa sprakk og fyltes med vulkanske bergarter",
+      "options": [
+        "Oslofeltet ble hevet opp av istiden og består av unge sedimenter fra Skagerrak",
+        "Oslofeltet er en 300 millioner år gammel rift der jordskorpa sprakk og fyltes med vulkanske bergarter",
+        "Vestlandet og Nord-Norge ble aldri dekket av hav, mens Østlandet lå under et grunt hav i millioner av år og fikk unge avsetninger",
+        "Kaledonidene i vest er rester av en kollisjon med Grønland som Østlandet slapp unna"
+      ],
+      "explanation": "Grunnfjellet i Norge er opptil 3 milliarder år; Oslofeltet er en «feilslått» rift der Skandinavia nesten delte seg, og som etterlot vulkaner og kalksteinen fra et tropisk hav. Derfor er jorda rundt Oslofjorden kalkrik og fruktbar, og derfor finner man fossiler i Slemmestad, men aldri i Bergen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Mexico by, med over 20 millioner innbyggere, bygd på et sted som synker og skjelver?",
+      "answer": "Aztekerne bygde hovedstaden på en øy i en innsjø, som spanjolene drenerte",
+      "options": [
+        "Byen ble anlagt der to elver møttes, og elvene har siden skiftet løp",
+        "Aztekerne bygde hovedstaden på en øy i en innsjø, som spanjolene drenerte",
+        "Spanjolene valgte høyplatået for å unngå malaria og tropisk hete ved kysten",
+        "Sølvgruvene i fjellene rundt gjorde stedet til det økonomiske sentrum"
+      ],
+      "explanation": "Tenochtitlan lå midt i Texcoco-sjøen, og hele dalen er gammel innsjøbunn av bløt leire. Byen har sunket over 10 meter på hundre år fordi grunnvannet pumpes opp, og leiren forsterker jordskjelv som en bolle gelé — det var derfor skjelvet i 1985 ble så dødelig. Stedsvalget var aztekernes, ikke geografiens."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Nordøstpassasjen langs Sibir blitt seilbar om sommeren, og hvorfor betyr det så mye for Norge?",
+      "answer": "Sommerisen har trukket seg tilbake, og ruten Asia–Europa forkortes med rundt 40 % — via norskekysten",
+      "options": [
+        "Russland har bygd atomisbrytere som holder ruten åpen, og Norge leverer drivstoffet",
+        "Sommerisen har trukket seg tilbake, og ruten Asia–Europa forkortes med rundt 40 % — via norskekysten",
+        "Golfstrømmen har snudd nordover og smelter isen fra Barentshavet og østover",
+        "Klimaavtalene har åpnet for kommersiell trafikk som tidligere var forbudt"
+      ],
+      "explanation": "Fra Shanghai til Rotterdam er det ca. 20 000 km via Suez, rundt 13 000 via Arktis. Sommerisen i Polhavet har krympet med over 40 % siden 1980. Trafikken går inn og ut av Arktis rett forbi Finnmark, og det er en av grunnene til at Nord-Norge er blitt strategisk viktig for både NATO og Kina."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor har Etiopia, med over 120 millioner innbyggere, ingen kystlinje?",
+      "answer": "Eritrea løsrev seg i 1993 og tok hele Rødehavskysten med seg",
+      "options": [
+        "Eritrea løsrev seg i 1993 og tok hele Rødehavskysten med seg",
+        "Etiopia er et fjellrike som aldri strakte seg ned til kysten",
+        "Italia beholdt kysten som koloni etter at Etiopia ble selvstendig",
+        "Djibouti ble skilt ut av Frankrike som en egen stat med havnen"
+      ],
+      "explanation": "Etiopia gikk fra å ha kyst til å bli verdens folkerikeste innlandsstat over natten. All import og eksport går nå via havnen i nabolandet Djibouti, som tar betalt. Det er bakteppet for Etiopias press mot Somaliland om havnetilgang — og for spenningen ved Rødehavet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor blir det stadig flere innsjøer på Grønland og i Himalaya, og hvorfor er det farlig?",
+      "answer": "Smeltende breer etterlater sjøer bak løse morenerygger som kan briste i én flodbølge",
+      "options": [
+        "Permafrosten tiner og bakken synker, så regnvann samler seg i nye groper",
+        "Smeltende breer etterlater sjøer bak løse morenerygger som kan briste i én flodbølge",
+        "Landhevingen etter isen lager nye bassenger som fanger elvene",
+        "Økt nedbør i fjellene fyller daler som før var tørre"
+      ],
+      "explanation": "En morene er grus og stein breen skjøv foran seg — ikke fjell. Når sjøen bak blir stor nok, gir demningen etter (en «GLOF» — glacial lake outburst flood). I Nepal og Bhutan ligger landsbyer og kraftverk rett nedenfor slike sjøer. Antallet bresjøer i verden har økt med rundt 50 % siden 1990."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor ligger nesten alle Europas gamle universitetsbyer og handelsbyer ved en elv, men sjelden ved kysten?",
+      "answer": "Elva ga drikkevann, transport og forsvar, og lå trygt unna sjørøvere og landgang fra havet",
+      "options": [
+        "Kysten var sumpete og malariabefengt fram til den ble drenert på 1800-tallet",
+        "Elva ga drikkevann, transport og forsvar, og lå trygt unna sjørøvere og landgang fra havet",
+        "Kirken forbød å anlegge byer ved havet fordi det var hedensk grunn",
+        "Elvebyene lå der de romerske veiene krysset, og romerne bygde aldri havnebyer"
+      ],
+      "explanation": "Paris, London, Roma, Praha, Wien, Firenze — alle ligger et stykke opp i en elv, ofte ved det første stedet den var grunn nok til å vade eller bygge bro over. En by rett ved havet kunne herjes av vikinger eller sarasenere på timer. Først da flåtene ble sterke nok til å beskytte kysten, vokste de store havnebyene."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor kan Sahel-beltet sør for Sahara gå fra hungersnød til grønn savanne på noen tiår?",
+      "answer": "Beltet ligger på grensen der monsunregnet stopper, og små forskyvninger gir enorme utslag",
+      "options": [
+        "Bøndene der driver svedjebruk som utarmer jorda, og lar den ligge brakk i tiår",
+        "Beltet ligger på grensen der monsunregnet stopper, og små forskyvninger gir enorme utslag",
+        "Sahara vokser og krymper med solflekksyklusen på rundt 11 år",
+        "Nedbøren styres av El Niño i Stillehavet, som veksler mellom våte og tørre år"
+      ],
+      "explanation": "Sahel er der den vestafrikanske monsunen dør ut. Flytter regngrensen seg 100 km nordover, får millioner av bønder avling; 100 km sørover, og de sulter — som i 1970- og 80-årene. Regnet der styres blant annet av havtemperaturen i Atlanterhavet, og havet har vært varmere siden 1990 — Sahel har faktisk blitt grønnere."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Bergen mye mildere om vinteren enn Fairbanks i Alaska, som ligger på omtrent samme breddegrad?",
+      "answer": "Golfstrømmen og vestavinden frakter varme fra Atlanterhavet",
+      "options": [
+        "Norge har tettere skydekke om vinteren, som holder på varmen som en dyne",
+        "Golfstrømmen og vestavinden frakter varme fra Atlanterhavet",
+        "Bergen ligger nesten ved havnivå, mens Fairbanks ligger høyt over havet",
+        "Alaska ligger på innsiden av polarsirkelen og mister sola om vinteren"
+      ],
+      "explanation": "Havet lagrer varme fra sommeren og avgir den langsomt, og vestavinden blåser den inn over Vest-Europa. Fairbanks får kald luft fra et enormt innland. Uten den atlantiske varmetransporten hadde Vestlandet hatt klima som Sør-Grønland."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Omtrent hvor mange ganger større er Russland i areal enn Norge?",
+      "answer": "Rundt 45 ganger",
+      "options": [
+        "Rundt 10 ganger",
+        "Rundt 45 ganger",
+        "Rundt 100 ganger",
+        "Rundt 5 ganger"
+      ],
+      "explanation": "Russland er ca. 17 millioner km², Norge ca. 385 000 km² (fastlandet + Svalbard). Russland spenner over 11 tidssoner, men har bare rundt 27 ganger så mange innbyggere som Norge — det meste av arealet er nesten folketomt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor ligger nesten alle Norges største byer ved kysten eller innerst i en fjord?",
+      "answer": "Sjøen var den eneste effektive transportveien i et land av fjell",
+      "options": [
+        "Kysten hadde den beste jordbruksjorden og det mildeste klimaet",
+        "Kongene ga handelsprivilegier bare til byer med havn, så innlandsbyene visnet",
+        "Sjøen var den eneste effektive transportveien i et land av fjell",
+        "Klimaet i innlandet var for kaldt til å brødfø en by før moderne jordbruk"
+      ],
+      "explanation": "Fram til jernbanen kom på 1800-tallet var en båt raskere og billigere enn noen landevei over fjellet. Bergen, Trondheim, Stavanger og Oslo ligger alle der en fjord møter et dalføre — de var omlastingspunkter mellom sjø og innland."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedgrunnen til at Sahara er en ørken?",
+      "answer": "Synkende, tørr luft i det subtropiske høytrykksbeltet",
+      "options": [
+        "Den ligger for langt fra havet til at fuktig luft rekker fram før den tørker",
+        "Atlasfjellene og Etiopias høyland stenger regnskyene ute fra begge sider",
+        "Synkende, tørr luft i det subtropiske høytrykksbeltet",
+        "Sanden reflekterer solvarmen, så luften over aldri blir kald nok til å gi regn"
+      ],
+      "explanation": "Luft som stiger ved ekvator, avgir regnet der og synker igjen rundt 30° nord og sør. Synkende luft varmes opp og tørker ut — derfor ligger verdens store ørkener som et belte: Sahara, Arabia, Kalahari, Australia og Atacama. Sahara har dessuten vært grønn savanne flere ganger, sist for rundt 6 000 år siden."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvilken av disse elvene renner gjennom flest hovedsteder?",
+      "answer": "Donau",
+      "options": [
+        "Rhinen",
+        "Volga",
+        "Donau",
+        "Nilen"
+      ],
+      "explanation": "Donau passerer Wien, Bratislava, Budapest og Beograd — fire hovedsteder, mer enn noen annen elv. Den var Romerrikets nordgrense i århundrer, og flere av byene begynte som romerske grensefestninger."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor har Sørlandet og Østlandet varmere somre enn Vestlandet, selv om Vestlandet har mildere vintre?",
+      "answer": "Fjellene skjermer for det fuktige, tempererte havværet",
+      "options": [
+        "Østlandet ligger lenger sør og får flere soltimer i sommerhalvåret",
+        "Fjellene skjermer for det fuktige, tempererte havværet",
+        "Den varme havstrømmen svinger av ved Lindesnes og når ikke inn i Skagerrak",
+        "Skogene på Østlandet lagrer solvarme om dagen og avgir den om natten"
+      ],
+      "explanation": "Havet jevner ut temperaturen begge veier — det gjør Bergen mild om vinteren, men også kjølig om sommeren. Langfjella stenger den havluften ute fra Østlandet, som får et innlandspreg: kaldere vintre, varmere somre og mye mindre nedbør. Bergen får rundt 2 200 mm i året, Oslo rundt 800."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvor bor omtrent halvparten av verdens befolkning?",
+      "answer": "Innenfor en sirkel som dekker Sør- og Øst-Asia",
+      "options": [
+        "På den nordlige halvkule utenom Asia, altså Europa, Nord-Amerika og Nord-Afrika",
+        "I Afrika og Sør-Amerika til sammen",
+        "I byer med over 10 millioner innbyggere",
+        "Innenfor en sirkel som dekker Sør- og Øst-Asia"
+      ],
+      "explanation": "Den såkalte Valeriepieris-sirkelen, tegnet rundt Sør-Kina-havet med India, Kina, Indonesia og Japan innenfor, rommer over halvparten av menneskeheten på under en tidel av landarealet. Elveslettene der har fôret tette befolkninger med ris i tusenvis av år."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er vestkysten av Sør-Amerika (Atacama) en av verdens tørreste ørkener, selv om den ligger rett ved havet?",
+      "answer": "En kald havstrøm kjøler luften så den ikke kan bære fuktighet inn over land",
+      "options": [
+        "Andesfjellene stenger fuktig luft fra Amazonas og Atlanterhavet ute",
+        "Vindene blåser konstant fra land og ut mot havet, så fukten aldri når inn",
+        "En kald havstrøm kjøler luften så den ikke kan bære fuktighet inn over land",
+        "Ørkenen ligger i regnskyggen av kystfjellene like ved sjøen"
+      ],
+      "explanation": "Humboldtstrømmen fra Antarktis holder havet utenfor Chile kaldt. Kald luft holder på lite vann, og det som er, felles ut som tåke over sjøen. Deler av Atacama har gått flere tiår uten målbar nedbør — NASA tester Mars-instrumenter der."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva skjer med en regnsky som blåser inn mot en fjellkjede, og hva forklarer det om Bergen og Oslo?",
+      "answer": "Luften løftes, kjøles og feller ut regnet på lo-siden — le-siden blir tørr",
+      "options": [
+        "Skyen stoppes av fjellet og regner like mye ned på begge sider",
+        "Luften presses over toppen og feller ut regnet på le-siden når den synker",
+        "Luften løftes, kjøles og feller ut regnet på lo-siden — le-siden blir tørr",
+        "Fjellet varmer luften nedenfra så skyen løser seg opp før den når over"
+      ],
+      "explanation": "Dette kalles regnskygge. Vestlandet får Atlanterhavets fukt rett i fjellveggen; det som kommer over, er tørr, synkende luft. Samme mekanisme gjør Patagonia tørt øst for Andes og gir Himalaya-fjellene 10 meter regn i året på sørsiden og ørken i Tibet på nordsiden."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Nederland så flatt og delvis under havnivå?",
+      "answer": "Det er et elvedelta bygd av slam fra Rhinen og Maas, senere innvunnet og drenert",
+      "options": [
+        "Isbreene under istiden skrapte landet flatt og etterlot det under havnivå",
+        "Det er et elvedelta bygd av slam fra Rhinen og Maas, senere innvunnet og drenert",
+        "Landet synker fordi det ligger på en tektonisk plategrense som gir etter",
+        "Det ble oversvømt av Nordsjøen da istiden tok slutt, og er aldri demmet helt inn"
+      ],
+      "explanation": "Rundt en fjerdedel av Nederland ligger under havnivå — og synker fortsatt, fordi drenert torvjord tørker og krymper. Schiphol lufthavn ligger 4 meter under havet på bunnen av en tidligere innsjø. Nederlenderne sier: «Gud skapte verden, men nederlenderne skapte Nederland.»"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor har Norge så mange fjorder, mens Sverige nesten ingen?",
+      "answer": "Breene gravde dype daler i Norges bratte fjell mot havet; Sverige lå flatt under isens sentrum",
+      "options": [
+        "Breene gravde dype daler i Norges bratte fjell mot havet; Sverige lå flatt under isens sentrum",
+        "Norskekysten ligger på en aktiv forkastningssone som revner og fylles med sjø",
+        "Havnivået steg langt mer på norsk side etter istiden enn i Østersjøen",
+        "Norges elver er kortere og brattere, og har gravd dalene før isen kom"
+      ],
+      "explanation": "En fjord er en U-dal gravd av en bre som gikk ut i havet, og som fylte seg med sjø da isen smeltet. Sognefjorden er 1 300 meter dyp — breen gravde langt under dagens havnivå. Sverige lå i sentrum av innlandsisen, der isen slipte flatt i stedet for å grave, og Østersjøen er grunn."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor blir dager og netter nesten like lange ved ekvator hele året, mens Tromsø har midnattssol og mørketid?",
+      "answer": "Jordaksen heller 23,4° — jo lenger fra ekvator, jo større utslag gjennom året",
+      "options": [
+        "Jorda er nærmest sola i juli, og avstanden gir sommer i nord og vinter i sør",
+        "Atmosfæren bøyer sollyset mer nær polene, så dagen strekkes ut om sommeren",
+        "Jordaksen heller 23,4° — jo lenger fra ekvator, jo større utslag gjennom året",
+        "Jorda roterer saktere ved polene, så hver dag varer lenger der"
+      ],
+      "explanation": "Om sommeren lener den nordlige halvkule seg mot sola; nord for polarsirkelen (66,6°) går sola da ikke ned i det hele tatt. Avstanden til sola spiller ingen rolle — jorda er faktisk nærmest sola i januar. Uten aksehellingen ville det ikke finnes årstider."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvilken by er verdens største målt i innbyggere i storbyområdet?",
+      "answer": "Tokyo",
+      "options": [
+        "Shanghai",
+        "Tokyo",
+        "Mexico by",
+        "Mumbai"
+      ],
+      "explanation": "Tokyo-regionen har rundt 37 millioner mennesker — nesten sju ganger Norges befolkning på et område litt større enn Vestfold og Telemark. Japans befolkning synker, så Tokyo ventes å bli forbigått av Delhi i løpet av 2030-årene."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er nesten alle Egypts 100+ millioner innbyggere samlet på under 5 % av landets areal?",
+      "answer": "Bare Nilens dal og delta får vann — resten er ørken",
+      "options": [
+        "Resten av landet er fjell og høyfjellsplatå uten dyrkbar jord",
+        "Kolonimaktene forbød bosetting i innlandet for å kontrollere handelen",
+        "Bare Nilens dal og delta får vann — resten er ørken",
+        "Middelhavskysten er den eneste delen av landet med brukbart grunnvann"
+      ],
+      "explanation": "Egypt får nesten ikke nedbør; Nilen frakter vann fra Etiopias høyland og Victoriasjøen. Landstripen langs elva er bare noen kilometer bred, men huser en befolkning på størrelse med Tysklands. Derfor er Etiopias nye demning i Blånilen et sikkerhetspolitisk spørsmål for Egypt."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor sitter ferskvannet i Norge løst i landskapet mens det lenger sør i Europa ligger dypt i grunnen?",
+      "answer": "Isen skrapte bort jordsmonnet ned til fjellet, så vannet blir liggende oppå",
+      "options": [
+        "Isen skrapte bort jordsmonnet ned til fjellet, så vannet blir liggende oppå",
+        "Norge får så mye nedbør at grunnen aldri rekker å suge unna",
+        "Berggrunnen i Norge er porøs kalkstein som holder vannet nær overflaten",
+        "Permafrost i bakken hindrer vannet i å trenge ned til grunnvannet"
+      ],
+      "explanation": "Innlandsisen fjernet løsmassene, og det harde grunnfjellet slipper ikke vann gjennom. Derfor har Norge over 400 000 innsjøer og mer myr enn nesten noe annet land. Sør i Europa ligger tykke lag av sedimenter der vannet trenger ned og må hentes fra brønner."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er hovedgrunnen til at landet rundt Oslofjorden fortsatt hever seg med flere millimeter i året?",
+      "answer": "Jordskorpa spretter tilbake etter at innlandsisens vekt forsvant",
+      "options": [
+        "Den nordatlantiske ryggen presser Skandinavia oppover fra vest",
+        "Jordskorpa spretter tilbake etter at innlandsisens vekt forsvant",
+        "Sedimenter fra Glomma og Drammenselva bygger landet opp år for år",
+        "Havnivået i Skagerrak synker fordi Nordsjøen tappes for grunnvann"
+      ],
+      "explanation": "Isen var opptil 3 km tykk og trykte skorpa flere hundre meter ned i mantelen. Landhevingen kalles postglasial heving og er raskest der isen var tykkest — rundt Bottenviken hever landet seg nesten 1 cm i året. Steinalderboplasser som lå ved sjøen, ligger i dag 60–100 meter over havet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor ligger nesten alle verdens store jordskjelv og vulkaner i et belte rundt Stillehavet?",
+      "answer": "Havbunnsplater presses ned under kontinentalplatene langs hele kanten",
+      "options": [
+        "Stillehavet er det eldste havet, og skorpa under er tynn og sprø",
+        "Havbunnsplater presses ned under kontinentalplatene langs hele kanten",
+        "Månens tidevannskraft trekker hardest i det største havet og rykker i skorpa",
+        "Stillehavsplaten roterer mot de andre platene og river i kantene"
+      ],
+      "explanation": "Ildringen rommer rundt 75 % av verdens aktive vulkaner og 90 % av jordskjelvene. Når en havbunnsplate synker ned, smelter den og gir vulkaner; når den henger fast og slipper, gir den skjelv. Japan, Chile, Indonesia og California ligger alle på slike grenser — Norge ligger midt i en plate og har nesten ingen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Afrikas elver, tross kontinentets størrelse, dårlig egnet som transportårer inn i innlandet?",
+      "answer": "Kontinentet er et høyt platå, så elvene faller bratt i fosser nær kysten",
+      "options": [
+        "Elvene tørker ut store deler av året fordi regntiden er kort",
+        "Kontinentet er et høyt platå, så elvene faller bratt i fosser nær kysten",
+        "Deltaene er så gjengrodde av mangrove at skip ikke kommer inn fra havet",
+        "De fleste elvene renner mot innlandet og ender i innsjøer, ikke i havet"
+      ],
+      "explanation": "Kongo, Zambezi, Niger og Oranje har alle stryk eller fosser få mil fra munningen — Kongo faller 270 meter på 35 mil rett innenfor kysten. Det er en viktig grunn til at europeerne holdt seg til kysten i 400 år, og at Afrika i dag har færre havner og elvebyer i innlandet enn Europa og Asia."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor har Kina bygd noen av verdens største byer i innlandet, mens Norge nesten bare bygger langs kysten?",
+      "answer": "Kinas elver er seilbare langt innover og renner gjennom flate, fruktbare sletter",
+      "options": [
+        "Kinas elver er seilbare langt innover og renner gjennom flate, fruktbare sletter",
+        "Kinas kyst er så utsatt for tyfoner at byene ble lagt i ly innenfor",
+        "Keiserne forbød i lange perioder handel og bosetting langs kysten",
+        "Kinas kyst mangler naturlige havner, så byene vokste ved elvene i stedet"
+      ],
+      "explanation": "Chongqing, 1 500 km fra havet oppover Yangtze, har over 30 millioner innbyggere i storkommunen. Yangtze og Gule elv bærer skipstrafikk og vanner sletter som har fôret halve Kina i årtusener. I Norge stopper seilbarheten der fjorden slutter."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor sier man at Istanbul ligger på Europas viktigste flaskehals?",
+      "answer": "Bosporos er eneste sjøvei mellom Svartehavet og verdenshavene",
+      "options": [
+        "Byen er endepunktet for Silkeveien og alle karavaneruter fra Asia",
+        "Alle landveier fra Asia til Europa går over Bosporos-broene",
+        "Bosporos er eneste sjøvei mellom Svartehavet og verdenshavene",
+        "Havnen er den eneste isfrie i Svartehavsregionen om vinteren"
+      ],
+      "explanation": "Sundet er bare 700 meter bredt på det smaleste. Russlands og Ukrainas korneksport, russisk olje fra Svartehavet og hele krigsflåten deres til Middelhavet må gjennom det. Montreux-konvensjonen fra 1936 gir Tyrkia rett til å stenge for krigsskip i krigstid — noe Tyrkia gjorde i 2022."
     }
   ]
 }

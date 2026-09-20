@@ -581,6 +581,486 @@
         "Alexander Fleming",
         "Jonas Salk"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor blir man svimmel og kan besvime når man reiser seg brått?",
+      "answer": "Blodet synker ned i beina, og det tar et sekund før karene strammer og pulsen øker nok til å holde trykket til hjernen",
+      "options": [
+        "Balanseorganet i det indre øret rekker ikke å registrere at hodet har flyttet seg, og sender feil signaler til hjernen i et par sekunder",
+        "Blodet synker ned i beina, og det tar et sekund før karene strammer og pulsen øker nok til å holde trykket til hjernen",
+        "Hjertet hopper over et slag når kroppen brått skifter stilling",
+        "Oksygenet i blodet faller fordi pusten holdes igjen under bevegelsen"
+      ],
+      "explanation": "Rundt en halv liter blod faller ned i beina når du reiser deg. Baroreseptorene i halsen merker trykkfallet og skrur opp puls og karmotstand innen et par sekunder — hos eldre, dehydrerte og folk på blodtrykksmedisin går det tregere. Ortostatisk hypotensjon er en av de vanligste årsakene til fall og hoftebrudd hos eldre."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor forsvant magesår som en livsstilssykdom nesten over natten på 1990-tallet?",
+      "answer": "To australske forskere viste at det skyldtes en bakterie, Helicobacter pylori, og kunne kureres med antibiotika",
+      "options": [
+        "Nye syrehemmende legemidler gjorde at magesekken fikk hvile og lege seg selv, og operasjonene ble unødvendige",
+        "To australske forskere viste at det skyldtes en bakterie, Helicobacter pylori, og kunne kureres med antibiotika",
+        "Røykeforbud og mindre stress i arbeidslivet fjernet årsaken",
+        "Kostholdet ble mindre krydret og fettrikt"
+      ],
+      "explanation": "Lærebøkene sa stress og syre; behandlingen var livslang diett eller å fjerne deler av magesekken. Barry Marshall drakk en kultur av bakterien i 1984 for å bevise det, fikk gastritt og kurerte seg selv. Fagfeltet trengte ti år på å snu. Nobelpris i 2005 — og et lærestykke i at «alle vet» ikke er evidens."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor fryser du og får feber samtidig når du blir syk?",
+      "answer": "Hjernen har hevet kroppens «termostat», så normal temperatur føles kald til kroppen når det nye målet",
+      "options": [
+        "Blodet trekkes fra huden til de indre organene for å bekjempe infeksjonen, så huden blir kald mens kjernen blir varm",
+        "Hjernen har hevet kroppens «termostat», så normal temperatur føles kald til kroppen når det nye målet",
+        "Bakteriene produserer giftstoffer som forstyrrer temperaturfølelsen i huden",
+        "Immunforsvaret bruker så mye energi at musklene ikke får nok til å holde varmen"
+      ],
+      "explanation": "Betennelsesstoffene (pyrogener) får hypothalamus til å sette målet til 39 i stedet for 37. Kroppen «tror» den er nedkjølt, og skjelver og trekker karene sammen for å nå det — det er frysningen. Når feberen går ned, snus det: du svetter. Feber er ikke sykdommen, men et forsvar: mange bakterier og virus formerer seg dårligere ved 39–40 grader."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er hoftebrudd hos eldre så farlig at rundt en av fire dør innen ett år?",
+      "answer": "Bruddet er sjelden dødsårsak i seg selv — det er sengeleiet, lungebetennelsen og tapet av funksjon som følger",
+      "options": [
+        "Blødningen inne i låret er så stor at mange får sirkulasjonssvikt i løpet av de første timene før de kommer til sykehus",
+        "Bruddet er sjelden dødsårsak i seg selv — det er sengeleiet, lungebetennelsen og tapet av funksjon som følger",
+        "Operasjonen krever full narkose, som eldre hjerter ofte ikke tåler",
+        "Beinvevet er så skjørt at det ikke gror, og infeksjonen sprer seg"
+      ],
+      "explanation": "En 85-åring som ligger en uke, mister opptil 10 % av muskelmassen og kanskje evnen til å gå. Deretter kommer blodpropp, lungebetennelse og liggesår. Derfor opereres hoftebrudd nå innen ett døgn og pasienten mobiliseres dagen etter. Norge har blant verdens høyeste rater av hoftebrudd — rundt 9 000 i året — trolig en blanding av gener, lite sol og lang levealder."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er den viktigste grunnen til at tuberkulose fortsatt dreper over en million mennesker i året, når vi har hatt medisin siden 1940-tallet?",
+      "answer": "Behandlingen krever seks måneder med flere medikamenter, og avbrutte kurer skaper resistente stammer",
+      "options": [
+        "Bakterien ligger i dvale inne i lungene der antibiotika ikke når den, så bare vaksine kan hindre den, og vaksinen er svak",
+        "Behandlingen krever seks måneder med flere medikamenter, og avbrutte kurer skaper resistente stammer",
+        "Sykdommen har ingen symptomer før den er langt framskreden",
+        "Medisinen er patentert og for dyr for fattige land"
+      ],
+      "explanation": "Tuberkelbakterien deler seg langsomt og har en vokslignende vegg — det tar måneder å drepe alle. Blir pasienten bedre etter to måneder og slutter, overlever de mest resistente. Rundt en fjerdedel av verdens befolkning bærer bakterien latent. Norge hadde over 7 000 TB-dødsfall i året rundt 1900; i dag er sykdommen nesten borte her, men den største infeksjonsdreperen globalt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er kolesterolet i egg mye mindre viktig for blodkolesterolet enn man trodde i tiår?",
+      "answer": "Leveren lager det meste av kolesterolet selv og skrur ned produksjonen når du spiser mer",
+      "options": [
+        "Kolesterolet i egg er bundet til lecitin og brytes ned i tarmen før det kan tas opp i blodet, i motsetning til kolesterolet i kjøtt",
+        "Leveren lager det meste av kolesterolet selv og skrur ned produksjonen når du spiser mer",
+        "Egg inneholder også stoffer som senker kolesterolet, så nettoeffekten er null",
+        "Kolesterolet i mat tas bare opp sammen med mettet fett, og egg har lite av det"
+      ],
+      "explanation": "Kroppen lager 1–2 gram kolesterol daglig; et egg gir 0,2. For de fleste hever kostkolesterol blodverdiene lite — det er mettet fett og transfett som driver LDL opp, fordi det påvirker leverens LDL-reseptorer. USAs kostråd fjernet grensen for kostkolesterol i 2015. Unntaket er en mindretallsgruppe «hyperrespondere» og folk med familiær hyperkolesterolemi."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kan man drukne i ferskvann raskere enn i saltvann?",
+      "answer": "Ferskvann trekkes raskt fra lungene inn i blodet, fortynner det og sprenger røde blodceller",
+      "options": [
+        "Saltvann er tyngre, så kroppen flyter høyere og får holde hodet over vann lenger før kreftene tar slutt",
+        "Ferskvann trekkes raskt fra lungene inn i blodet, fortynner det og sprenger røde blodceller",
+        "Ferskvann er kaldere, og kuldesjokket stopper pusten",
+        "Saltvann utløser en refleks som lukker strupen"
+      ],
+      "explanation": "Osmose: ferskvann i lungeblærene har lavere saltkonsentrasjon enn blodet og strømmer inn, mens saltvann trekker væske ut i lungene (lungeødem). Begge dreper, men mekanismene er ulike, og det har betydning for gjenoppliving. Uansett vann: rundt 70 % av drukningsulykker i Norge er menn, og alkohol er innblandet i omtrent halvparten."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor regnes Framingham-studien som en av medisinens viktigste, selv om den aldri testet en behandling?",
+      "answer": "Den fulgte en hel by i tiår og fant risikofaktorene for hjertesykdom — blodtrykk, kolesterol, røyking — som ingen visste om",
+      "options": [
+        "Den var det første forsøket der deltakerne ble trukket tilfeldig til behandling eller placebo, og la grunnlaget for alle senere legemiddelstudier",
+        "Den fulgte en hel by i tiår og fant risikofaktorene for hjertesykdom — blodtrykk, kolesterol, røyking — som ingen visste om",
+        "Den beviste at hjerteinfarkt var arvelig og la grunnlaget for genetisk screening",
+        "Den viste at aspirin forebygger infarkt"
+      ],
+      "explanation": "I 1948 var hjerteinfarkt en gåte som drepte presidenter; begrepet «risikofaktor» fantes ikke — det ble laget av Framingham. Over 5 000 innbyggere i Massachusetts ble undersøkt hvert annet år, og barnebarna følges ennå. Alle risikokalkulatorer legen bruker, stammer derfra. Det er den observasjonsstudien som viser hva observasjon kan, når den er god."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er lungekreft blitt den største kreftdreperen blant norske kvinner, når den var sjelden for 50 år siden?",
+      "answer": "Kvinner begynte å røyke 20–30 år etter menn, og kreften kommer med samme forsinkelse",
+      "options": [
+        "Kvinner er biologisk mer sårbare for tobakksrøyk, og passiv røyking fra menn har gitt utslag med lang forsinkelse",
+        "Kvinner begynte å røyke 20–30 år etter menn, og kreften kommer med samme forsinkelse",
+        "Radon i norske boliger rammer kvinner mer fordi de var mer hjemme",
+        "Brystkreft er blitt så godt behandlet at lungekreft rykket opp"
+      ],
+      "explanation": "Menns lungekreft toppet seg rundt 1990 og faller; kvinners stiger fortsatt fordi kvinner røykte mest på 1970–80-tallet. Forsinkelsen mellom eksponering og sykdom er 20–40 år, og det er derfor tobakkens skade var så vanskelig å se: Doll og Hill måtte følge 40 000 britiske leger fra 1951 for å bevise sammenhengen. Røyking dreper fortsatt rundt 6 000 nordmenn i året."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor tar det 10–15 år og over en milliard dollar å få et nytt legemiddel til markedet?",
+      "answer": "Ni av ti kandidater feiler i klinisk utprøving, og prisen på ett godkjent middel må dekke alle de som ikke ble noe",
+      "options": [
+        "Patentsystemet krever at selskapene dokumenterer effekt i alle land separat, og hver godkjenning tar flere år hver",
+        "Ni av ti kandidater feiler i klinisk utprøving, og prisen på ett godkjent middel må dekke alle de som ikke ble noe",
+        "Fase 3-studiene må følge pasientene i minst ti år for å avdekke sjeldne bivirkninger",
+        "Produksjonsanleggene må bygges før effekten er dokumentert"
+      ],
+      "explanation": "Fase 1 (sikkerhet, 20–100 friske), fase 2 (virker det? noen hundre), fase 3 (bedre enn dagens? tusener) — og de fleste faller i fase 2 fordi det som virket i mus, ikke virker i mennesker. Alzheimer har hatt over 200 feilede kandidater. Det er derfor patentbeskyttelsen på 20 år, hvorav halve går til utprøving, er så omstridt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor gir vaksinen mot HPV en så stor gevinst at flere land regner med å utrydde livmorhalskreft?",
+      "answer": "Nesten all livmorhalskreft skyldes noen få HPV-typer, og vaksinen hindrer infeksjonen før den kan starte kreftutviklingen",
+      "options": [
+        "Vaksinen inneholder antistoffer som angriper kreftceller i livmorhalsen direkte, så også kvinner som allerede har celleforandringer, blir friske",
+        "Nesten all livmorhalskreft skyldes noen få HPV-typer, og vaksinen hindrer infeksjonen før den kan starte kreftutviklingen",
+        "Vaksinen gir flokkimmunitet som også beskytter uvaksinerte kvinner fullstendig",
+        "Kreften utvikler seg så langsomt at vaksinasjon i voksen alder rekker"
+      ],
+      "explanation": "Harald zur Hausen fant på 1980-tallet at et virus lå bak — en kreft med én årsak, som kan forebygges med én vaksine. I Skottland er det ikke funnet ett tilfelle blant kvinner som ble fullvaksinert som 12–13-åringer. Gutter vaksineres nå også, for HPV gir også kreft i svelg og anus, og for å stoppe smitten. Australia regner med å ha utryddet sykdommen som folkehelseproblem rundt 2035."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor øker risikoen for hjerteinfarkt i dagene etter en influensa?",
+      "answer": "Betennelsen gjør plakk i kransårene ustabilt og blodet mer levringsvillig",
+      "options": [
+        "Viruset angriper hjertemuskelen direkte og svekker pumpekraften i flere uker etter at feberen er borte",
+        "Betennelsen gjør plakk i kransårene ustabilt og blodet mer levringsvillig",
+        "Dehydrering under feberen gjør blodet tykkere",
+        "Hostingen belaster hjertet mekanisk"
+      ],
+      "explanation": "Risikoen for infarkt er rundt seks ganger høyere den første uka etter påvist influensa. Infarkt oppstår sjelden fordi åren gradvis tettes, men fordi et plakk sprekker og en propp dannes på sekunder — og betennelse er det som gjør plakket skjørt. Det er hovedargumentet for influensavaksine til hjertepasienter: den forebygger infarkt, ikke bare influensa."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor svinger blodsukkeret mer av hvitt brød enn av samme mengde karbohydrat fra bønner?",
+      "answer": "Fiber, intakt cellestruktur og protein i bønnene bremser fordøyelsen, så glukosen kommer langsomt ut i blodet",
+      "options": [
+        "Bønner inneholder stivelse av en annen kjemisk type som ikke kan brytes ned til glukose i det hele tatt, bare til fettsyrer i tykktarmen",
+        "Fiber, intakt cellestruktur og protein i bønnene bremser fordøyelsen, så glukosen kommer langsomt ut i blodet",
+        "Hvitt brød inneholder tilsatt sukker",
+        "Gjæringen i brødet har allerede forhåndsfordøyd stivelsen"
+      ],
+      "explanation": "Dette er glykemisk indeks: hvitt brød rundt 75, bønner rundt 30. Malt mel er stivelse med all struktur fjernet — enzymene får tak øyeblikkelig. Samme prinsipp gjør at et eple gir lavere topp enn eplejuice, og at pasta kokt al dente gir lavere enn overkokt. Blodsukkertoppene betyr mest for dem med insulinresistens; for en frisk, trent person spiller det mindre rolle."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er en 40 år gammel maratonløper bedre beskyttet mot hjerteinfarkt enn en utrent, selv om begge har samme kolesterol og blodtrykk?",
+      "answer": "Trening bedrer karveggenes funksjon, insulinfølsomhet og betennelsesnivå — faktorer som ikke fanges av standardmålingene",
+      "options": [
+        "Løperen har utviklet flere kollateralårer rundt hjertet, så en tett kransåre gir ikke infarkt fordi blodet finner en omvei — dette er den viktigste beskyttelsen",
+        "Trening bedrer karveggenes funksjon, insulinfølsomhet og betennelsesnivå — faktorer som ikke fanges av standardmålingene",
+        "Løperens hjerte er så sterkt at det tåler et infarkt uten å svikte",
+        "Forskjellen er nesten helt forklart av lavere vekt"
+      ],
+      "explanation": "Kondisjon er en av de sterkeste enkeltprediktorene for levealder — sterkere enn røyking i noen studier. Effekten består etter justering for vekt, blodtrykk og kolesterol. Endotelet (karenes innside) lager mer NO, blodplatene er mindre klebrige, og hvilepuls og betennelsesmarkører er lavere. Kollateraler finnes, men utvikles først ved etablert sykdom."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var Wakefield-saken i 1998, og hvorfor er den fortsatt medisinens viktigste advarsel om forskningsjuks?",
+      "answer": "En artikkel i Lancet på 12 barn koblet MMR-vaksinen til autisme; den var fabrikkert, men startet en vaksineskepsis som fortsatt gir meslingutbrudd",
+      "options": [
+        "En stor studie viste at et smertestillende middel ga hjerteinfarkt, og produsenten hadde skjult dataene i årevis mens millioner brukte det",
+        "En artikkel i Lancet på 12 barn koblet MMR-vaksinen til autisme; den var fabrikkert, men startet en vaksineskepsis som fortsatt gir meslingutbrudd",
+        "En forsker publiserte klonede stamceller som ikke fantes, og satte feltet tilbake et tiår",
+        "En metaanalyse av antidepressiva viste at halvparten av studiene var skjult"
+      ],
+      "explanation": "Wakefield hadde betaling fra advokater som ville saksøke vaksineprodusenter, og hadde manipulert journalene. Artikkelen ble trukket i 2010, og han mistet lisensen. Men vaksinedekningen i Storbritannia falt til 80 %, og meslinger — som var nær utryddet — kom tilbake i hele Europa. Ingen av over 20 store studier med millioner av barn har funnet noen sammenheng."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor virker GLP-1-medisinene (Ozempic-typen) mot fedme, og hva forteller det om hvorfor slanking så ofte mislykkes?",
+      "answer": "De etterligner et tarmhormon som gir metthet i hjernen — og viser at appetitt er biologisk regulert, ikke primært et viljespørsmål",
+      "options": [
+        "De blokkerer opptaket av fett i tarmen, så kaloriene går ut igjen uabsorbert — og viser at det er fettet i maten som er problemet, ikke mengden",
+        "De etterligner et tarmhormon som gir metthet i hjernen — og viser at appetitt er biologisk regulert, ikke primært et viljespørsmål",
+        "De øker forbrenningen ved å aktivere brunt fett",
+        "De senker insulin, så kroppen henter energi fra fettlagrene"
+      ],
+      "explanation": "GLP-1 skilles ut fra tarmen etter måltid og forteller hjernen «nok». Medisinen holder signalet på hele tiden; pasientene beskriver at «matstøyen» stilner. Vekttap på 15 % i studier, mot 3–5 % for livsstilstiltak. Det har snudd synet på fedme i medisinen: kroppen forsvarer sin vekt med sult og lavere forbrenning, og det er derfor 80–95 % av slankekurer ender med gjenvinning."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er «tallet for VO2max» — maksimalt oksygenopptak — så sterkt knyttet til levealder?",
+      "answer": "Det oppsummerer hele kjeden hjerte–lunger–kar–mitokondrier i ett mål, og svekkelse hvor som helst i den viser seg der først",
+      "options": [
+        "Høyt oksygenopptak betyr at cellene får mer oksygen i hvile, så de eldes langsommere og reparerer DNA-skader mer effektivt gjennom livet",
+        "Det oppsummerer hele kjeden hjerte–lunger–kar–mitokondrier i ett mål, og svekkelse hvor som helst i den viser seg der først",
+        "De med høy VO2max har gener som også beskytter mot kreft",
+        "Sammenhengen skyldes at syke mennesker ikke kan trene"
+      ],
+      "explanation": "En studie av 122 000 pasienter (Cleveland Clinic, 2018) fant at dødeligheten hos de i nederste femtedel av kondisjon var høyere enn hos røykere eller diabetikere, og at det ikke fantes noe tak — de aller sprekeste hadde lavest risiko. VO2max faller rundt 10 % per tiår etter 30, men trening kan skyve kurven 20 år. Det måles nå i HUNT-studien i Norge på befolkningsnivå."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor forsvant nesten hele dødeligheten av spedbarnsdiaré i Bangladesh med en løsning av sukker og salt?",
+      "answer": "Glukose drar natrium og dermed vann gjennom tarmveggen selv når tarmen er infisert — oral rehydrering erstatter intravenøs væske",
+      "options": [
+        "Saltet dreper kolerabakteriene i tarmen, og sukkeret gir energi til immunforsvaret til å bekjempe infeksjonen uten antibiotika",
+        "Glukose drar natrium og dermed vann gjennom tarmveggen selv når tarmen er infisert — oral rehydrering erstatter intravenøs væske",
+        "Blandingen stopper diaréen ved å binde væsken i tarmen",
+        "Den gjenoppretter tarmfloraen som infeksjonen har slått ut"
+      ],
+      "explanation": "Barn døde av væsketap, ikke av bakterien; intravenøs væske krever sykehus. Oppdagelsen på 1960-tallet av at glukose og natrium tas opp sammen (SGLT1-transportøren), gjorde at foreldre kunne redde barnet hjemme med en pose ORS. Lancet kalte det «det viktigste medisinske framskrittet i dette århundret» — anslagsvis 50 millioner liv reddet. Kostnad: noen kroner."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor gir «kreft» som samlebegrep et misvisende bilde av hvor langt behandlingen har kommet?",
+      "answer": "Det er hundrevis av sykdommer: testikkelkreft og barneleukemi kureres i 90 %, bukspyttkjertelkreft fortsatt under 10 %",
+      "options": [
+        "Nesten all framgangen skyldes tidligere diagnose, ikke bedre behandling, så folk lever lenger med diagnosen uten å leve lenger totalt sett",
+        "Det er hundrevis av sykdommer: testikkelkreft og barneleukemi kureres i 90 %, bukspyttkjertelkreft fortsatt under 10 %",
+        "Kreft rammer nesten bare gamle, så overlevelsen begrenses av andre sykdommer",
+        "De store gjennombruddene gjelder bare sjeldne kreftformer"
+      ],
+      "explanation": "Overlevelsen avhenger av hvor lett svulsten oppdages, hvor tidlig den sprer seg, og om den har en «akilleshæl» (hormonavhengighet, én drivermutasjon). Fem års overlevelse for all kreft i Norge har gått fra ~40 % på 1970-tallet til ~75 %. Immunterapi har gjort føflekkreft med spredning, som var en dødsdom i 2010, overlevbar for rundt halvparten."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er lav muskelmasse i alderdommen en like sterk dødsrisiko som mange sykdommer?",
+      "answer": "Muskelen er kroppens største protein- og glukoselager og reserve ved sykdom — og styrken avgjør om man kan reise seg etter et fall",
+      "options": [
+        "Musklene produserer hormoner som hindrer kreft og demens, og når massen faller under en terskel, mister kroppen dette forsvaret helt",
+        "Muskelen er kroppens største protein- og glukoselager og reserve ved sykdom — og styrken avgjør om man kan reise seg etter et fall",
+        "Lav muskelmasse gir lavt stoffskifte, som gir fedme og diabetes",
+        "Sammenhengen er statistisk: syke mister muskler, ikke omvendt"
+      ],
+      "explanation": "Sarkopeni: fra 50 år mister man 1–2 % muskelmasse i året uten motstand. Under en alvorlig infeksjon eller operasjon henter kroppen aminosyrer fra muskel — den som har lite, har ingen reserve. Gripestyrke er en bedre prediktor for dødelighet enn blodtrykk i flere store studier. Styrketrening virker i alle aldre: 90-åringer øker styrken 100 % på 8 uker i forsøk."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva var den viktigste enkeltårsaken til at forventet levealder i Norge steg fra rundt 50 til over 70 år mellom 1900 og 1960?",
+      "answer": "Rent vann, kloakk, bedre ernæring og boliger — før antibiotika og vaksiner fikk effekt",
+      "options": [
+        "Penicillin og de andre antibiotikaene, som gjorde infeksjonssykdommene ufarlige nesten over natten fra 1940-tallet",
+        "Rent vann, kloakk, bedre ernæring og boliger — før antibiotika og vaksiner fikk effekt",
+        "Utbyggingen av sykehus og legeutdanning, som ga alle tilgang til behandling",
+        "Nedgangen i røyking, som startet allerede på 1930-tallet"
+      ],
+      "explanation": "Dødeligheten av tuberkulose, tyfus og barnediaré falt bratt lenge før det fantes medisin mot dem — det var vannverk, kloakk og melk som ble pasteurisert. Thomas McKeown viste at medisinen sto for en liten del av gevinsten. Det er hovedargumentet for at folkehelse slår klinikk når det gjelder å forlenge liv."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor virker ikke antibiotika mot forkjølelse og influensa?",
+      "answer": "De angriper strukturer bakterier har og virus mangler — cellevegg, egne ribosomer, egen stoffskifte",
+      "options": [
+        "Virus muterer så raskt at antibiotikaene blir utdaterte før de rekker å virke, slik som med influensavaksinen",
+        "De angriper strukturer bakterier har og virus mangler — cellevegg, egne ribosomer, egen stoffskifte",
+        "Virus gjemmer seg inne i cellene der antibiotika ikke slipper inn",
+        "De virker, men bivirkningene er større enn nytten ved milde infeksjoner"
+      ],
+      "explanation": "Et virus er ikke en celle; det er en oppskrift i en proteinkapsel som kaprer dine egne celler. Det finnes ikke noe å slå hull på. Derfor er antibiotika mot virus null nytte og bare risiko — og hver unødvendige kur avler resistente bakterier. Anslagsvis en tredjedel av antibiotikakurene i Vesten gis fortsatt mot tilstander som er virale."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva skjer i musklene når du blir «støl» dagen etter en hard økt?",
+      "answer": "Mikroskopiske rifter i muskelfibrene utløser en betennelsesreaksjon som gir smerte og stivhet",
+      "options": [
+        "Melkesyre fra treningen har hopet seg opp i muskelen og irriterer nerveendene til den er skylt ut av blodet, noe som tar et døgn eller to",
+        "Mikroskopiske rifter i muskelfibrene utløser en betennelsesreaksjon som gir smerte og stivhet",
+        "Muskelen har brukt opp glykogenlagrene og krampe-signalet vedvarer til de er fylt",
+        "Senene er strukket og trenger døgn på å trekke seg sammen igjen"
+      ],
+      "explanation": "Melkesyremyten er seiglivet — laktat er borte innen en time. Stølhet (DOMS) kommer 24–72 timer etter, mest etter eksentrisk arbeid (nedoverbakke, bremse en vekt), og er reparasjon i gang. Den er ikke et mål på hvor god økten var, og neste gang blir du mindre støl av samme økt — den «repeterte anfallseffekten»."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er hvilepulsen til en godt trent utholdenhetsutøver ofte under 45, mot 60–80 hos utrente?",
+      "answer": "Hjertet pumper mer per slag, så det trenger færre slag for samme blodmengde",
+      "options": [
+        "Musklene bruker mindre oksygen i hvile fordi de er blitt mer effektive, så hjertet kan slappe av",
+        "Hjertet pumper mer per slag, så det trenger færre slag for samme blodmengde",
+        "Trening senker stresshormonene som holder pulsen oppe hos utrente",
+        "Lungene tar opp mer oksygen per pust, så blodet trenger ikke sirkulere like fort"
+      ],
+      "explanation": "Slagvolumet — blodet per hjerteslag — øker med utholdenhetstrening fordi venstre hjertekammer blir større og sterkere. Hvilepulsen er derfor et enkelt mål på form. Tour de France-ryttere har målt ned mot 30. Ordet «idrettshjerte» beskriver den samme tilpasningen, og den er ufarlig — i motsetning til forstørrelse fra høyt blodtrykk."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er placeboeffekten egentlig et bevis på?",
+      "answer": "At forventning utløser reelle fysiologiske endringer — smertelindring, hormoner, immunrespons",
+      "options": [
+        "At mange sykdommer er innbilte, og at pasienter som blir bedre av sukkerpiller, aldri var syke",
+        "At forventning utløser reelle fysiologiske endringer — smertelindring, hormoner, immunrespons",
+        "At de fleste plager går over av seg selv uansett hva man gjør",
+        "At legens autoritet får pasienter til å rapportere bedring de ikke føler"
+      ],
+      "explanation": "Placebo-smertelindring kan blokkeres med naloxon, motgiften mot opioider — altså frigjør forventningen kroppens egne opioider. Dyrere placebo virker bedre enn billig, sprøyte bedre enn pille. Det er derfor alle nye legemidler må slå placebo, ikke ingenting: mye av det en behandling gjør, er å skru på kroppens egen apotek."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor dør flere av hjerteinfarkt om vinteren og tidlig om morgenen?",
+      "answer": "Kulde og oppvåkning trekker blodårene sammen og hever blodtrykk og stresshormoner, og blodet er «tykkere» om morgenen",
+      "options": [
+        "Folk trener mindre om vinteren og spiser tyngre mat, og morgenen er når frokosten og kaffen belaster hjertet mest — særlig hos dem som allerede har trange kransårer",
+        "Kulde og oppvåkning trekker blodårene sammen og hever blodtrykk og stresshormoner, og blodet er «tykkere» om morgenen",
+        "Mørket senker D-vitamin og melatonin, som beskytter hjertet",
+        "Snømåking er den vanligste utløsende aktiviteten"
+      ],
+      "explanation": "Kortisol og adrenalin topper seg rett før oppvåkning, blodtrykket stiger brått, og blodplatene er mer klebrige — infarkt-risikoen er rundt 40 % høyere mellom 6 og 12. Kulde legger til ytterligere karsammentrekning. Snømåking er en ekte utløser: tungt arbeid med armene over hodet i kulde, ofte hos utrente. Det er derfor betablokkere ofte tas om morgenen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor blir man ikke immun mot forkjølelse, når man blir det mot meslinger etter én gang?",
+      "answer": "Forkjølelse skyldes over 200 ulike virus som stadig endrer seg — meslinger er ett stabilt virus",
+      "options": [
+        "Forkjølelsesvirus er så milde at immunforsvaret ikke lager hukommelsesceller mot dem, bare mot farlige sykdommer",
+        "Forkjølelse skyldes over 200 ulike virus som stadig endrer seg — meslinger er ett stabilt virus",
+        "Immuniteten mot forkjølelse varer bare noen måneder fordi den bare sitter i slimhinnene",
+        "Man er faktisk immun, men symptomene skyldes allergiske reaksjoner på nye virus"
+      ],
+      "explanation": "Rhinovirus alene finnes i over 160 varianter, pluss coronavirus, adenovirus, RSV. Du blir immun mot hver enkelt — det er derfor voksne er forkjølet 2–3 ganger i året og barn 8–10: de har rukket færre. Meslingviruset kan ikke endre overflaten sin uten å miste evnen til å infisere, og derfor virker vaksinen livet ut."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er det så vanskelig å utvikle nye antibiotika, selv om behovet er akutt?",
+      "answer": "Et nytt antibiotikum bør brukes minst mulig for å hindre resistens — så det er nesten umulig å tjene inn utviklingen",
+      "options": [
+        "Bakteriene har allerede utviklet resistens mot alle molekyler som finnes i naturen, så nye antibiotika må designes fra bunnen av — og det tar tiår og feiler oftest",
+        "Et nytt antibiotikum bør brukes minst mulig for å hindre resistens — så det er nesten umulig å tjene inn utviklingen",
+        "Regulatoriske krav til antibiotika er strengere enn for alle andre legemidler",
+        "Store molekyler slipper ikke gjennom bakterienes cellevegg"
+      ],
+      "explanation": "Et blodtrykksmiddel tas daglig i 30 år; et nytt antibiotikum legges i reserve og gis i ti dager til de sykeste. Utviklingskostnaden er den samme, over en milliard dollar. De fleste store selskapene har lagt ned forskningen. Løsningsforslag: staten betaler abonnement for tilgang uavhengig av bruk — Storbritannia startet det i 2022."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var Semmelweis' oppdagelse i 1847, og hvorfor ble han ignorert?",
+      "answer": "Håndvask med klor før fødsler senket dødeligheten fra barselfeber dramatisk — men ingen trodde på usynlige smittestoffer",
+      "options": [
+        "At kirurgi under narkose reduserte dødeligheten dramatisk, men kollegene mente smerten var nødvendig for helbredelsen og nektet å bruke eter i ti år",
+        "Håndvask med klor før fødsler senket dødeligheten fra barselfeber dramatisk — men ingen trodde på usynlige smittestoffer",
+        "At kolera spredte seg via drikkevann, men byrådet nektet å stenge brønnen",
+        "At sitrusfrukt hindret skjørbuk, men marinen ville ikke bære kostnaden"
+      ],
+      "explanation": "På avdelingen der legene kom rett fra obduksjonssalen, døde 10–18 % av mødrene; på jordmoravdelingen 2 %. Etter klorvask falt legenes tall til under 2 %. Semmelweis kunne ikke forklare hvorfor — Pasteur og Koch kom 20 år senere — og han ble drevet fra stillingen og døde på asyl. «Semmelweis-refleksen» er blitt et begrep for å avvise ny kunnskap fordi den bryter med det man tror."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor øker muskelstyrken de første ukene av styrketrening lenge før musklene har vokst?",
+      "answer": "Nervesystemet lærer å rekruttere flere muskelfibre samtidig og koordinere dem bedre",
+      "options": [
+        "Musklene fyller seg med glykogen og vann i løpet av dager, noe som gir mer volum og kraft før proteinet er bygget",
+        "Nervesystemet lærer å rekruttere flere muskelfibre samtidig og koordinere dem bedre",
+        "Senene stivner raskere enn musklene vokser, og overfører kraften bedre",
+        "Testosteron stiger de første ukene og gir en midlertidig kraftøkning"
+      ],
+      "explanation": "En utrent person aktiverer kanskje 60 % av fibrene i en maksimal løft; hjernen holder igjen. Trening senker bremsen, øker fyringsfrekvensen og skrur av antagonistmuskler som motarbeider. Derfor kan en nybegynner øke 30 % på fem uker uten synlig muskelvekst — og derfor mister man styrke saktere enn muskelmasse ved pause."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor regnes randomiserte kontrollerte forsøk som gullstandarden, når store observasjonsstudier kan ha hundre ganger flere deltakere?",
+      "answer": "Tilfeldig fordeling fjerner alle skjulte forskjeller mellom gruppene — også dem forskeren ikke har tenkt på",
+      "options": [
+        "De er dyrere og strengere regulert, så resultatene er mer nøyaktig registrert og bedre kontrollert enn i store registerstudier der data samles inn rutinemessig",
+        "Tilfeldig fordeling fjerner alle skjulte forskjeller mellom gruppene — også dem forskeren ikke har tenkt på",
+        "Deltakerne vet ikke hva de får, så placeboeffekten utlignes",
+        "De måler harde utfall som død, mens observasjonsstudier bare måler biomarkører"
+      ],
+      "explanation": "De som tar vitamintilskudd, trener også mer, røyker mindre og har høyere inntekt — så vitamin ser sunt ut i observasjonsdata. Hormonbehandling i overgangsalderen så beskyttende ut i registre; RCT-en (WHI, 2002) viste økt risiko. Randomisering er den eneste metoden som håndterer forskjeller du ikke kan måle, fordi tilfeldigheten fordeler dem likt."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er den viktigste grunnen til at kvinner lever 3–5 år lenger enn menn i nesten alle land?",
+      "answer": "En kombinasjon: østrogen beskytter hjertet, to X-kromosomer gir reserve, og menn tar mer risiko og røyker mer",
+      "options": [
+        "Menn har mer muskelmasse og høyere stoffskifte, som sliter kroppen raskere ut gjennom livet",
+        "En kombinasjon: østrogen beskytter hjertet, to X-kromosomer gir reserve, og menn tar mer risiko og røyker mer",
+        "Kvinner går oftere til lege og får sykdom oppdaget tidligere",
+        "Forskjellen er nesten helt forklart av krig og farlige yrker"
+      ],
+      "explanation": "Forskjellen finnes også hos andre pattedyr og hos munker og nonner med likt liv, så biologi bidrar. Men den vokste kraftig da menn begynte å røyke før kvinner, og krymper nå: i Norge var gapet 6,5 år i 1985, rundt 3,5 i dag. I Russland er det over 10 år — alkohol og ulykker."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er sepsis («blodforgiftning») så dødelig, når det er kroppens eget immunforsvar som gjør skaden?",
+      "answer": "Immunresponsen løper løpsk og gjør blodårene lekke, så blodtrykket faller og organene mister oksygen",
+      "options": [
+        "Bakteriene formerer seg i blodet raskere enn antibiotika kan drepe dem, og giftstoffene deres lammer hjertet og nyrene direkte i løpet av noen timer",
+        "Immunresponsen løper løpsk og gjør blodårene lekke, så blodtrykket faller og organene mister oksygen",
+        "Immunforsvaret angriper kroppens egne celler fordi bakteriene ligner dem",
+        "Blodet levrer seg i alle små årer på én gang og stopper sirkulasjonen"
+      ],
+      "explanation": "Betennelsesstoffene som skal hjelpe lokalt, sprer seg til hele kroppen, og karene åpner seg. Sepsis dreper rundt 11 millioner i året globalt — flere enn kreft — og hver times forsinkelse før antibiotika øker dødeligheten. Derfor lærer man opp å tenke «kan det være sepsis?» ved feber pluss forvirring, rask pust eller lavt blodtrykk."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er sitte-stille-tid en egen risikofaktor, selv for den som trener hver dag?",
+      "answer": "Lange perioder uten muskelaktivitet senker blodsukker- og fettomsetningen uavhengig av treningen",
+      "options": [
+        "Sitting komprimerer blodårene i beina og gir blodpropper som over tid skader hjertet, uansett trening",
+        "Lange perioder uten muskelaktivitet senker blodsukker- og fettomsetningen uavhengig av treningen",
+        "Den som sitter mye, sover dårligere, og det er søvnen som gjør skaden",
+        "Trening kompenserer fullt ut — sammenhengen er en statistisk artefakt"
+      ],
+      "explanation": "Enzymet lipoproteinlipase i muskel, som tar opp fett fra blodet, faller kraftig etter en times stillesitting. Metaanalyser viser at over 8 timer sitting daglig gir økt dødelighet — men også at 60–75 minutter moderat aktivitet daglig ser ut til å utligne det. Poenget er «pausene»: å reise seg noen minutter hver time gjør forskjell på blodsukkeret."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «det epidemiologiske skiftet» som et land går gjennom når det blir rikere?",
+      "answer": "Dødsårsakene flytter seg fra infeksjoner og barnedød til hjerte-kar, kreft og andre kroniske sykdommer",
+      "options": [
+        "Sykdomsbyrden flytter seg fra fattige til rike, siden de rike lever lenge nok til å få alderssykdommene først, mens de fattige fortsatt dør av infeksjoner og ulykker",
+        "Dødsårsakene flytter seg fra infeksjoner og barnedød til hjerte-kar, kreft og andre kroniske sykdommer",
+        "Fødselstallene faller under to per kvinne, og befolkningen begynner å eldes",
+        "Sykehusene erstatter primærhelsetjenesten som viktigste arena"
+      ],
+      "explanation": "Omran beskrev det i 1971: først dør folk av pest og sult, så av tuberkulose og lungebetennelse, så av hjerteinfarkt og kreft. Norge var gjennom skiftet rundt 1950; India og Nigeria er midt i det, og har derfor «dobbel byrde» — malaria og diabetes samtidig. Det avgjør hvilket helsevesen et land trenger."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var «sulfa»-preparatene på 1930-tallet et like stort vendepunkt som penicillin?",
+      "answer": "De var det første beviset på at et syntetisk kjemikalium kunne drepe bakterier inne i kroppen uten å drepe pasienten",
+      "options": [
+        "De var de første legemidlene som ble testet i randomiserte forsøk, og la grunnlaget for moderne legemiddelutprøving",
+        "De var det første beviset på at et syntetisk kjemikalium kunne drepe bakterier inne i kroppen uten å drepe pasienten",
+        "De virket mot tuberkulose, som antibiotika ikke gjorde",
+        "De kunne produseres i store mengder under krigen, mens penicillin var mangelvare"
+      ],
+      "explanation": "Domagk ved Bayer testet et tekstilfargestoff (Prontosil) på mus i 1932 og reddet sin egen datters liv med det i 1935. Før det var «indre antisepsis» ansett som umulig — alt som drepte bakterier, drepte også cellene. Barselfeber, lungebetennelse og hjernehinnebetennelse ble brått behandlbare. Domagk fikk Nobelprisen i 1939, men Hitler forbød ham å motta den."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «number needed to treat» (NNT), og hvorfor er det det mest ærlige tallet i medisinen?",
+      "answer": "Hvor mange som må behandles for at én skal unngå utfallet — det avslører at små absolutte effekter skjuler seg bak store relative",
+      "options": [
+        "Hvor mange pasienter et legemiddel må testes på før det kan godkjennes — det viser hvor solid dokumentasjonen er",
+        "Hvor mange som må behandles for at én skal unngå utfallet — det avslører at små absolutte effekter skjuler seg bak store relative",
+        "Antall doser som trengs før effekten inntrer",
+        "Forholdet mellom antall behandlede og antall som får bivirkning"
+      ],
+      "explanation": "«Statiner reduserer risikoen for hjerteinfarkt med 25 %» høres stort ut. For friske med moderat risiko er NNT rundt 100 over fem år: 99 tar pillen daglig uten å ha nytte av den. For en som allerede har hatt infarkt, er NNT rundt 20. Samme relative effekt, helt ulik verdi — det er derfor NNT skal stå i alle pasientbrosjyrer."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor gir høyintensiv intervalltrening omtrent samme forbedring i kondisjon som lengre rolige økter på en brøkdel av tiden?",
+      "answer": "Det er belastningen på hjertet nær maksimalt slagvolum som driver tilpasningen, og den nås bare ved høy intensitet",
+      "options": [
+        "Intervaller tømmer glykogenlagrene raskere og tvinger kroppen til å bygge flere mitokondrier for å fylle dem",
+        "Det er belastningen på hjertet nær maksimalt slagvolum som driver tilpasningen, og den nås bare ved høy intensitet",
+        "Høy intensitet frigjør veksthormon, som ikke utløses av rolig trening",
+        "Rolig trening gir samme effekt, men folk holder ikke ut lenge nok"
+      ],
+      "explanation": "4×4-studiene fra NTNU viste at fire drag på 4 minutter ved 90 % av makspuls ga større økning i VO2max enn dobbelt så lang rolig trening. Slagvolumet topper seg først ved høy puls, og det er hjertets pumpekapasitet som er flaskehalsen for oksygenopptak. Men eliteutøvere trener 80 % rolig — fordi de allerede har tatt ut lettvinte gevinster, og volumet bygger andre ting."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var grunnen til at koleraepidemien i London 1854 ble et vendepunkt for medisinen — før noen visste hva en bakterie var?",
+      "answer": "John Snow kartla dødsfallene, sporet dem til én vannpumpe og viste at sykdom kunne spres gjennom vann — epidemiologiens fødsel",
+      "options": [
+        "Florence Nightingale beviste med statistikk at rene sykehus reddet liv, og fikk parlamentet til å bygge kloakk",
+        "John Snow kartla dødsfallene, sporet dem til én vannpumpe og viste at sykdom kunne spres gjennom vann — epidemiologiens fødsel",
+        "Legene oppdaget at karantene stoppet spredningen, og Storbritannia innførte de første helselovene",
+        "Pasteur påviste bakterien i Themsen og fikk byen til å klore vannet"
+      ],
+      "explanation": "Den rådende teorien var «miasma» — dårlig luft. Snow tegnet hvert dødsfall inn på et kart og fant at de klumpet seg rundt pumpen i Broad Street; bryggeriarbeiderne i samme gate, som drakk øl, var friske. Han fikk fjernet pumpehåndtaket. Koleravibrionen ble påvist først 30 år senere, men Snows metode — telle, kartlegge, sammenligne — er fortsatt grunnlaget for all folkehelse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er overdiagnostikk blitt et større problem i takt med bedre bildediagnostikk?",
+      "answer": "Skanning finner endringer som aldri ville gitt symptomer, og hver av dem utløser behandling med reell risiko",
+      "options": [
+        "Bildediagnostikk har så mange falske positive at nesten halvparten av funnene er teknisk støy som må avkreftes med biopsi",
+        "Skanning finner endringer som aldri ville gitt symptomer, og hver av dem utløser behandling med reell risiko",
+        "Pasienter krever skanning for alt, og leger har ikke tid til å si nei",
+        "Stråledosen fra CT gir mer kreft enn den oppdager"
+      ],
+      "explanation": "Obduksjoner viser at over en tredjedel av menn over 70 har prostatakreft de aldri fikk vite om. Skjoldbruskkjertelkreft i Sør-Korea ble 15-doblet etter innføring av ultralydscreening — dødeligheten endret seg ikke. Diagnosen er ikke feil, den er unødvendig: du får operasjon og angst for noe som ikke ville skadet deg. Det er derfor screening måles på dødelighet, ikke på hvor mange svulster den finner."
     }
   ]
 }

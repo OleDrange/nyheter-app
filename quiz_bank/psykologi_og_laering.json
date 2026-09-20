@@ -588,6 +588,66 @@
         "Kohortstudie"
       ],
       "explanation": "Den regnes som høyeste nivå av evidens — men arver skjevhetene i studiene den bygger på. Publiseringsskjevhet gjør at effekter systematisk ser større ut enn de er."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor husker du så godt hvor du var 22. juli 2011, men ikke hva du gjorde 22. juli 2012?",
+      "answer": "Sterke følelser får amygdala til å forsterke lagringen — men slike «flashbulb»-minner er ikke mer nøyaktige, bare mer levende",
+      "options": [
+        "Sterke følelser får amygdala til å forsterke lagringen — men slike «flashbulb»-minner er ikke mer nøyaktige, bare mer levende",
+        "Hjernen lagrer bare hendelser den vurderer som viktige for overlevelse, og sletter resten aktivt under søvn de neste nettene — det er derfor du husker traumer, men ikke hverdager",
+        "Du har gjenfortalt det så mange ganger",
+        "Mediedekningen har plantet minnet"
+      ],
+      "explanation": "Studier etter 11. september viste at folk var svært sikre på minnene sine — og at detaljene endret seg betydelig fra år til år. Følelsen av klarhet og nøyaktigheten er to forskjellige ting. Det er derfor vitneutsagn fra dramatiske hendelser er upålitelige, selv når vitnet er skråsikkert. Hukommelsen er en rekonstruksjon, ikke et opptak."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er det så vanskelig å endre en vane, selv når du vet den er dårlig?",
+      "answer": "Vaner lagres i basalgangliene og utløses automatisk av kontekst — viljen bor i pannelappen, som er langsom og blir trett",
+      "options": [
+        "Vaner lagres i basalgangliene og utløses automatisk av kontekst — viljen bor i pannelappen, som er langsom og blir trett",
+        "Hjernen belønner gjentakelse med dopamin uansett innhold, og en vane som er gjentatt over 21 dager, er permanent lagret i langtidshukommelsen og kan bare overskrives, ikke slettes",
+        "Dårlige vaner er alltid koblet til avhengighet",
+        "Vaner er genetisk bestemt"
+      ],
+      "explanation": "En vane er en snarvei hjernen lager for å spare energi: signal → rutine → belønning. Den ligger dypt og krever ikke bevissthet — det er derfor du kan kjøre hjem uten å huske turen. Å slutte krever å bryte signalet, ikke bare å ville: flytt sjokoladen, endre ruten. «21 dager» er en myte; studier viser fra 18 til 254 dager, i snitt rundt 66."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva viste Stanford-marshmallowtesten egentlig, og hva ble senere funnet?",
+      "answer": "Barn som ventet på to marshmallows, klarte seg bedre senere — men en større gjentakelse viste at effekten mest skyldtes familiens økonomi",
+      "options": [
+        "Barn som ventet på to marshmallows, klarte seg bedre senere — men en større gjentakelse viste at effekten mest skyldtes familiens økonomi",
+        "At selvkontroll er en muskel som kan trenes, og at barn som fikk trening i å vente, økte IQ-en med 10 poeng i løpet av barneskolen og fikk bedre karakterer helt til videregående",
+        "At barn ikke kan utsette belønning før 7 år",
+        "At jenter har bedre selvkontroll enn gutter"
+      ],
+      "explanation": "Mischel (1972) fant at ventetiden spådde skoleresultater 20 år senere. Watts (2018) med 900 barn: sammenhengen krympet kraftig når man tok hensyn til foreldrenes inntekt. Et barn som har lært at lovnader ikke holdes, gjør klokt i å spise nå. Historien er et lærestykke i hvordan et lite, elegant funn blir til en ideologi om karakter."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er «10 000 timer» til ekspertise en misforståelse av forskningen?",
+      "answer": "Ericsson målte bevisst, tilbakemeldingsstyrt øving på det man ikke kan — ikke timer; og spredningen var enorm, tallet er et gjennomsnitt",
+      "options": [
+        "Ericsson målte bevisst, tilbakemeldingsstyrt øving på det man ikke kan — ikke timer; og spredningen var enorm, tallet er et gjennomsnitt",
+        "Studien gjaldt bare fiolinister i Berlin, og for idrett og fag som medisin eller sjakk kreves det tre ganger så mye — rundt 30 000 timer — før man når internasjonalt toppnivå",
+        "Tallet var 1 000, og Gladwell la til en null",
+        "Talent forklarer alt, øving ingenting"
+      ],
+      "explanation": "Fiolinstudentene i Berlin-studien varierte fra 4 000 til 20 000 timer ved samme nivå. Poenget var kvaliteten: øve på det som er vanskelig, med umiddelbar tilbakemelding, ikke gjenta det man kan. Metaanalyser finner at bevisst øving forklarer 20–25 % av variasjonen i musikk og idrett, mindre i yrker. Resten er gener, start-alder og flaks — men uten øvingen kommer ingen dit."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «replikasjonskrisen» i psykologien, og hva lærte faget?",
+      "answer": "Under 40 % av kjente funn lot seg gjenskape i 2015; små utvalg, fleksibel analyse og publiseringsskjevhet hadde produsert falske positiver i tiår",
+      "options": [
+        "Under 40 % av kjente funn lot seg gjenskape i 2015; små utvalg, fleksibel analyse og publiseringsskjevhet hadde produsert falske positiver i tiår",
+        "Flere av fagets mest siterte forskere ble avslørt for å ha diktet opp data, og hele feltet sosialpsykologi ble satt under administrasjon av universitetene",
+        "At folk oppfører seg annerledes i laboratoriet enn i virkeligheten",
+        "At effektene bare gjelder amerikanske studenter"
+      ],
+      "explanation": "«Power posing», ego-utmattelse og priming med eldre-ord som gjør at folk går saktere — alle smuldret. Årsaken var sjelden juks, men «p-hacking»: prøv mange analyser, rapporter den som ble signifikant. Svaret er forhåndsregistrering, større utvalg og deling av data — og mange lærebokfunn er nå strøket. Medisin og økonomi har samme problem, i mindre grad."
     }
   ]
 }

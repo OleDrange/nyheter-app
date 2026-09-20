@@ -588,6 +588,66 @@
         "Fotonsfæren"
       ],
       "explanation": "Det første bildet av en hendelseshorisont ble offentliggjort i 2019 — av det svarte hullet i galaksen M87, 55 millioner lysår unna."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er himmelen blå om dagen og rød ved solnedgang?",
+      "answer": "Luftmolekyler sprer blått lys mest; ved solnedgang går lyset gjennom så mye luft at det blå er spredt vekk før det når deg",
+      "options": [
+        "Luftmolekyler sprer blått lys mest; ved solnedgang går lyset gjennom så mye luft at det blå er spredt vekk før det når deg",
+        "Himmelen speiler havet, og ved solnedgang speiler den solens røde skive — det er derfor himmelen er gråere i innlandet og over ørkener enn ved kysten, og blåest over Stillehavet",
+        "Ozonlaget er blått, og støv i horisonten er rødt",
+        "Øyet er mest følsomt for blått i dagslys"
+      ],
+      "explanation": "Rayleigh-spredning: korte bølgelengder spres mye mer enn lange. Fiolett spres enda mer enn blått, men solen sender ut mindre av det og øyet ser det dårlig. Ved horisonten er veien gjennom atmosfæren 40 ganger lengre, så bare rødt og oransje overlever. På Mars er det motsatt: dagen er rødlig av støv, og solnedgangen blå."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor flyter is på vann, og hvorfor er det avgjørende for livet?",
+      "answer": "Vann utvider seg når det fryser, så isen er lettere enn vannet — innsjøer fryser derfor ovenfra, og livet under overlever",
+      "options": [
+        "Vann utvider seg når det fryser, så isen er lettere enn vannet — innsjøer fryser derfor ovenfra, og livet under overlever",
+        "Isen inneholder luftbobler som gir oppdrift, slik som isbiter i et glass — helt ren is uten luft, som i bunnen av Antarktis-isen, ville sunket til bunns i en innsjø",
+        "Kaldt vann er alltid lettere enn varmt",
+        "Saltet i vannet holder isen oppe"
+      ],
+      "explanation": "Nesten alle stoffer blir tettere som fast stoff; vann er unntaket, fordi hydrogenbindingene låser molekylene i et åpent gitter. Vann er tettest ved 4 grader — det er det som ligger på bunnen av en innsjø om vinteren. Sank isen, ville innsjøer og hav fryse fra bunnen og aldri tine helt. Samme egenskap sprenger fjell og vannrør."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er det ingen atmosfære på månen, når jorda har?",
+      "answer": "Månen har for svak tyngdekraft til å holde på gassmolekyler — de når unnslipningshastigheten og forsvinner ut i rommet",
+      "options": [
+        "Månen har for svak tyngdekraft til å holde på gassmolekyler — de når unnslipningshastigheten og forsvinner ut i rommet",
+        "Månen har aldri hatt vulkaner som kunne slippe ut gasser, mens jordas atmosfære kommer fra milliarder år med vulkanutbrudd som fortsatt pågår og fyller på det som lekker ut",
+        "Solvinden blåste den bort fordi månen mangler magnetfelt",
+        "Månen er for kald til at gass kan eksistere"
+      ],
+      "explanation": "Molekyler i en gass beveger seg tilfeldig, noen svært fort. Med en sjettedel av jordas tyngdekraft trenger et molekyl bare 2,4 km/s for å slippe unna månen — og de letteste gassene gjør det på kort tid. Mars, med en tredjedel av jordas tyngdekraft, mistet det meste av sin. Titan, Saturns måne, er kald nok til å beholde en tykk atmosfære tross lav masse."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor har store dyr som elefanter langsommere puls og lever lenger enn mus?",
+      "answer": "Stoffskiftet per kilo faller med størrelsen — en mus brenner energi 20 ganger raskere per gram og sliter seg ut på to år",
+      "options": [
+        "Stoffskiftet per kilo faller med størrelsen — en mus brenner energi 20 ganger raskere per gram og sliter seg ut på to år",
+        "Store dyr har flere rovdyrfrie år å leve i og har derfor utviklet DNA-reparasjon, mens små dyr dør før kreft rekker å utvikle seg",
+        "Store dyr har flere celler som kan deles på jobben",
+        "Mus har kortere kromosomer"
+      ],
+      "explanation": "Kleibers lov: stoffskiftet skalerer med massen opphøyd i 3/4. En mus har 600 slag i minuttet, en elefant 30 — men begge får omtrent en milliard hjerteslag i livet. Regelen forklarer hvorfor små dyr må spise nesten kontinuerlig, og hvorfor små barn trenger mer mat per kilo enn voksne. Mennesket får rundt 2,5 milliarder slag — vi lever «for lenge» for vår størrelse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er karbon grunnlaget for alt liv, og ikke silisium, som ligger rett under i periodesystemet?",
+      "answer": "Karbon danner fire sterke bindinger til seg selv og andre atomer i lange, stabile kjeder og ringer — silisiumkjeder brytes lett, og SiO₂ er et fast stoff, ikke en gass som CO₂",
+      "options": [
+        "Karbon danner fire sterke bindinger til seg selv og andre atomer i lange, stabile kjeder og ringer — silisiumkjeder brytes lett, og SiO₂ er et fast stoff, ikke en gass som CO₂",
+        "Karbon er det vanligste grunnstoffet på jorda, mens silisium finnes nesten bare i stjerner og i asteroider som traff jorda så sent at livet allerede hadde valgt karbon",
+        "Silisium reagerer ikke med vann",
+        "Karbon finnes i atmosfæren, silisium ikke"
+      ],
+      "explanation": "Livet trenger store, komplekse, men stabile molekyler — DNA, proteiner — og karbon lager over 10 millioner kjente forbindelser. Silisium er faktisk 300 ganger vanligere i jordskorpa, men binder seg helst til oksygen og blir stein (kvarts, sand). Og karbons avfallsprodukt, CO₂, kan pustes ut; silisiums ville vært sandkorn. Science fiction-livsformer av silisium er kjemisk lite sannsynlige."
     }
   ]
 }

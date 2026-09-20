@@ -728,6 +728,78 @@
         "Zhou",
         "Ming"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kollapset Romerriket i vest, men ikke i øst?",
+      "answer": "Østriket hadde de rike provinsene, Konstantinopels murer og kortere grenser — Vestriket bar alle folkevandringene med tom statskasse",
+      "options": [
+        "Østriket hadde de rike provinsene, Konstantinopels murer og kortere grenser — Vestriket bar alle folkevandringene med tom statskasse",
+        "Kristendommen ble statsreligion i øst først, og kirken holdt riket sammen der mens vest forble hedensk og splittet mellom keiser, senat og germanske generaler som ikke stolte på hverandre",
+        "Hunerne angrep bare i vest",
+        "Østriket hadde funnet opp gresk ild og var militært overlegent"
+      ],
+      "explanation": "Vestromerriket «falt» i 476 nesten uten at noen merket det — det hadde vært en germansk protektoratstat i tiår. Egypt og Syria fôret Konstantinopel med korn og skatt, og Theodosius-murene sto til 1453. Det bysantinske riket levde tusen år lenger enn det vestlige, og det er derfor gresk, ortodoks kristendom og romersk rett overlevde i øst."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor var boktrykkerkunsten så mye mer omveltende i Europa enn i Kina, der den var oppfunnet 400 år før?",
+      "answer": "Alfabetet med 26 tegn passet løse typer; kinesisk med tusenvis av tegn gjorde det upraktisk — og Europa var politisk splittet, så ingen kunne stoppe den",
+      "options": [
+        "Alfabetet med 26 tegn passet løse typer; kinesisk med tusenvis av tegn gjorde det upraktisk — og Europa var politisk splittet, så ingen kunne stoppe den",
+        "Kina hadde ikke papir av god nok kvalitet til å trykke på, og importerte det fra Europa først på 1600-tallet — kinesisk rispapir tålte ikke presset fra en metallpresse",
+        "Kineserne brukte trykk bare til religiøse tekster",
+        "Gutenberg brukte metalltyper som ga skarpere trykk"
+      ],
+      "explanation": "Gutenberg (ca. 1450) kunne sette en side på timer. Innen 1500 fantes 20 millioner bøker i Europa; prisen på en bok falt til under en hundredel. Luthers teser spredte seg over Tyskland på uker — reformasjonen er utenkelig uten trykkpressen. I Kina kontrollerte keiseren trykkeriene; i Europa flyttet trykkeren bare til neste fyrstedømme."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor gikk Europa fra å være en bakevje i 1450 til å dominere verden i 1900?",
+      "answer": "Politisk splittelse ga konkurranse mellom stater, som drev fram våpen, skip, kreditt og vitenskap — mens Kina og osmanene var samlet og selvtilfredse",
+      "options": [
+        "Politisk splittelse ga konkurranse mellom stater, som drev fram våpen, skip, kreditt og vitenskap — mens Kina og osmanene var samlet og selvtilfredse",
+        "Europa hadde kull og jern i overflod og fikk den industrielle revolusjonen alene, mens Asia manglet råvarene til å ta den igjen før 1900 og måtte importere all teknologi",
+        "Kristendommen ga en overlegen arbeidsmoral",
+        "Sølvet fra Amerika finansierte alt"
+      ],
+      "explanation": "Columbus fikk nei fra Portugal og ja fra Spania — i Kina fantes bare én keiser å spørre, og han hadde nettopp lagt flåten i opplag (1433). Rivaliseringen tvang europeiske stater til å finansiere alt som kunne gi et fortrinn. Amerikas sølv, slavehandel og kolonier forsterket det. «Det store skillet» er historiefagets mest debatterte spørsmål, og svaret er trolig flere av dem."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor ble første verdenskrig så mye blodigere enn alle tidligere kriger?",
+      "answer": "Industriell ildkraft — maskingevær, artilleri, piggtråd — møtte 1800-tallets angrepstaktikk, og forsvaret var overlegent i fire år",
+      "options": [
+        "Industriell ildkraft — maskingevær, artilleri, piggtråd — møtte 1800-tallets angrepstaktikk, og forsvaret var overlegent i fire år",
+        "Giftgassen drepte millioner i skyttergravene før gassmaskene kom, og influensaen som fulgte tok like mange som kulene — til sammen mer enn alle tidligere kriger i Europa",
+        "Generalene var uvanlig inkompetente",
+        "Verneplikten gjorde hærene ti ganger større enn før"
+      ],
+      "explanation": "Ved Somme 1. juli 1916 mistet britene 57 000 mann på én dag. Jernbane førte millioner til fronten, men der stoppet det: ingen stridsvogner, radio eller fly kunne ennå bryte gjennom. Først i 1918 fantes kombinasjonen. Rundt 10 millioner soldater døde, og krigen knuste fire imperier — det russiske, tyske, østerrikske og osmanske — og skapte forutsetningene for den neste."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor forsvant slaveriet i Vesten på under hundre år etter å ha vært akseptert i alle sivilisasjoner i tusener av år?",
+      "answer": "En moralsk massebevegelse fra 1780-tallet, drevet av kvekere og evangelikale, møtte en industri som ikke lenger trengte det — og Storbritannia brukte flåten mot handelen",
+      "options": [
+        "En moralsk massebevegelse fra 1780-tallet, drevet av kvekere og evangelikale, møtte en industri som ikke lenger trengte det — og Storbritannia brukte flåten mot handelen",
+        "Slaveopprøret på Haiti i 1791 spredte frykt til alle slaveeiere, og kolonimaktene avskaffet det for å unngå at det samme skjedde hos dem — først Frankrike, så Storbritannia",
+        "Opplysningsfilosofene beviste at det var irrasjonelt",
+        "Det ble ulønnsomt da sukkerprisen falt"
+      ],
+      "explanation": "Britene avskaffet handelen i 1807 og slaveriet i 1833 — mot egne økonomiske interesser, og betalte eierne 40 % av statsbudsjettet i erstatning. Den kongelige marine jaktet slaveskip i 60 år. USA trengte en borgerkrig med 700 000 døde. Brasil var sist i 1888. Det er historiens klareste eksempel på at en idé kan slå et helt økonomisk system."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor var Marshallplanen så virkningsfull, når beløpet var relativt lite?",
+      "answer": "Den tvang europeerne til å samarbeide om fordelingen, ga dollar til import da ingen hadde dem, og signaliserte at USA ble værende — grunnlaget for EU og NATO",
+      "options": [
+        "Den tvang europeerne til å samarbeide om fordelingen, ga dollar til import da ingen hadde dem, og signaliserte at USA ble værende — grunnlaget for EU og NATO",
+        "Pengene ble brukt til å kjøpe opp tysk industri og flytte den til Frankrike og Storbritannia som krigserstatning, noe som gjenreiste de allierte raskt",
+        "Den betalte Europas hele gjenoppbygging",
+        "Den var betingelsen for at Stalin trakk seg ut av Øst-Europa"
+      ],
+      "explanation": "13 milliarder dollar over fire år, rundt 3 % av mottakerlandenes BNP — mindre enn folk tror. Men i 1947 sultet Europa og hadde ikke dollar til å kjøpe amerikansk korn og maskiner. Kravet om felles plan skapte OEEC, forløperen til OECD og en vane for samarbeid. Stalin forbød østblokken å delta — og delingen av Europa var et faktum."
     }
   ]
 }

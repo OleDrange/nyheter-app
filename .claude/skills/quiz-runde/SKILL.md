@@ -72,8 +72,12 @@ kategorien i `<slug>.json` + `<slug>.2.json` om det trengs — importen stripper
 3. **`explanation` skal gi noe NYTT** — en mekanisme, en konsekvens, et tall, en
    sammenligning. Minst 60 tegn. Den skal aldri bare gjenta svaret. Den vises uansett om
    leseren svarte riktig, så den bærer halve læringen.
-4. **Distraktorene skal friste én som halvvet svaret.** Samme type, samme lengde, plausible.
-   Ikke «Euro / Daler / Norske mark». Riktig svar må ikke være det lengste.
+4. **Distraktorene skal friste én som halvvet svaret.** Samme type, plausible, gjerne
+   *sanne* utsagn som bare ikke svarer på spørsmålet (en ekte mekanisme, feil sted). Ikke
+   «Euro / Daler / Norske mark». **Lengden må ikke lekke:** i minst halvparten av
+   spørsmålene skal en distraktor være lengre enn riktig svar — scriptet nekter filen om
+   riktig svar er lengst i over 40 %. Rekkefølgen i filen er likegyldig (generatoren
+   stokker alternativene ved hver trekning), men varier den likevel.
 5. **Svaret skal være sant om fem år.** Ingen sittende personer, «nyeste», rekorder som
    slås, eller tall som endrer seg årlig. Etablert kunnskap, ikke nyheter.
 

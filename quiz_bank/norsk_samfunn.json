@@ -491,6 +491,486 @@
         "Norges Banks hovedstyre",
         "Stortingets finanskomité"
       ]
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor får alle i Norge samme behandling på sykehus, uansett inntekt — og hva er prisen for det?",
+      "answer": "Sykehusene er statlige og finansiert over skatten, med prioritering etter behov — prisen er køer for det som ikke haster",
+      "options": [
+        "Alle nordmenn har en obligatorisk helseforsikring gjennom folketrygden som betaler sykehusene per behandling, slik at ingen kan avvises av økonomiske grunner",
+        "Sykehusene er statlige og finansiert over skatten, med prioritering etter behov — prisen er køer for det som ikke haster",
+        "Sykehusene eies av kommunene og drives etter lokalt selvstyre, så tilbudet varierer med kommunens økonomi",
+        "Legene er statsansatte og har plikt til å behandle alle likt etter Hippokrates' ed"
+      ],
+      "explanation": "Fire regionale helseforetak eier sykehusene; egenandelen er en brøkdel av kostnaden. Prioriteringen er lovfestet: alvorlighet, nytte og ressursbruk. Baksiden er ventetid — en hofteoperasjon kan ta måneder — og derfor har over 700 000 nordmenn nå privat helseforsikring via jobben, som gir en «snarvei». Debatten om «todelt helsevesen» handler om akkurat det."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er norsk mat så dyr, og hvorfor er det politisk villet?",
+      "answer": "Tollmurer og tilskudd holder norsk landbruk i live i et land der 3 % av arealet kan dyrkes — prisen betales i butikken og over skatten",
+      "options": [
+        "Tre dagligvarekjeder deler markedet mellom seg og holder prisene høye uten reell konkurranse, og Stortinget har ikke villet gripe inn av hensyn til norske arbeidsplasser",
+        "Tollmurer og tilskudd holder norsk landbruk i live i et land der 3 % av arealet kan dyrkes — prisen betales i butikken og over skatten",
+        "Momsen på mat er høyere i Norge enn i EU",
+        "Transportkostnadene i et langstrakt land gjør all mat dyr"
+      ],
+      "explanation": "Et norsk kilo ost tåler ikke konkurranse fra dansk uten toll på 200–300 %. Jordbruksoppgjøret gir rundt 25 milliarder i året i støtte. Begrunnelsen er beredskap, bosetting og kulturlandskap — og alle partier unntatt Frp står bak. Kjedemakten (Norgesgruppen, Coop, Rema) legger på toppen: Norge har Europas høyeste matpriser og færrest butikkjeder."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva skjer når du blir syk — hvordan henger fastlegen, legevakten og sykehuset sammen?",
+      "answer": "Fastlegen er portvakt: du kommer til sykehus bare med henvisning, unntatt ved akutt sykdom via legevakt eller 113",
+      "options": [
+        "Alle tre er deler av samme statlige helseforetak, og pasienten kan velge fritt hvilket nivå hun vil starte på, siden staten betaler uansett hvor hun møter opp",
+        "Fastlegen er portvakt: du kommer til sykehus bare med henvisning, unntatt ved akutt sykdom via legevakt eller 113",
+        "Legevakten er sykehusets mottak, og fastlegen bare for kroniske sykdommer",
+        "Fastlegen er ansatt på sykehuset og følger deg gjennom hele behandlingen"
+      ],
+      "explanation": "Portvaktmodellen holder spesialistene fri for det som kan løses enkelt — 90 % av kontaktene avsluttes hos fastlegen. Fastlegen er selvstendig næringsdrivende med avtale med kommunen; legevakten er kommunens akuttilbud utenom kontortid; sykehuset er statens. Ordningen fra 2001 er populær, men mangler nå leger i mange kommuner, fordi arbeidsbelastningen har vokst uten at antallet fastleger har fulgt med."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor blir det stadig færre bønder i Norge, samtidig som matproduksjonen holder seg oppe?",
+      "answer": "Hver gård blir større og mer mekanisert; tilskuddene favoriserer volum, og små bruk i bratt terreng legges ned",
+      "options": [
+        "Import fra EU tar over en større del av markedet hvert år gjennom EØS-avtalen, og norske bønder taper konkurransen på pris og legger ned gårdene",
+        "Hver gård blir større og mer mekanisert; tilskuddene favoriserer volum, og små bruk i bratt terreng legges ned",
+        "Klimaendringene har gjort jordbruk ulønnsomt i innlandet",
+        "Unge vil ikke overta, og odelsloven hindrer salg til andre"
+      ],
+      "explanation": "Norge hadde 200 000 gårdsbruk i 1950; i dag under 40 000. Melkeroboter og kvoter gjør at én bonde driver det ti gjorde. Jordbruksarealet er nesten uendret — det leies av naboen. Følgen er at Vestlandet og Nord-Norge gror igjen, mens flatbygdene på Østlandet og Jæren produserer mer enn noen gang. Selvforsyningsgraden ligger likevel rundt 40 %."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kan norske aviser leve av abonnenter, mens amerikanske lokalaviser dør?",
+      "answer": "Pressestøtte, momsfritak og en befolkning som betaler for nyheter — Norge har verdens høyeste andel som betaler for digitale nyheter",
+      "options": [
+        "Norske aviser eies av stiftelser og partier uten profittkrav, og de får sine inntekter fra Norsk Tipping og offentlig annonsering, ikke fra lesere og markedet",
+        "Pressestøtte, momsfritak og en befolkning som betaler for nyheter — Norge har verdens høyeste andel som betaler for digitale nyheter",
+        "Norsk lov forbyr gratis nettaviser",
+        "Facebook og Google er pålagt å betale norske aviser for innhold"
+      ],
+      "explanation": "Rundt 40 % av nordmenn betaler for nyheter på nett, mot 20 % i USA og 10 % i Storbritannia. Nullmoms på journalistikk (også digitalt siden 2016), produksjonsstøtte til «nummer to»-aviser og en kultur for lokalavis — over 200 aviser i et land på 5,5 millioner. Amedia og Schibsted eier de fleste, og debatten går om hvor mye eierkonsentrasjon som er trygt."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «dugnad», og hvorfor mener forskere at den forklarer noe om Norge?",
+      "answer": "Ubetalt fellesarbeid for et lokalt gode — et uttrykk for tillit og likhet, og et ord uten dekkende oversettelse",
+      "options": [
+        "En gammel bondeskikk med pliktarbeid for godseieren som overlevde som frivillig innsats, og som ble kåret til Norges nasjonalord i 2004",
+        "Ubetalt fellesarbeid for et lokalt gode — et uttrykk for tillit og likhet, og et ord uten dekkende oversettelse",
+        "En religiøs skikk fra pietismen der menigheten arbeider for de fattige",
+        "Et skattefradrag for frivillig arbeid"
+      ],
+      "explanation": "Fra norrønt «dugnaðr» — hjelp. Idrettslag, borettslag, korps og skoler drives av det: frivillig innsats i Norge tilsvarer over 140 000 årsverk. Sosiologer ser den som limet som holder tillit og likhet ved like — alle stiller, uansett stilling. Under pandemien snakket regjeringen om «nasjonal dugnad», og ordet var så sterkt at folk faktisk stilte."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kjører nesten alle nye biler i Norge på strøm, når landet er en oljeeksportør?",
+      "answer": "Elbiler var fritatt for moms og engangsavgift i 30 år — og med bensinbiler avgiftsbelagt ble elbil det billige valget",
+      "options": [
+        "Norge har så billig vannkraft at strøm koster en tiendedel av bensin, og markedet gjorde valget selv uten at staten trengte å gjøre noe",
+        "Elbiler var fritatt for moms og engangsavgift i 30 år — og med bensinbiler avgiftsbelagt ble elbil det billige valget",
+        "Stortinget forbød salg av bensinbiler i 2020",
+        "Oljefondet eier store aksjeposter i Tesla og andre elbilprodusenter"
+      ],
+      "explanation": "Fritakene startet i 1990 som støtte til den norske elbilen «Think» og ble stående til teknologien innhentet dem. Nesten 90 % av nybilsalget er elektrisk — verdensrekord. Fordelene har kostet staten titalls milliarder i tapte avgifter, og momsfritaket fases nå ut. Poenget er at Norge kan bruke oljepenger til grønne avgiftsfritak — en luksus få land har."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «Nav-skandalen» fra 2019 et eksempel på?",
+      "answer": "At forvaltning og domstoler i årevis praktiserte norsk lov i strid med EØS-retten, og folk ble dømt for trygdesvindel for å reise",
+      "options": [
+        "At Nav hadde utbetalt milliarder i trygd til folk som bodde i utlandet uten å kontrollere, og at Riksrevisjonen avdekket systemsvikt over ti år",
+        "At forvaltning og domstoler i årevis praktiserte norsk lov i strid med EØS-retten, og folk ble dømt for trygdesvindel for å reise",
+        "At Navs datasystemer brøt sammen og tusenvis mistet utbetalinger",
+        "At Nav-ansatte hadde solgt personopplysninger"
+      ],
+      "explanation": "EØS-reglene sier at sykepenger og arbeidsavklaringspenger kan tas med til et annet EØS-land; Nav krevde opphold i Norge. Minst 80 ble uskyldig fengslet, tusenvis fikk krav om tilbakebetaling. Ingen — verken Nav, departementet, påtalemyndigheten eller Høyesterett — hadde stilt spørsmålet på 25 år. Skandalen viser hvor lite EØS-retten satt i norsk juridisk ryggmarg."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er kommunevalg og stortingsvalg i Norge holdt annenhver gang, og hva gjør det med politikken?",
+      "answer": "Toårsrytmen gir partiene et «mellomvalg» som måler stemningen — og gjør at regjeringen alltid er under to år fra en test",
+      "options": [
+        "Grunnloven forbyr at Stortinget og kommunestyrene velges samme år, for at rikspolitikken ikke skal overskygge lokalsakene, og det har vært slik siden 1837",
+        "Toårsrytmen gir partiene et «mellomvalg» som måler stemningen — og gjør at regjeringen alltid er under to år fra en test",
+        "Kommunevalg holdes hvert annet år fordi kommunestyrene har toårs valgperiode",
+        "Ordningen kom med formannskapslovene og har ingen politisk funksjon"
+      ],
+      "explanation": "Stortingsvalg hvert fjerde år (2025, 2029), kommune- og fylkestingsvalg to år forskjøvet (2027, 2031). Stortinget kan ikke oppløses, så det finnes ikke nyvalg — mellomvalget er eneste ventil. Lokalvalg blir dermed rikspolitiske stemningsmålinger, til lokalpolitikernes frustrasjon. Stabiliteten er høy: ingen regjering har måttet gå av på grunn av et lokalvalg."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor har Norge nesten ingen streiker sammenlignet med Frankrike, når organisasjonsgraden er mye høyere?",
+      "answer": "Fredsplikten i tariffperioden, Riksmekleren og tvungen lønnsnemnd kanaliserer konfliktene inn i forhandling",
+      "options": [
+        "Norske fagforeninger har medlemmer i styrene og eierandeler i bedriftene gjennom LO-fondene, så de streiker i praksis mot seg selv og velger derfor forhandling",
+        "Fredsplikten i tariffperioden, Riksmekleren og tvungen lønnsnemnd kanaliserer konfliktene inn i forhandling",
+        "Streik er forbudt i offentlig sektor",
+        "Lønningene er så høye at det ikke er noe å streike for"
+      ],
+      "explanation": "Franske forbund er små og rivaliserende og har streik som viktigste våpen; norske er store og har forhandlingsmakt i stedet. Mellom oppgjørene er streik ulovlig, og en streik som truer liv og helse, stoppes av Stortinget med lønnsnemnd. Systemet gir få tapte arbeidsdager — men også kritikk for at streikeretten uthules når nemnd brukes for ofte."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «innvandrerregnskapet» en strid om, og hva sier tallene?",
+      "answer": "Om innvandring lønner seg for statskassen — svaret avhenger helt av hvem som kommer: arbeidsinnvandrere fra EU gir pluss, flyktninger minus i tiår",
+      "options": [
+        "Om innvandrere betaler mindre skatt enn nordmenn per person — tallene viser at de betaler omtrent like mye, men får mer i barnetrygd og bostøtte i de første årene",
+        "Om innvandring lønner seg for statskassen — svaret avhenger helt av hvem som kommer: arbeidsinnvandrere fra EU gir pluss, flyktninger minus i tiår",
+        "Om innvandring presser lønningene ned for norske arbeidere",
+        "Om Norge tar imot flere enn nabolandene"
+      ],
+      "explanation": "SSB og Brochmann-utvalgene: en polsk håndverker betaler skatt fra dag én og drar ofte hjem før pensjon; en flyktning trenger år på å komme i jobb, og sysselsettingen når sjelden det norske nivået. Men et «regnskap» over mennesker fanger ikke opp barna, som gjør det nesten like godt som andre norske barn — og innvandrere er 20 % av befolkningen og fyller helsevesenet, byggeplassene og fiskeindustrien."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Norge samtidig et land med sterk sentralstat og sterkt lokalt selvstyre?",
+      "answer": "Kommunene utfører velferden — skole, omsorg, barnehage — men innenfor lover, øremerkinger og en finansiering staten bestemmer",
+      "options": [
+        "Grunnloven av 1814 delte makten mellom Stortinget og amtene etter amerikansk mønster, og kommunene har siden hatt egne skatteinntekter staten ikke rår over",
+        "Kommunene utfører velferden — skole, omsorg, barnehage — men innenfor lover, øremerkinger og en finansiering staten bestemmer",
+        "Fylkeskommunene har lovgivningsmakt på områder som samferdsel og videregående skole",
+        "Kommunene er selvstendige, men staten kan overprøve dem gjennom Statsforvalteren i alle saker"
+      ],
+      "explanation": "Halvparten av offentlig ansatte jobber i kommunene, og det er der du møter velferdsstaten. Men skattesatsen er fastsatt av Stortinget, og rettighetslovgivningen (rett til barnehageplass, sykehjem) binder pengene. Forholdet er en evig dragkamp: kommunene vil ha frihet, Stortinget vil ha like tjenester over hele landet — og velgerne vil ha begge deler."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er den viktigste grunnen til at Norge har så lav arbeidsledighet i nedgangstider sammenlignet med Sør-Europa?",
+      "answer": "Regjeringen kan bruke oljepenger motsyklisk, og kronen svekker seg når oljeprisen faller og demper sjokket for eksportbedriftene",
+      "options": [
+        "Norsk industri produserer varer som olje, gass og fisk som verden trenger uansett konjunktur, så etterspørselen faller aldri like mye som for biler og turisme",
+        "Regjeringen kan bruke oljepenger motsyklisk, og kronen svekker seg når oljeprisen faller og demper sjokket for eksportbedriftene",
+        "Permitteringsordningen holder folk formelt ansatt gjennom kriser",
+        "Offentlig sektor er så stor at den fanger opp de som mister jobben"
+      ],
+      "explanation": "Under oljeprisfallet 2014–16 falt kronen 30 % mot euro — norske varer ble billigere, og industrien på Vestlandet fikk et støtdemper Hellas aldri hadde med euro. Samtidig kunne staten øke pengebruken uten å låne. Permittering hjelper også: bedriften slipper å si opp, staten betaler. Ledigheten passerte aldri 5 %, mot 25 % i Spania etter 2008."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er allemannsretten så uvanlig i verden, og hva er dens grense?",
+      "answer": "Alle kan ferdes og telte i utmark uansett eier — men ikke i innmark, ikke nærmere hus enn 150 meter, og med hensyn",
+      "options": [
+        "Allemannsretten gir alle rett til å plukke, fiske og jakte fritt på statens grunn, som er 85 % av landet, mens privat grunn er stengt som i resten av Europa",
+        "Alle kan ferdes og telte i utmark uansett eier — men ikke i innmark, ikke nærmere hus enn 150 meter, og med hensyn",
+        "Retten gjelder bare fjellet over tregrensen, som ingen eier",
+        "Retten er en sedvane uten lov, og grunneier kan si nei"
+      ],
+      "explanation": "Friluftsloven (1957) lovfestet en sedvane fra middelalderen. I England og USA er skogen privat og stengt; i Norge kan du gå gjennom en fremmed manns skog og plukke bær der. Grensen går ved dyrket mark, gårdstun og «hensynsfull ferdsel» — jakt og fiske i ferskvann tilhører grunneieren. Sverige og Finland har lignende, og strandsonen er der striden står nå."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er norsk skole så ulik andre lands — sen karaktersetting, ingen nivådeling, og likevel høye kostnader?",
+      "answer": "Enhetsskolen skal gi like sjanser og holde alle sammen til 16 år; forskning viser at det utjevner, men koster i topp-prestasjoner",
+      "options": [
+        "Reformene på 1990-tallet (Reform 94 og 97) kopierte finsk modell med sen skolestart og få prøver, som ga Finland verdens beste PISA-resultater, men virket ikke i Norge",
+        "Enhetsskolen skal gi like sjanser og holde alle sammen til 16 år; forskning viser at det utjevner, men koster i topp-prestasjoner",
+        "Lærernes fagforening har blokkert alle former for måling og differensiering",
+        "Kommunene bestemmer selv, så det finnes ikke ett norsk skolesystem"
+      ],
+      "explanation": "Karakterer først i 8. klasse, ingen nivådelte klasser, lite stryk — mens Tyskland deler ved 10 år. Norge ligger midt på treet i PISA tross høyest pengebruk per elev i OECD. Effekten av foreldrenes utdanning på barnas resultater er derimot lavere enn i de fleste land. Det er skolens grunnavveining: skal den løfte bunnen eller toppen — og Norge har valgt bunnen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er norsk lakseoppdrett blitt verdens nest største eksportnæring i Norge, og hva er kjernen i striden om den?",
+      "answer": "Skjermede fjorder og kald sjø ga et naturlig monopol; striden gjelder lakselus, rømming og hvem som skal eie retten til fjorden",
+      "options": [
+        "Norge har verdens største villaksbestand, og oppdrettet begynte som avl fra den — striden gjelder om avlslaksen fortrenger villaksen når den rømmer og gyter",
+        "Skjermede fjorder og kald sjø ga et naturlig monopol; striden gjelder lakselus, rømming og hvem som skal eie retten til fjorden",
+        "Oppdrett ble innført av staten på 1970-tallet for å redde fiskeriene",
+        "Næringen er subsidiert som landbruket, og striden gjelder støtten"
+      ],
+      "explanation": "Laks for over 120 milliarder i året — bare olje og gass er større. Konsesjonene ble gitt gratis til kystbønder på 1970-tallet og er i dag verdt milliarder på få hender. Grunnrenteskatten fra 2023 (25 %) er statens svar på at fjorden er fellesskapets. Lakselus dreper villaks og begrenser veksten; «trafikklyset» stenger nye konsesjoner i røde soner."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var Alta-saken (1979–81), og hvorfor endret den mer enn én elv?",
+      "answer": "Kampen mot utbygging av Alta-Kautokeinovassdraget tapte, men sultestreiken foran Stortinget ga samene Sameting, grunnlovsvern og en egen politikk",
+      "options": [
+        "Norges største miljøaksjon stoppet en demning som ville lagt en samisk bygd under vann, og førte til at Stortinget vernet alle store vassdrag i nord i Verneplan III",
+        "Kampen mot utbygging av Alta-Kautokeinovassdraget tapte, men sultestreiken foran Stortinget ga samene Sameting, grunnlovsvern og en egen politikk",
+        "Aksjonen splittet Arbeiderpartiet og førte til Gro Harlem Brundtlands første regjering",
+        "Domstolene ga samene eiendomsrett til Finnmarksvidda"
+      ],
+      "explanation": "Demningen ble bygd og 600 politifolk bar bort lenkegjengen i januar 1981 — Norges største politiaksjon. Men saken tvang fram Samerettsutvalget: Sameloven 1987, Sametinget 1989, grunnlovsparagraf om samisk kultur 1988, ILO-konvensjonen 1990. Kraftverket ble langt mindre enn planlagt og Máze ble spart. Alta er derfor «nederlaget som ble en seier» — for samene, og starten på norsk miljøbevegelse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er norsk bistand på 1 % av BNI så politisk stabil, når den er omstridt i de fleste giverland?",
+      "answer": "Enighet fra KrF til SV om at rikdommen forplikter, en sterk misjons- og solidaritetstradisjon — og at prosenten er ideologisk, ikke effektbasert",
+      "options": [
+        "Bistanden er hjemlet i Grunnloven og kan ikke kuttes uten to tredjedels flertall, og den gir norske bedrifter kontrakter for det meste av beløpet",
+        "Enighet fra KrF til SV om at rikdommen forplikter, en sterk misjons- og solidaritetstradisjon — og at prosenten er ideologisk, ikke effektbasert",
+        "FN krever 1 % av alle land med oljefond",
+        "Bistanden gir Norge plass i Sikkerhetsrådet og andre fora"
+      ],
+      "explanation": "Rundt 50 milliarder i året, blant verdens høyeste per innbygger. Bare Frp vil kutte vesentlig. Evalueringene er blandet: det som virker best (vaksiner, kontantoverføringer), får ikke nødvendigvis mest, og mye går via norske organisasjoner. Kritikken fra begge sider — «for lite, for spredt» og «for mye, for lite effekt» — treffer sjelden prosenten selv, som er blitt et mål på hvem Norge vil være."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor sier man at Grunnloven fra 1814 «vant» over Stortinget i 2015, i saken om Høyesteretts prøvingsrett?",
+      "answer": "Prøvingsretten — at domstolene kan sette lover til side som grunnlovsstridige — ble tatt inn i Grunnloven etter 150 år som ulovfestet praksis",
+      "options": [
+        "Høyesterett satte for første gang en stortingslov til side og tvang Stortinget til å endre Grunnloven for å få igjennom pensjonsreformen",
+        "Prøvingsretten — at domstolene kan sette lover til side som grunnlovsstridige — ble tatt inn i Grunnloven etter 150 år som ulovfestet praksis",
+        "Stortinget vedtok at Høyesterett ikke lenger kan overprøve lover",
+        "Grunnloven ble oversatt til moderne norsk, og Stortinget tapte striden om nynorsk"
+      ],
+      "explanation": "Høyesterett har siden 1860-årene tatt seg retten til å sette lover til side, som i USA — uvanlig i Europa. Det er brukt med stor forsiktighet (Kløfta-saken 1976 er standardreferansen), men gjør domstolen til en reell motmakt. Ved 200-årsjubileet fikk Grunnloven et menneskerettskapittel og § 89 om prøvingsrett. Det er derfor Fosen-dommen kunne stoppe staten: Grunnloven står over Stortinget."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor kalles Norge et «konsensusdemokrati», og hva er svakheten?",
+      "answer": "Mindretallsregjeringer, forlik på tvers og partene i arbeidslivet gir brede løsninger som varer — men også at velgerne sjelden får et reelt regimeskifte",
+      "options": [
+        "Grunnloven krever to tredjedels flertall for alle viktige lover, så partiene må alltid forhandle — svakheten er at små partier får vetorett over budsjettet",
+        "Mindretallsregjeringer, forlik på tvers og partene i arbeidslivet gir brede løsninger som varer — men også at velgerne sjelden får et reelt regimeskifte",
+        "Alle partier deltar i regjeringen etter valgresultatet, og opposisjonen finnes ikke",
+        "Kongen megler mellom partiene og sikrer enighet"
+      ],
+      "explanation": "Pensjon, klima, skatt, forsvar og skole er avgjort ved forlik som en ny regjering ikke rører. Fordelen: forutsigbarhet, og at store reformer overlever valg. Ulempen: skiftene er små, og misnøye får få kanaler. Lijphart satte Norge blant de tydeligste konsensusdemokratiene i verden — mot «flertallsdemokratiene» Storbritannia og USA, der vinneren tar alt og snur politikken."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kan Norge ha så høye lønninger og likevel konkurrere internasjonalt?",
+      "answer": "Frontfagsmodellen holder lønnsveksten innenfor det eksportindustrien tåler, og produktiviteten er blant verdens høyeste",
+      "options": [
+        "Oljepengene subsidierer industrien gjennom lave strømpriser og skattefradrag, så bedriftene kan betale mer enn de tjener inn på eksporten",
+        "Frontfagsmodellen holder lønnsveksten innenfor det eksportindustrien tåler, og produktiviteten er blant verdens høyeste",
+        "Kronekursen justeres av Norges Bank for å holde eksporten konkurransedyktig",
+        "Norge eksporterer nesten bare råvarer, som ikke konkurrerer på lønn"
+      ],
+      "explanation": "Industrien forhandler først, og rammen derfra blir normen for alle — også offentlig sektor. Slik unngår man at skjermede næringer driver lønnene opp. Høye lønninger tvinger dessuten bedrifter til å automatisere og investere, og ulønnsomme jobber forsvinner raskt. Samtidig gjør små lønnsforskjeller at en ingeniør er billig og en renholder dyr i Norge sammenlignet med de fleste land."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva skjer egentlig med skattepengene — hva er den største enkeltposten på statsbudsjettet?",
+      "answer": "Folketrygden: pensjoner, sykepenger, uføretrygd og foreldrepenger — rundt en tredjedel av alle utgifter",
+      "options": [
+        "Helsevesenet, med sykehusene alene på over en fjerdedel av budsjettet og fastlegeordningen på toppen av det",
+        "Folketrygden: pensjoner, sykepenger, uføretrygd og foreldrepenger — rundt en tredjedel av alle utgifter",
+        "Overføringene til kommunene, som driver skole og eldreomsorg",
+        "Forsvaret, etter opptrappingen mot to prosent"
+      ],
+      "explanation": "Folketrygden er over 600 milliarder — mer enn helse, forsvar, utdanning og samferdsel til sammen. Alderspensjon er den største delen og vokser med antall eldre. Det er derfor pensjonsreformen i 2011 var den viktigste økonomiske reformen på tiår: uten «levealdersjustering», der pensjonen synker når hvert kull lever lenger, ville systemet spist hele oljefondet."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er strømprisen i Sør-Norge ofte fem ganger høyere enn i Nord-Norge?",
+      "answer": "Landet er delt i prisområder, og sør har kabler til Europa som knytter prisen til kontinentet — nord har flaskehalser og overskudd",
+      "options": [
+        "Nord-Norge får billig kraft fra Russland og Finland gjennom avtaler fra 1960-tallet, mens sør må kjøpe fra Danmark og Tyskland når magasinene er lave om vinteren",
+        "Landet er delt i prisområder, og sør har kabler til Europa som knytter prisen til kontinentet — nord har flaskehalser og overskudd",
+        "Vannmagasinene i nord er så mye større at det aldri blir knapphet",
+        "Nord-Norge er fritatt for elavgift og moms på strøm"
+      ],
+      "explanation": "Strøm kan ikke lagres i nettet, og linjene sørover fra Nordland er for svake til å flytte overskuddet. I sør setter den dyreste kilden som trengs — ofte gasskraft i Tyskland, via kablene — prisen i timen. Norge har fem prisområder nettopp fordi nettet er en flaskehals. Nord-Norge har derfor Europas billigste kraft, og derfor kommer datasentre og batterifabrikker dit."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor mister nordmenn nesten aldri jobben på dagen, slik amerikanere kan?",
+      "answer": "Arbeidsmiljøloven krever saklig grunn for oppsigelse, og arbeidstakeren kan stå i stillingen mens saken prøves",
+      "options": [
+        "Tariffavtalene forbyr oppsigelser uten fagforeningens samtykke, og nesten alle arbeidsplasser er organisert, så tillitsvalgte kan i praksis blokkere enhver oppsigelse",
+        "Arbeidsmiljøloven krever saklig grunn for oppsigelse, og arbeidstakeren kan stå i stillingen mens saken prøves",
+        "Staten dekker lønnen i oppsigelsestiden, så bedriftene har ingen grunn til å si opp raskt",
+        "Oppsigelser må godkjennes av NAV"
+      ],
+      "explanation": "«Saklig grunn» betyr nedbemanning eller at den ansatte har sviktet — og bevisbyrden ligger hos arbeidsgiveren. Oppsigelsestiden er minst én måned, ofte tre. Motstykket er at bedrifter er forsiktige med å ansette fast, og bruker vikarer og innleie. OECD rangerer Norge midt på treet i stillingsvern — Danmark har «flexicurity»: lett å si opp, men høy dagpengedekning."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor eier så mange nordmenn boligen sin, mens tyskere og sveitsere leier?",
+      "answer": "Skattesystemet favoriserer eie kraftig — rentefradrag, lav formuesverdi og skattefri gevinst — og leiemarkedet er lite og uregulert",
+      "options": [
+        "Husbanken har siden 1946 gitt alle nordmenn rett til et subsidiert lån til første bolig med rente under markedet, og de fleste førstegangskjøpere bruker den fortsatt",
+        "Skattesystemet favoriserer eie kraftig — rentefradrag, lav formuesverdi og skattefri gevinst — og leiemarkedet er lite og uregulert",
+        "Boligene i Norge er billigere i forhold til lønn enn i de fleste land",
+        "Norske banker gir ikke lån til utleieboliger"
+      ],
+      "explanation": "Rundt 80 % eier, mot 50 % i Tyskland. Boligen verdsettes til 25 % av markedsverdi i formuesskatten, gevinst er skattefri etter ett års botid, og renter trekkes fra. Eierlinja var bevisst politikk etter krigen. Følgen: nordmenns sparing er plassert i murstein, boligprisene presses opp, og de som står utenfor, får det stadig vanskeligere å komme inn."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «tillit» som samfunnsressurs, og hvorfor trekkes Norge fram som eksempel?",
+      "answer": "Rundt 70 % av nordmenn sier de stoler på folk flest, mot 30 % i Frankrike — det senker kostnaden ved alt fra handel til styring",
+      "options": [
+        "Norge har verdens laveste kriminalitet, og folk låser ikke dørene — det gjør at politiet og domstolene kan holdes svært små og staten sparer milliarder hvert år",
+        "Rundt 70 % av nordmenn sier de stoler på folk flest, mot 30 % i Frankrike — det senker kostnaden ved alt fra handel til styring",
+        "Nordmenn stoler på staten fordi den eier oljen og deler ut pengene rettferdig",
+        "Tillit er en følge av at Norge er lite og alle kjenner alle"
+      ],
+      "explanation": "Høy tillit gjør at avtaler holdes uten advokater, skatt betales uten kontroll, og myndigheter kan be folk holde seg hjemme uten tvang — som under pandemien. Forskere kobler det til små forskjeller, sterke institusjoner og lang tid uten korrupsjon. Det er ikke gitt for alltid: tilliten er «sosial kapital» som kan brukes opp av skandaler og økende ulikhet."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor har Norge to skriftspråk, og hvor mange bruker faktisk nynorsk?",
+      "answer": "Bokmål er fornorsket dansk; nynorsk ble laget av dialektene på 1800-tallet som et nasjonalt alternativ — rundt 10–12 % bruker det i dag",
+      "options": [
+        "Nynorsk var vestlandets språk og bokmål østlandets, og de to ble sidestilt etter unionsoppløsningen i 1905 — omtrent 25 % bruker nynorsk",
+        "Bokmål er fornorsket dansk; nynorsk ble laget av dialektene på 1800-tallet som et nasjonalt alternativ — rundt 10–12 % bruker det i dag",
+        "Nynorsk er det opprinnelige norske skriftspråket fra middelalderen, bokmål kom med Hansaen",
+        "De to målformene var ment å smelte sammen til «samnorsk» innen 1950"
+      ],
+      "explanation": "Ivar Aasen reiste rundt i bygdene på 1840-tallet og satte sammen landsmålet av dialektene, som motvekt til det danske skriftspråket embetsmennene brukte. Samnorsk-prosjektet — å smelte dem sammen — ble forsøkt til 1960-tallet og forlatt etter kraftig motstand. Nynorsk står sterkest på Vestlandet, og alle statlige organer må svare på den målformen du skriver på."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er sykefraværet i Norge blant verdens høyeste, samtidig som befolkningen er blant de friskeste?",
+      "answer": "Full lønn fra dag én i et år, ingen karensdag, og et arbeidsmarked som inkluderer folk som andre land holder utenfor",
+      "options": [
+        "Norske leger sykmelder for lett fordi fastlegeordningen gjør dem avhengige av å beholde pasientene, og NAV kontrollerer ikke",
+        "Full lønn fra dag én i et år, ingen karensdag, og et arbeidsmarked som inkluderer folk som andre land holder utenfor",
+        "Kaldt klima og lange vintre gir mer infeksjoner og depresjon",
+        "Statistikken teller også foreldrepermisjon og omsorgsdager"
+      ],
+      "explanation": "Sverige innførte karensdag i 1993 og fraværet falt; Norge har prøvd IA-avtalen i stedet. Norge har også rekordhøy sysselsetting blant kvinner, eldre og folk med helseproblemer — mange som i andre land er utenfor statistikken helt. Sykefraværet er rundt 7 %; legemeldt fravær over 8 uker er den dyre delen, og muskel-/skjelett og psykiske lidelser dominerer."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvordan bestemmes egentlig renta på boliglånet ditt?",
+      "answer": "Norges Bank setter styringsrenta ut fra inflasjonsmålet, bankene legger på sin margin, og pengemarkedet mellom bankene gjør resten",
+      "options": [
+        "Finansdepartementet fastsetter rentenivået i statsbudsjettet etter råd fra Norges Bank, og bankene er pålagt å følge det innenfor en margin på ett prosentpoeng",
+        "Norges Bank setter styringsrenta ut fra inflasjonsmålet, bankene legger på sin margin, og pengemarkedet mellom bankene gjør resten",
+        "Renta følger den europeiske sentralbanken, siden kronen er knyttet til euroen",
+        "Bankene setter renta fritt etter hva kundene tåler"
+      ],
+      "explanation": "Norges Bank har vært uavhengig av politikerne siden 2001 med ett oppdrag: 2 % inflasjon over tid. Setter den renta opp, blir det dyrere å låne, folk bruker mindre, og prisene stiger saktere — med 1–2 års forsinkelse. Norske lån er nesten alle flytende, så renteendringer virker raskere her enn i Tyskland eller USA, der 30-årige fastrenter er vanlig."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Norge ikke i EU, men følger likevel de fleste EU-lovene?",
+      "answer": "EØS-avtalen gir adgang til det indre markedet mot at Norge overtar regelverket for det — uten stemmerett",
+      "options": [
+        "Norge har en assosieringsavtale som Sveits, der hver lov forhandles enkeltvis i Brussel, og Stortinget kan si nei uten andre konsekvenser enn tap av den ene ordningen",
+        "EØS-avtalen gir adgang til det indre markedet mot at Norge overtar regelverket for det — uten stemmerett",
+        "Norge er medlem av tollunionen, men ikke av den politiske unionen",
+        "Norge følger EU-lover frivillig for å gjøre eksporten enklere"
+      ],
+      "explanation": "Rundt 80 % av eksporten går til EU. EØS (1994) dekker fri flyt av varer, tjenester, kapital og personer — men ikke fisk, landbruk, toll og utenrikspolitikk. Norge har «reservasjonsrett» mot nye regler, men har brukt den én gang (postdirektivet), og trakk det tilbake. Kritikerne kaller det «faks-demokrati»; tilhengerne mener alternativet er dårligere tilgang eller fullt medlemskap."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor kan en norsk kommune med 2 000 innbyggere tilby samme skole og eldreomsorg som en storby?",
+      "answer": "Inntektssystemet omfordeler fra rike til fattige kommuner og kompenserer for spredt bosetting og små kull",
+      "options": [
+        "Småkommunene får inntekt fra kraftverk og oppdrett i sitt område, som gir dem mer penger per innbygger enn byene har, og som dekker skole og omsorg fullt ut",
+        "Inntektssystemet omfordeler fra rike til fattige kommuner og kompenserer for spredt bosetting og små kull",
+        "Staten driver skole og eldreomsorg direkte i små kommuner",
+        "Innbyggerne betaler høyere kommuneskatt i små kommuner"
+      ],
+      "explanation": "Kommunene har samme lovpålagte oppgaver uansett størrelse. Rammetilskuddet fordeles etter «utgiftsbehov»: mange eldre, lange avstander og få barn per skole gir mer. Bergen sender i praksis penger til Beiarn. Det er derfor kommunesammenslåing er så betent — små kommuner kan ha god økonomi nettopp fordi de er små — og derfor Norge har 357 kommuner der Danmark klarer seg med 98."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er norske straffer så mye lavere enn amerikanske, og hva er resultatet?",
+      "answer": "Straffen skal først og fremst hindre ny kriminalitet, ikke gjengjelde — og tilbakefallet er rundt 20 % mot 60–70 % i USA",
+      "options": [
+        "Norge har så lav kriminalitet at det aldri har vært behov for strenge straffer, og fengslene er nesten tomme uansett",
+        "Straffen skal først og fremst hindre ny kriminalitet, ikke gjengjelde — og tilbakefallet er rundt 20 % mot 60–70 % i USA",
+        "Grunnloven forbyr straff over 21 år, og domstolene kan ikke omgå den",
+        "Fengslene drives av kommunene, som ikke har råd til lange dommer"
+      ],
+      "explanation": "Maksimumsstraffen er 21 år (30 for folkemord), men «forvaring» kan forlenges så lenge faren vedvarer — Breivik sitter under den. Innsatte har stemmerett, studerer og går på permisjon; en fengselsbetjent har to års høyskole. Målet er at naboen din skal komme ut bedre enn han gikk inn. USA har 500 innsatte per 100 000, Norge rundt 55."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «formuesskatten» en strid om, egentlig?",
+      "answer": "Om skatt på eiendeler — ikke inntekt — driver eiere ut av landet og tapper bedrifter, eller er nødvendig for å skattlegge de rikeste som knapt har inntekt",
+      "options": [
+        "Om arv skal beskattes, siden Norge avskaffet arveavgiften i 2014 og er ett av få land uten, og de rikeste derfor overfører formuen skattefritt",
+        "Om skatt på eiendeler — ikke inntekt — driver eiere ut av landet og tapper bedrifter, eller er nødvendig for å skattlegge de rikeste som knapt har inntekt",
+        "Om boligen skal beskattes til full markedsverdi",
+        "Om utlendinger skal betale skatt på norske aksjer"
+      ],
+      "explanation": "Norge er ett av få land med formuesskatt (rundt 1 % over 1,7 millioner). Argumentet for: de rikeste tar ut lite lønn, og uten den ville de knapt betalt skatt. Mot: eieren må ta utbytte fra bedriften for å betale — også i tapsår — og flere av landets rikeste flyttet til Sveits i 2022–23. Debatten er en av de mest ideologisk ladede i norsk politikk."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor ble Norge et av verdens mest likestilte land — hvilke to grep hadde størst effekt?",
+      "answer": "Utbyggingen av barnehager fra 1970-tallet og fedrekvoten fra 1993 gjorde det mulig og normalt for begge å jobbe",
+      "options": [
+        "Likestillingsloven i 1978 forbød lønnsforskjeller, og kvoteringsregelen for styrer i 2003 tvang næringslivet til å slippe kvinner til i toppen",
+        "Utbyggingen av barnehager fra 1970-tallet og fedrekvoten fra 1993 gjorde det mulig og normalt for begge å jobbe",
+        "P-pillen og abortloven ga kvinner kontroll over familieplanleggingen",
+        "Kvinnelige statsministre og Gro Harlem Brundtlands «kvinneregjering» endret normene"
+      ],
+      "explanation": "Norge var sent ute: i 1970 jobbet under halvparten av gifte kvinner. Full barnehagedekning kom først rundt 2010, og maksprisen i 2003. Fedrekvoten, der «bruk eller mist»-uker ble øremerket far, tredoblet fedrenes permisjon på få år og ble kopiert i mange land. Fortsatt jobber 35 % av kvinnene deltid, og arbeidsmarkedet er blant Europas mest kjønnsdelte."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Norges «velferdsstat» avhengig av at nesten alle jobber — og hvorfor er det den største trusselen mot den?",
+      "answer": "Skatteinntektene kommer fra arbeid, ikke olje; med 1 av 5 i yrkesaktiv alder på trygd og en aldrende befolkning krymper grunnlaget",
+      "options": [
+        "Oljefondet dekker allerede en tredjedel av statsbudsjettet, og når det er brukt opp om 20 år, må velferden kuttes til det halve",
+        "Skatteinntektene kommer fra arbeid, ikke olje; med 1 av 5 i yrkesaktiv alder på trygd og en aldrende befolkning krymper grunnlaget",
+        "Innvandringen koster mer enn den gir, og nettoeffekten spiser velferden",
+        "Kommunene bruker mer enn staten bevilger, og gjelden vokser"
+      ],
+      "explanation": "Oljepengebruken er rundt 20 % av budsjettet; resten er skatt på arbeid og forbruk. Hver person i jobb finansierer velferden til dem som ikke er det. Perspektivmeldingen viser at det blir færre yrkesaktive per pensjonist — fra 4 i 2000 til under 2,5 i 2060 — og at Norge har rekordmange unge uføre. Det er derfor «arbeidslinja» er felles politikk fra Frp til SV."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor sier man at norsk politikk avgjøres i «trepartssamarbeidet» like mye som i Stortinget?",
+      "answer": "Staten, LO og NHO forhandler lønn, pensjon og arbeidsliv utenom Stortinget — og de fleste regjeringer gjennomfører det partene blir enige om",
+      "options": [
+        "LO og NHO har fast plass i regjeringens underutvalg og kan stanse lovforslag som angår arbeidslivet, en rett de fikk i Hovedavtalen i 1935",
+        "Staten, LO og NHO forhandler lønn, pensjon og arbeidsliv utenom Stortinget — og de fleste regjeringer gjennomfører det partene blir enige om",
+        "Arbeiderpartiet og LO er organisatorisk ett, så LO styrer partiet",
+        "Stortinget har delegert arbeidslivsspørsmål til partene ved lov"
+      ],
+      "explanation": "Pensjonsreformen (2005), AFP, sykelønn og IA-avtalen ble alle forhandlet fram i treparts-utvalg før Stortinget stemte. Sterke organisasjoner (50 % er fagorganisert, mot 10 % i USA) og en stat som tar ansvar for utfallet — det er «den nordiske modellen». Fordelen er stabilitet; ulempen er at uorganiserte, gründere og folk utenfor arbeidslivet ikke sitter ved bordet."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor har Norge nesten ingen private skoler, når nabolandet Sverige har et helt privatskolemarked?",
+      "answer": "Privatskoleloven krever et religiøst eller pedagogisk alternativ og forbyr utbytte — Sverige åpnet for kommersielle «friskoler» i 1992",
+      "options": [
+        "Grunnloven fra 1814 slår fast at all undervisning skal være offentlig, og bare kirkelige skoler har hatt unntak siden reformasjonen",
+        "Privatskoleloven krever et religiøst eller pedagogisk alternativ og forbyr utbytte — Sverige åpnet for kommersielle «friskoler» i 1992",
+        "Norske foreldre har aldri etterspurt private skoler fordi den offentlige er så god",
+        "Private skoler får ikke statsstøtte i Norge, så bare de rikeste har råd"
+      ],
+      "explanation": "Under 5 % av norske elever går i private skoler, mot 15 % i Sverige, der børsnoterte konsern driver dem og PISA-resultatene og karakterinflasjonen er blitt en nasjonal strid. Norsk privatskole må være Steiner, Montessori, kristen eller lignende — og får 85 % statsstøtte, men kan ikke ta ut overskudd. Bondevik-regjeringen prøvde å åpne opp i 2003; Stoltenberg stengte igjen i 2007."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor kan ikke Stortinget bare bruke mer av oljefondet når det trengs — hva er handlingsregelen egentlig?",
+      "answer": "En selvpålagt regel om å bruke bare forventet realavkastning (3 %), så fondet varer evig og ikke overoppheter økonomien",
+      "options": [
+        "En grunnlovsbestemmelse fra 2001 som forbyr Stortinget å bruke mer enn 4 % av fondet, og som bare kan endres med to tredjedels flertall",
+        "En selvpålagt regel om å bruke bare forventet realavkastning (3 %), så fondet varer evig og ikke overoppheter økonomien",
+        "En avtale med EU om at oljepenger ikke skal subsidiere norsk næringsliv",
+        "En regel som sier at oljepengene bare kan brukes til investeringer, ikke drift"
+      ],
+      "explanation": "Fondet er over 20 000 milliarder; 3 % er 600 milliarder, mer enn nok til å friste. Regelen er ikke lov, bare et stortingsflertall — men ingen regjering har brutt den vesentlig, unntatt under pandemien. Bak ligger «hollandsk syke»: Nederland brukte gasspengene på 1970-tallet, kronen steg, industrien døde. Fondet investerer bare i utlandet av samme grunn."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Norge, med verdens beste råd, ett av landene i Europa med høyest andel uføre?",
+      "answer": "Ordningen er romslig og trygg, alternative ytelser er stengt, og arbeidslivet har få enkle jobber igjen for folk med redusert kapasitet",
+      "options": [
+        "Norge har flere arbeidsulykker og yrkesskader enn andre land på grunn av olje, fiske og bygg, og de fleste uføre er tidligere industriarbeidere",
+        "Ordningen er romslig og trygg, alternative ytelser er stengt, og arbeidslivet har få enkle jobber igjen for folk med redusert kapasitet",
+        "Legene sykmelder for lenge, så folk mister tilknytningen til jobben",
+        "Innvandrere fra land utenfor Europa står for det meste av økningen"
+      ],
+      "explanation": "Over 10 % av befolkningen i yrkesaktiv alder er uføre, og andelen unge uføre har doblet seg på 20 år — psykiske lidelser dominerer. Der andre land har lav arbeidsledighetstrygd og sosialhjelp som mellomstasjon, går folk i Norge fra sykepenger til arbeidsavklaringspenger til uføretrygd. Og et høyproduktivt arbeidsliv har få plasser for den som yter 60 %. Det er velferdsstatens dyreste og vanskeligste spørsmål."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor har Sametinget så mye makt i arealsaker i nord, og hvorfor er det omstridt?",
+      "answer": "Finnmarksloven og folkeretten (ILO 169) gir samene konsultasjonsrett og medeierskap i Finnmark, som vindkraft og gruver må forholde seg til",
+      "options": [
+        "Sametinget har vetorett over alle naturinngrep nord for Saltfjellet etter Alta-forliket i 1981, og har stanset over hundre prosjekter",
+        "Finnmarksloven og folkeretten (ILO 169) gir samene konsultasjonsrett og medeierskap i Finnmark, som vindkraft og gruver må forholde seg til",
+        "Sametinget eier reinbeiteområdene og leier dem ut",
+        "Grunnlovens samiske paragraf gir Sametinget lovgivningsmakt"
+      ],
+      "explanation": "Fosen-dommen (2021) slo fast at vindturbinene krenket reindriftssamenes rett til kulturutøvelse etter FN-konvensjonen, og staten måtte inngå forlik med turbinene stående. Finnmarkseiendommen, som eier 95 % av Finnmark, har styre valgt av Sametinget og fylkestinget. Konflikten: det grønne skiftet trenger arealer nettopp der reindriften er — og retten står på samenes side oftere enn før."
     }
   ]
 }

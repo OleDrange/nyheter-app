@@ -1,4 +1,485 @@
 {
   "category": "Filosofi og ideer",
-  "questions": []
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva var opplysningstidens grunnidé, den som ligger under både menneskerettighetene og moderne vitenskap?",
+      "answer": "Fornuft og erfaring, ikke tradisjon og åpenbaring, skal avgjøre hva som er sant og rett",
+      "options": [
+        "Mennesket er født godt, og det er samfunnet og eiendommen som ødelegger det og skaper all urett",
+        "Fornuft og erfaring, ikke tradisjon og åpenbaring, skal avgjøre hva som er sant og rett",
+        "Folket skal styre seg selv gjennom valgte forsamlinger uten konge eller adel",
+        "Gud har skapt verden som et urverk og griper ikke lenger inn i den"
+      ],
+      "explanation": "Kants slagord var «Sapere aude» — våg å bruke din egen forstand. 1700-tallets tenkere ville undersøke alt: religionen, kongemakten, straffen, slaveriet. Den amerikanske og den franske revolusjonen var forsøk på å bygge stater på fornuft. Og Norges grunnlov av 1814 er et direkte barn av den samme bevegelsen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er egentlig forskjellen på en «hypotese» og en «teori» i vitenskapen?",
+      "answer": "En hypotese er en testbar antakelse; en teori er en godt underbygd forklaring som har tålt mange tester",
+      "options": [
+        "En hypotese er en gjetning; en teori er en gjetning som mange forskere er enige om, men som ennå ikke er bevist",
+        "En hypotese er en testbar antakelse; en teori er en godt underbygd forklaring som har tålt mange tester",
+        "En hypotese gjelder ett eksperiment; en teori er en lov som gjelder overalt",
+        "En hypotese kan være feil; en teori er per definisjon sann"
+      ],
+      "explanation": "«Det er bare en teori» er en misforståelse — i vitenskap er teori det høyeste en forklaring kan nå. Evolusjonsteorien, relativitetsteorien og kimteorien om sykdom er alle teorier. En «lov» er derimot bare en beskrivelse av et mønster (tyngdeloven sier hva som skjer, ikke hvorfor)."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «Ockhams barberkniv», prinsippet forskere og leger bruker daglig?",
+      "answer": "Blant forklaringer som passer like godt, velg den som krever færrest antakelser",
+      "options": [
+        "Blant forklaringer som passer like godt, velg den som krever færrest antakelser",
+        "Fjern alt fra en teori som ikke kan observeres direkte, for det finnes ikke",
+        "Skjær bort de svakeste hypotesene før du tester de sterke, så du sparer tid",
+        "Den enkleste forklaringen er alltid den riktige"
+      ],
+      "explanation": "Ikke «det enkleste er sant», men «ikke legg til mer enn du må». En lege som ser feber, hoste og tungpust, tenker lungebetennelse — ikke tre sjeldne sykdommer samtidig. Prinsippet er oppkalt etter en fransiskanermunk fra 1300-tallet som brukte det mot teologiske spissfindigheter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva var Machiavellis egentlige poeng i «Fyrsten», boken som ga oss ordet «machiavellisk»?",
+      "answer": "At en hersker må dømmes etter om staten overlever, ikke etter om han er et godt menneske",
+      "options": [
+        "At en hersker må dømmes etter om staten overlever, ikke etter om han er et godt menneske",
+        "At makt korrumperer alle som får den, og at fyrster derfor må byttes ut ofte",
+        "At folket alltid vil velge den grusomste lederen om de får velge selv, og derfor ikke bør få stemme",
+        "At religion er det beste redskapet for å holde folket i ro"
+      ],
+      "explanation": "Machiavelli skilte politikk fra moral for første gang: en fyrste som er for god, mister staten — og da lider alle. «Bedre å bli fryktet enn elsket, om man ikke kan være begge.» Han skrev også et forsvar for republikken, men det er «Fyrsten» som leses — av alle fra Napoleon til moderne ledelseskurs."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er det taoistiske begrepet «wu wei», som Kinas ledere og vestlige ledelsesguruer begge siterer?",
+      "answer": "Å handle uten å tvinge — la ting skje etter sin natur, som vann som finner veien",
+      "options": [
+        "Å trekke seg fra verden og leve i en hule for å oppnå udødelighet",
+        "Å handle uten å tvinge — la ting skje etter sin natur, som vann som finner veien",
+        "Å underordne seg keiseren fullstendig, siden han er himmelens sønn og all motstand er unaturlig",
+        "Å bryte alle regler for å finne sitt sanne jeg"
+      ],
+      "explanation": "Laozi: «Den beste herskeren er den folket knapt vet finnes.» Taoismen er konfucianismens motpol i kinesisk tenkning — der Konfucius vil ordne, vil Laozi slippe. Ideen om at den beste handlingen ofte er ikke å gripe inn, dukker opp i alt fra kampsport og medisin til debatten om hvor mye staten skal styre."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva sa John Stuart Mill om hvor grensen for individets frihet går?",
+      "answer": "Samfunnet kan bare gripe inn mot en handling for å hindre skade på andre — ikke for personens eget beste",
+      "options": [
+        "Frihet betyr å kunne gjøre alt loven ikke forbyr, og loven bestemmes av flertallet i frie valg",
+        "Samfunnet kan bare gripe inn mot en handling for å hindre skade på andre — ikke for personens eget beste",
+        "Individet er fritt så lenge det ikke krenker Gud, kongen eller eiendommen",
+        "Frihet er retten til å delta i styringen av samfunnet"
+      ],
+      "explanation": "«Skadeprinsippet» fra «Om friheten» (1859) er den klareste testen som finnes på om et forbud er legitimt: rammer handlingen andre, eller bare deg selv? Debattene om røyking, rusmidler, hjelmpåbud og sukkeravgift er alle varianter av det samme spørsmålet. Mill mente også at flertallet kan være like tyrannisk som en konge."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er stoikernes og buddhistenes felles råd om hvordan man bør møte motgang?",
+      "answer": "Lidelsen kommer mindre av hendelsen enn av vår dom over den — og dommen kan vi endre",
+      "options": [
+        "Motgang er en prøve fra en høyere makt, og den som består den, blir belønnet i et neste liv",
+        "Lidelsen kommer mindre av hendelsen enn av vår dom over den — og dommen kan vi endre",
+        "Man skal søke motgang aktivt for å herde seg",
+        "Det eneste som hjelper, er å slutte å ønske seg noe som helst"
+      ],
+      "explanation": "Epiktet: «Det er ikke tingene som plager oss, men våre meninger om tingene.» Buddha: begjæret etter at det skal være annerledes, er lidelsens rot. De kom fram til det uavhengig av hverandre, 500 år og 5 000 km fra hverandre — og kognitiv atferdsterapi, den best dokumenterte psykoterapien, bygger på nøyaktig det."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var Aristoteles' svar på hva et godt liv er, og hvorfor har det fått en renessanse?",
+      "answer": "Blomstring gjennom å utvikle sine evner og dyder over et helt liv — ikke nytelse eller rikdom",
+      "options": [
+        "Ro i sjelen gjennom å begrense sine ønsker til det man kan være sikker på å få, og nyte det enkle",
+        "Blomstring gjennom å utvikle sine evner og dyder over et helt liv — ikke nytelse eller rikdom",
+        "Ære og hukommelse i ettertiden, oppnådd gjennom dåd i krig og politikk",
+        "Kontemplasjon av det evige, som bare filosofen kan nå"
+      ],
+      "explanation": "«Eudaimonia» oversettes ofte med lykke, men betyr snarere å leve godt som menneske — mot, måtehold, vennskap, klokskap. Dyden er den gylne middelvei mellom to laster: mot ligger mellom feighet og dumdristighet. Positiv psykologi og forskning på «meaning vs. pleasure» er i stor grad Aristoteles med data."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «trolleyproblemet», og hvorfor er det blitt praktisk relevant?",
+      "answer": "Ville du ofre én for å redde fem? Svaret varierer med hvordan man ofrer — og selvkjørende biler må programmeres til et svar",
+      "options": [
+        "Bør man betale for et kollektivt gode man kan nyte gratis? Det er kjernen i alle skattedebatter",
+        "Ville du ofre én for å redde fem? Svaret varierer med hvordan man ofrer — og selvkjørende biler må programmeres til et svar",
+        "Hvis en vogn med to gjenstander veier mer enn en med tre, hvilken er tyngst? Et paradoks om måling",
+        "Kan man stole på en vitne som har noe å tjene på utfallet?"
+      ],
+      "explanation": "De fleste vipper sporet for å redde fem på bekostning av én — men nekter å dytte en tykk mann foran vognen for samme resultat. Forskjellen er ikke utilitaristisk, men følelsesmessig: å bruke noen som redskap. Bilprodusenter, krigsroboter og prioritering i helsevesenet står alle overfor varianten «hvem skal algoritmen ofre?»"
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er den viktigste forskjellen på hvordan protestantismen og katolisismen ser på veien til frelse?",
+      "answer": "Protestanter: ved tro alene, direkte for Gud. Katolikker: tro og gjerninger, formidlet gjennom kirken og sakramentene",
+      "options": [
+        "Protestanter tror på forutbestemmelse og at frelsen er avgjort før fødselen; katolikker mener alle kan velge fritt",
+        "Protestanter: ved tro alene, direkte for Gud. Katolikker: tro og gjerninger, formidlet gjennom kirken og sakramentene",
+        "Protestanter avviser Det gamle testamente; katolikker regner det som like hellig som Det nye",
+        "Protestanter tror ikke på et liv etter døden i samme forstand"
+      ],
+      "explanation": "Luthers opprør i 1517 handlet om avlatshandelen — at kirken solgte syndsforlatelse. Hans svar: ingen mellommann, ingen kjøp, bare tro. Det tok makten fra presteskapet og ga den enkelte ansvaret for sitt forhold til Gud — og Max Weber mente at nettopp den holdningen skapte kapitalismens arbeidsetikk i Nord-Europa."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva mente Sartre med at mennesket er «dømt til frihet»?",
+      "answer": "At det ikke finnes noen gitt natur eller plan — vi er hva vi velger, og kan ikke skylde på noe",
+      "options": [
+        "At friheten er en illusjon skapt av samfunnet, og at vi egentlig er styrt av klasse og oppvekst",
+        "At det ikke finnes noen gitt natur eller plan — vi er hva vi velger, og kan ikke skylde på noe",
+        "At mennesket er skapt fritt av Gud, men misbruker friheten til synd",
+        "At friheten bare kan vinnes gjennom politisk revolusjon"
+      ],
+      "explanation": "«Eksistensen kommer før essensen»: en kniv er laget for et formål, mennesket er ikke. Å si «jeg kunne ikke annet» er det Sartre kalte ond tro — flukt fra ansvaret. Eksistensialismen vokste fram i ruinene etter krigen, da alle de gamle autoritetene hadde sviktet, og preget en hel generasjon — også Norges."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «Pascals veddemål», og hva er den vanligste innvendingen?",
+      "answer": "Tro på Gud, for taper du, mister du lite, vinner du, vinner du alt — men det forutsetter at man kan velge å tro, og at det er riktig gud",
+      "options": [
+        "Sats aldri mer enn du har råd til å tape, for sannsynligheten er alltid mot deg — men det gjelder ikke når innsatsen er evigheten",
+        "Tro på Gud, for taper du, mister du lite, vinner du, vinner du alt — men det forutsetter at man kan velge å tro, og at det er riktig gud",
+        "Bevis for Guds eksistens fra sannsynlighetsregning — men det bygger på en feil om uendelige tall",
+        "Gud eksisterer fordi noe måtte starte alt — men da må også Gud ha en årsak"
+      ],
+      "explanation": "Pascal var matematiker og la opp troen som en spillteori-matrise. Innvendingene: tro er ikke et valg man tar som et veddemål; en gud som belønner beregnende tro er neppe verdig; og hvilken av tusen guder skal man satse på? Men strukturen — beslutning under usikkerhet med asymmetriske utfall — er i dag standardverktøy i risikoanalyse."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er forskjellen på «pliktetikk» og «konsekvensetikk», og hvor møter en lege dem daglig?",
+      "answer": "Plikt: noen handlinger er gale uansett utfall. Konsekvens: bare utfallet teller. Sannhet til en døende pasient er testcasen",
+      "options": [
+        "Plikt: gjør det yrkesreglene sier. Konsekvens: gjør det som ser best ut i ettertid. Prioritering ved knapphet er testcasen",
+        "Plikt: noen handlinger er gale uansett utfall. Konsekvens: bare utfallet teller. Sannhet til en døende pasient er testcasen",
+        "Plikt: følg pasientens ønske. Konsekvens: følg det medisinsk beste. Samtykke er testcasen",
+        "De er to navn på samme ting, sett fra to fag"
+      ],
+      "explanation": "Skal legen fortelle en engstelig pasient hele sannheten om prognosen? Kant: ja, alltid — en løgn behandler pasienten som et barn. Utilitaristen: bare om det gir best utfall. Det samme skillet ligger under debatten om tortur, aktiv dødshjelp og om man kan bryte et løfte når det lønner seg. De fleste mennesker er en ustabil blanding av begge."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er hovedideen i marxismen som analyse — uavhengig av hva den ble til som politikk?",
+      "answer": "At samfunnets ideer, lover og religion formes av hvem som eier produksjonsmidlene, og at historien drives av klassekamp",
+      "options": [
+        "At staten skal eie alt og fordele etter behov, og at pengene skal avskaffes så snart som mulig etter revolusjonen",
+        "At samfunnets ideer, lover og religion formes av hvem som eier produksjonsmidlene, og at historien drives av klassekamp",
+        "At arbeiderne må gripe makten med vold, siden borgerskapet aldri gir den fra seg frivillig",
+        "At alle mennesker er like og bør ha lik lønn"
+      ],
+      "explanation": "Marx var analytiker mer enn planlegger — han skrev tusen sider om kapitalismen og knapt ti om kommunismen. Poenget om at de rådende ideene er de rådendes ideer, og at økonomiske interesser forkler seg som moral, brukes i dag av folk som avskyr alt annet ved ham. Hans spådom om at kapitalismen ville kollapse av seg selv, slo derimot feil."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Gödel-teoremet», og hvorfor rystet det matematikken?",
+      "answer": "I ethvert regelsystem rikt nok til å beskrive tall finnes sanne påstander som ikke kan bevises innenfor systemet",
+      "options": [
+        "Enhver matematisk sannhet kan bevises om man bare finner de riktige aksiomene, og Gödel viste hvordan de skal velges",
+        "I ethvert regelsystem rikt nok til å beskrive tall finnes sanne påstander som ikke kan bevises innenfor systemet",
+        "Uendelighetene har ulik størrelse, og noen kan ikke telles",
+        "Datamaskiner kan aldri avgjøre om et program stopper"
+      ],
+      "explanation": "Hilbert ville i 1900 bevise at matematikken var komplett og motsigelsesfri. Gödel (1931) viste at det er umulig: et system kan ikke bevise sin egen konsistens. Beviset bruker en påstand som i praksis sier «denne setningen kan ikke bevises». Turing brukte samme idé til å vise at det finnes problemer ingen datamaskin kan løse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var Wittgensteins sene hovedpoeng om språk, og hvorfor endret det filosofien?",
+      "answer": "Ords mening er deres bruk i praksis — så mange filosofiske problemer er språk som «går på tomgang»",
+      "options": [
+        "Språket er et bilde av virkeligheten, og det som ikke kan avbildes, kan ikke sies — derfor må filosofien tie om etikk og Gud",
+        "Ords mening er deres bruk i praksis — så mange filosofiske problemer er språk som «går på tomgang»",
+        "Alle språk deler en medfødt grammatikk, og tanken er formet av den",
+        "Språket bestemmer hva vi kan tenke, så ulike språk gir ulike verdener"
+      ],
+      "explanation": "Den unge Wittgenstein mente det første (Tractatus); den eldre forkastet det. «Hva er tid?» virker dypt, men er kanskje bare ordet «tid» brukt utenfor de sammenhengene der det virker. Terapeutisk filosofi: oppløs problemet i stedet for å løse det. Det traff filosofien så hardt at mye av faget siden har handlet om språk."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «det naturalistiske feilslutning», som Hume først påpekte?",
+      "answer": "At man ikke kan slutte fra hvordan noe ER til hvordan det BØR være uten en ekstra premiss",
+      "options": [
+        "At det som er naturlig, alltid er sunt, og det som er kunstig, alltid er skadelig — feilen bak mye helsemarkedsføring",
+        "At man ikke kan slutte fra hvordan noe ER til hvordan det BØR være uten en ekstra premiss",
+        "At naturvitenskapen ikke kan forklare bevissthet, siden den bare beskriver materie",
+        "At det som er vanlig, er riktig"
+      ],
+      "explanation": "«Dyr spiser hverandre, altså er det greit at vi gjør det» — det mangler et ledd. Alle argumenter fra biologi til moral (evolusjon «vil» at menn skal være utro; testosteron «forklarer» aggresjon) snubler her. Hume: fornuften kan si hva som er, men aldri alene hva som bør — det krever verdier, og de kommer fra oss."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er ideen i Isaiah Berlins skille mellom «negativ» og «positiv» frihet, og hvorfor advarte han mot den siste?",
+      "answer": "Negativ: fravær av tvang. Positiv: evnen til å realisere sitt «sanne jeg» — som noen kan påstå å kjenne bedre enn deg",
+      "options": [
+        "Negativ: frihet fra staten. Positiv: frihet gjennom staten, som skole og helse — og den siste truer den første når skattene stiger",
+        "Negativ: fravær av tvang. Positiv: evnen til å realisere sitt «sanne jeg» — som noen kan påstå å kjenne bedre enn deg",
+        "Negativ: frihet til å si nei. Positiv: frihet til å si ja — og bare den siste er ekte",
+        "Negativ frihet er individets, positiv frihet er kollektivets"
+      ],
+      "explanation": "Berlin (1958) hadde sett hva Sovjet gjorde: «vi frigjør deg fra dine falske ønsker». Hvis frihet betyr å følge sitt høyere jeg, kan partiet eller presten definere det for deg og tvinge deg «til frihet». Derfor foretrakk han den beskjedne negative friheten — men innrømmet at den er tom for den som sulter."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er forklaringen på at den greske filosofien overlevde til middelalderens Europa?",
+      "answer": "Muslimske lærde i Bagdad og Córdoba oversatte, kommenterte og bevarte den — og Europa fikk den tilbake via arabisk",
+      "options": [
+        "Klostrene i Irland og Italia kopierte de greske manuskriptene i hemmelighet gjennom hele den mørke middelalderen",
+        "Muslimske lærde i Bagdad og Córdoba oversatte, kommenterte og bevarte den — og Europa fikk den tilbake via arabisk",
+        "Bysants sendte biblioteket til Venezia da Konstantinopel falt",
+        "Kirken i Roma bevarte alt som ikke stred mot læren"
+      ],
+      "explanation": "Aristoteles var nesten ukjent i Vest-Europa i 500 år. I Visdommens hus i Bagdad ble han oversatt på 800-tallet; Avicenna og Averroës bygde videre. På 1100-tallet ble arabiske tekster oversatt til latin i Toledo, og Thomas Aquinas bygde katolsk teologi på «Filosofen». Ordene algebra, algoritme og alkymi er spor av den samme overleveringen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «det vanskelige problemet» om bevissthet, som filosofer og nevrovitere fortsatt står fast på?",
+      "answer": "Hvorfor og hvordan fysiske prosesser i hjernen i det hele tatt oppleves som noe — ikke bare hva de gjør",
+      "options": [
+        "Hvordan hjernen samler informasjon fra milliarder av celler til én enhetlig opplevelse uten en sentral styringsenhet",
+        "Hvorfor og hvordan fysiske prosesser i hjernen i det hele tatt oppleves som noe — ikke bare hva de gjør",
+        "Om dyr har bevissthet, og hvordan man kan måle det",
+        "Om en datamaskin kan bli bevisst, og hvordan vi ville vite det"
+      ],
+      "explanation": "David Chalmers (1995): de «lette» problemene — oppmerksomhet, hukommelse, rapportering — er vanskelige nok, men i prinsippet løsbare. Det vanskelige er hvorfor det er «noe det er likt» å se rødt. Ingen fysisk beskrivelse ser ut til å forklare det. Spørsmålet er blitt praktisk med AI: hvordan skulle vi noensinne vite om en maskin opplever noe?"
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva var Sokrates' viktigste metode, og hvorfor ble han dømt til døden for den?",
+      "answer": "Han stilte spørsmål til folk innså at de ikke visste det de trodde de visste, og makthaverne opplevde det som undergraving",
+      "options": [
+        "Han skrev bøker som kritiserte det athenske demokratiet og hyllet Sparta, og de ble brent offentlig på torget etter dommen",
+        "Han stilte spørsmål til folk innså at de ikke visste det de trodde de visste, og makthaverne opplevde det som undergraving",
+        "Han nektet å tro på gudene og forkynte at verden var laget av atomer",
+        "Han holdt taler mot Sparta under krigen og ble dømt for landssvik"
+      ],
+      "explanation": "Sokrates skrev aldri et ord; vi kjenner ham gjennom Platon. Metoden — spørre til man ser at man ikke vet — kalles fortsatt sokratisk. Anklagen i 399 f.Kr. var «å forderve ungdommen og ikke ære byens guder». Han kunne ha flyktet, men valgte giftbegeret for å ikke bryte loven han hadde levd under."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er kjernen i stoisismen, filosofien som er blitt populær igjen blant ledere og idrettsutøvere?",
+      "answer": "Skill mellom det du kan styre og det du ikke kan — og bruk kreftene bare på det første",
+      "options": [
+        "Undertrykk følelsene og vis aldri svakhet, uansett hva som skjer — bare den som ikke lar seg røre, er virkelig fri",
+        "Skill mellom det du kan styre og det du ikke kan — og bruk kreftene bare på det første",
+        "Nyt livet nå, for døden kommer uansett og ingenting varer",
+        "Lev enkelt og trekk deg unna samfunnet for å finne ro"
+      ],
+      "explanation": "Stoikerne mente at ytre ting — rykte, helse, andres handlinger — er utenfor vår kontroll; bare våre egne vurderinger og valg er våre. Marcus Aurelius skrev sine «Meditasjoner» som keiser i felten. Moderne kognitiv terapi bygger direkte på stoisk tenkning: det er ikke hendelsen, men tolkningen som plager oss."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva skiller de tre store religionene jødedom, kristendom og islam fra de fleste andre — og binder dem sammen?",
+      "answer": "De har én gud, en hellig bok og regner Abraham som stamfar",
+      "options": [
+        "De oppsto alle i og rundt Jerusalem, deler samme hellige by og har alle et presteskap som forvalter templet",
+        "De har én gud, en hellig bok og regner Abraham som stamfar",
+        "De tror på gjenfødelse og et endelig oppgjør på dommedag",
+        "De forbyr alle bilder av det guddommelige og har ingen prester"
+      ],
+      "explanation": "Derfor kalles de «abrahamittiske». Islam regner Moses og Jesus som profeter, og Koranen omtaler jøder og kristne som «bokens folk». Til sammen har de over 4 milliarder tilhengere — over halve menneskeheten. Hinduisme og buddhisme, de to neste, har verken én gud eller én bok."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva mente Nietzsche med det berømte utsagnet «Gud er død»?",
+      "answer": "At troen ikke lenger bærer samfunnets moral, og at vi må finne verdiene på egen hånd",
+      "options": [
+        "At naturvitenskapen etter Darwin hadde motbevist Guds eksistens én gang for alle, og at kirken burde legges ned",
+        "At troen ikke lenger bærer samfunnets moral, og at vi må finne verdiene på egen hånd",
+        "At kirken var så korrupt at den hadde drept sin egen gud",
+        "At mennesket var blitt sin egen gud gjennom teknologien"
+      ],
+      "explanation": "Sitatet er ikke et jubelrop, men en advarsel: «og vi har drept ham». Nietzsche fryktet at Europa ville synke ned i nihilisme når den kristne moralen mistet sitt fundament, og at folk ville gripe til nye avguder — nasjonen, rasen, ideologien. Det 20. århundret ga ham ikke helt feil."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «det kategoriske imperativ», Kants grunnregel for moral?",
+      "answer": "Handle bare etter regler du kunne ønske gjaldt for alle",
+      "options": [
+        "Handle bare etter regler du kunne ønske gjaldt for alle",
+        "Gjør mot andre det du vil at de skal gjøre mot deg",
+        "Velg alltid den handlingen som gir mest lykke for flest",
+        "Følg samvittigheten i hvert enkelt tilfelle, for den er fornuftens stemme i mennesket og vet mer enn regler"
+      ],
+      "explanation": "Testen er om regelen kan universaliseres: kan du ønske at alle løy når det passet dem? Nei — for da ville ingen tro på noe, og løgnen ville miste sin mening. Kant mente derfor at løgn alltid er galt, selv overfor en morder som spør hvor offeret gjemmer seg. Den andre formuleringen er mer kjent: behandle aldri et menneske bare som middel."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er grunnideen i utilitarismen?",
+      "answer": "En handling er riktig om den gir mest mulig velferd for flest mulig",
+      "options": [
+        "En handling er riktig om den følger regler som alle berørte kunne enes om bak et slør av uvitenhet",
+        "En handling er riktig om den gir mest mulig velferd for flest mulig",
+        "En handling er riktig om den er til nytte for den som handler",
+        "En handling er riktig om den bygger god karakter"
+      ],
+      "explanation": "Bentham og Mill på 1800-tallet: bare konsekvensene teller, og alles lykke teller likt — også de fattiges, kvinnenes og til slutt dyrenes. Det var radikalt. Problemet er de tilfellene der flertallets lykke krever ett offer: må man skyve én person foran toget for å redde fem? Trolleyproblemet er utilitarismens evige hodepine."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er hovedforskjellen på buddhisme og de fleste andre store religioner?",
+      "answer": "Den har ingen skapergud — målet er å slukke lidelsen gjennom innsikt og praksis",
+      "options": [
+        "Den har ingen skapergud — målet er å slukke lidelsen gjennom innsikt og praksis",
+        "Den krever ikke tro, bare at man følger de ti levereglene",
+        "Den oppsto i Kina som en gren av taoismen og bygger på forfedredyrkelse og harmoni med naturens vei",
+        "Den har mange guder som hver styrer sitt område av livet"
+      ],
+      "explanation": "Buddha var et menneske, ikke en gud, og han mente spørsmålet om gudene var uinteressant. Lidelsen kommer av begjær og fastklamring; veien ut er innsikt, etikk og meditasjon. Derfor kunne meditasjonsteknikkene løftes rett ut i sekulær «mindfulness» uten at noe religiøst fulgte med."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er Platons hulelignelse et bilde på?",
+      "answer": "At det vi sanser, er skygger av en dypere virkelighet bare tanken kan nå",
+      "options": [
+        "At mennesker foretrekker trygg uvitenhet framfor ubehagelig sannhet, og straffer den som forsøker å opplyse dem",
+        "At det vi sanser, er skygger av en dypere virkelighet bare tanken kan nå",
+        "At makthaverne holder folket i mørket for å beholde makten",
+        "At all kunnskap kommer gjennom sansene, og at fornuften bare tolker"
+      ],
+      "explanation": "Fangene i hulen ser bare skyggene på veggen og tror det er virkeligheten. Den som slipper ut i lyset — filosofen — ser tingene selv, og blir ledd av når han kommer tilbake. Ideen om at den sanselige verden er avledet fra en høyere, bar rett inn i kristendommen via Augustin — og ligger under all senere debatt om hva som er «virkelig»."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor var Descartes' «jeg tenker, altså er jeg» et så viktig vendepunkt?",
+      "answer": "Han gjorde tvilen til metode og fant det ene som ikke kunne betviles — det tenkende jeget",
+      "options": [
+        "Han beviste at sjelen finnes, og ga kirken et filosofisk fundament",
+        "Han gjorde tvilen til metode og fant det ene som ikke kunne betviles — det tenkende jeget",
+        "Han viste at følelsene og sansene, ikke den rene fornuften, er den eneste sikre kilden til kunnskap om verden",
+        "Han avviste all kunnskap som ikke kommer fra eksperimenter"
+      ],
+      "explanation": "Descartes tvilte på alt — sansene, kroppen, matematikken (en ond demon kunne lure ham) — og fant at selve tvilen krever en som tviler. Fra det punktet skulle all kunnskap bygges opp på nytt, av fornuften alene. Moderne filosofi regnes ofte fra ham: individet, ikke tradisjonen eller Gud, ble utgangspunktet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «samfunnskontrakten» som Hobbes, Locke og Rousseau skrev om?",
+      "answer": "Ideen om at statens makt bygger på at borgerne har avgitt frihet i bytte mot beskyttelse",
+      "options": [
+        "En faktisk avtale inngått av de første byene i antikken",
+        "Ideen om at statens makt bygger på at borgerne har avgitt frihet i bytte mot beskyttelse",
+        "Kirkens lære om at kongen styrer med Guds fullmakt",
+        "Avtalen mellom adel og konge i middelalderen som ga adelen skattefrihet og jord mot å stille med riddere i krig"
+      ],
+      "explanation": "Et tankeeksperiment: uten stat ville livet være «ensomt, fattig, ekkelt, brutalt og kort» (Hobbes), så mennesker gir opp retten til å ta seg selv til rette. Locke la til at kontrakten kan sies opp om kongen bryter den — det er ideen bak den amerikanske uavhengighetserklæringen. Rousseau: makten tilhører folket, ikke fyrsten."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva la Karl Popper fram som kjennetegnet på en vitenskapelig teori?",
+      "answer": "At den kan falsifiseres — det må finnes en observasjon som ville vise at den er gal",
+      "options": [
+        "At den er bekreftet av så mange uavhengige eksperimenter at sannsynligheten for at den er gal, er neglisjerbar",
+        "At den kan falsifiseres — det må finnes en observasjon som ville vise at den er gal",
+        "At den kan uttrykkes i matematiske ligninger",
+        "At et flertall av fagfolk aksepterer den"
+      ],
+      "explanation": "Popper var lei av at marxisme og psykoanalyse kunne forklare alt — ingenting kunne motbevise dem, og det var svakheten, ikke styrken. Einsteins relativitetsteori derimot spådde noe risikabelt (at lys bøyes av sola) som kunne ha slått feil i 1919. En påstand som ikke kan være gal, sier ingenting om verden."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «det usynlige hånd»-argumentet til Adam Smith egentlig?",
+      "answer": "At folk som forfølger egen vinning i et marked, uten å ville det, tjener fellesskapet",
+      "options": [
+        "At markedet må styres av en skjult, kyndig elite for å fungere",
+        "At folk som forfølger egen vinning i et marked, uten å ville det, tjener fellesskapet",
+        "At Gud ordner økonomien slik at de flittige belønnes",
+        "At priser og lønninger settes av usynlige markedskrefter som ingen enkeltperson kan forutsi eller påvirke"
+      ],
+      "explanation": "«Det er ikke av slakterens velvilje vi venter vår middag, men av hans egeninteresse.» Smith brukte uttrykket bare én gang i «Nasjonenes velstand» (1776), og var moralfilosof, ikke markedsdyrker — han advarte mot at kjøpmenn samler seg for å presse prisene opp. Argumentet er fortsatt kjernen i debatten om hva markedet kan og ikke kan ordne."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er forskjellen mellom sunni- og sjiamuslimer, som forklarer mye av Midtøstens konflikter?",
+      "answer": "Uenighet om hvem som skulle lede muslimene etter Muhammed — de valgte, eller hans slekt",
+      "options": [
+        "Ulikt syn på om Koranen skal tolkes bokstavelig eller symbolsk, og om nye lover kan utledes av den i dag",
+        "Uenighet om hvem som skulle lede muslimene etter Muhammed — de valgte, eller hans slekt",
+        "Sjiaene aksepterer bare de første fire kalifene, sunniene alle senere",
+        "Sunniene tillater bildeframstillinger, sjiaene forbyr dem"
+      ],
+      "explanation": "Sjia (fra «shiat Ali», Alis parti) mente at Muhammeds svigersønn Ali og hans etterkommere skulle lede; sunniene fulgte de valgte kalifene. Splittelsen ble blodig ved Karbala i 680, som sjiaene fortsatt sørger over. Rundt 85–90 % er sunni; Iran, Irak, Bahrain og Aserbajdsjan er sjiadominert — derfor rivaliseringen Iran–Saudi-Arabia."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva var det revolusjonerende i Darwins teori — ikke evolusjon i seg selv, men mekanismen?",
+      "answer": "At tilfeldig variasjon og ulik overlevelse gir tilpasning uten noen plan eller hensikt",
+      "options": [
+        "At arter forandrer seg over tid, noe ingen hadde foreslått før",
+        "At tilfeldig variasjon og ulik overlevelse gir tilpasning uten noen plan eller hensikt",
+        "At mennesket stammer fra apene, som stred mot Bibelen",
+        "At egenskaper dyr tilegner seg i løpet av livet, som sterke muskler eller lang hals, arves av avkommet"
+      ],
+      "explanation": "At arter endrer seg, hadde flere foreslått (Lamarck mente ervervede egenskaper arves — det var feil). Darwins bidrag var at design kan oppstå uten designer: bare de best tilpassede får flest avkom. Det fjernet hensikten fra naturen, og det var derfor Darwin ventet 20 år med å publisere. Daniel Dennett kalte det «den beste ideen noen noensinne har hatt»."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Rawls' uvitenhetsslør», og hva skal det brukes til?",
+      "answer": "Velg samfunnets regler som om du ikke visste hvem du ville bli i det — da beskytter du de svakeste",
+      "options": [
+        "Godta at mennesker aldri kan vite hva som er rettferdig, og la flertallet bestemme",
+        "Velg samfunnets regler som om du ikke visste hvem du ville bli i det — da beskytter du de svakeste",
+        "Aksepter at dommere må dømme uten kjennskap til partenes bakgrunn, formue eller stilling for å være rettferdige",
+        "Innse at lykke ikke kan måles, så fordeling må skje etter innsats"
+      ],
+      "explanation": "Rawls (1971) spurte: hvilke regler ville du velge hvis du kunne ende som fattig, syk eller diskriminert? Svaret hans: like friheter for alle, og ulikhet bare når den gagner dem som har minst. Det er det mest innflytelsesrike forsvaret for velferdsstaten i moderne filosofi — og et redskap du kan bruke på enhver politisk sak."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva var Humes «problem med induksjon», som fortsatt ikke er løst?",
+      "answer": "At ingen mengde observasjoner kan bevise at neste gang blir som forrige — vi antar det bare av vane",
+      "options": [
+        "At sansene kan bedra oss, så all erfaring er usikker",
+        "At ingen mengde observasjoner kan bevise at neste gang blir som forrige — vi antar det bare av vane",
+        "At årsak og virkning aldri kan skilles fra ren tilfeldighet når utvalget av observasjoner er lite",
+        "At matematikk ikke kan beskrive en verden i forandring"
+      ],
+      "explanation": "Solen har stått opp hver dag — men det beviser logisk ingenting om i morgen. Å si «naturen er regelmessig» forutsetter det som skal bevises. Hume konkluderte at vitenskap bygger på psykologisk vane, ikke logikk. Det vekket Kant fra hans «dogmatiske slummer», og Popper løste det ved å gi opp bevis: teorier kan bare motbevises."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er konfucianismens grunntanke, og hvorfor former den fortsatt Øst-Asia?",
+      "answer": "Harmoni gjennom rette relasjoner og plikter — barn til foreldre, undersått til hersker — og dannelse gjennom studier",
+      "options": [
+        "Streng lov og hard straff er eneste vei til orden, siden mennesket er egoistisk og ondt av natur og ikke kan oppdras",
+        "Harmoni gjennom rette relasjoner og plikter — barn til foreldre, undersått til hersker — og dannelse gjennom studier",
+        "Individet skal trekke seg fra samfunnet og følge naturens vei",
+        "Alle mennesker er like for himmelen, og herskeren velges av folket"
+      ],
+      "explanation": "Konfucius (500-tallet f.Kr.) ville gjenopprette orden gjennom moral, ikke makt: den som dyrker seg selv, ordner familien, som ordner staten. Kinas embetseksamener testet konfucianske klassikere i 1 300 år. Respekten for utdanning, eldre og hierarki i Kina, Korea, Japan og Vietnam — og forventningen om at staten skal være en streng, men velvillig far — går rett tilbake hit."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva mente Hannah Arendt med «ondskapens banalitet» etter å ha fulgt rettssaken mot Eichmann?",
+      "answer": "At massedrap ikke krever monstre, men lydige byråkrater som slutter å tenke selv",
+      "options": [
+        "At ondskap er så vanlig at den ikke fortjener oppmerksomhet",
+        "At massedrap ikke krever monstre, men lydige byråkrater som slutter å tenke selv",
+        "At Eichmann var en middelmådig mann uten reell makt som ble gjort til syndebukk for hele regimets forbrytelser",
+        "At det onde alltid er kjedelig, mens det gode er interessant"
+      ],
+      "explanation": "Arendt forventet et uhyre og fant en karrierebyråkrat som snakket i klisjeer og var stolt av å ha fulgt ordre. Hennes poeng: det farligste er ikke hat, men tankeløshet — evnen til å ikke stille spørsmålet «hva er det jeg egentlig gjør?». Milgrams lydighetseksperimenter samme år ga henne rett."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er Thomas Kuhns begrep «paradigmeskifte» opprinnelig en teori om?",
+      "answer": "At vitenskapen ikke vokser jevnt, men i revolusjoner der hele rammen for hva som er et gyldig spørsmål byttes ut",
+      "options": [
+        "At teknologiske gjennombrudd kommer i bølger på rundt 50 år, og at hver bølge velter den forrige industriens verdensbilde",
+        "At vitenskapen ikke vokser jevnt, men i revolusjoner der hele rammen for hva som er et gyldig spørsmål byttes ut",
+        "At forskere bør skifte felt hvert tiende år for å unngå tunnelsyn",
+        "At nye teorier alltid er enklere enn de gamle de erstatter"
+      ],
+      "explanation": "Kuhn (1962): «normalvitenskap» løser gåter innenfor et paradigme til anomaliene hoper seg opp, og en ny generasjon ser verden annerledes — Ptolemaios til Kopernikus, Newton til Einstein. Provoserende poeng: skiftet avgjøres ikke bare av bevis, men av at de gamle dør ut. Ordet er siden blitt til markedsføringssjargong, men ideen er skarp."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er det hinduistiske begrepet «karma» egentlig, i motsetning til den vestlige populærbruken?",
+      "answer": "En upersonlig lov om at handlingers moralske kvalitet former neste liv — ikke en straff som treffer i dette",
+      "options": [
+        "Et guddommelig regnskap der Vishnu og de andre gudene belønner og straffer hver sjel i dette livet etter fortjeneste",
+        "En upersonlig lov om at handlingers moralske kvalitet former neste liv — ikke en straff som treffer i dette",
+        "Skjebnen man er født med, som ingen handling kan endre",
+        "Summen av gode gjerninger som gir adgang til himmelen"
+      ],
+      "explanation": "Karma betyr «handling». Den virker som tyngdekraft, ikke som en dommer, og utfallet kommer gjerne i en senere fødsel — det forklarer for hinduen hvorfor uskyldige lider nå. Kastesystemet ble lenge legitimert slik. Buddhismen tok begrepet med seg, men flyttet vekten til intensjonen bak handlingen."
+    }
+  ]
 }

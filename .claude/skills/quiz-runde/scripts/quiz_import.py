@@ -21,6 +21,7 @@ BANK = os.path.normpath(BANK)
 DIFFS = ("easy", "medium", "hard")
 MIN_EXPLANATION = 60
 NEAR_JACCARD = 0.5
+MAX_LONGEST_SHARE = 0.4
 
 # Spørsmålsformer som er oppslag, ikke forståelse. Årstall er lov i spørsmålsteksten
 # (som kontekst), men ikke som det som spørres om.
@@ -182,6 +183,13 @@ def main() -> None:
             errs.extend(e)
             if not e:
                 batch_index.append((slug, norm(q["question"]), toks(q["question"]), norm(q["answer"])))
+        # Lengden lekker: er riktig svar det lengste i de fleste spørsmålene, lærer leseren
+        # å velge det lengste. Distraktorene skal like ofte være lengre.
+        longest = [q for q in qs if isinstance(q, dict) and isinstance(q.get("options"), list) and q.get("answer")
+                   and len(q["answer"]) >= max(len(o) for o in q["options"])]
+        if qs and len(longest) / len(qs) > MAX_LONGEST_SHARE:
+            errs.append(f"{slug}: riktig svar er lengst i {len(longest)}/{len(qs)} spørsmål (maks {MAX_LONGEST_SHARE:.0%}) — "
+                        "gjør distraktorene lengre i noen: " + "; ".join(q["question"][:40] for q in longest[:5]))
         by_diff = {d: sum(1 for q in qs if isinstance(q, dict) and q.get("difficulty") == d) for d in DIFFS}
         for e in errs:
             print("✗ ", e)

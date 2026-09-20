@@ -576,6 +576,66 @@
         "Filip Ingebrigtsen"
       ],
       "explanation": "Samme leker vant Karsten Warholm 400 meter hekk med verdensrekord på 45,94 — den første under 46 sekunder noensinne."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor dominerer kenyanere og etiopiere langdistanseløp, når de er få prosent av verdens befolkning?",
+      "answer": "Barndom i 2 000 meters høyde, tynne legger som gir billig løpsøkonomi, en kultur der løping er veien ut — og tusenvis som prøver",
+      "options": [
+        "Barndom i 2 000 meters høyde, tynne legger som gir billig løpsøkonomi, en kultur der løping er veien ut — og tusenvis som prøver",
+        "De har et gen for høyere oksygenopptak som oppsto i Rift Valley, og som ikke finnes andre steder i verden — funnet i 2006 og siden brukt som forklaring på 90 % av medaljene",
+        "De løper til skolen fra de er små",
+        "De trener dobbelt så mye som europeere"
+      ],
+      "explanation": "Nesten alle kenyanske stjerner kommer fra ett folk, kalenjin, i Rift Valley. Ingen enkeltgen er funnet — men kombinasjonen av høyde, kroppsbygning, enkel kost og en enorm base av unge som ser Kipchoge som forbildet, gir et utvalg få land matcher. Norge har vist at systematisk trening (Ingebrigtsen) kan ta igjen mye — men Kenya har tusen Ingebrigtsen-emner."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er kvinnenes verdensrekorder i løp rundt 10 % langsommere enn menns, og hvorfor krymper ikke gapet lenger?",
+      "answer": "Testosteron i puberteten gir mer muskelmasse, større hjerte og mer hemoglobin — gapet stabiliserte seg rundt 1980 da kvinner fikk trene likt",
+      "options": [
+        "Testosteron i puberteten gir mer muskelmasse, større hjerte og mer hemoglobin — gapet stabiliserte seg rundt 1980 da kvinner fikk trene likt",
+        "Kvinner har lavere smerteterskel under maksimal belastning, og forskningen på kvinnelig utholdenhet begynte først etter 2000, så treningsmetodene er fortsatt tilpasset menn",
+        "Kvinner får ikke samme sponsorpenger",
+        "Gapet krymper fortsatt, bare sakte"
+      ],
+      "explanation": "Gapet var 30 % i 1920 og falt raskt til kvinner fikk konkurrere og trene fullt. Siden 1980-tallet ligger det på 10–12 % i alle løp fra 100 m til maraton — et biologisk, ikke sosialt, tall. Det er grunnlaget for at idretten har egne kvinneklasser, og for debatten om transkvinner og utøvere med naturlig høyt testosteron, som Caster Semenya."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor trener eliteutøvere i utholdenhet 80 % av tiden rolig, når intervallene gir mest per time?",
+      "answer": "Volumet bygger mitokondrier, kapillærer og fettforbrenning uten å slite ut kroppen — og gjør at de tåler de harde 20 prosentene",
+      "options": [
+        "Volumet bygger mitokondrier, kapillærer og fettforbrenning uten å slite ut kroppen — og gjør at de tåler de harde 20 prosentene",
+        "Rolig trening er restitusjon som er nødvendig for å reparere skadene intervallene gir, og gir ingen treningseffekt i seg selv — den er bare det som gjør neste intervalløkt mulig",
+        "Tradisjon fra 1970-tallet som ingen har testet",
+        "Sponsorene krever mange timer på TV"
+      ],
+      "explanation": "«Polarisert trening» — dokumentert av Seiler ved Universitetet i Agder på norske langrennsløpere. Mellomintensiteten (der de fleste mosjonister ligger) er for hard til å gi volum og for lett til å gi topp. Kipchoge løper 200 km i uka, det meste i 4–5 min/km. For en mosjonist med 4 timer i uka er regnestykket annerledes: der gir intervallene mest."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor ble Norges langrennsløpere anklaget for astmamedisin-juks, og hva er sannheten?",
+      "answer": "Norske utøvere har langt høyere astmaforekomst enn andre, trolig fordi kald, tørr luft skader luftveiene — bruken er lovlig, men grensene er blitt uklare",
+      "options": [
+        "Norske utøvere har langt høyere astmaforekomst enn andre, trolig fordi kald, tørr luft skader luftveiene — bruken er lovlig, men grensene er blitt uklare",
+        "Norske leger skrev ut astmamedisin til friske utøvere fordi den øker oksygenopptaket med 5 %, noe som ble avslørt i 2016 og førte til at hele støtteapparatet ble byttet ut",
+        "Astmamedisin er forbudt, og Norge fikk fritak",
+        "Sundby ble dømt for EPO, ikke astmamedisin"
+      ],
+      "explanation": "Rundt halvparten av norske langrennsløpere har astmadiagnose. Kald luft under hard pust tørker ut og skader bronkiene — «skiastma». Sundby ble utestengt to måneder i 2016 for å ha brukt for høy dose av et lovlig middel. Johaug-saken var en annen: en leppekrem med anabole steroider. Sakene viste at lovlig og etisk ikke alltid er det samme i utøvernes og publikums øyne."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er kvinnefotball og landslag som Norge blitt forbigått av land som England og Spania på under ti år?",
+      "answer": "De store klubbene begynte å investere i kvinnelag rundt 2015, og talentmassen og treningskvaliteten i storligaene forbigikk de nordiske pionerene",
+      "options": [
+        "De store klubbene begynte å investere i kvinnelag rundt 2015, og talentmassen og treningskvaliteten i storligaene forbigikk de nordiske pionerene",
+        "Norge nektet å innføre profesjonelle kontrakter for kvinner fram til 2020 av hensyn til likestilling mellom klubbene, og mistet en hel generasjon spillere til utenlandske ligaer",
+        "Norske jenter velger håndball og ski",
+        "FIFA la VM til Europa og ga hjemmefordel"
+      ],
+      "explanation": "Norge vant VM 1995 og OL 2000 fordi jenter spilte fotball her da det var forbudt eller sett ned på i Spania og England. Da Barcelona, Lyon og Chelsea bygde proffsatsinger med 90 000 på tribunen, ble Toppserien en utviklingsliga. Ada Hegerberg spiller i Lyon. Det er samme mønster som i herrefotballen på 1990-tallet, bare 30 år senere."
     }
   ]
 }

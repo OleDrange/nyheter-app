@@ -1,4 +1,485 @@
 {
   "category": "Økonomi og verden",
-  "questions": []
+  "questions": [
+    {
+      "difficulty": "easy",
+      "question": "Hva er egentlig en aksje, og hvorfor stiger børsen over tid selv om den krasjer innimellom?",
+      "answer": "En eierandel i et selskaps framtidige overskudd — og overskuddene i verdensøkonomien vokser med produktivitet og befolkning",
+      "options": [
+        "Et lån til selskapet som gir fast rente og tilbakebetaling — børsen stiger fordi rentene over tid alltid har vært høyere enn inflasjonen",
+        "En eierandel i et selskaps framtidige overskudd — og overskuddene i verdensøkonomien vokser med produktivitet og befolkning",
+        "Et veddemål på at andre vil betale mer for papiret senere",
+        "En andel i selskapets eiendeler som selges ved konkurs"
+      ],
+      "explanation": "Globale aksjer har gitt rundt 5 % realavkastning i året siden 1900 — pengene dobles hvert 14. år. Krakk på 30–50 % kommer et par ganger per generasjon, og har alltid vært hentet inn. Det er grunnen til at Oljefondet har 70 % i aksjer og at pensjonssparing er aksjer: det eneste som slår aksjer på 20 år, er flaks. Prisen er å tåle svingningene uten å selge på bunn."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor kan ikke staten bare trykke penger og betale for alt — hva skjer da?",
+      "answer": "Flere penger på jakt etter samme varer gir inflasjon, og til slutt mister folk tilliten til valutaen helt — som i Tyskland 1923 og Venezuela 2018",
+      "options": [
+        "Flere penger på jakt etter samme varer gir inflasjon, og til slutt mister folk tilliten til valutaen helt — som i Tyskland 1923 og Venezuela 2018",
+        "Internasjonale avtaler forbyr sentralbanker å finansiere staten direkte, og landet ville bli utestengt fra IMF og verdenshandelen",
+        "Pengene må ha dekning i gull eller valutareserver",
+        "Statsgjelden ville øke like mye som pengemengden"
+      ],
+      "explanation": "Penger er et krav på varer; trykker du flere uten at det lages flere varer, deler flere sedler samme kake. Under pandemien gjorde vestlige sentralbanker nesten dette («kvantitative lettelser»), og inflasjonen i 2022 var delvis regningen. Men i moderate mengder, i en krise, virker det — Japan har gjort det i 20 år. Grensen går ved tilliten, og den forsvinner brått."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Sveits, uten råvarer og med 9 millioner innbyggere, blant verdens rikeste land?",
+      "answer": "Nøytralitet, stabilitet og bankhemmelighet trakk kapital; presisjonsindustri, farmasi og høy utdanning gjorde resten",
+      "options": [
+        "Landet skattlegger ikke utlendingers formuer og lever av gebyrene fra verdens svarte penger, som utgjør halve økonomien",
+        "Nøytralitet, stabilitet og bankhemmelighet trakk kapital; presisjonsindustri, farmasi og høy utdanning gjorde resten",
+        "Alpene gir Europas største vannkraftressurser og billig energi",
+        "Sveits var EU-medlem med alle fordeler til 1992"
+      ],
+      "explanation": "Sveits ble spart for begge verdenskrigene og fikk Europas kapital i trygghet. Men bankene er bare 10 % av økonomien: Roche, Novartis, Nestlé, ABB og urindustrien bygger på fagopplæring og universiteter. Lærdommen for Norge er at et lite land kan bli rikt uten olje — men det tar 150 år, ikke 15."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er «rentes rente», og hvorfor kalles den verdens sterkeste kraft?",
+      "answer": "Avkastning på tidligere avkastning — 7 % årlig dobler pengene hvert tiende år, så tid slår innskudd",
+      "options": [
+        "Renten bankene tar for å låne ut penger de selv har lånt i sentralbanken — det er derfor renten alltid er høyere for kunden enn for banken",
+        "Avkastning på tidligere avkastning — 7 % årlig dobler pengene hvert tiende år, så tid slår innskudd",
+        "Straffen på lån som ikke betales i tide",
+        "Renten på statsobligasjoner, som alle andre renter måles mot"
+      ],
+      "explanation": "Sett inn 10 000 ved 25 år med 7 %, og du har 150 000 ved 65 — nesten alt er avkastning på avkastning. Starter du ved 45, blir det 40 000. «72-regelen»: del 72 på renten, og du har antall år til dobling. Det samme gjelder gjeld, kredittkortrenter og for den saks skyld bakterievekst og økonomisk vekst: 2 % i året høres lite ut, men firedobler en økonomi på 70 år."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er kaffe, sjokolade og bananer så billige, når bøndene som dyrker dem, er fattige?",
+      "answer": "Råvaren er en brøkdel av butikkprisen — foredling, frakt, merkevare og handel tar resten, og millioner av småbønder konkurrerer om å selge",
+      "options": [
+        "Vestlige selskaper eier plantasjene og betaler bøndene som dagarbeidere, og overskuddet sendes hjem — Fairtrade-merkede varer er de eneste der bonden eier jorda",
+        "Råvaren er en brøkdel av butikkprisen — foredling, frakt, merkevare og handel tar resten, og millioner av småbønder konkurrerer om å selge",
+        "Prisene holdes nede av EU-subsidier til importørene",
+        "Bøndene får bra betalt, men mellommennene i hjemlandet tar det meste"
+      ],
+      "explanation": "Kaffebonden får rundt 1–2 kroner av en 50-kroners latte. Kaffebønner har ingen merkevare, så prisen settes på råvarebørsen i New York, der 25 millioner småbønder er pristakere. Foredlingen — brenning, pakking, markedsføring — skjer i rike land. Veien ut for produsentlandene er å flytte oppover i kjeden: Etiopia og Colombia prøver å brenne kaffen selv."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er en pandemi, en krig eller et stengt skip i Suezkanalen nok til at prisene stiger over hele verden?",
+      "answer": "Global produksjon er bygd på «just in time» med lange leveransekjeder og minimale lagre, så ett brudd stopper hele kjeden",
+      "options": [
+        "Prisene settes av spekulanter på råvarebørsene som reagerer på nyheter lenge før noe faktisk mangler, og de faller sjelden tilbake",
+        "Global produksjon er bygd på «just in time» med lange leveransekjeder og minimale lagre, så ett brudd stopper hele kjeden",
+        "Forsikringsselskapene hever premiene, som legges på alle varer",
+        "Sentralbankene hever renta ved kriser, og det driver prisene"
+      ],
+      "explanation": "En bil har 30 000 deler fra 20 land; mangler én brikke, står fabrikken. Toyota fant opp systemet for å spare lagerkostnad, og det ble globalt. «Ever Given» sperret Suez i seks dager i 2021 og forsinket 10 % av verdenshandelen. Etter pandemien snakker bedriftene om «just in case» og «friend-shoring» — men lagre koster, og prisen betaler forbrukeren."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er grunnen til at et boliglån i Norge kan koste 5 %, mens den samme banken gir 1 % på innskudd?",
+      "answer": "Bankens marginer dekker tap, kapitalkrav og drift — og innskudd er «gratis» penger så lenge kundene ikke flytter dem",
+      "options": [
+        "Norges Bank fastsetter både utlåns- og innskuddsrente, og forskjellen er en avgift som går til staten for å finansiere innskuddsgarantien",
+        "Bankens marginer dekker tap, kapitalkrav og drift — og innskudd er «gratis» penger så lenge kundene ikke flytter dem",
+        "Boliglån er risikable, så bankene må ta høy rente for å dekke mislighold",
+        "Bankene er pålagt å ha innskuddsrente under styringsrenta"
+      ],
+      "explanation": "Banken låner av deg til 1 % og ut til 5 %; rentemarginen er hovedinntekten. Tap på boliglån i Norge er nesten null. Forskjellen er så stor fordi folk sjelden bytter bank — «kundetreghet» er verdt milliarder. Etter finanskrisen må bankene også holde mer egenkapital, som koster. Sammenlignet: en sparekonto til 4 % finnes hos små nettbanker som må konkurrere om pengene."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor kan India, med 1,4 milliarder mennesker og verdens raskeste vekst, fortsatt ha så mange fattige?",
+      "answer": "Veksten er i IT og tjenester som sysselsetter få; industrien som ga Kina massearbeidsplasser, har India aldri fått i gang",
+      "options": [
+        "Kastesystemet holder 200 millioner daliter utenfor arbeidsmarkedet, og veksten går til de øvre kastene — reformer stanses av religiøse partier i parlamentet",
+        "Veksten er i IT og tjenester som sysselsetter få; industrien som ga Kina massearbeidsplasser, har India aldri fått i gang",
+        "Befolkningen vokser like fort som økonomien",
+        "Korrupsjonen tar mesteparten av veksten"
+      ],
+      "explanation": "Bangalore koder for hele verden, men halvparten av inderne lever fortsatt av jordbruk. Kinas oppskrift var fabrikker som tok bønder inn i lønnet arbeid; Indias byråkrati, arbeidslover og elendige infrastruktur har hindret det. Bare 20 % av kvinnene er i arbeid. Modis «Make in India» og Apples flytting fra Kina er forsøket på å ta igjen — 30 år for sent."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er euroen både en suksess og en felle for Sør-Europa?",
+      "answer": "Felles valuta ga lave renter og stabilitet, men tok fra Hellas og Italia muligheten til å devaluere når de tapte konkurranseevne — så kuttene måtte tas i lønn og velferd",
+      "options": [
+        "Euroen ble innført til feil kurs for Sør-Europa, som gjorde alt de produserte 30 % for dyrt fra dag én, og Tyskland nektet å rette kursen fordi det tjente på det",
+        "Felles valuta ga lave renter og stabilitet, men tok fra Hellas og Italia muligheten til å devaluere når de tapte konkurranseevne — så kuttene måtte tas i lønn og velferd",
+        "Sør-Europa lånte billig i euro og brukte pengene på pensjoner",
+        "Den europeiske sentralbanken styres av Tyskland og setter renta for Tyskland"
+      ],
+      "explanation": "Med drakmer kunne Hellas ha latt valutaen falle 30 % i 2010 og blitt billig over natten; med euro måtte lønningene falle 30 % i stedet — «intern devaluering», som ga 25 % ledighet. Norge gjorde det motsatte i 2014–16 via kronen uten at noen merket det. En valutaunion uten felles budsjett er ufullstendig, og det er derfor eurokrisen ikke er løst, bare dempet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «grunnrente», og hvorfor mener økonomer den bør skattlegges hardere enn annet?",
+      "answer": "Overskudd som skyldes en naturressurs (olje, foss, fjord) og ikke innsats — skatt på den vrir ikke atferd, siden ressursen ikke kan flyttes",
+      "options": [
+        "Renten staten betaler på grunnlån til jordbruket — den bør skattlegges fordi bøndene ellers får dobbel støtte gjennom jordbruksoppgjøret",
+        "Overskudd som skyldes en naturressurs (olje, foss, fjord) og ikke innsats — skatt på den vrir ikke atferd, siden ressursen ikke kan flyttes",
+        "Inntekten fra å eie tomter i byene, som Henry George ville skattlegge",
+        "Den delen av lønnen som overstiger det jobben er verdt"
+      ],
+      "explanation": "En olje- eller laksekonsesjon gir ekstraordinær fortjeneste fordi det finnes få fjorder — ikke fordi eieren er dyktig. Skatt på vanlig overskudd får bedrifter til å investere mindre; skatt på grunnrente gjør det ikke, for fjorden blir liggende uansett. Norge har 78 % på olje, 47 % på vannkraft, 25 % på laks og vind — og striden om laks og vind var blant de hardeste på Stortinget."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Afrika, med enorme ressurser og ung befolkning, fortsatt det fattigste kontinentet?",
+      "answer": "Kolonigrenser uten sammenheng, svake stater, råvareavhengighet og at ressursrikdom ofte gir korrupsjon og konflikt i stedet for utvikling",
+      "options": [
+        "Klima og tropesykdommer gjør jordbruk og arbeid mindre produktivt enn i tempererte soner, og malaria alene koster kontinentet en tredjedel av veksten",
+        "Kolonigrenser uten sammenheng, svake stater, råvareavhengighet og at ressursrikdom ofte gir korrupsjon og konflikt i stedet for utvikling",
+        "Bistanden har gjort landene avhengige og hindret egen industri",
+        "Befolkningsveksten spiser all økonomisk framgang"
+      ],
+      "explanation": "Kongo har verdens største koboltreserver og er blant de fattigste — ressursene finansierer militser, ikke skoler. Botswana, med diamanter og gode institusjoner, gikk fra fattigst til middelinntekt. Institusjonene avgjør, ikke geografien alene. Kontinentet vokser nå raskere enn Europa, og Afrika blir 2,5 milliarder i 2050 — verdens arbeidskraft kommer til å være der."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «Gini-koeffisienten», og hvorfor er den lav i Norge og høy i USA?",
+      "answer": "Et mål på inntektsulikhet fra 0 (alle likt) til 1 — skatt, velferd og små lønnsforskjeller gir Norge rundt 0,25, USA nær 0,40",
+      "options": [
+        "Et mål på hvor stor andel av inntekten den rikeste prosenten har — i Norge rundt 8 %, i USA rundt 20 % etter skattekuttene under Reagan og Trump",
+        "Et mål på inntektsulikhet fra 0 (alle likt) til 1 — skatt, velferd og små lønnsforskjeller gir Norge rundt 0,25, USA nær 0,40",
+        "Et mål på fattigdom: andelen under halv medianinntekt",
+        "Forholdet mellom sjefens og arbeiderens lønn"
+      ],
+      "explanation": "Før skatt er forskjellen mindre enn folk tror — det er omfordelingen som gjør Norge likt. Nordisk likhet kommer også av sammenpressede lønninger: en ufaglært tjener relativt mye, en advokat relativt lite. Formuesulikheten er derimot høy også i Norge, fordi de rikeste eier bedriftene. Ulikhet i Norge har økt siden 1990, mest på toppen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor produserer Kina over 80 % av verdens solceller og batterier — og hva betyr det for det grønne skiftet?",
+      "answer": "Staten satset industrielt fra 2010 med subsidier og skala, og priser som falt 90 % — verden får billig grønn teknologi, men blir avhengig av Beijing",
+      "options": [
+        "Kina har verdens største forekomster av litium og silisium, og forbyr eksport av råvarene, så produksjonen må skje der — Vesten har ingen alternativ",
+        "Staten satset industrielt fra 2010 med subsidier og skala, og priser som falt 90 % — verden får billig grønn teknologi, men blir avhengig av Beijing",
+        "Vestlige selskaper flyttet produksjonen dit av miljøhensyn",
+        "Kina kopierte tysk teknologi som Tyskland sluttet å subsidiere"
+      ],
+      "explanation": "Tyskland finansierte solrevolusjonen med feed-in-tariffer, men Kina bygde fabrikkene. Nå selger Kina elbiler, vindturbiner og paneler som ingen kan matche på pris. USA (Inflation Reduction Act) og EU svarer med toll og egne subsidier — og dilemmaet er tydelig: raskt og billig grønt skifte med kinesisk utstyr, eller dyrt og sakte med eget. Norges elbilrevolusjon ble i praksis muliggjort av Kina."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor blir Norge, som selger olje og gass, ikke rammet av energikrisen i Europa på samme måte — og hvorfor ble det likevel en strid?",
+      "answer": "Krisen ga Norge rekordinntekter, mens strømprisen i sør fulgte Europa opp — og nabolandene anklaget Norge for krigsprofitt",
+      "options": [
+        "Norge er selvforsynt med vannkraft og kunne stenge kablene til Europa da prisene steg, mens EU ville ha kabelen åpen og truet med sanksjoner",
+        "Krisen ga Norge rekordinntekter, mens strømprisen i sør fulgte Europa opp — og nabolandene anklaget Norge for krigsprofitt",
+        "Norge måtte selge gassen til fastpris etter EØS-avtalen",
+        "Oljefondet tapte mer på børsfallet enn staten tjente på gassen"
+      ],
+      "explanation": "Da Russland stengte gassen i 2022, ble Norge EUs største leverandør, og statens inntekter ble tredoblet til over 1 000 milliarder. Polen ba Norge dele gevinsten. Samtidig betalte husholdninger i Sør-Norge europeiske priser, og strømstøtten ble en av statens største utgifter. Dilemmaet: Norge tjener på EUs sårbarhet, og er avhengig av at Europa fortsatt vil kjøpe gass i 2040."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «Triffins dilemma», og hvorfor rammer det USA nå?",
+      "answer": "Landet med reservevalutaen må levere dollar til verden gjennom underskudd, som over tid undergraver tilliten til den samme valutaen",
+      "options": [
+        "Landet med reservevalutaen kan ikke devaluere for å øke eksporten uten å utløse en global finanskrise, så USA må akseptere permanent lavere vekst enn resten av verden",
+        "Landet med reservevalutaen må levere dollar til verden gjennom underskudd, som over tid undergraver tilliten til den samme valutaen",
+        "Reservevalutaen tvinger USA til å holde høyere rente enn andre land",
+        "Dollaren kan ikke være både nasjonal og global uten kapitalkontroll"
+      ],
+      "explanation": "Verden trenger dollar til handel og reserver — de kommer bare hvis USA kjøper mer enn de selger. Derfor har USA handelsunderskudd i 50 år, og statsgjeld på 35 000 milliarder. Så lenge verden vil ha dollar, er det gratis; den dagen Kina og Gulfstatene vil ha noe annet, blir det dyrt. Trumps toll og «dedollarisering» er to sider av det samme dilemmaet Triffin beskrev i 1960."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor mener mange økonomer at den lave produktivitetsveksten siden 2005 er Vestens viktigste problem?",
+      "answer": "Produktivitet er eneste varige kilde til høyere levestandard — uten den blir all fordeling et nullsumspill, og det er det som gjør politikken bitrere",
+      "options": [
+        "Produktivitetsveksten bestemmer hvor mye sentralbankene kan senke renta uten inflasjon — lav vekst tvinger fram høye renter og gjør statsgjelden uhåndterlig i alle land",
+        "Produktivitet er eneste varige kilde til høyere levestandard — uten den blir all fordeling et nullsumspill, og det er det som gjør politikken bitrere",
+        "Lav produktivitet gjør at Kina tar igjen Vesten teknologisk",
+        "Pensjonssystemene er beregnet på 2 % vekst og kollapser uten"
+      ],
+      "explanation": "Fra 1950 til 1973 vokste produktiviteten i Vesten 3–4 % i året — folk fikk dobbelt så god råd på en generasjon. Siden 2005 rundt 1 %. Gordon mener de store oppfinnelsene (strøm, bil, antibiotika) er tatt; andre skylder på målefeil, monopol og for lite investering. Om AI snur det, er det viktigste økonomiske spørsmålet i tiåret. Norge har samme mønster, kamuflert av olje."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor sier man at Kinas «belte og vei»-initiativ er både bistand, business og maktpolitikk på én gang?",
+      "answer": "Kina lånte ut over 1 000 milliarder dollar til havner, veier og kraftverk i 150 land — bygd av kinesiske selskaper, og gjelden gir innflytelse",
+      "options": [
+        "Kina ga bort infrastruktur gratis til afrikanske land mot eksklusive råvarekontrakter i 99 år, som gjør at Kina i dag eier de fleste av Afrikas gruver og havner",
+        "Kina lånte ut over 1 000 milliarder dollar til havner, veier og kraftverk i 150 land — bygd av kinesiske selskaper, og gjelden gir innflytelse",
+        "Det er en frihandelssone som utfordrer WTO",
+        "Initiativet er en militær allianse forkledd som handel"
+      ],
+      "explanation": "Sri Lanka kunne ikke betale for havnen i Hambantota og ga Kina den på 99 års leie — «gjeldsfellediplomati» ble et begrep, selv om det er omstridt om det var planlagt. For mottakerne var Kina ofte eneste tilbyder: Vesten bygde ikke veier lenger. Kina er nå verdens største bilaterale kreditor, og hvordan de håndterer Zambia og Pakistan avgjør om initiativet blir sett som hjelp eller felle."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er en arbeidsledighet på under 3 % ikke nødvendigvis bra?",
+      "answer": "Under et visst nivå (NAIRU) presser mangel på folk lønningene opp fortere enn produktiviteten, og inflasjonen tar av — så sentralbanken må bremse",
+      "options": [
+        "Under 3 % betyr at bedriftene ikke finner folk og flytter produksjonen utenlands, som gir høyere ledighet senere — det er derfor Norge hadde 8 % ledighet på 1990-tallet",
+        "Under et visst nivå (NAIRU) presser mangel på folk lønningene opp fortere enn produktiviteten, og inflasjonen tar av — så sentralbanken må bremse",
+        "Lav ledighet betyr at tallene skjuler uføretrygd og deltid",
+        "Ledighet under 3 % har aldri forekommet i en markedsøkonomi"
+      ],
+      "explanation": "Phillips-kurven: lav ledighet gir lønnsvekst gir inflasjon. Sentralbanker leter derfor etter «likevektsledigheten» — for Norge anslått rundt 3,5–4 %. Det er kynisk: noen må gå ledige for at prisene skal holdes i sjakk. Kritikerne mener sammenhengen er svak — USA hadde 3,5 % ledighet og lav inflasjon i 2019. Men 2022 ga Phillips rett igjen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Saudi-Arabia i ferd med å bruke oljepengene på alt annet enn olje — og hva ligner på Norge?",
+      "answer": "Vision 2030 skal gjøre landet uavhengig av olje før etterspørselen faller — turisme, sport, fond og byer; som Norge investerer de i utlandet gjennom et statlig fond",
+      "options": [
+        "Landet går tom for olje innen 2040 ifølge egne geologer, og bruker inntektene på å kjøpe seg inn i vestlig olje- og gassindustri for å sikre forsyningen",
+        "Vision 2030 skal gjøre landet uavhengig av olje før etterspørselen faller — turisme, sport, fond og byer; som Norge investerer de i utlandet gjennom et statlig fond",
+        "USA har krevd at Saudi-Arabia investerer oljepengene i amerikanske selskaper som betaling for militær beskyttelse",
+        "Landet bygger atomkraft for å slippe å bruke egen olje"
+      ],
+      "explanation": "Saudi-Arabia har olje i 70 år til — problemet er at verden kanskje ikke vil ha den. Public Investment Fund (over 900 milliarder dollar) kjøper fotballklubber, golf og Uber, og bygger ørkenbyen Neom. Der Norge sparer passivt, satser Saudi aktivt og politisk. Begge stiller samme spørsmål: hva er et petroleumsland når oljen ikke lenger er verdt noe?"
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor kalles rentekostnadene på USAs statsgjeld verdens viktigste tall for tiden?",
+      "answer": "Rentene passerte forsvarsbudsjettet i 2024 — over 1 000 milliarder dollar i året — og gjelden vokser raskere enn økonomien, som setter grenser for alt annet",
+      "options": [
+        "Rentene betales til Kina og Japan, som eier det meste av gjelden — og gir dem makt til å utløse en krise ved å selge, slik Kina truet med under handelskrigen",
+        "Rentene passerte forsvarsbudsjettet i 2024 — over 1 000 milliarder dollar i året — og gjelden vokser raskere enn økonomien, som setter grenser for alt annet",
+        "USA må refinansiere hele gjelden hvert år, og en mislykket auksjon ville gi global krise",
+        "Rentene avgjør dollarkursen, som avgjør oljeprisen"
+      ],
+      "explanation": "Gjelden er over 120 % av BNP, og rentene på 4–5 % gjør at hver ny dollar i underskudd koster mer. Utlendinger eier bare en fjerdedel — det meste er amerikanske pensjonsfond og Fed. Faren er ikke konkurs (USA kan trykke dollar), men at markedet krever stadig høyere rente, som rammer boliglån og bedrifter over hele verden. Ingen av de politiske partiene har en plan."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva er inflasjon egentlig, og hvorfor er litt av den ønsket?",
+      "answer": "Et generelt fall i pengenes kjøpekraft — rundt 2 % gir rom for lønnsjusteringer og holder økonomien unna deflasjon",
+      "options": [
+        "At prisene på råvarer som olje og mat stiger på verdensmarkedet — litt er ønsket fordi det gir eksportlandene som Norge høyere inntekter",
+        "Et generelt fall i pengenes kjøpekraft — rundt 2 % gir rom for lønnsjusteringer og holder økonomien unna deflasjon",
+        "At staten trykker mer penger enn økonomien vokser",
+        "At lønningene stiger raskere enn produktiviteten"
+      ],
+      "explanation": "Deflasjon — fallende priser — er verre: folk utsetter kjøp fordi alt blir billigere i morgen, gjeld blir tyngre, og økonomien fryser, som i Japan på 1990-tallet. Med 2 % kan bedrifter i trøbbel senke reallønnen uten å kutte den nominelle, og sentralbanken har rom til å sette renta ned. Derfor har nesten alle sentralbanker 2 % som mål, ikke 0."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor heves renta når prisene stiger — hvordan virker det?",
+      "answer": "Dyrere lån får husholdninger og bedrifter til å bruke mindre, etterspørselen faller, og prisveksten dempes med 1–2 års forsinkelse",
+      "options": [
+        "Høyere rente gjør at bankene låner ut mindre, så det blir færre penger i omløp og hver krone blir mer verdt — effekten er umiddelbar",
+        "Dyrere lån får husholdninger og bedrifter til å bruke mindre, etterspørselen faller, og prisveksten dempes med 1–2 års forsinkelse",
+        "Høyere rente gir sterkere krone, som gjør importen billigere",
+        "Bedriftene får høyere kostnader og må selge mer for å dekke dem"
+      ],
+      "explanation": "Renta er bremsepedalen, men den virker gjennom folks lommebok — og treffer skjevt: en familie med stort boliglån rammes hardt, en pensjonist med bankinnskudd tjener. Kronekursen hjelper også. Faren er å bremse for hardt for lenge og skape arbeidsledighet. Sentralbanksjefens jobb er å treffe med et redskap som virker to år etter."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er det så mye billigere å produsere en T-skjorte i Bangladesh, og hvorfor er det ikke bare utnytting?",
+      "answer": "Lønnene er lave fordi alternativene er dårligere — tekstilfabrikken er ofte trinnet som løftet Sør-Korea, Kina og nå Bangladesh ut av fattigdom",
+      "options": [
+        "Fabrikkene eies av vestlige kjeder som presser lønningene ned gjennom monopolmakt, og landet ville vært rikere om fabrikkene var lokalt eid",
+        "Lønnene er lave fordi alternativene er dårligere — tekstilfabrikken er ofte trinnet som løftet Sør-Korea, Kina og nå Bangladesh ut av fattigdom",
+        "Bangladesh har ingen minstelønn eller arbeidsmiljølov",
+        "Bomullen dyrkes lokalt og transporten er kort"
+      ],
+      "explanation": "Kvinnene i fabrikkene i Dhaka kom fra risåkre der lønnen var lavere og barnedødeligheten høyere. Bangladesh' ekstremfattigdom har falt fra 40 % til under 10 % siden 1990, og jenter går lenger på skole. Det betyr ikke at Rana Plaza-kollapsen (1 134 døde i 2013) var akseptabel — men boikott rammer arbeiderne, ikke eierne. Kravet bør være standarder, ikke stopp."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er Kinas økonomi blitt 40 ganger større på 40 år — hva var det viktigste grepet?",
+      "answer": "Deng Xiaopings reformer fra 1978 slapp markedet løs innenfor partiets kontroll — bønder fikk selge overskuddet, og kysten ble åpnet for eksport",
+      "options": [
+        "Den kommunistiske planøkonomien ble beholdt, men femårsplanene ble rettet inn mot eksport av forbruksvarer til USA etter Nixons besøk i 1972",
+        "Deng Xiaopings reformer fra 1978 slapp markedet løs innenfor partiets kontroll — bønder fikk selge overskuddet, og kysten ble åpnet for eksport",
+        "Vestlige selskaper flyttet fabrikkene sine dit for å slippe miljøkrav",
+        "Ettbarnspolitikken frigjorde kvinner til arbeid"
+      ],
+      "explanation": "Åtte hundre millioner mennesker løftet ut av ekstremfattigdom — det meste av verdens fattigdomsreduksjon siden 1980 er Kina. Oppskriften var kapitalisme uten demokrati: private bedrifter, statlige banker, eksport, og et parti som styrer alt. Det utfordrer den vestlige antakelsen om at markedsøkonomi fører til frihet. Veksten er nå nede i 4–5 %, og gjeld og eiendom er problemene."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hva gjør en sentralbank som Federal Reserve så mektig at hele verden venter på hva den sier?",
+      "answer": "Dollaren er verdens reservevaluta — Feds rente styrer kapitalstrømmer, gjeldskostnader og valutakurser fra Oslo til Jakarta",
+      "options": [
+        "Fed eier den amerikanske statsgjelden og kan stoppe utbetalingene til enhver regjering som ikke følger USAs utenrikspolitikk",
+        "Dollaren er verdens reservevaluta — Feds rente styrer kapitalstrømmer, gjeldskostnader og valutakurser fra Oslo til Jakarta",
+        "Fed bestemmer oljeprisen sammen med OPEC",
+        "Alle andre sentralbanker er formelt underlagt Fed gjennom IMF"
+      ],
+      "explanation": "Rundt 60 % av verdens valutareserver og nesten all olje- og råvarehandel er i dollar. Når Fed hever renta, flyter kapital til USA, fremvoksende lands valutaer faller, og deres dollargjeld blir dyrere — det er derfor Tyrkia og Argentina får kriser når Fed strammer. «Dollarens privilegium» er USAs største maktmiddel, og sanksjonene mot Russland viste det: uten tilgang til dollarsystemet stopper handelen."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er BNP per innbygger et dårlig mål på hvor godt folk har det — men brukes likevel?",
+      "answer": "Det teller all produksjon, også ulykker og forurensning, og ikke fritid, fordeling eller ubetalt arbeid — men det henger tett sammen med helse, utdanning og levealder",
+      "options": [
+        "Det måler bare industri og eksport, ikke tjenester, og undervurderer derfor alle moderne økonomier der tjenester er 70 % — men det er lett å sammenligne mellom land",
+        "Det teller all produksjon, også ulykker og forurensning, og ikke fritid, fordeling eller ubetalt arbeid — men det henger tett sammen med helse, utdanning og levealder",
+        "Det justeres ikke for inflasjon, så tallene er ikke sammenlignbare over tid",
+        "Det inkluderer oljeinntekter, som gjør Norge kunstig rikt"
+      ],
+      "explanation": "Robert Kennedy i 1968: BNP «måler alt, unntatt det som gjør livet verdt å leve». Likevel: ingen land med høyt BNP per innbygger har lav levealder eller høy barnedødelighet, og sammenhengen med selvrapportert lykke er sterk opp til et visst nivå. Alternativene (HDI, lykkeindekser) bygger selv på BNP. Det er et dårlig mål som ingen har klart å erstatte."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor var Bretton Woods-systemet etter 1944 så viktig, og hvorfor brøt det sammen i 1971?",
+      "answer": "Alle valutaer ble bundet til dollaren og dollaren til gull, som ga stabil handel — til USA ikke lenger hadde gull nok til å innløse dollarene",
+      "options": [
+        "Systemet ga alle land like store lån fra Verdensbanken til gjenoppbygging etter krigen — det brøt sammen da Marshall-hjelpen tok slutt og Europa ikke lenger trengte dollar",
+        "Alle valutaer ble bundet til dollaren og dollaren til gull, som ga stabil handel — til USA ikke lenger hadde gull nok til å innløse dollarene",
+        "Systemet forbød toll mellom medlemslandene, og brøt sammen da Frankrike innførte toll",
+        "Det var forløperen til EU, og ble erstattet av Romatraktaten"
+      ],
+      "explanation": "Vietnamkrigen og sosiale programmer ble finansiert med dollar verden måtte godta; da Frankrike begynte å veksle inn i gull, stengte Nixon vinduet. Siden har alle valutaer flytt — og IMF og Verdensbanken, laget for det gamle systemet, lever videre. Fastkurs gir stabilitet, men tvinger politikken; flytende kurs gir frihet, men svingninger. Euroen er et forsøk på å få det første tilbake."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «komparative fortrinn» — grunnen til at handel lønner seg selv for et land som er dårligere til alt?",
+      "answer": "Hvert land bør lage det det er relativt best til og bytte til seg resten — begge tjener, selv om ett er absolutt best i alt",
+      "options": [
+        "Hvert land bør spesialisere seg på det det har naturressurser til, og importere alt annet — fordelene ligger i stordriften som gir lavere pris",
+        "Hvert land bør lage det det er relativt best til og bytte til seg resten — begge tjener, selv om ett er absolutt best i alt",
+        "Rike land bør produsere avansert teknologi, fattige land råvarer",
+        "Land bør bare handle med det de har overskudd av"
+      ],
+      "explanation": "Ricardo, 1817: En advokat som også er verdens beste sekretær, bør likevel ansette en sekretær og bruke tiden på jus. Tilsvarende bør Norge lage laks og olje og kjøpe klær fra Bangladesh, selv om vi kunne sydd bedre. Det er den viktigste innsikten i økonomifaget, og den vanskeligste å tro på — proteksjonisme vinner nesten alltid i politikken."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva utløste finanskrisen i 2008, i én setning?",
+      "answer": "Amerikanske boliglån til folk som ikke kunne betale, ble pakket om til «trygge» verdipapirer og solgt til hele verden — og da boligprisene falt, visste ingen hvem som satt med tapene",
+      "options": [
+        "Lehman Brothers hadde spekulert i råvarer og valuta med lånte penger og gikk konkurs, og fordi banken skyldte alle andre banker, stoppet all utlån mellom dem over natten",
+        "Amerikanske boliglån til folk som ikke kunne betale, ble pakket om til «trygge» verdipapirer og solgt til hele verden — og da boligprisene falt, visste ingen hvem som satt med tapene",
+        "Kinas eksportoverskudd hadde presset rentene så lavt at all kapital gikk inn i aksjer",
+        "Oljeprisen på 147 dollar knakk amerikansk bilindustri og dro bankene med"
+      ],
+      "explanation": "Ratingbyråene ga søppel toppkarakter, bankene lånte 30 ganger egenkapitalen, og alle trodde boligpriser ikke kunne falle. Da tilliten forsvant, ville ingen låne til noen. Stater måtte redde banker med tusenvis av milliarder — «for store til å falle» — mens millioner mistet hus og jobb. Det politiske etterspillet, fra Occupy til Trump og Brexit, kan spores hit."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er Tyskland så mye mer avhengig av eksport til Kina enn USA er, og hva betyr det politisk?",
+      "answer": "Tysk industri — biler, maskiner, kjemi — solgte til Kinas vekst i 20 år; nå er Kina konkurrent, og Tyskland står i klem mellom Washington og Beijing",
+      "options": [
+        "Tyskland har ingen egen forsvarsindustri og er avhengig av kinesiske sjeldne jordarter til bilbatteriene, som gjør landet sårbart for handelskrig",
+        "Tysk industri — biler, maskiner, kjemi — solgte til Kinas vekst i 20 år; nå er Kina konkurrent, og Tyskland står i klem mellom Washington og Beijing",
+        "EU forbyr Tyskland å innføre toll mot Kina uten enstemmighet",
+        "Tyskland kjøper kinesisk gass etter at Russland stengte kranene"
+      ],
+      "explanation": "Volkswagen solgte flere biler i Kina enn i Europa. Men Kina bygde opp egne bilmerker med tysk teknologi, og BYD selger nå billigere elbiler i Europa. Samtidig presser USA på for avkobling. Tysklands modell — billig russisk gass, eksport til Kina, sikkerhet fra USA — falt i grus mellom 2022 og 2025, og landet har hatt nullvekst siden. EUs Kina-politikk avgjøres i praksis av det dilemmaet."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor kan et land som Argentina, rikt og velutdannet, gå konkurs ni ganger?",
+      "answer": "Gjentatt underskudd finansiert med lån i dollar og seddelpresse, som gir inflasjon, valutafall og til slutt betalingsstopp — og velgere som straffer den som strammer inn",
+      "options": [
+        "Landet lånte til krig mot Storbritannia i 1982 og har siden vært utestengt fra internasjonale kapitalmarkeder, så staten må låne innenlands til høye renter",
+        "Gjentatt underskudd finansiert med lån i dollar og seddelpresse, som gir inflasjon, valutafall og til slutt betalingsstopp — og velgere som straffer den som strammer inn",
+        "Militærdiktaturene stjal statskassen, og demokratiet arvet gjelden",
+        "Landet er avhengig av én eksportvare, biff, og priskrakk gir kollaps"
+      ],
+      "explanation": "Argentina var blant verdens ti rikeste land i 1913. Perón (1946) bygde en velferdsstat på eksportinntekter som ikke varte, og siden har hver regjering lovet mer enn økonomien bærer. Inflasjon på 200 % og en peso som halveres årlig lærer folk å spare i dollar, som svekker pesoen mer. Milei's motorsag fra 2023 er det siste forsøket på å bryte sirkelen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva gjør OPEC, og hvorfor er kartellet svakere enn folk tror?",
+      "answer": "Medlemmene avtaler produksjonskvoter for å styre oljeprisen — men hvert land tjener på å jukse, og USA er blitt verdens største produsent utenfor",
+      "options": [
+        "OPEC eier oljefeltene i Midtøsten og setter prisen direkte hver måned — men prisen undergraves av Russland og Norge, som selger under OPEC-prisen for å ta markedsandeler",
+        "Medlemmene avtaler produksjonskvoter for å styre oljeprisen — men hvert land tjener på å jukse, og USA er blitt verdens største produsent utenfor",
+        "OPEC er en FN-organisasjon som regulerer oljehandelen etter folkeretten",
+        "Kartellet ble forbudt av WTO i 1995 og er nå kun rådgivende"
+      ],
+      "explanation": "Kartellets dilemma: kutter Saudi-Arabia, stiger prisen — og Nigeria øker for å ta gevinsten. Saudi-Arabia er «swing-produsenten» som bærer kuttene. Skiferoljen ga USA 13 millioner fat om dagen, mer enn Saudi-Arabia, og et pristak: over 80 dollar bores det mer i Texas. Norge er ikke medlem, men produserer 2 millioner fat og lever av prisen OPEC setter."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er verdens fattigdom halvert siden 1990, og hvor var den?",
+      "answer": "Ekstremfattigdom falt fra 36 % til under 10 %, mesteparten i Kina og India gjennom vekst, handel og bedre landbruk — Afrika sør for Sahara henger etter",
+      "options": [
+        "Ekstremfattigdom falt fra 36 % til under 10 %, mest takket være vestlig bistand og gjeldsslette gjennom FNs tusenårsmål — Afrika fikk størst effekt fordi bistanden gikk dit",
+        "Ekstremfattigdom falt fra 36 % til under 10 %, mesteparten i Kina og India gjennom vekst, handel og bedre landbruk — Afrika sør for Sahara henger etter",
+        "Fattigdommen er ikke redusert, bare målt annerledes etter at Verdensbanken justerte grensen",
+        "Nedgangen skyldes at fattige land fikk lavere fødselstall"
+      ],
+      "explanation": "Over en milliard mennesker gikk fra under 2,15 dollar dagen til over det — historiens største velstandsøkning. Motoren var økonomisk vekst i Asia, ikke bistand. Afrika har også hatt fremgang i helse og skole, men befolkningsveksten spiser den økonomiske. De fleste ekstremfattige bor nå i Afrika sør for Sahara, og målet om null i 2030 nås ikke."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hva er «Dutch disease» (hollandsk syke), og hvordan har Norge forsøkt å unngå den?",
+      "answer": "Råvareinntekter presser valutaen opp og lønnene opp, så all annen eksportindustri dør — Norge sparer inntektene i utlandet og bruker bare avkastningen",
+      "options": [
+        "Råvareinntekter gjør at staten slutter å kreve inn skatt og blir uavhengig av folket, som gir korrupsjon — Norge har unngått det ved å beholde høy skatt på arbeid uansett oljeinntekter",
+        "Råvareinntekter presser valutaen opp og lønnene opp, så all annen eksportindustri dør — Norge sparer inntektene i utlandet og bruker bare avkastningen",
+        "Landet blir avhengig av én råvare og kollapser når prisen faller",
+        "Utenlandske selskaper tar gevinsten, og landet sitter igjen med forurensningen"
+      ],
+      "explanation": "Nederland fant gass i 1959, brukte pengene hjemme, gylden steg, og industrien tapte konkurransen. Norge lærte: fondet investerer bare i utlandet, og handlingsregelen begrenser bruken. Likevel har Norge fått en mild variant — verdens høyeste lønnskostnader og en industri som er svært oljeavhengig. Spørsmålet «hva skal vi leve av etter oljen» er hollandsk syke i norsk form."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Taiwan verdens kanskje viktigste økonomiske enkeltpunkt?",
+      "answer": "TSMC lager over 90 % av verdens mest avanserte databrikker — en blokade ville stanse alt fra iPhone til F-35 og AI",
+      "options": [
+        "Taiwanstredet er verdens travleste skipsled, og halvparten av all containertrafikk mellom Asia og Europa passerer der — en stenging ville stoppe verdenshandelen",
+        "TSMC lager over 90 % av verdens mest avanserte databrikker — en blokade ville stanse alt fra iPhone til F-35 og AI",
+        "Taiwan har verdens største valutareserver og finansierer USAs underskudd",
+        "Øya er verdens største produsent av sjeldne jordarter"
+      ],
+      "explanation": "Å bygge en fabrikk for 3-nanometer-brikker koster 20 milliarder dollar og krever maskiner bare nederlandske ASML lager. Ingen andre — ikke Intel, ikke Samsung — ligger på TSMCs nivå. Det kalles Taiwans «silisiumskjold»: verden har ikke råd til at Kina tar øya, og Kina har ikke råd til å ødelegge fabrikkene. USA bygger nå kopier i Arizona, og Kina bruker enorme summer på å innhente — det er kjernen i brikkekrigen."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er det «japanske tiåret» et lærestykke om, og hvorfor frykter Kina det samme?",
+      "answer": "En eiendoms- og aksjeboble sprakk i 1990, og Japan gikk inn i 30 år med deflasjon, nullvekst og aldring — Kina har nå samme boligboble og aldring",
+      "options": [
+        "Japans eksportindustri tapte mot Sør-Korea og Kina på 1990-tallet fordi yenen var for sterk, og landet mistet en generasjon industriarbeidsplasser — Kina frykter samme skjebne mot Vietnam og India",
+        "En eiendoms- og aksjeboble sprakk i 1990, og Japan gikk inn i 30 år med deflasjon, nullvekst og aldring — Kina har nå samme boligboble og aldring",
+        "Japans statsgjeld på 250 % av BNP tvang landet til kutt som drepte veksten",
+        "Handelskrigen med USA på 1980-tallet stengte Japans viktigste marked"
+      ],
+      "explanation": "På toppen i 1989 var tomten under keiserpalasset «verdt» like mye som hele California. Etter smellen satt bankene med råtne lån de ikke ville innrømme, folk sparte i stedet for å bruke, og fødselstallene falt. Nikkei-indeksen brukte 34 år på å nå toppen igjen. Kinas Evergrande-kollaps, tomme boligblokker og fallende befolkning er urovekkende like — men Kina har fortsatt fattige regioner som kan vokse."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor gikk Storbritannia ut av EU, og hva ble den økonomiske fasiten?",
+      "answer": "Innvandring, suverenitet og en fortelling om EU-byråkrati vant 52–48; fasiten er lavere handel og investering, anslått 4–5 % lavere BNP enn ellers",
+      "options": [
+        "Finanskrisen og eurokrisen overbeviste britene om at EU var en synkende skute — fasiten er at City of London vant tilbake finansmarkedene fra Frankfurt og Paris",
+        "Innvandring, suverenitet og en fortelling om EU-byråkrati vant 52–48; fasiten er lavere handel og investering, anslått 4–5 % lavere BNP enn ellers",
+        "Britene ville ha frihandelsavtaler med USA og Samveldet, og har fått dem",
+        "EU krevde at Storbritannia innførte euro"
+      ],
+      "explanation": "Britene hadde aldri vært med i euro eller Schengen, men arbeidsinnvandringen fra Øst-Europa etter 2004 ble symbolet. Løftet om 350 millioner pund i uka til NHS var falskt. Etter utmeldingen 2020: tollpapirer, arbeidskraftmangel, mindre investering. Et flertall sier nå at det var feil, men ingen partier vil ta omkampen — og Norge/EØS diskuteres som modell for tilbakevei."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor gir en rentehevning i USA krise i land som Sri Lanka og Ghana?",
+      "answer": "Deres gjeld er i dollar: sterkere dollar og høyere rente gjør avdragene uoverkommelige i lokal valuta, og kapitalen flykter hjem til USA",
+      "options": [
+        "IMF krever at land med dollargjeld hever sin egen rente like mye som Fed, som kveler økonomien deres — det er derfor IMF-lån er så upopulære",
+        "Deres gjeld er i dollar: sterkere dollar og høyere rente gjør avdragene uoverkommelige i lokal valuta, og kapitalen flykter hjem til USA",
+        "USA stopper bistanden når renta stiger for å finansiere egen gjeld",
+        "Amerikanske forbrukere kjøper mindre te og kakao når renta stiger"
+      ],
+      "explanation": "«Erstatningssynden»: fattige land får ikke låne i egen valuta, så de låner i dollar. Da Fed hevet renta i 2022, ble dollaren 15 % dyrere, og Sri Lanka, Ghana og Zambia gikk til betalingsstopp. Over 60 land er i eller nær gjeldskrise. Kina er nå den største enkeltkreditoren, og forhandlingene om gjeldsslette er blitt et geopolitisk spill mellom Beijing, Paris-klubben og IMF."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er verdens verdiskaping så konsentrert i noen få byregioner, og hvorfor forsterker det seg selv?",
+      "answer": "Agglomerasjon: talent, kapital og ideer tjener på nærhet, så de mest produktive byene trekker til seg mer av alt — og resten faller etter",
+      "options": [
+        "Storbyene har universitetene, og siden alle høyt utdannede vil bo nær andre høyt utdannede, blir det en flukt fra distriktene som bare mer bredbånd og hjemmekontor kan snu",
+        "Agglomerasjon: talent, kapital og ideer tjener på nærhet, så de mest produktive byene trekker til seg mer av alt — og resten faller etter",
+        "Skattesystemene favoriserer byene gjennom eiendomsverdiene",
+        "Havner og flyplasser bestemmer hvor bedrifter kan ligge"
+      ],
+      "explanation": "Silicon Valley, London, Shenzhen: produktiviteten per arbeider er 50–100 % høyere enn landsgjennomsnittet. Kunnskap smitter ved kaffemaskinen, og en ingeniør som kan bytte jobb uten å flytte, tar mer risiko. Det er den økonomiske forklaringen på by-land-skillet i politikken — Brexit, gule vester, Trump — og på hvorfor hjemmekontor ikke tømte byene. Oslo-regionen har halve Norges vekst."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor kan sanksjoner mot Russland være både lammende og virkningsløse på samme tid?",
+      "answer": "De stengte Russland ute fra vestlig teknologi og finans, men olje og gass fant nye kjøpere i India og Kina, og krigsøkonomien holdt veksten oppe",
+      "options": [
+        "Sanksjonene rammer bare varer, ikke tjenester, og Russland lever av å selge IT og våpen, så økonomien har vokst — men befolkningen lider fordi importert mat og medisin er stoppet",
+        "De stengte Russland ute fra vestlig teknologi og finans, men olje og gass fant nye kjøpere i India og Kina, og krigsøkonomien holdt veksten oppe",
+        "Sanksjonene ble aldri innført fullt ut fordi Ungarn blokkerte dem",
+        "Russland hadde forberedt seg med et oljefond som Norge og lever av det"
+      ],
+      "explanation": "Russlands BNP falt bare 1–2 % i 2022 og vokste siden — staten pøser oljepenger inn i våpenfabrikker. Men flyparken kannibaliseres for deler, bilfabrikkene lager sovjetkvalitet, og halvparten av valutareservene er frosset. Sanksjoner virker langsomt og skjevt: de ødelegger framtiden, ikke nåtiden. Læringen fra Iran og Nord-Korea er at et regime kan overleve fattigdom i tiår."
+    }
+  ]
 }

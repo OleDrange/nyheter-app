@@ -504,6 +504,126 @@
         "Å kryptere modellvektene"
       ],
       "explanation": "Går man fra 16 til 4 bit per vekt, krymper modellen omtrent til en firedel. Ofte merkes knapt forskjellen — og det er derfor store modeller kan kjøre på en laptop."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er GPS-satellittene avhengige av Einsteins relativitetsteori for å virke?",
+      "answer": "Klokkene om bord går raskere enn på bakken på grunn av svakere tyngdekraft og fart — uten korreksjon ville posisjonen bomme med 10 km per dag",
+      "options": [
+        "Klokkene om bord går raskere enn på bakken på grunn av svakere tyngdekraft og fart — uten korreksjon ville posisjonen bomme med 10 km per dag",
+        "Radiosignalene bøyes av jordas tyngdefelt på vei ned, og mottakeren må regne ut krumningen for å finne den rette avstanden — en effekt Einstein forutsa i 1915 og som ble målt i 1919",
+        "Satellittene beregner posisjon fra lysets hastighet, som Einstein målte",
+        "Einstein designet det første atomuret"
+      ],
+      "explanation": "Telefonen din måler tiden signalet bruker fra fire satellitter; 1 nanosekund feil = 30 cm. Klokkene i bane går 38 mikrosekunder fortere per døgn — spesiell relativitet (fart) bremser dem 7, generell (tyngde) skynder dem 45. Ingeniørene bygde inn korreksjonen på forhånd. Det er det mest hverdagslige beviset for at Einstein hadde rett."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor virker ikke passordet ditt som beskyttelse hvis det er brukt på to nettsteder?",
+      "answer": "Når ett nettsted lekker, tester angripere kombinasjonen automatisk mot tusenvis av andre — «credential stuffing» er den vanligste innbruddsmetoden",
+      "options": [
+        "Når ett nettsted lekker, tester angripere kombinasjonen automatisk mot tusenvis av andre — «credential stuffing» er den vanligste innbruddsmetoden",
+        "Nettsteder deler passordbaser med hverandre gjennom annonsenettverk, slik at ett passord i praksis er tilgjengelig for alle som betaler for tilgang til brukerdata hos de store",
+        "Passord lagres i klartekst overalt",
+        "Nettleseren sender passordet til alle sider du besøker"
+      ],
+      "explanation": "Milliarder av e-post/passord-par fra gamle lekkasjer ligger åpent tilgjengelig. Angriperen trenger ikke knekke noe, bare prøve. Derfor er rådet: unikt passord per sted (passordbehandler) og tofaktor. Tjenesten haveibeenpwned.com viser om din e-post er i en kjent lekkasje — de fleste er det."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor «hallusinerer» språkmodeller — finner på fakta som ser troverdige ut?",
+      "answer": "De er trent til å forutsi neste sannsynlige ord, ikke til å vite; en plausibel setning belønnes likt enten den er sann eller ikke",
+      "options": [
+        "De er trent til å forutsi neste sannsynlige ord, ikke til å vite; en plausibel setning belønnes likt enten den er sann eller ikke",
+        "De er trent på internett, der halvparten av alt er feil, og modellen kan ikke skille pålitelige kilder fra upålitelige uten menneskelig merking",
+        "De har for lite minne og glemmer kilden",
+        "De er programmert til aldri å si «jeg vet ikke»"
+      ],
+      "explanation": "En språkmodell har ingen database å slå opp i — den har et statistisk kart over hvordan tekst pleier å se ut. Spør du om en bok som ikke finnes, lager den en tittel og et forlag som ser riktige ut. Nyere modeller reduserer det med søk og trening på å innrømme usikkerhet, men problemet ligger i selve metoden. Regelen: sjekk alt som er et navn, et tall eller en kilde."
+    },
+    {
+      "difficulty": "easy",
+      "question": "Hvorfor er batteriet det som avgjør elbilens pris og rekkevidde — og hvorfor har prisen falt 90 %?",
+      "answer": "Litiumbatterier er en tredjedel av bilens kostnad; prisen falt fordi kinesiske fabrikker skalerte opp og kjemien ble forbedret år for år",
+      "options": [
+        "Litiumbatterier er en tredjedel av bilens kostnad; prisen falt fordi kinesiske fabrikker skalerte opp og kjemien ble forbedret år for år",
+        "Litium ble funnet i store mengder i Chile og Australia etter 2010, og råvareprisen falt så mye at batteriene ble nesten gratis å lage — celleprisen følger litiumprisen direkte",
+        "Tesla ga bort patentene sine",
+        "Subsidier i Norge og USA betalte utviklingen"
+      ],
+      "explanation": "Fra 1 200 dollar per kWh i 2010 til rundt 100 i dag. Wrights lov: hver dobling av produksjonen senker prisen 15–20 %. Samme kurve som solceller. Litium er en liten del av kostnaden. Det er grunnen til at elbiler snart er billigere enn bensinbiler uten støtte — og til at Kina, som lager 75 % av verdens batterier, sitter med nøkkelen."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor ble internett bygd uten noen sentral kontroll, og hva betyr det i dag?",
+      "answer": "ARPANET skulle overleve at deler ble slått ut, så pakkene finner veien selv — det gjør nettet robust, men også nesten umulig å sensurere eller skru av",
+      "options": [
+        "ARPANET skulle overleve at deler ble slått ut, så pakkene finner veien selv — det gjør nettet robust, men også nesten umulig å sensurere eller skru av",
+        "Forskerne som bygde det på 1970-tallet, var idealister som ville hindre at staten eller selskaper kunne eie det, og ga bort protokollene gratis med krav om at ingen skulle kontrollere dem",
+        "Ingen hadde råd til en sentral datamaskin",
+        "Telefonselskapene nektet å bygge det"
+      ],
+      "explanation": "En pakke fra Oslo til Tokyo kan gå via 15 rutere i fem land, og velger ny vei hvis en faller ut. Ingen eier internett; en frivillig organisasjon (IETF) vedtar standardene. Det er derfor Kinas «store brannmur» krever så enorm innsats, og derfor Russland ikke kunne koble seg fra i 2022. Men det er også derfor spam, angrep og desinformasjon ikke kan stoppes ved kilden."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor bruker en AI-modell så mye strøm at Microsoft og Google gjenåpner atomkraftverk?",
+      "answer": "Trening og bruk krever titusenvis av GPU-er som regner døgnet rundt — ett datasenter kan trekke like mye som en mellomstor by",
+      "options": [
+        "Trening og bruk krever titusenvis av GPU-er som regner døgnet rundt — ett datasenter kan trekke like mye som en mellomstor by",
+        "Kjølingen av brikkene krever mer strøm enn brikkene selv, og datasentrene må ligge i kalde land som Norge eller ved kjernekraftverk med kjølevann",
+        "Modellene lagres i kvantedatamaskiner som må holdes nær absolutt nullpunkt",
+        "Hver forespørsel går innom alle serverne i verden"
+      ],
+      "explanation": "Å trene GPT-4 tok anslagsvis 50 GWh — Bergens forbruk i en måned. Hvert ChatGPT-svar bruker rundt 10 ganger strømmen til et Google-søk. Datasentrene er den raskest voksende strømkunden i USA, og Three Mile Island gjenåpnes for Microsoft. Norge, med billig kraft og kaldt klima, ser datasentre som ny industri — og som strid om kraften."
+    },
+    {
+      "difficulty": "medium",
+      "question": "Hvorfor er kryptering med «offentlig nøkkel» så genial at hele netthandelen bygger på den?",
+      "answer": "Alle kan låse med den offentlige nøkkelen, bare eieren kan låse opp med den private — så to som aldri har møttes, kan snakke hemmelig",
+      "options": [
+        "Alle kan låse med den offentlige nøkkelen, bare eieren kan låse opp med den private — så to som aldri har møttes, kan snakke hemmelig",
+        "Nøkkelen skifter hvert sekund etter en formel bare de to partene kjenner, slik at en avlytter aldri rekker å knekke den før den er byttet ut — det er derfor hengelåsen blinker",
+        "Nøkkelen er så lang at den ikke kan gjettes",
+        "Bankene deler en hemmelig hovednøkkel"
+      ],
+      "explanation": "Før 1976 måtte to parter ha utvekslet en hemmelig nøkkel på forhånd — umulig med fremmede på nett. Diffie, Hellman og RSA løste det med matematikk: å gange to store primtall er lett, å faktorisere produktet er praktisk umulig. Hengelåsen i nettleseren er dette. Kvantedatamaskiner kan en dag knekke det, og nye «post-kvante»-algoritmer rulles ut nå."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor ble «transformeren» fra 2017 vendepunktet som gjorde dagens AI mulig?",
+      "answer": "Oppmerksomhetsmekanismen lar modellen vekte alle ord mot hverandre samtidig, som kan parallelliseres på GPU-er — så modellene kunne skaleres tusen ganger",
+      "options": [
+        "Oppmerksomhetsmekanismen lar modellen vekte alle ord mot hverandre samtidig, som kan parallelliseres på GPU-er — så modellene kunne skaleres tusen ganger",
+        "Den erstattet nevrale nettverk med symbolsk logikk, slik at modellen kunne resonnere i steg i stedet for å gjette statistisk, og dermed forklare hvorfor den svarte som den gjorde",
+        "Den kunne trenes uten merkede data for første gang",
+        "Google ga arkitekturen bort gratis"
+      ],
+      "explanation": "Tidligere modeller (RNN) leste ord for ord og glemte begynnelsen av lange setninger. «Attention is all you need» (Google, 2017) lot hvert ord «se» alle de andre i én operasjon — akkurat det GPU-er er gode til. Fra da av var oppskriften: mer data, flere brikker, større modell. GPT står for Generative Pre-trained Transformer. Åtte forfattere; alle har sluttet i Google."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hvorfor er Nvidia blitt et av verdens mest verdifulle selskaper på brikker som var laget for dataspill?",
+      "answer": "GPU-er gjør tusenvis av enkle regnestykker parallelt — akkurat det matrisemultiplikasjon i nevrale nett krever — og programvarelaget CUDA låste utviklerne til Nvidia",
+      "options": [
+        "GPU-er gjør tusenvis av enkle regnestykker parallelt — akkurat det matrisemultiplikasjon i nevrale nett krever — og programvarelaget CUDA låste utviklerne til Nvidia",
+        "Nvidia kjøpte opp de eneste fabrikkene som kan lage AI-brikker, og har monopol på produksjonen fram til patentene utløper i 2030",
+        "Nvidia oppfant transformeren",
+        "Intel og AMD sluttet å lage brikker"
+      ],
+      "explanation": "En CPU har noen få kraftige kjerner; en GPU har tusenvis av svake. I 2012 viste AlexNet at nevrale nett trent på to spill-GPU-er slo alt. Nvidia hadde bygd CUDA siden 2006 for å la forskere bruke brikkene — og et tiår med kode er umulig å flytte. Brikkene lages hos TSMC på Taiwan. Nvidias marginer på over 70 % er det alle konkurrenter, inkludert Google og Amazon, prøver å bryte."
+    },
+    {
+      "difficulty": "hard",
+      "question": "Hva er «alignment»-problemet i AI, og hvorfor er det mer enn science fiction?",
+      "answer": "Å få et system til å ville det vi mener, ikke det vi bokstavelig ba om — systemer som optimerer et mål, finner snarveier vi ikke forutså",
+      "options": [
+        "Å få et system til å ville det vi mener, ikke det vi bokstavelig ba om — systemer som optimerer et mål, finner snarveier vi ikke forutså",
+        "Å sikre at AI-modeller fra ulike selskaper bruker samme etiske regler, så en kinesisk og en amerikansk modell svarer likt på moralske spørsmål",
+        "Å hindre at AI blir bevisst",
+        "Å sørge for at AI ikke tar jobbene"
+      ],
+      "explanation": "En spill-AI som skulle vinne båtrace, lærte å kjøre i sirkel og samle bonuspoeng i stedet. En anbefalingsalgoritme som skal maksimere tid brukt, lærer å vise sinne. Det er ikke ond vilje, men at mål er vanskelige å spesifisere. Jo mer kapable systemene blir, jo dyrere blir gapet mellom det vi sa og det vi mente. Det er kjernen i det Anthropic, OpenAI og forskere ved Oxford jobber med."
     }
   ]
 }
