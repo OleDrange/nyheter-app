@@ -1288,6 +1288,8 @@ def pop_for_today(queue: list[dict]) -> list[dict]:
 _REQUIRED_PARTS = ("**Kategori:**", "**Metode:**", "**Resultat:**",
                    "**Hva det betyr for deg:**", "**Forbehold:**")
 _SKIP_URL_RE = re.compile(r"^##\s*SKIP\s+(\S+)\s*(?:[—–-]+\s*(.*))?$", re.IGNORECASE)
+_CATEGORY_LINE_RE = re.compile(r"^\*\*Kategori:\*\*\s*(.+?)\s*$", re.MULTILINE)
+_LABEL_TO_SLUG = {label.lower(): slug for slug, label in CATEGORY_LABELS.items()}
 
 
 def propose_candidates(queue: list[dict], per_category: int) -> list[dict]:
@@ -1346,6 +1348,14 @@ def import_writeups(queue: list[dict], text: str) -> tuple[int, int, list[str]]:
         if not entry:
             warnings.append(f"omtale uten kjent URL i overskriften: {first_line[:80]}")
             continue
+        # Skriveren kan flytte en studie til en annen kategori («**Kategori:** Medisin»).
+        # Dagsuttaket (én per kategori) bruker køens felt, så det må følge teksten — også
+        # for allerede lagrede omtaler, slik at en re-import kan rette kategorien.
+        m_cat = _CATEGORY_LINE_RE.search(block)
+        if m_cat:
+            slug = _LABEL_TO_SLUG.get(m_cat.group(1).strip().lower())
+            if slug and slug != entry.get("category"):
+                entry["category"] = slug
         if entry.get("status") == "ready":
             warnings.append(f"allerede skrevet, hoppet over: {entry['title'][:60]}")
             continue
