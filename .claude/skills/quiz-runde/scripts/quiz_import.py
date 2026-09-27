@@ -22,6 +22,14 @@ DIFFS = ("easy", "medium", "hard")
 MIN_EXPLANATION = 60
 NEAR_JACCARD = 0.5
 MAX_LONGEST_SHARE = 0.4
+# Alternativene skal være korte og like lange — lengden skal aldri avsløre svaret.
+# Kalibrert 27. september 2026: runden på 277 hadde median 77 tegn per alternativ og riktig
+# svar i median 38 % lengre enn distraktorene (svar + én lang lokkedue + to korte).
+MAX_OPTION = 60          # tegn; resonnementet hører hjemme i explanation
+MIN_SPREAD = 0.6         # korteste alternativ ≥ 60 % av det lengste …
+LEN_SLACK = 12           # … med mindre forskjellen er ≤ 12 tegn (korte svar)
+MAX_ANSWER_LEAD = 1.2    # riktig svar ≤ 1,2 × snittet av distraktorene (+ LEN_SLACK/2)
+COMPOUND = re.compile(r" — | – |; ")  # to påstander i ett alternativ
 
 # Spørsmålsformer som er oppslag, ikke forståelse. Årstall er lov i spørsmålsteksten
 # (som kontekst), men ikke som det som spørres om.
@@ -59,7 +67,30 @@ def load_bank() -> dict:
     return banks
 
 
-def check_question(q: dict, i: int, slug: str, bank_index: list, batch_index: list) -> list:
+def check_lengths(opts: list, ans: str, where: str) -> list:
+    """Korte, presise og like lange alternativer. Egen funksjon fordi --lint teller disse
+    separat: den gamle banken bryter dem i stort monn, og det skal ikke drukne resten."""
+    errs = []
+    lens = [len(o.strip()) for o in opts]
+    for o in opts:
+        if len(o.strip()) > MAX_OPTION:
+            errs.append(f"{where}: alternativ over {MAX_OPTION} tegn ({len(o.strip())}) — kort det ned, "
+                        f"flytt resonnementet til explanation: «{o[:50]}…»")
+        if COMPOUND.search(o):
+            errs.append(f"{where}: alternativ med tankestrek/semikolon er to påstander — velg én: «{o[:50]}»")
+    if min(lens) < MIN_SPREAD * max(lens) and max(lens) - min(lens) > LEN_SLACK:
+        errs.append(f"{where}: ujevne lengder {sorted(lens)} — korteste må være ≥ {MIN_SPREAD:.0%} av lengste "
+                    f"(eller ≤ {LEN_SLACK} tegn kortere)")
+    others = [len(o.strip()) for o in opts if o.strip() != ans]
+    mean = sum(others) / len(others) if others else 0
+    if len(ans) > MAX_ANSWER_LEAD * mean and len(ans) - mean > LEN_SLACK / 2:
+        errs.append(f"{where}: riktig svar ({len(ans)}) er lengre enn distraktorene (snitt {mean:.0f}) — "
+                    "kort svaret eller gjør distraktorene like presise")
+    return errs
+
+
+def check_question(q: dict, i: int, slug: str, bank_index: list, batch_index: list,
+                   lengths: bool = True) -> list:
     """Returnerer liste av feilmeldinger for ett spørsmål. bank_index/batch_index:
     [(slug, norm_question, toks, norm_answer)] — batch_index er tidligere i samme runde."""
     errs = []
@@ -84,9 +115,8 @@ def check_question(q: dict, i: int, slug: str, bank_index: list, batch_index: li
         for o in opts:
             if BAD_OPTION.match(o.strip()):
                 errs.append(f"{where}: «{o}» — ingen «alle/ingen av de over»")
-        lens = [len(o) for o in opts]
-        if len(ans) > 1.8 * max(len(o) for o in opts if o != ans):
-            errs.append(f"{where}: riktig svar er mye lengre enn distraktorene (gir det bort)")
+        if lengths:
+            errs.extend(check_lengths(opts, ans, where))
     if WEAK_QUESTION.search(qtext):
         errs.append(f"{where}: oppslagsspørsmål (årstall/paragraf/forkortelse): «{qtext}»")
     if YEAR_ANSWER.match(ans):
@@ -122,19 +152,25 @@ def lint_bank(banks: dict) -> int:
         for q in d.get("questions", []):
             index.append((slug, norm(q.get("question")), toks(q.get("question")), norm(q.get("answer"))))
     seen_pairs = set()
+    long_opts = 0
     for slug, d in banks.items():
         for i, q in enumerate(d.get("questions", [])):
             qq = dict(q)
             qq.setdefault("explanation", "x" * MIN_EXPLANATION)
             own = (slug, norm(q.get("question")), toks(q.get("question")), norm(q.get("answer")))
             others = [e for e in index if e is not own and not (e[0] == slug and e[1] == own[1])]
-            for e in check_question(qq, i, slug, others, []):
+            if isinstance(q.get("options"), list) and q.get("answer"):
+                long_opts += bool(check_lengths(q["options"], q["answer"].strip(), ""))
+            for e in check_question(qq, i, slug, others, [], lengths=False):
                 key = tuple(sorted([own[1], e.split("«")[-1]]))
                 if key in seen_pairs:
                     continue
                 seen_pairs.add(key)
                 print("⚠ ", e)
                 n += 1
+    if long_opts:
+        print(f"⚠  {long_opts} spørsmål bryter lengdekravene (lange/ujevne alternativer) — "
+              "skrives om eller slettes ved behov, ikke lintet enkeltvis")
     return n
 
 

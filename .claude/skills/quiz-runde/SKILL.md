@@ -49,19 +49,19 @@ kategorien i `<slug>.json` + `<slug>.2.json` om det trengs — importen stripper
   {
     "difficulty": "medium",
     "question": "Hvorfor er Bergen mye mildere om vinteren enn Fairbanks i Alaska, som ligger på nesten samme breddegrad?",
-    "answer": "Golfstrømmen og vestavinden frakter varme fra Atlanterhavet",
+    "answer": "Varmt havvann og vestavind",
     "options": [
-      "Golfstrømmen og vestavinden frakter varme fra Atlanterhavet",
-      "Bergen ligger lavere over havet",
-      "Norge har mer skydekke som holder på varmen",
-      "Alaska ligger nærmere Nordpolen"
+      "Varmt havvann og vestavind",
+      "Lavere høyde over havet",
+      "Mer skydekke om vinteren",
+      "Kortere vei til ekvator"
     ],
     "explanation": "Havet lagrer enorme mengder varme fra sommeren og avgir den langsomt. Vestavinden blåser den varmen inn over Vest-Europa, mens Alaska får kald luft fra innlandet. Fjern Golfstrømmen, og Norge får klima som Sør-Grønland."
   }
 ]
 ```
 
-### Kriterier — alle fem må holde
+### Kriterier — alle seks må holde
 
 1. **Forståelse, ikke oppslag.** Spør om *hvorfor*, *hvordan*, *hvor mye større*, *hva
    skjedde som følge av*, *hva kom først*. Årstall, paragrafer og forkortelser stryker
@@ -72,13 +72,25 @@ kategorien i `<slug>.json` + `<slug>.2.json` om det trengs — importen stripper
 3. **`explanation` skal gi noe NYTT** — en mekanisme, en konsekvens, et tall, en
    sammenligning. Minst 60 tegn. Den skal aldri bare gjenta svaret. Den vises uansett om
    leseren svarte riktig, så den bærer halve læringen.
-4. **Distraktorene skal friste én som halvvet svaret.** Samme type, plausible, gjerne
-   *sanne* utsagn som bare ikke svarer på spørsmålet (en ekte mekanisme, feil sted). Ikke
-   «Euro / Daler / Norske mark». **Lengden må ikke lekke:** i minst halvparten av
-   spørsmålene skal en distraktor være lengre enn riktig svar — scriptet nekter filen om
-   riktig svar er lengst i over 40 %. Rekkefølgen i filen er likegyldig (generatoren
-   stokker alternativene ved hver trekning), men varier den likevel.
-5. **Svaret skal være sant om fem år.** Ingen sittende personer, «nyeste», rekorder som
+4. **Alternativene er korte og presise — maks 60 tegn, helst under 40.** Alternativet
+   *navngir* svaret; `explanation` *forklarer* det. Én påstand per alternativ: ingen
+   tankestrek eller semikolon som henger på en begrunnelse. Er svaret en hel setning, er
+   spørsmålet for vidt — snevr det inn («Hvilken type lån utløste finanskrisen i 2008?»
+   → «Boliglån til folk uten betalingsevne»), ikke utvid svaret.
+5. **Alle fire alternativene er like lange og like presise.** Leseren skal ikke kunne
+   gjette på form: riktig svar er ikke lengre, mer nyansert, mer detaljert eller mer
+   forbeholden enn distraktorene. Skriv distraktorene *etter* svaret, i samme grammatiske
+   form og samme detaljnivå — har svaret et tall, har distraktorene tall; har svaret to
+   ledd, har de to ledd. Mønsteret *svar + én lang lokkedue + to korte* avslører svaret
+   like godt som et langt svar. Scriptet nekter: korteste alternativ under 60 % av det
+   lengste (når forskjellen er over 12 tegn), riktig svar over 1,2 × snittet av
+   distraktorene, og riktig svar lengst i over 40 % av filen.
+
+   Distraktorene skal friste én som halvvet svaret: samme type, plausible, gjerne *sanne*
+   utsagn som bare ikke svarer på spørsmålet (en ekte mekanisme, feil sted). Ikke «Euro /
+   Daler / Norske mark». Rekkefølgen i filen er likegyldig (generatoren stokker ved hver
+   trekning), men varier den likevel.
+6. **Svaret skal være sant om fem år.** Ingen sittende personer, «nyeste», rekorder som
    slås, eller tall som endrer seg årlig. Etablert kunnskap, ikke nyheter.
 
 ### Nivå
@@ -115,6 +127,7 @@ python3 .claude/skills/quiz-runde/scripts/quiz_import.py --check kandidater/*.js
 ```
 
 Scriptet nekter alt som bryter det mekaniske: format, 4 alternativer, svar i alternativene,
+alternativer over 60 tegn eller med tankestrek/semikolon, ujevne lengder,
 årstall/paragraf/forkortelse, for kort forklaring, ustabile svar, duplikat eller nær-duplikat
 mot banken og mot resten av runden. **Rett i kandidatfilen, aldri i banken.** Kjør til null
 feil. Skjønnet i kriteriene (er dette faktisk forståelse?) er ditt — scriptet fanger bare
@@ -146,6 +159,9 @@ Antall importert per kategori og nivå, og hvor mange dager den tynneste kategor
   "questions": []}` + linje i `_QUIZ_CATEGORY_ORDER` i `news_briefing.py` + rad i tabellen
   over. Slug endres aldri etterpå (dedup er på spørsmålstekst, så det er trygt, men
   rekkefølgen på siden endres).
+- **Lengdekravene kom 27. september 2026, etter første runde.** ~340 spørsmål i banken
+  bryter dem (`--lint` teller dem uten å liste dem). De importeres ikke på nytt og kan stå,
+  men et spørsmål som skrives om eller erstattes, skal følge kravene.
 - **Fjern aldri `explanation` fra gamle spørsmål** — repetisjonsutvelgelsen prioriterer dem.
 - Slett svake gamle spørsmål fritt; `quiz_seen.json` ignorerer spørsmål som ikke finnes i
   banken lenger.
