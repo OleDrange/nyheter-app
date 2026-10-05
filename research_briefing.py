@@ -722,6 +722,8 @@ _BARN_NARROW = [
     "pregnant women", "nipple", "cesarean", "caesarean", "labour", "labor ",
     "low- and middle-income", "biofortif", "sanitation", "mass administration",
     "seroefficacy", "pregnancy", "disabilities",
+    # «children» i tittelen er ikke det samme som at barnet er studiepopulasjonen.
+    "sexual", "abuse", "maltreatment", "determinants", "behavior change communication",
 ]
 
 # Eldre: mildere straff (−1,5) — relevant for longevity, men leserne er 35, og uten den
