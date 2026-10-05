@@ -244,6 +244,13 @@ lege — med små barn i horisonten. Menneskestudier med tydelige tall de kan ha
 dagen opp likevel. Kryss-kategori-duplikater fjernes (første spørring vinner).
 `CATEGORY_QUERIES` er en **liste** av (kategori, spørring) — trening har to.
 
+**Barn = avgjørelser foreldre kan ta for et friskt barn på 0–5 år** (fra 5. oktober 2026).
+Før dekket spørringen også ungdom, «pediatric» og svangerskap, og av de 9 øverste var 3
+ubrukelige (sykehusbehandling, kasus-kontroll, for tidlig fødte) og flere handlet om mor eller
+skolebarn. Aldersordene alene gir for lite volum (~170 i vinduet), så «children» er med og
+scoringen sorterer på alder. Samme dag fikk alle kategorier en tittelstraff for metode-,
+pilot- og protokollstudier, og søvn/stress for yrkesgrupper (6 av 9 vraket den uka).
+
 **Designkravet er per kategori, bevisst:** RCT/MA/SR som standard; trening og barn tar også
 `Clinical Trial` (crossover); prestasjonsspørringen (utøvere, VO2max, sener) har **ingen**
 designkrav — der er kravet flyttet til scoringen (0 designpoeng → må ha n, tall og utfall).

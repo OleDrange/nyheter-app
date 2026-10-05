@@ -265,19 +265,43 @@ CATEGORY_QUERIES: list[tuple[str, str]] = [
         'OR JOURNAL:"Circulation")'
         + _PMC_BASE + _PMC_RCT
     )),
-    # ~420 treff. Barneterm × livsstilsterm i tittelen, så vi får «søvn hos småbarn» og ikke
-    # «cellegift hos barn». Lempet designkrav (Clinical Trial). Svangerskap/amming hører hit.
+    # ~400 treff (5. oktober 2026). Spørsmålet er: hvilke AVGJØRELSER kan foreldre ta for et
+    # barn på 0–5 år? Aldersterm × foreldrestyrt eksponering i tittelen. Før sto «adolescent»,
+    # «pediatric» og «pregnancy» her, og toppen ble ungdom, sykehusbehandling og ammeveiledning
+    # for mor. Aldersordene alene × emnet gir ~170; «children/child» er med for volum, og
+    # scoringen (_EARLY_CHILD_TERMS / _SCHOOL_AGE_TERMS) løfter 0–5 og skyver skolebarn ned.
+    # Emnelista er spakene foreldre faktisk rår over: mat og introduksjon av allergener,
+    # søvn og soveplass, skjerm, lesing/språk, lek/ute, barnehage, tenner, sol, vaksine.
     ("barn", (
-        '(TITLE:"children" OR TITLE:"child" OR TITLE:"infant" OR TITLE:"infants" '
-        'OR TITLE:"toddler" OR TITLE:"preschool" OR TITLE:"adolescent" OR TITLE:"pregnancy" '
-        'OR TITLE:"breastfeeding" OR TITLE:"parent" OR TITLE:"parental" OR TITLE:"pediatric") '
-        'AND (TITLE:"sleep" OR TITLE:"diet" OR TITLE:"nutrition" OR TITLE:"screen time" '
-        'OR TITLE:"physical activity" OR TITLE:"exercise" OR TITLE:"allergy" '
-        'OR TITLE:"development" OR TITLE:"language" OR TITLE:"reading" OR TITLE:"outdoor" '
-        'OR TITLE:"play" OR TITLE:"obesity" OR TITLE:"iron" OR TITLE:"vitamin D" '
-        'OR TITLE:"probiotic" OR TITLE:"peanut" OR TITLE:"breastfeeding" OR TITLE:"feeding" '
-        'OR TITLE:"fever" OR TITLE:"antibiotic" OR TITLE:"vaccine" OR TITLE:"bedtime" '
-        'OR TITLE:"myopia" OR TITLE:"sunscreen" OR TITLE:"daycare")'
+        '(TITLE:"infant" OR TITLE:"infants" OR TITLE:"infancy" OR TITLE:"newborn" '
+        'OR TITLE:"newborns" OR TITLE:"baby" OR TITLE:"babies" OR TITLE:"toddler" '
+        'OR TITLE:"toddlers" OR TITLE:"preschool" OR TITLE:"preschoolers" '
+        'OR TITLE:"early childhood" OR TITLE:"young children" OR TITLE:"early life" '
+        'OR TITLE:"first year of life" OR TITLE:"first 1000 days" OR TITLE:"breastfeeding" '
+        'OR TITLE:"breastfed" OR TITLE:"breast milk" OR TITLE:"complementary feeding" '
+        'OR TITLE:"parenting" OR TITLE:"under five" OR TITLE:"under-five" '
+        'OR TITLE:"children" OR TITLE:"child") '
+        'AND (TITLE:"sleep" OR TITLE:"bedtime" OR TITLE:"nap" OR TITLE:"napping" '
+        'OR TITLE:"screen" OR TITLE:"media use" OR TITLE:"digital media" OR TITLE:"reading" '
+        'OR TITLE:"book" OR TITLE:"language" OR TITLE:"vocabulary" OR TITLE:"music" '
+        'OR TITLE:"play" OR TITLE:"outdoor" OR TITLE:"nature" OR TITLE:"physical activity" '
+        'OR TITLE:"motor" OR TITLE:"daycare" OR TITLE:"childcare" OR TITLE:"kindergarten" '
+        'OR TITLE:"diet" OR TITLE:"nutrition" OR TITLE:"feeding" OR TITLE:"solid" '
+        'OR TITLE:"weaning" OR TITLE:"baby-led" OR TITLE:"allergen" OR TITLE:"peanut" '
+        'OR TITLE:"egg" OR TITLE:"allergy" OR TITLE:"eczema" OR TITLE:"emollient" '
+        'OR TITLE:"atopic" OR TITLE:"vitamin D" OR TITLE:"iron" OR TITLE:"fluoride" '
+        'OR TITLE:"tooth" OR TITLE:"caries" OR TITLE:"toothbrushing" OR TITLE:"sugar" '
+        'OR TITLE:"juice" OR TITLE:"cow\'s milk" OR TITLE:"formula" OR TITLE:"probiotic" '
+        'OR TITLE:"vaccine" OR TITLE:"vaccination" OR TITLE:"antibiotic" OR TITLE:"fever" '
+        'OR TITLE:"sunscreen" OR TITLE:"swaddling" OR TITLE:"pacifier" OR TITLE:"bed-sharing" '
+        'OR TITLE:"co-sleeping" OR TITLE:"sudden infant death" OR TITLE:"car seat" '
+        'OR TITLE:"drowning" OR TITLE:"swimming" OR TITLE:"pets" OR TITLE:"bilingual" '
+        'OR TITLE:"responsive" OR TITLE:"discipline" OR TITLE:"attachment" '
+        'OR TITLE:"tummy time" OR TITLE:"crying" OR TITLE:"colic" OR TITLE:"toilet" '
+        'OR TITLE:"fish" OR TITLE:"omega-3" OR TITLE:"docosahexaenoic" OR TITLE:"growth" '
+        'OR TITLE:"development" OR TITLE:"cognitive" OR TITLE:"obesity" OR TITLE:"overweight" '
+        'OR TITLE:"picky" OR TITLE:"vegetable" OR TITLE:"fruit" OR TITLE:"skin-to-skin" '
+        'OR TITLE:"father" OR TITLE:"mother")'
         + _PMC_BASE + _PMC_TRIAL
     )),
 ]
@@ -295,7 +319,7 @@ CATEGORY_ORDER = ["trening", "kosthold", "sovn_stress", "longevity", "medisin", 
 _API_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 _HEADERS = {"User-Agent": "research-briefing/1.0 (personal script)"}
 
-SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for to bestemte lesere: et par rundt 35 år. Den ene trener mye styrke, løping og padel; den andre er lege. Begge er opptatt av ernæring, trening, søvn, stressmestring og hva som gir et godt og langt liv, de har små barn i horisonten, og de vil følge store medisinske gjennombrudd. Overordnet vil de ha forskning de kan BRUKE selv — med tydelige tall de kan stole på. Eksempler på treff: ashwagandha og løpekapasitet, søvnregularitet mot søvnlengde, hva som gir mest av styrke- eller løpetrening, fiber/protein/tarmflora, hvordan redusere stress.
+SYSTEM_PROMPT = """Du lager en daglig forskningsbriefing på norsk for to bestemte lesere: et par rundt 35 år. Den ene trener mye styrke, løping og padel; den andre er lege. Begge er opptatt av ernæring, trening, søvn, stressmestring og hva som gir et godt og langt liv, de har små barn i horisonten, og de vil følge store medisinske gjennombrudd. Overordnet vil de ha forskning de kan BRUKE selv — med tydelige tall de kan stole på. Eksempler på treff: ashwagandha og løpekapasitet, søvnregularitet mot søvnlengde, hva som gir mest av styrke- eller løpetrening, fiber/protein/tarmflora, hvordan redusere stress, når en baby bør få peanøtter og egg, hva skjermtid gjør med språket til en toåring.
 
 Du får en liste med studier (kategori, tittel, tidsskrift, dato, URL, engelsk sammendrag). Alle er menneskestudier, forhåndsrangert som relevante. De fleste er RCT, metaanalyse eller systematisk oversikt; i kategorien Trening kan det også være crossover- og kohortstudier på utøvere — si da tydelig i Metode og Forbehold hva designet ikke kan vise.
 
@@ -305,7 +329,7 @@ VRAKING: er en studie likevel ubrukelig for denne leseren, skal du IKKE skrive e
 ## SKIP [n] — kort begrunnelse
 der [n] er studiens nummer i listen. Vrak kun når ett av disse er oppfylt:
 1. Ingen konkrete tall — sammendraget sier bare "signifikant bedring" uten effektstørrelser (prosent, HR/RR/OR med konfidensintervall, SMD, absolutte endringer).
-2. Ingen handlingsrom — dette er klinisk behandling leseren aldri selv vil ta stilling til. Gjelder IKKE kategorien Medisin: der er poenget nettopp behandling, og kravet er i stedet at funnet er stort nok til å endre praksis.
+2. Ingen handlingsrom — dette er klinisk behandling leseren aldri selv vil ta stilling til. Gjelder IKKE kategorien Medisin: der er poenget nettopp behandling, og kravet er i stedet at funnet er stort nok til å endre praksis. I kategorien Barn er kravet strengere: studien må svare på en avgjørelse foreldre selv kan ta for et friskt barn på 0–5 år (mat og introduksjon av allergener, søvn og soveplass, skjerm, lesing og språk, lek og aktivitet, barnehage, tannpuss, sol, vaksiner, når man skal til lege). Vrak studier om skolebarn og ungdom, om syke eller for tidlig fødte barn på sykehus, og om mors egen helse uten utfall hos barnet.
 3. Studien er så svak eller så smal at et råd bygget på den ville villede.
 Vraking skal være unntaket. Er du i tvil, skriv omtalen.
 
@@ -314,7 +338,7 @@ FORMAT — for hver studie du skriver om, nøyaktig denne strukturen:
 **Kategori:** Trening | Kosthold | Søvn og stress | Longevity | Medisin | Barn (velg én — bruk kandidatens kategori, men flytt studien hvis en annen passer bedre)
 **Metode:** Hva slags studie er dette (RCT, metaanalyse av N studier, systematisk oversikt), hvor mange deltakere, hvem var de (alder, kjønn, helsetilstand), hvor lenge varte det, og hva gikk intervensjonen eller eksponeringen konkret ut på? Forklar designet slik at leseren skjønner hvorfor det gir grunn til å tro på resultatet. 3–4 setninger.
 **Resultat:** Hovedfunnene med konkrete tall — effektstørrelse, prosentvis endring, HR/RR/OR med konfidensintervall, p-verdi der den er oppgitt. Si alltid hva det ble sammenlignet MOT (kontrollgruppe, placebo, ingen endring). Ta med de viktigste sekundærfunnene hvis de er interessante. 3–4 setninger.
-**Hva det betyr for deg:** Oversett funnet til handling. Hvilken dose, frekvens eller mengde er det snakk om i praksis? Er effekten stor nok til å bry seg om? Hva bør leseren eventuelt endre — eller hva bekrefter dette at de kan fortsette med? For Medisin: hva endrer dette i klinisk praksis, for hvem, og hvor stor er den absolutte gevinsten? For Barn: hva betyr det for foreldre i hverdagen? Vær konkret; ingen runde formuleringer. 3–4 setninger.
+**Hva det betyr for deg:** Oversett funnet til handling. Hvilken dose, frekvens eller mengde er det snakk om i praksis? Er effekten stor nok til å bry seg om? Hva bør leseren eventuelt endre — eller hva bekrefter dette at de kan fortsette med? For Medisin: hva endrer dette i klinisk praksis, for hvem, og hvor stor er den absolutte gevinsten? For Barn: hvilken konkret avgjørelse kan foreldre ta for barnet sitt på 0–5 år — hva, når og hvor mye — og hvor stor er gevinsten for barnet? Vær konkret; ingen runde formuleringer. 3–4 setninger.
 **Forbehold:** Hva studien IKKE viser. Observasjonsdata kan ikke vise årsak; kort varighet sier ingenting om livslang effekt; et smalt utvalg (kun eliteutøvere, kun eldre kvinner) generaliserer dårlig; industrifinansiering, høy heterogenitet eller lav studiekvalitet i en metaanalyse svekker konklusjonen. 1–2 setninger.
 
 REGLER:
@@ -656,6 +680,48 @@ _NARROW_POPULATION = [
     "infection", "viral", "acute", "anabolic", "steroid", "immunogenicity",
     "psychopatholog", "pathophysiolog", "health care workers", "healthcare workers",
     "patients", "gout", "liver disease", "steatotic", "aged 80",
+    # Yrkes- og særgrupper (5. oktober 2026): seks av ni søvn/stress-kandidater var politi,
+    # flyktninger, sykepleiere, innlagte med delirium eller kroniske smertepasienter.
+    "police", "law enforcement", "firefighter", "military", "veterans", "refugee", "asylum",
+    "prisoners", "incarcerat", "nurses", "hospitalised", "hospitalized", "delirium",
+    "chronic pain", "musculoskeletal pain", "nerve block", "paravertebral",
+]
+
+# Studier OM en metode, et skjema eller en plan — ikke om et utfall. Straffes på tittel i alle
+# kategorier utenom medisin: «reliabilitet til Glasgow Sleep Effort Scale» og protokoller har
+# ingen funn å skrive om, og pilot-/gjennomførbarhetsstudier er per definisjon for små.
+_METHOD_TITLE = [
+    "reliability", "validity", "validation", "psychometric", "internal consistency",
+    "protocol", "cohort profile", "patent", "feasibility", "pilot",
+]
+
+# Smalgruppe-ord som i barn er nettopp spørsmålet foreldre står i: infeksjoner (probiotika,
+# antibiotika ved ørebetennelse), astma/eksem-forebygging, jernmangel, tannhelse.
+_NARROW_OK_FOR_CHILDREN = {"infection", "viral", "acute", "asthma", "anaemia", "anemia", "dental"}
+
+# Barn: leseren spør hva foreldre kan gjøre for et barn på 0–5 år. Disse løfter studien
+# (tittel +2, kun abstract +0,5) …
+_EARLY_CHILD_TERMS = [
+    "infant", "infancy", "newborn", "baby", "babies", "toddler", "preschool",
+    "early childhood", "young children", "early life", "first year of life", "first 1000 days",
+    "under five", "under-five", "under 5", "breastfe", "complementary feeding", "weaning",
+    "months of age", "month-old", "year-old", "kindergarten", "daycare", "childcare",
+]
+# … og disse skyver den ned (tittel −3): skolebarn og ungdom er en annen alder, …
+_SCHOOL_AGE_TERMS = [
+    "adolescen", "teen", "youth", "school-age", "school-aged", "schoolchildren",
+    "school children", "primary school", "elementary school", "secondary school",
+    "high school", "students", "university",
+]
+# … og disse (tittel −4) handler om sykehusbehandling av nyfødte eller om mor alene —
+# ingen beslutning foreldre til et friskt barn står i. «children with …» er syke barn.
+_BARN_NARROW = [
+    "preterm", "premature", "low birth weight", "nicu", "neonatal intensive", "kangaroo",
+    "children with", "infants with", "toddlers with", "preschoolers with", "child with",
+    "milk production", "galactagog", "breast massage", "lactation", "postpartum women",
+    "pregnant women", "nipple", "cesarean", "caesarean", "labour", "labor ",
+    "low- and middle-income", "biofortif", "sanitation", "mass administration",
+    "seroefficacy", "pregnancy", "disabilities",
 ]
 
 # Eldre: mildere straff (−1,5) — relevant for longevity, men leserne er 35, og uten den
@@ -696,7 +762,7 @@ _DRUG_TERMS = [
 # lista over kan aldri bli komplett. Regex på tittel, utenfor «medisin».
 _DRUG_SUFFIX_RE = re.compile(
     r"\b(?!peptides?\b)\w{2,}(mab|tide|flozin|gliptin|statin|sartan|pril|olol|prazole|ciclib|"
-    r"tinib|parib|lukast|afil|dipine|oxetine|triptan|glutide|cretin)s?\b"
+    r"tinib|parib|lukast|afil|dipine|oxetine|triptan|glutide|cretin|orexant)s?\b"
 )
 
 # Barn: vaksine og antibiotika er spørsmål foreldre faktisk står i, så de straffes ikke der.
@@ -799,12 +865,28 @@ def _score_candidate(article: dict) -> tuple[float, str]:
     if any(t in title for t in _OBSERVATIONAL_TITLE):
         score -= 1.5
         why.append("−observasjonell")
+    if any(t in title for t in _METHOD_TITLE):
+        score -= 3.0
+        why.append("−metode/pilot")
+
+    if category == "barn":
+        if any(t in title for t in _EARLY_CHILD_TERMS):
+            score += 2.0
+            why.append("+0–5 år")
+        elif any(t in abstract for t in _EARLY_CHILD_TERMS):
+            score += 0.5
+            why.append("+0–5 år (abstract)")
+        if any(t in title for t in _SCHOOL_AGE_TERMS):
+            score -= 3.0
+            why.append("−skolealder")
 
     # Smal pasientgruppe / ren klinikk: straffes på TITTELEN (der populasjonen står), og
     # svakere på abstractet (en nevnt bisetning skal ikke drepe en ellers god studie).
-    narrow = list(_NARROW_POPULATION)
-    if category != "barn":
-        narrow += _CHILD_TERMS
+    if category == "barn":
+        narrow = [t for t in _NARROW_POPULATION if t not in _NARROW_OK_FOR_CHILDREN]
+        narrow += _BARN_NARROW
+    else:
+        narrow = list(_NARROW_POPULATION) + _CHILD_TERMS
     narrow_title = sum(1 for t in narrow if t in title)
     if narrow_title:
         score -= 4.0 * narrow_title
