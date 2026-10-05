@@ -99,6 +99,10 @@ Bare blokker med kjent URL og alle fem avsnitt lagres; resten gis som `⚠`-linj
 filen og kjør igjen til det er null advarsler (lagrede hoppes over). Sluttlinja skal si
 ≥ 42 ferdigskrevne.
 
+Oppdager du en feil i en omtale som allerede er lagret (et tall eller en påstand som ikke
+står i abstractet), rett blokken og importer den på nytt med `--overwrite` lagt til
+kommandoen. Det virker bare før omtalen er publisert — publiserte studier har forlatt køen.
+
 ## 5. Oppsummer
 
 Kun titlene som ble skrevet, gruppert per kategori, og hvor mange dager køen dekker.

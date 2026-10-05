@@ -685,6 +685,11 @@ _NARROW_POPULATION = [
     "police", "law enforcement", "firefighter", "military", "veterans", "refugee", "asylum",
     "prisoners", "incarcerat", "nurses", "hospitalised", "hospitalized", "delirium",
     "chronic pain", "musculoskeletal pain", "nerve block", "paravertebral",
+    # Etablert sykdom og intensiv (12. oktober-runden, tatt 5. oktober 2026): longevity- og
+    # kostholdstoppen var sekundærforebygging, hjerneslag i akuttfase, denguefeber og colitis.
+    "atherosclerotic cardiovascular disease", "cardiovascular disease patients", "ischemic",
+    "ischaemic", "reperfus", "thrombocytopenia", "dengue", "critically ill", "colitis",
+    "crohn", "masld", "nafld", "psychedelic", "school-based", "arrhythmia",
 ]
 
 # Studier OM en metode, et skjema eller en plan — ikke om et utfall. Straffes på tittel i alle
@@ -1400,7 +1405,8 @@ def propose_candidates(queue: list[dict], per_category: int) -> list[dict]:
     return out
 
 
-def import_writeups(queue: list[dict], text: str) -> tuple[int, int, list[str]]:
+def import_writeups(queue: list[dict], text: str,
+                    overwrite: bool = False) -> tuple[int, int, list[str]]:
     """Legg ferdigskrevne omtaler inn i køen. Returnerer (lagret, vraket, advarsler).
 
     Samme kontrakt som _parse_writeups: blokker mappes på URL, ikke rekkefølge, og en blokk
@@ -1440,7 +1446,9 @@ def import_writeups(queue: list[dict], text: str) -> tuple[int, int, list[str]]:
             slug = _LABEL_TO_SLUG.get(m_cat.group(1).strip().lower())
             if slug and slug != entry.get("category"):
                 entry["category"] = slug
-        if entry.get("status") == "ready":
+        # En lagret omtale røres ikke ved re-import (så en fil kan kjøres flere ganger), med
+        # mindre --overwrite er gitt: da kan en feil i en ennå ikke publisert omtale rettes.
+        if entry.get("status") == "ready" and not overwrite:
             warnings.append(f"allerede skrevet, hoppet over: {entry['title'][:60]}")
             continue
         missing = [p for p in _REQUIRED_PARTS if p not in block]
@@ -1569,6 +1577,12 @@ def main() -> None:
              "abstract) og avslutt. Brukes av skillen /forskning-uke.",
     )
     parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Med --import-writeups: erstatt også omtaler som allerede er ferdigskrevne "
+             "(retting før publisering).",
+    )
+    parser.add_argument(
         "--import-writeups",
         metavar="FIL",
         help="Les omtaler (markdown i SYSTEM_PROMPT-formatet, «-» = stdin) inn i køen som "
@@ -1596,7 +1610,7 @@ def main() -> None:
         text = (sys.stdin.read() if args.import_writeups == "-"
                 else open(args.import_writeups, encoding="utf-8").read())
         queue = _load_queue()
-        saved, rejected, warnings = import_writeups(queue, text)
+        saved, rejected, warnings = import_writeups(queue, text, overwrite=args.overwrite)
         _save_queue(queue)
         for w in warnings:
             print(f"  ⚠  {w}")
